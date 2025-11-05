@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Base de Dados PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: logistica-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: logistica
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - logistica-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: logistica-backend
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/logistica
+      JWT_SECRET: seu-secret-super-secreto-aqui-change-in-production
+      PORT: 5000
+      NODE_ENV: development
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - logistica-network
+    command: sh -c "npx prisma migrate deploy && npm run dev"
+
+  # Frontend React
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: logistica-frontend
+    environment:
+      VITE_API_URL: http://localhost:5000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - logistica-network
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
+
+networks:
+  logistica-network:
+    driver: bridge
