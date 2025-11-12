@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { useNavigate } from 'react-router-dom';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import api from '../api/api';
 
 interface DashboardStats {
@@ -58,9 +59,13 @@ const STATUS_COLORS: { [key: string]: string } = {
 };
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState('Últimos 30 dias');
+  const [showSuppliersModal, setShowSuppliersModal] = useState(false);
+  const [allSuppliers, setAllSuppliers] = useState<any[]>([]);
+  const [expandedChart, setExpandedChart] = useState<string | null>(null);
 
   useEffect(() => {
     loadStats();
@@ -75,6 +80,61 @@ const Dashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // ✅ EXPORTAR RELATÓRIO (PDF/Excel)
+  const handleExportReport = () => {
+    if (!stats) return;
+
+    // Criar CSV
+    const csvContent = [
+      ['Relatório de Performance - Sistema Logística'],
+      ['Data', new Date().toLocaleDateString('pt-BR')],
+      [''],
+      ['Resumo Geral'],
+      ['Total de Produtos', stats.totalProducts],
+      ['Recebidos', stats.summary.received],
+      ['Em Análise', stats.summary.inAnalysis],
+      ['Em Armazenamento', stats.summary.inStorage],
+      ['Entregues', stats.summary.delivered],
+      ['Rejeitados', stats.summary.rejected],
+      [''],
+      ['Top 5 Fornecedores'],
+      ['Posição', 'Nome', 'Produtos', 'Percentagem'],
+      ...stats.topSuppliers.map((s, i) => {
+        const percentage = stats.totalProducts > 0
+          ? ((s.productCount / stats.totalProducts) * 100).toFixed(1)
+          : '0';
+        return [`#${i + 1}`, s.name, s.productCount, `${percentage}%`];
+      })
+    ].map(row => row.join(',')).join('\n');
+
+    // Download CSV
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `relatorio_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // ✅ CARREGAR TODOS OS FORNECEDORES
+  const loadAllSuppliers = async () => {
+    try {
+      const response = await api.get('/suppliers');
+      setAllSuppliers(response.data);
+      setShowSuppliersModal(true);
+    } catch (error) {
+      console.error('Erro ao carregar fornecedores:', error);
+    }
+  };
+
+  // ✅ EXPANDIR GRÁFICO
+  const toggleExpandChart = (chartId: string) => {
+    setExpandedChart(expandedChart === chartId ? null : chartId);
   };
 
   if (loading) {
@@ -101,7 +161,6 @@ const Dashboard: React.FC = () => {
     );
   }
 
-
   const pieData = stats.productsByStatus.map(item => ({
     name: STATUS_TRANSLATIONS[item.status] || item.status,
     value: item.count,
@@ -116,7 +175,6 @@ const Dashboard: React.FC = () => {
     { name: 'Rejeitados', value: stats.summary.rejected, fill: '#EF4444' }
   ];
 
-
   const calculateChange = (value: string) => {
     const num = parseFloat(value);
     return num > 0 ? `+${value}%` : `${value}%`;
@@ -126,7 +184,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100">
-     
+      {/* Header */}
       <div className="bg-white border-b shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
@@ -141,8 +199,14 @@ const Dashboard: React.FC = () => {
                 </svg>
                 <span className="text-sm font-medium text-gray-700">{dateRange}</span>
               </div>
-              <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm shadow-sm">
-                + Exportar Relatório
+              <button 
+                onClick={handleExportReport}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm shadow-sm flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Exportar Relatório
               </button>
             </div>
           </div>
@@ -150,9 +214,8 @@ const Dashboard: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-3 shadow-lg">
@@ -173,7 +236,6 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-        
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-3 shadow-lg">
@@ -198,7 +260,6 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
 
-        
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300">
             <div className="flex items-center justify-between mb-4">
               <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-3 shadow-lg">
@@ -240,33 +301,34 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-       
+        {/* Gráficos */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-         
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
+          {/* Gráfico Pizza */}
+          <div className={`bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all ${
+            expandedChart === 'pie' ? 'lg:col-span-2' : ''
+          }`}>
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold text-gray-900">Distribuição por Estado</h3>
               <div className="flex space-x-2">
-                <button className="p-1 hover:bg-gray-100 rounded">
+                <button 
+                  onClick={() => toggleExpandChart('pie')}
+                  className="p-1 hover:bg-gray-100 rounded transition-colors"
+                  title="Expandir"
+                >
                   <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                   </svg>
                 </button>
-                <button className="p-1 hover:bg-gray-100 rounded">
-                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                  </svg>
-                </button>
               </div>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={expandedChart === 'pie' ? 500 : 300}>
               <PieChart>
                 <Pie
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={100}
+                  innerRadius={expandedChart === 'pie' ? 100 : 60}
+                  outerRadius={expandedChart === 'pie' ? 180 : 100}
                   paddingAngle={2}
                   dataKey="value"
                 >
@@ -291,60 +353,69 @@ const Dashboard: React.FC = () => {
             </ResponsiveContainer>
           </div>
 
-          
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-gray-900">Resumo por Categoria</h3>
-              <div className="flex space-x-2">
-                <button className="p-1 hover:bg-gray-100 rounded">
-                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                  </svg>
-                </button>
-                <button className="p-1 hover:bg-gray-100 rounded">
-                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                  </svg>
-                </button>
+          {/* Gráfico Barras */}
+          {expandedChart !== 'pie' && (
+            <div className={`bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all ${
+              expandedChart === 'bar' ? 'lg:col-span-2' : ''
+            }`}>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-gray-900">Resumo por Categoria</h3>
+                <div className="flex space-x-2">
+                  <button 
+                    onClick={() => toggleExpandChart('bar')}
+                    className="p-1 hover:bg-gray-100 rounded transition-colors"
+                    title="Expandir"
+                  >
+                    <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                    </svg>
+                  </button>
+                </div>
               </div>
+              <ResponsiveContainer width="100%" height={expandedChart === 'bar' ? 500 : 300}>
+                <BarChart data={barData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis 
+                    dataKey="name" 
+                    tick={{ fontSize: 12, fill: '#6B7280' }}
+                    axisLine={{ stroke: '#e5e7eb' }}
+                  />
+                  <YAxis 
+                    tick={{ fontSize: 12, fill: '#6B7280' }}
+                    axisLine={{ stroke: '#e5e7eb' }}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'white', 
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    }}
+                    cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }}
+                  />
+                  <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                    {barData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis 
-                  dataKey="name" 
-                  tick={{ fontSize: 12, fill: '#6B7280' }}
-                  axisLine={{ stroke: '#e5e7eb' }}
-                />
-                <YAxis 
-                  tick={{ fontSize: 12, fill: '#6B7280' }}
-                  axisLine={{ stroke: '#e5e7eb' }}
-                />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: 'white', 
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                  }}
-                  cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }}
-                />
-                <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-                  {barData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          )}
         </div>
 
-       
+        {/* Top 5 Fornecedores */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow mb-8">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-bold text-gray-900">Top 5 Fornecedores</h3>
-            <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-              Ver todos →
+            <button 
+              onClick={loadAllSuppliers}
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+            >
+              Ver todos
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </button>
           </div>
           {stats.topSuppliers.length === 0 ? (
@@ -389,7 +460,7 @@ const Dashboard: React.FC = () => {
           )}
         </div>
 
-       
+        {/* Alerta Produtos Rejeitados */}
         {stats.summary.rejected > 0 && (
           <div className="bg-gradient-to-r from-red-50 to-red-100 border-l-4 border-red-500 rounded-xl p-6 shadow-sm">
             <div className="flex items-start">
@@ -405,7 +476,10 @@ const Dashboard: React.FC = () => {
                 <p className="text-sm text-red-700 mt-1">
                   Existem <strong>{stats.summary.rejected} produto(s) rejeitado(s)</strong> que requerem ação imediata.
                 </p>
-                <button className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium">
+                <button 
+                  onClick={() => navigate('/produtos?status=REJECTED')}
+                  className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+                >
                   Ver Produtos Rejeitados
                 </button>
               </div>
@@ -413,6 +487,71 @@ const Dashboard: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Modal Todos os Fornecedores */}
+      {showSuppliersModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-gray-900">Todos os Fornecedores</h2>
+                <button
+                  onClick={() => setShowSuppliersModal(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              {allSuppliers.length === 0 ? (
+                <p className="text-center text-gray-500 py-12">Nenhum fornecedor encontrado</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {allSuppliers.map((supplier) => (
+                    <div key={supplier.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h3 className="font-semibold text-gray-900">{supplier.name}</h3>
+                          <p className="text-sm text-gray-500 mt-1">NIF: {supplier.nif}</p>
+                          {supplier.email && (
+                            <p className="text-sm text-gray-500">{supplier.email}</p>
+                          )}
+                          {supplier.phone && (
+                            <p className="text-sm text-gray-500">{supplier.phone}</p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => {
+                            navigate('/fornecedores');
+                            setShowSuppliersModal(false);
+                          }}
+                          className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                        >
+                          Ver →
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="p-4 border-t border-gray-200 bg-gray-50">
+              <button
+                onClick={() => {
+                  navigate('/fornecedores');
+                  setShowSuppliersModal(false);
+                }}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              >
+                Ir para Gestão de Fornecedores
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,7 +1,5 @@
- //backend/src/controllers/suppliers.controller.ts
 import { Request, Response } from 'express';
-import prisma from '../../prisma/client';
-
+import prisma from '../config/database';
 
 export const listSuppliers = async (req: Request, res: Response) => {
   try {
@@ -37,16 +35,33 @@ export const getSupplier = async (req: Request, res: Response) => {
 export const createSupplier = async (req: Request, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: 'Não autenticado' });
-    const { name, nif, address, email, phone } = req.body;
+    
+    // ✅ Aceitar tanto NIF (frontend) quanto nif (backend)
+    const { 
+      name, 
+      NIF,      // Frontend envia assim
+      nif,      // Backend espera assim
+      address, 
+      email, 
+      phone,
+      city,     // ✅ ADICIONAR
+      state     // ✅ ADICIONAR
+    } = req.body;
+    
     if (!name) return res.status(400).json({ error: 'Nome é obrigatório' });
+
+    // ✅ Usar NIF ou nif (o que vier preenchido)
+    const nifValue = NIF || nif;
 
     const created = await prisma.supplier.create({
       data: {
         name,
-        nif,
+        nif: nifValue,
         address,
         email,
         phone,
+        city,           // ✅ ADICIONAR
+        state,          // ✅ ADICIONAR
         companyId: req.user.companyId,
       },
     });
@@ -61,14 +76,36 @@ export const updateSupplier = async (req: Request, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: 'Não autenticado' });
     const { id } = req.params;
-    const { name, nif, address, email, phone } = req.body;
+    const { 
+      name, 
+      NIF,      // Frontend envia assim
+      nif,      // Backend espera assim
+      address, 
+      email, 
+      phone,
+      city,     // ✅ ADICIONAR
+      state     // ✅ ADICIONAR
+    } = req.body;
 
-    const existing = await prisma.supplier.findFirst({ where: { id, companyId: req.user.companyId }});
+    const existing = await prisma.supplier.findFirst({ 
+      where: { id, companyId: req.user.companyId }
+    });
     if (!existing) return res.status(404).json({ error: 'Fornecedor não encontrado' });
+
+    // ✅ Usar NIF ou nif (o que vier preenchido)
+    const nifValue = NIF || nif;
 
     const updated = await prisma.supplier.update({
       where: { id },
-      data: { name, nif, address, email, phone },
+      data: { 
+        name, 
+        nif: nifValue, 
+        address, 
+        email, 
+        phone,
+        city,           
+        state           
+      },
     });
     res.json(updated);
   } catch (error) {
@@ -82,13 +119,16 @@ export const deleteSupplier = async (req: Request, res: Response) => {
     if (!req.user) return res.status(401).json({ error: 'Não autenticado' });
     const { id } = req.params;
 
-    const existing = await prisma.supplier.findFirst({ where: { id, companyId: req.user.companyId }});
+    const existing = await prisma.supplier.findFirst({ 
+      where: { id, companyId: req.user.companyId }
+    });
     if (!existing) return res.status(404).json({ error: 'Fornecedor não encontrado' });
 
-     
     const productsCount = await prisma.product.count({ where: { supplierId: id }});
     if (productsCount > 0) {
-      return res.status(409).json({ error: 'Existem produtos associados a este fornecedor' });
+      return res.status(409).json({ 
+        error: 'Existem produtos associados a este fornecedor' 
+      });
     }
 
     await prisma.supplier.delete({ where: { id }});

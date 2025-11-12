@@ -30,12 +30,12 @@ model User {
   email       String            @unique
   password    String
   role        Role              @default(OPERATOR)
-  companyId   String
+  companyId   String?           // ✅ AGORA É OPCIONAL (para Super Admins)
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
   auditLogs   AuditLog[]
   productLogs ProductMovement[]
-  company     Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company     Company?          @relation(fields: [companyId], references: [id], onDelete: Cascade) // ✅ OPCIONAL
 }
 
 model Supplier {
@@ -45,6 +45,8 @@ model Supplier {
   address   String?
   email     String?
   phone     String?
+  city      String?
+  state     String?
   companyId String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -95,9 +97,12 @@ model ProductMovement {
 model Vehicle {
   id           String      @id @default(uuid())
   licensePlate String
+  model        String?
+  brand        String?
   type         String
   capacity     Float
   year         Int?
+  status       String      @default("available")
   observations String?
   companyId    String
   createdAt    DateTime    @default(now())
@@ -109,19 +114,23 @@ model Vehicle {
 }
 
 model Transport {
-  id           String             @id @default(uuid())
-  origin       String
-  destination  String
-  expectedDate DateTime
-  driver       String?
-  status       TransportStatus    @default(PENDING)
-  vehicleId    String?
-  companyId    String
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-  company      Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  vehicle      Vehicle?           @relation(fields: [vehicleId], references: [id])
-  products     TransportProduct[]
+  id                String             @id @default(uuid())
+  origin            String
+  destination       String
+  expectedDate      DateTime
+  departureDate     DateTime?
+  estimatedArrival  DateTime?
+  driver            String?
+  status            TransportStatus    @default(PENDING)
+  totalWeight       Float?
+  notes             String?
+  vehicleId         String?
+  companyId         String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  company           Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  vehicle           Vehicle?           @relation(fields: [vehicleId], references: [id])
+  products          TransportProduct[]
 }
 
 model TransportProduct {
@@ -148,6 +157,7 @@ model AuditLog {
 }
 
 enum Role {
+  SUPER_ADMIN  // ✅ ADICIONADO
   ADMIN
   OPERATOR
 }

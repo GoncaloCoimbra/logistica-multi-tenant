@@ -1,4 +1,4 @@
- //backend/src/controllers/products.controller.ts
+ 
 import { Request, Response } from 'express';
 import { ProductStatus, Role, PrismaClient } from '@prisma/client';
 import { ProductStateService } from '../services/product-state.service';
@@ -69,7 +69,7 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
       }
       
       if (dateTo && typeof dateTo === 'string') {
-         //Adiciona 23:59:59 para incluir o dia inteiro
+      
         const endDate = new Date(dateTo);
         endDate.setHours(23, 59, 59, 999);
         where.createdAt.lte = endDate;
@@ -187,7 +187,7 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-     // Novo: resolver o fornecedor (por ID ou nome)
+     
     let resolvedSupplierId = supplierId || null;
 
     if (!resolvedSupplierId && supplierName) {

@@ -1,17 +1,4 @@
-/*
-  Warnings:
 
-  - You are about to drop the `audit_logs` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `companies` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `product_movements` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `products` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `suppliers` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `transport_products` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `transports` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `users` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `vehicles` table. If the table is not empty, all the data it contains will be lost.
-
-*/
 
 ALTER TABLE "audit_logs" DROP CONSTRAINT "audit_logs_companyId_fkey";
 

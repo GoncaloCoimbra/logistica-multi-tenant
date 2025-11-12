@@ -215,13 +215,13 @@ const ProductList: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Filtrar por Estado</label>
+            <label className="block text-sm font-medium mb-2">Filtrar por Estados</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
             >
-              <option value="">Todos os estados</option>
+              <option value="">Todos os Estados</option>
               {Object.entries(STATUS_TRANSLATIONS).map(([key, value]) => (
                 <option key={key} value={key}>{value}</option>
               ))}
@@ -254,7 +254,7 @@ const ProductList: React.FC = () => {
                     Fornecedor
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Estado
+                    Estados
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Localização

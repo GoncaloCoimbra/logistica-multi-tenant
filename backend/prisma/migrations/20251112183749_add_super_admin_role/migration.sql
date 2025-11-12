@@ -1,0 +1,5 @@
+-- AlterEnum
+ALTER TYPE "Role" ADD VALUE 'SUPER_ADMIN';
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "companyId" DROP NOT NULL;

@@ -285,7 +285,7 @@ docker-compose up --build
 - Frontend consumindo API
 - Dashboard com métricas
 
-  Nível Avançado (Parcial)
+  Nível ACarrinhaçado (Parcial)
 - Logs e auditoria (backend completo)
 - Dashboard com gráficos
 - Gestão de fornecedores (backend)

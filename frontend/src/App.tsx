@@ -4,22 +4,27 @@ import { AuthProvider } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Layout from './components/Layout';
 import Login from './pages/Login';
-import { Register } from './pages/Register'; // ✅ COM CHAVES
+import { Register } from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
 import NewProduct from './pages/NewProduct';
+import SupplierList from './pages/SupplierList';
+import VehicleList from './pages/VehicleList';
+import TransportList from './pages/TransportList';
+import Settings from './pages/Settings';
+import AuditLog from './pages/AuditLog'; // ✅ NOVO
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          
+          {/* Rotas Públicas */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-        
+          {/* Dashboard */}
           <Route
             path="/"
             element={
@@ -42,6 +47,7 @@ function App() {
             }
           />
 
+          {/* Produtos */}
           <Route
             path="/produtos"
             element={
@@ -75,7 +81,67 @@ function App() {
             }
           />
 
-        
+          {/* Fornecedores */}
+          <Route
+            path="/fornecedores"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <SupplierList />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          {/* Veículos */}
+          <Route
+            path="/veiculos"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <VehicleList />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          {/* Transportes */}
+          <Route
+            path="/transportes"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <TransportList />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          {/* Configurações */}
+          <Route
+            path="/configuracoes"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Settings />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          {/* ✅ NOVO - Histórico de Operações (apenas Admin) */}
+          <Route
+            path="/historico"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <AuditLog />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>

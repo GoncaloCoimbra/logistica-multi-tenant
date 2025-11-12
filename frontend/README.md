@@ -54,7 +54,7 @@ Antes de escrever uma linha de código, pega num papel, no Paint, no Excalidraw 
    - Como mostrar a tabela de produtos?
    - Como fazer o formulário de mudança de estado?
 
-Exemplo prático: Quando leres sobre os filtros na secção 2.2.6, já deves estar a pensar: "vou precisar de dropdowns no frontend para filtrar por estado, um input de pesquisa para localização, outro dropdown para fornecedor". Depois desenhas onde vão ficar esses filtros no ecrã e como vais implementá-los.
+Exemplo prático: Quando leres sobre os filtros na secção 2.2.6, já deves estar a pensar: "vou precisar de dropdowns no frontend para , um input de pesquisa para localização, outro dropdown para fornecedor". Depois desenhas onde vão ficar esses filtros no ecrã e como vais implementá-los.
 
 Este planeamento inicial poupa-te horas de refactoring e retrabalho. É muito mais fácil mudar um desenho no Paint do que reescrever código.
 
@@ -290,7 +290,6 @@ Operador:
 ```bash
 cd backend
 npm test
-```
 
  Gerar Migração Prisma
 ```bash

@@ -5,9 +5,9 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: 'ADMIN' | 'OPERATOR';
-  companyId: string;
-  companyName: string;
+  role: 'SUPER_ADMIN' | 'ADMIN' | 'OPERATOR'; // ✅ ADICIONADO SUPER_ADMIN
+  companyId?: string; // ✅ AGORA É OPCIONAL
+  companyName?: string; // ✅ OPCIONAL
 }
 
 interface AuthContextData {
@@ -16,6 +16,9 @@ interface AuthContextData {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
+  isSuperAdmin: boolean; // ✅ NOVO
+  isAdmin: boolean; // ✅ NOVO
+  isOperator: boolean; // ✅ NOVO
 }
 
 const AuthContext = createContext<AuthContextData | null>(null);
@@ -80,6 +83,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         login,
         logout,
         isAuthenticated: !!user,
+        isSuperAdmin: user?.role === 'SUPER_ADMIN', // ✅ NOVO
+        isAdmin: user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN', // ✅ NOVO
+        isOperator: user?.role === 'OPERATOR', // ✅ NOVO
       }}
     >
       {children}

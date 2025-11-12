@@ -345,7 +345,7 @@ const NewProduct: React.FC = () => {
                     Testando estruturas...
                   </>
                 ) : (
-                  "Salvar"
+                  "Guardar"
                 )}
               </button>
             </div>

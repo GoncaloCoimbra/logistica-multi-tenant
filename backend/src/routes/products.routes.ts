@@ -9,7 +9,7 @@ import {
   getNextStates,
   getProductHistory
 } from '../controllers/products.controller';
-import { authenticate } from '../middlewares/auth.middleware';  // Atualize para 'authenticate'
+import { authenticate } from '../middlewares/auth.middleware';  
 
 const router = Router();
 
