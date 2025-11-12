@@ -336,6 +336,7 @@ async function main() {
   console.log('   Company: (sem empresa - acesso global)');
 
   console.log('\n🏢 EMPRESA 1 - Logística Demo Lda');
+  console.log('   📧 Admin: superadmin@sistema.com /superadmin123');
   console.log('   📧 Admin: admin@logistica.com / admin123');
   console.log('   👤 Operador: operador@logistica.com / operator123');
   console.log(`   📦 Produtos: ${products1.length}`);

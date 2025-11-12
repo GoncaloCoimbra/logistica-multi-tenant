@@ -100,8 +100,10 @@ const Login: React.FC = () => {
 
         <div className="mt-6 text-center text-sm text-gray-600">
           <p>Credenciais de teste:</p>
+           <p className="font-mono">superadmin@sistema.com /superadmin123</p>
           <p className="font-mono">admin@logistica.com / admin123</p>
           <p className="font-mono">operador@logistica.com / operator123</p>
+          
         </div>
       </div>
     </div>

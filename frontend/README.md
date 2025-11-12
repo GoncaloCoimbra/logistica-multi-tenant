@@ -246,6 +246,12 @@ Operador:
 
  Permissões
 
+Super-Admin
+
+Acesso a todo
+
+
+
 Administrador:
 - Acesso total ao sistema
 - Pode aprovar ou rejeitar produtos

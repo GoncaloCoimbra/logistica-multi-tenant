@@ -1,14 +1,10 @@
- 
 import { Request, Response } from 'express';
 import { ProductStatus, Role, PrismaClient } from '@prisma/client';
 import { ProductStateService } from '../services/product-state.service';
 
 import prisma from '../config/database';
 
-
 type PrismaTransactionClient = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>;
-
-
 
 export const listProducts = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -19,11 +15,12 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
 
     const { status, search, supplier, location, dateFrom, dateTo } = req.query;
 
-    const where: any = {
-      companyId: req.user.companyId,
-    };
+    // ✅ Super Admin vê TODOS os produtos de TODAS as empresas
+    const where: any = req.user.role === 'SUPER_ADMIN' 
+      ? {} 
+      : { companyId: req.user.companyId };
 
-     
+    // Filtro de status
     if (status && typeof status === 'string') {
       if (Object.values(ProductStatus).includes(status as ProductStatus)) {
         where.status = status as ProductStatus;
@@ -33,7 +30,7 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
       }
     }
 
-    
+    // Busca por texto
     if (search) {
       const searchString = search as string;
       where.OR = [
@@ -42,7 +39,7 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
       ];
     }
 
-     
+    // Filtro por fornecedor
     if (supplier && typeof supplier === 'string') {
       where.supplier = {
         name: {
@@ -52,7 +49,7 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
       };
     }
 
-    
+    // Filtro por localização
     if (location && typeof location === 'string') {
       where.currentLocation = {
         contains: location,
@@ -60,7 +57,7 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
       };
     }
 
-     
+    // Filtro por data
     if (dateFrom || dateTo) {
       where.createdAt = {};
       
@@ -69,7 +66,6 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
       }
       
       if (dateTo && typeof dateTo === 'string') {
-      
         const endDate = new Date(dateTo);
         endDate.setHours(23, 59, 59, 999);
         where.createdAt.lte = endDate;
@@ -86,6 +82,14 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
             nif: true,
           },
         },
+        // ✅ Super Admin vê também a empresa do produto
+        company: req.user.role === 'SUPER_ADMIN' ? {
+          select: {
+            id: true,
+            name: true,
+            nif: true,
+          }
+        } : false,
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -106,11 +110,17 @@ export const getProduct = async (req: Request, res: Response): Promise<void> => 
 
     const { id } = req.params;
 
+    // ✅ Super Admin pode acessar qualquer produto, outros usuários apenas da sua empresa
+    const where: any = {
+      id,
+    };
+
+    if (req.user.role !== 'SUPER_ADMIN') {
+      where.companyId = req.user.companyId;
+    }
+
     const product = await prisma.product.findFirst({
-      where: {
-        id,
-        companyId: req.user.companyId,
-      },
+      where,
       include: {
         supplier: true,
         movements: {
@@ -168,7 +178,7 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-     
+    // Validações numéricas
     const quantityNum = parseFloat(quantity);
     if (isNaN(quantityNum) || quantityNum <= 0) {
       res.status(400).json({ error: "Quantidade inválida ou menor que 1" });
@@ -187,7 +197,7 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-     
+    // Resolver fornecedor
     let resolvedSupplierId = supplierId || null;
 
     if (!resolvedSupplierId && supplierName) {
@@ -208,7 +218,7 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
       resolvedSupplierId = supplier.id;
     }
 
-     
+    // Verificar código interno único
     const existingProduct = await prisma.product.findFirst({
       where: {
         internalCode,
@@ -223,7 +233,7 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-     
+    // Criar produto com transação
     const product = await prisma.$transaction(async (tx: PrismaTransactionClient) => {
       const createdProduct = await tx.product.create({
         data: {
@@ -335,11 +345,17 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
+    // ✅ Super Admin pode atualizar qualquer produto, outros usuários apenas da sua empresa
+    const where: any = {
+      id,
+    };
+
+    if (req.user.role !== 'SUPER_ADMIN') {
+      where.companyId = user.companyId;
+    }
+
     const existingProduct = await prisma.product.findFirst({
-      where: {
-        id,
-        companyId: user.companyId,
-      },
+      where,
     });
 
     if (!existingProduct) {
@@ -386,11 +402,17 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
 
     const { id } = req.params;
 
+    // ✅ Super Admin pode eliminar qualquer produto, outros usuários apenas da sua empresa
+    const where: any = {
+      id,
+    };
+
+    if (req.user.role !== 'SUPER_ADMIN') {
+      where.companyId = user.companyId;
+    }
+
     const existingProduct = await prisma.product.findFirst({
-      where: {
-        id,
-        companyId: user.companyId,
-      },
+      where,
     });
 
     if (!existingProduct) {
@@ -427,8 +449,6 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
   }
 };
 
- 
-
 export const changeProductStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -455,11 +475,17 @@ export const changeProductStatus = async (req: Request, res: Response): Promise<
 
     const targetStatus = newStatus as ProductStatus;
 
+    // ✅ Super Admin pode alterar status de qualquer produto, outros usuários apenas da sua empresa
+    const where: any = {
+      id,
+    };
+
+    if (req.user.role !== 'SUPER_ADMIN') {
+      where.companyId = user.companyId;
+    }
+
     const existingProduct = await prisma.product.findFirst({
-      where: {
-        id,
-        companyId: user.companyId,
-      },
+      where,
     });
 
     if (!existingProduct) {
@@ -578,11 +604,17 @@ export const getNextStates = async (req: Request, res: Response): Promise<void> 
 
     const { id } = req.params;
 
+    // ✅ Super Admin pode acessar qualquer produto, outros usuários apenas da sua empresa
+    const where: any = {
+      id,
+    };
+
+    if (req.user.role !== 'SUPER_ADMIN') {
+      where.companyId = req.user.companyId;
+    }
+
     const product = await prisma.product.findFirst({
-      where: {
-        id,
-        companyId: req.user.companyId,
-      },
+      where,
     });
 
     if (!product) {
@@ -614,11 +646,17 @@ export const getProductHistory = async (req: Request, res: Response): Promise<vo
 
     const { id } = req.params;
 
+    // ✅ Super Admin pode acessar qualquer produto, outros usuários apenas da sua empresa
+    const where: any = {
+      id,
+    };
+
+    if (req.user.role !== 'SUPER_ADMIN') {
+      where.companyId = req.user.companyId;
+    }
+
     const product = await prisma.product.findFirst({
-      where: {
-        id,
-        companyId: req.user.companyId,
-      },
+      where,
     });
 
     if (!product) {

@@ -9,9 +9,15 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
       return;
     }
 
-    const companyId = req.user.companyId;
-    
-   
+    // ✅ Super Admin vê dados globais
+    const isSuperAdmin = req.user.role === 'SUPER_ADMIN';
+    const companyId = isSuperAdmin ? undefined : req.user.companyId;
+
+    if (!isSuperAdmin && !companyId) {
+      res.status(401).json({ error: 'Utilizador sem empresa associada' });
+      return;
+    }
+
     const { period = '30d' } = req.query;
     
     let startDate = new Date();
@@ -32,15 +38,18 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
         startDate.setDate(startDate.getDate() - 30);
     }
 
-  
+    // ✅ WHERE clause condicional
+    const whereCompany = companyId ? { companyId } : {};
+
+    // Total de produtos
     const totalProducts = await prisma.product.count({
-      where: { companyId }
+      where: whereCompany
     });
 
-   
+    // Produtos por status
     const productsByStatus = await prisma.product.groupBy({
       by: ['status'],
-      where: { companyId },
+      where: whereCompany,
       _count: {
         id: true
       }
@@ -51,68 +60,67 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
       count: item._count.id
     }));
 
-    
+    // Movimentos recentes
     const recentMovements = await prisma.productMovement.count({
       where: {
-        product: {
-          companyId
-        },
+        product: whereCompany,
         createdAt: {
           gte: startDate
         }
       }
     });
 
-   
+    // Movimentos por dia
     const movementsByDay = await prisma.$queryRaw<Array<{date: Date, count: bigint}>>`
       SELECT 
         DATE(pm."createdAt") as date,
         COUNT(*)::int as count
       FROM "ProductMovement" pm
       INNER JOIN "Product" p ON p.id = pm."productId"
-      WHERE p."companyId" = ${companyId}
-        AND pm."createdAt" >= ${startDate}
+      WHERE ${companyId ? prisma.$queryRaw`p."companyId" = ${companyId} AND` : prisma.$queryRaw``}
+        pm."createdAt" >= ${startDate}
       GROUP BY DATE(pm."createdAt")
       ORDER BY date ASC
     `;
 
-    
+    // Produtos criados por dia
     const productsCreatedByDay = await prisma.$queryRaw<Array<{date: Date, count: bigint}>>`
       SELECT 
         DATE("createdAt") as date,
         COUNT(*)::int as count
       FROM "Product"
-      WHERE "companyId" = ${companyId}
-        AND "createdAt" >= ${startDate}
+      WHERE ${companyId ? prisma.$queryRaw`"companyId" = ${companyId} AND` : prisma.$queryRaw``}
+        "createdAt" >= ${startDate}
       GROUP BY DATE("createdAt")
       ORDER BY date ASC
     `;
 
-    // ✅ CORREÇÃO: Cast explícito do enum para text
+    // Entregas por dia
     const deliveredByDay = await prisma.$queryRaw<Array<{date: Date, count: bigint}>>`
       SELECT 
         DATE(pm."createdAt") as date,
         COUNT(*)::int as count
       FROM "ProductMovement" pm
       INNER JOIN "Product" p ON p.id = pm."productId"
-      WHERE p."companyId" = ${companyId}
-        AND pm."newStatus"::text = ${ProductStatus.DELIVERED}
+      WHERE ${companyId ? prisma.$queryRaw`p."companyId" = ${companyId} AND` : prisma.$queryRaw``}
+        pm."newStatus"::text = ${ProductStatus.DELIVERED}
         AND pm."createdAt" >= ${startDate}
       GROUP BY DATE(pm."createdAt")
       ORDER BY date ASC
     `;
 
-    
+    // Contagens por status
     const [receivedCount, inAnalysisCount, inStorageCount, deliveredCount, rejectedCount] = await Promise.all([
-      prisma.product.count({ where: { companyId, status: ProductStatus.RECEIVED } }),
-      prisma.product.count({ where: { companyId, status: ProductStatus.IN_ANALYSIS } }),
-      prisma.product.count({ where: { companyId, status: ProductStatus.IN_STORAGE } }),
-      prisma.product.count({ where: { companyId, status: ProductStatus.DELIVERED } }),
-      prisma.product.count({ where: { companyId, status: ProductStatus.REJECTED } })
+      prisma.product.count({ where: { ...whereCompany, status: ProductStatus.RECEIVED } }),
+      prisma.product.count({ where: { ...whereCompany, status: ProductStatus.IN_ANALYSIS } }),
+      prisma.product.count({ where: { ...whereCompany, status: ProductStatus.IN_STORAGE } }),
+      prisma.product.count({ where: { ...whereCompany, status: ProductStatus.DELIVERED } }),
+      prisma.product.count({ where: { ...whereCompany, status: ProductStatus.REJECTED } })
     ]);
 
+    // Top fornecedores
     const topSuppliers = await prisma.supplier.findMany({
-      where: { companyId },
+      where: whereCompany,
       include: {
         _count: {
           select: { products: true }
@@ -126,27 +134,27 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
       take: 5
     });
 
-   
+    // Estatísticas de transportes
     const [totalTransports, activeTransports, completedTransports] = await Promise.all([
-      prisma.transport.count({ where: { companyId } }),
+      prisma.transport.count({ where: whereCompany }),
       prisma.transport.count({ 
         where: { 
-          companyId, 
+          ...whereCompany,
           status: { in: [TransportStatus.PENDING, TransportStatus.IN_TRANSIT] }
         } 
       }),
       prisma.transport.count({ 
         where: { 
-          companyId, 
+          ...whereCompany,
           status: TransportStatus.DELIVERED 
         } 
       })
     ]);
 
-   
-    const totalVehicles = await prisma.vehicle.count({ where: { companyId } });
+    // Total de veículos
+    const totalVehicles = await prisma.vehicle.count({ where: whereCompany });
 
-    // ✅ CORREÇÃO: Cast explícito do enum para text
+    // Taxa de rejeição por fornecedor
     const rejectionRateBySupplier = await prisma.$queryRaw<Array<{
       supplierId: string,
       supplierName: string,
@@ -166,14 +174,15 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
         END as "rejectionRate"
       FROM "Supplier" s
       LEFT JOIN "Product" p ON p."supplierId" = s.id
-      WHERE s."companyId" = ${companyId}
+      WHERE ${companyId ? prisma.$queryRaw`s."companyId" = ${companyId} AND` : prisma.$queryRaw``}
+        1=1
       GROUP BY s.id, s.name
       HAVING COUNT(p.id) > 0
       ORDER BY "rejectionRate" DESC
       LIMIT 5
     `;
 
-    
+    // Tempo médio por status
     const avgTimeInStatus = await prisma.$queryRaw<Array<{
       status: string,
       avgHours: number
@@ -192,12 +201,12 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
           ORDER BY "createdAt" ASC
           LIMIT 1
         )
-      WHERE p."companyId" = ${companyId}
-        AND pm."createdAt" >= ${startDate}
+      WHERE ${companyId ? prisma.$queryRaw`p."companyId" = ${companyId} AND` : prisma.$queryRaw``}
+        pm."createdAt" >= ${startDate}
       GROUP BY pm."newStatus"
     `;
 
-    
+    // Percentagens
     const percentages = {
       received: totalProducts > 0 ? ((receivedCount / totalProducts) * 100).toFixed(1) : '0',
       inStorage: totalProducts > 0 ? ((inStorageCount / totalProducts) * 100).toFixed(1) : '0',
@@ -205,7 +214,7 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
       rejected: totalProducts > 0 ? ((rejectedCount / totalProducts) * 100).toFixed(1) : '0'
     };
 
-    
+    // Tendências
     const previousStartDate = new Date(startDate);
     switch (period) {
       case '7d':
@@ -224,19 +233,8 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
 
     const previousPeriodProducts = await prisma.product.count({
       where: {
-        companyId,
+        ...whereCompany,
         createdAt: {
-          gte: previousStartDate,
-          lt: startDate
-        }
-      }
-    });
-
-    const previousPeriodDelivered = await prisma.product.count({
-      where: {
-        companyId,
-        status: ProductStatus.DELIVERED,
-        shippedAt: {
           gte: previousStartDate,
           lt: startDate
         }
@@ -245,18 +243,8 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
 
     const currentPeriodProducts = await prisma.product.count({
       where: {
-        companyId,
+        ...whereCompany,
         createdAt: {
-          gte: startDate
-        }
-      }
-    });
-
-    const currentPeriodDelivered = await prisma.product.count({
-      where: {
-        companyId,
-        status: ProductStatus.DELIVERED,
-        shippedAt: {
           gte: startDate
         }
       }
@@ -266,12 +254,23 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
       ? (((currentPeriodProducts - previousPeriodProducts) / previousPeriodProducts) * 100).toFixed(1)
       : '0';
 
-    const deliveryTrend = previousPeriodDelivered > 0
-      ? (((currentPeriodDelivered - previousPeriodDelivered) / previousPeriodDelivered) * 100).toFixed(1)
-      : '0';
+    // ✅ Dados extras para Super Admin
+    let superAdminData = {};
+    if (isSuperAdmin) {
+      const totalCompanies = await prisma.company.count();
+      const totalUsers = await prisma.user.count();
+      
+      superAdminData = {
+        totalCompanies,
+        totalUsers,
+        systemWide: true,
+      };
+    }
 
     res.json({
       period,
+      isSuperAdmin,
+      ...superAdminData,
       totalProducts,
       productsByStatus: statusData,
       recentMovements,
@@ -321,7 +320,6 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
       })),
       trends: {
         products: productTrend,
-        deliveries: deliveryTrend
       }
     });
 

@@ -157,7 +157,7 @@ model AuditLog {
 }
 
 enum Role {
-  SUPER_ADMIN  // ✅ ADICIONADO
+  SUPER_ADMIN  
   ADMIN
   OPERATOR
 }
