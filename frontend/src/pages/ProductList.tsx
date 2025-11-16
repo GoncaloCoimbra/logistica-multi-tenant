@@ -103,7 +103,7 @@ const ProductList: React.FC = () => {
   });
 
   const handleProductClick = (productId: string) => {
-    navigate(`/produtos/${productId}`); // ✅ CORRIGIDO - era /products/${productId}
+    navigate(`/produtos/${productId}`); 
   };
 
   if (loading) {
@@ -119,7 +119,7 @@ const ProductList: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Lista de Produtos</h1>
         <button
-          onClick={() => navigate('/produtos/novo')} // ✅ CORRIGIDO - era /products/new
+          onClick={() => navigate('/produtos/novo')} 
           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
         >
           Novo Produto

@@ -5,13 +5,13 @@ import { useAuth } from '../contexts/AuthContext';
 interface PrivateRouteProps {
   children: React.ReactElement;
   adminOnly?: boolean;
-  superAdminOnly?: boolean; // ✅ NOVO
+  superAdminOnly?: boolean; 
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ 
   children, 
   adminOnly = false,
-  superAdminOnly = false // ✅ NOVO
+  superAdminOnly = false 
 }) => {
   const { user, loading, isSuperAdmin, isAdmin } = useAuth();
 
@@ -30,7 +30,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     return <Navigate to="/login" replace />;
   }
 
-  // ✅ Verificar se requer SUPER_ADMIN
+  
   if (superAdminOnly && !isSuperAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">

@@ -36,7 +36,7 @@ export const createSupplier = async (req: Request, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: 'Não autenticado' });
     
-    // ✅ Aceitar tanto NIF (frontend) quanto nif (backend)
+    
     const { 
       name, 
       NIF,      // Frontend envia assim
@@ -44,13 +44,13 @@ export const createSupplier = async (req: Request, res: Response) => {
       address, 
       email, 
       phone,
-      city,     // ✅ ADICIONAR
-      state     // ✅ ADICIONAR
+      city,     
+      state    
     } = req.body;
     
     if (!name) return res.status(400).json({ error: 'Nome é obrigatório' });
 
-    // ✅ Usar NIF ou nif (o que vier preenchido)
+    
     const nifValue = NIF || nif;
 
     const created = await prisma.supplier.create({
@@ -60,8 +60,8 @@ export const createSupplier = async (req: Request, res: Response) => {
         address,
         email,
         phone,
-        city,           // ✅ ADICIONAR
-        state,          // ✅ ADICIONAR
+        city,           
+        state,          
         companyId: req.user.companyId,
       },
     });
@@ -83,8 +83,8 @@ export const updateSupplier = async (req: Request, res: Response) => {
       address, 
       email, 
       phone,
-      city,     // ✅ ADICIONAR
-      state     // ✅ ADICIONAR
+      city,    
+      state     
     } = req.body;
 
     const existing = await prisma.supplier.findFirst({ 
@@ -92,7 +92,7 @@ export const updateSupplier = async (req: Request, res: Response) => {
     });
     if (!existing) return res.status(404).json({ error: 'Fornecedor não encontrado' });
 
-    // ✅ Usar NIF ou nif (o que vier preenchido)
+    
     const nifValue = NIF || nif;
 
     const updated = await prisma.supplier.update({

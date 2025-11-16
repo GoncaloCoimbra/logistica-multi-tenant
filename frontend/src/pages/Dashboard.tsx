@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // ✅ EXPORTAR RELATÓRIO (PDF/Excel)
+  
   const handleExportReport = () => {
     if (!stats) return;
 
@@ -121,7 +121,7 @@ const Dashboard: React.FC = () => {
     document.body.removeChild(link);
   };
 
-  // ✅ CARREGAR TODOS OS FORNECEDORES
+ 
   const loadAllSuppliers = async () => {
     try {
       const response = await api.get('/suppliers');
@@ -132,7 +132,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // ✅ EXPANDIR GRÁFICO
+ 
   const toggleExpandChart = (chartId: string) => {
     setExpandedChart(expandedChart === chartId ? null : chartId);
   };

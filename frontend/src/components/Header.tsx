@@ -79,6 +79,13 @@ const Header: React.FC = () => {
     });
   }
 
+  const getAvatarUrl = () => {
+    if (user?.avatarUrl) {
+      return `${process.env.REACT_APP_API_URL}${user.avatarUrl}`;
+    }
+    return null;
+  };
+
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -137,10 +144,19 @@ const Header: React.FC = () => {
                 </div>
                 <div className="relative group">
                   <button className="flex items-center space-x-2">
-                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md ring-2 ring-white">
-                      <span className="text-white font-bold text-sm">
-                        {user.name.charAt(0).toUpperCase()}
-                      </span>
+                    {/* ✅ ATUALIZADO: Avatar com imagem ou inicial */}
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md ring-2 ring-white overflow-hidden">
+                      {getAvatarUrl() ? (
+                        <img 
+                          src={getAvatarUrl()!} 
+                          alt={user.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-white font-bold text-sm">
+                          {user.name.charAt(0).toUpperCase()}
+                        </span>
+                      )}
                     </div>
                     <svg className="w-4 h-4 text-gray-400 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -154,12 +170,16 @@ const Header: React.FC = () => {
                       <p className="text-xs text-gray-500">{user.email}</p>
                     </div>
                     <div className="py-2">
-                      <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                      {/* ✅ CORRIGIDO: Link para Perfil */}
+                      <Link
+                        to="/profile"
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"
+                      >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                         <span>Perfil</span>
-                      </button>
+                      </Link>
                       <Link
                         to="/configuracoes"
                         className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"

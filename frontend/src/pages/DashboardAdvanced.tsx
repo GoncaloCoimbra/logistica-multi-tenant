@@ -8,9 +8,20 @@ import {
   AreaChart, Area
 } from 'recharts';
 import api from '../api/api';
+import DashboardFilters, { FilterState } from '../components/DashboardFilters';
 
 interface DashboardStats {
   period: string;
+  customDateRange: { startDate: Date; endDate: Date } | null;
+  appliedFilters: {
+    supplierId: string | null;
+    hasDateRange: boolean;
+  };
+  availableSuppliers: Array<{
+    id: string;
+    name: string;
+    productCount: number;
+  }>;
   totalProducts: number;
   productsByStatus: Array<{ status: string; count: number }>;
   recentMovements: number;
@@ -92,25 +103,42 @@ const DashboardAdvanced: React.FC = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedPeriod, setSelectedPeriod] = useState('30d');
   const [viewMode, setViewMode] = useState<'overview' | 'detailed'>('overview');
-
-  const periods = [
-    { value: '7d', label: '7 dias' },
-    { value: '30d', label: '30 dias' },
-    { value: '90d', label: '90 dias' },
-    { value: '1y', label: '1 ano' }
-  ];
+  
+  // Estado dos filtros
+  const [currentFilters, setCurrentFilters] = useState<FilterState>({
+    period: '30d',
+    supplierId: null,
+    startDate: null,
+    endDate: null,
+    useCustomDate: false
+  });
 
   useEffect(() => {
-    loadStats();
-  }, [selectedPeriod]);
+    loadStats(currentFilters);
+  }, []);
 
-  const loadStats = async () => {
+  const loadStats = async (filters: FilterState) => {
     try {
       setLoading(true);
-      const response = await api.get(`/dashboard/stats?period=${selectedPeriod}`);
+      
+      // Construir query params
+      const params = new URLSearchParams();
+      
+      if (filters.useCustomDate && filters.startDate && filters.endDate) {
+        params.append('startDate', filters.startDate);
+        params.append('endDate', filters.endDate);
+      } else {
+        params.append('period', filters.period);
+      }
+      
+      if (filters.supplierId) {
+        params.append('supplierId', filters.supplierId);
+      }
+      
+      const response = await api.get(`/dashboard/stats?${params.toString()}`);
       setStats(response.data);
+      setCurrentFilters(filters);
     } catch (error) {
       console.error('Erro ao carregar estatísticas:', error);
     } finally {
@@ -118,7 +146,81 @@ const DashboardAdvanced: React.FC = () => {
     }
   };
 
-  if (loading) {
+  const handleFilterChange = (filters: FilterState) => {
+    loadStats(filters);
+  };
+
+  const handleExportReport = () => {
+    if (!stats) return;
+
+    // Criar CSV com informações dos filtros aplicados
+    const filterInfo = [];
+    
+    if (stats.appliedFilters.supplierId) {
+      const supplier = stats.availableSuppliers.find(s => s.id === stats.appliedFilters.supplierId);
+      filterInfo.push(['Fornecedor Filtrado', supplier?.name || 'N/A']);
+    }
+    
+    if (stats.customDateRange) {
+      filterInfo.push([
+        'Período Customizado',
+        `${new Date(stats.customDateRange.startDate).toLocaleDateString('pt-PT')} - ${new Date(stats.customDateRange.endDate).toLocaleDateString('pt-PT')}`
+      ]);
+    } else {
+      filterInfo.push(['Período', stats.period]);
+    }
+
+    const csvContent = [
+      ['Relatório de Performance Avançado - Sistema Logística'],
+      ['Data de Exportação', new Date().toLocaleDateString('pt-BR')],
+      [''],
+      ['FILTROS APLICADOS'],
+      ...filterInfo,
+      [''],
+      ['RESUMO GERAL'],
+      ['Total de Produtos', stats.totalProducts],
+      ['Recebidos', stats.summary.received],
+      ['Em Análise', stats.summary.inAnalysis],
+      ['Em Armazenamento', stats.summary.inStorage],
+      ['Entregues', stats.summary.delivered],
+      ['Rejeitados', stats.summary.rejected],
+      [''],
+      ['TENDÊNCIAS'],
+      ['Produtos vs Período Anterior', `${stats.trends.products}%`],
+      ['Entregas vs Período Anterior', `${stats.trends.deliveries}%`],
+      [''],
+      ['TOP FORNECEDORES'],
+      ['Posição', 'Nome', 'Produtos', 'Percentagem'],
+      ...stats.topSuppliers.map((s, i) => {
+        const percentage = stats.totalProducts > 0
+          ? ((s.productCount / stats.totalProducts) * 100).toFixed(1)
+          : '0';
+        return [`#${i + 1}`, s.name, s.productCount, `${percentage}%`];
+      }),
+      [''],
+      ['TAXA DE REJEIÇÃO POR FORNECEDOR'],
+      ['Fornecedor', 'Total Produtos', 'Rejeitados', 'Taxa (%)'],
+      ...stats.rejectionRateBySupplier.map(r => [
+        r.supplierName,
+        r.totalProducts,
+        r.rejectedProducts,
+        r.rejectionRate
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    // Download CSV
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `relatorio_avancado_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  if (loading && !stats) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="text-center">
@@ -199,9 +301,25 @@ const DashboardAdvanced: React.FC = () => {
     return null;
   };
 
+  // Determinar label do período atual
+  const getPeriodLabel = () => {
+    if (stats.customDateRange) {
+      return `${new Date(stats.customDateRange.startDate).toLocaleDateString('pt-PT')} - ${new Date(stats.customDateRange.endDate).toLocaleDateString('pt-PT')}`;
+    }
+    
+    const periodLabels: { [key: string]: string } = {
+      '7d': 'Últimos 7 dias',
+      '30d': 'Últimos 30 dias',
+      '90d': 'Últimos 90 dias',
+      '1y': 'Último ano'
+    };
+    
+    return periodLabels[stats.period] || stats.period;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-gray-100">
-      
+      {/* Header */}
       <div className="bg-white border-b shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -209,56 +327,31 @@ const DashboardAdvanced: React.FC = () => {
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Dashboard Avançado
               </h1>
-              <p className="text-sm text-gray-500 mt-1">Análise detalhada e insights do sistema</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Análise detalhada e insights do sistema • {getPeriodLabel()}
+              </p>
             </div>
             <div className="flex items-center gap-3">
-             
-              <div className="flex items-center bg-gray-100 rounded-lg p-1">
-                <button
-                  onClick={() => setViewMode('overview')}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                    viewMode === 'overview'
-                      ? 'bg-white text-blue-600 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  Visão Geral
-                </button>
-                <button
-                  onClick={() => setViewMode('detailed')}
-                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                    viewMode === 'detailed'
-                      ? 'bg-white text-blue-600 shadow-sm'
-                      : 'text-gray-600 hover:text-gray-900'
-                  }`}
-                >
-                  Detalhado
-                </button>
-              </div>
-
-             
-              <div className="flex items-center bg-gray-100 rounded-lg p-1">
-                {periods.map((period) => (
-                  <button
-                    key={period.value}
-                    onClick={() => setSelectedPeriod(period.value)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                      selectedPeriod === period.value
-                        ? 'bg-white text-blue-600 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    {period.label}
-                  </button>
-                ))}
-              </div>
-
+              {/* Botão Exportar */}
               <button 
-                onClick={loadStats}
-                className="p-2 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors group"
+                onClick={handleExportReport}
+                disabled={loading}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm shadow-sm flex items-center gap-2 disabled:opacity-50"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Exportar
+              </button>
+
+              {/* Botão Atualizar */}
+              <button 
+                onClick={() => loadStats(currentFilters)}
+                disabled={loading}
+                className="p-2 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors group disabled:opacity-50"
                 title="Atualizar"
               >
-                <svg className="w-5 h-5 text-blue-600 group-hover:rotate-180 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className={`w-5 h-5 text-blue-600 transition-transform duration-500 ${loading ? 'animate-spin' : 'group-hover:rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </button>
@@ -268,7 +361,16 @@ const DashboardAdvanced: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-       
+        {/* ===== FILTROS INTERATIVOS ===== */}
+        <div className="mb-8">
+          <DashboardFilters
+            availableSuppliers={stats.availableSuppliers}
+            onFilterChange={handleFilterChange}
+            loading={loading}
+          />
+        </div>
+
+        {/* Cards de Métricas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between mb-4">
@@ -436,7 +538,8 @@ const DashboardAdvanced: React.FC = () => {
             </button>
           </div>
         </div>
-      
+
+        {/* Gráfico de Timeline */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 hover:shadow-lg transition-shadow">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -494,7 +597,7 @@ const DashboardAdvanced: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          
+          {/* Gráfico Pizza */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-shadow">
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900">📊 Distribuição por Estado</h3>
@@ -529,7 +632,7 @@ const DashboardAdvanced: React.FC = () => {
             </ResponsiveContainer>
           </div>
 
-          
+          {/* Tempo Médio por Estado */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-shadow">
             <div className="mb-6">
               <h3 className="text-lg font-bold text-gray-900">⏱️ Tempo Médio por Estado</h3>
@@ -571,7 +674,7 @@ const DashboardAdvanced: React.FC = () => {
           </div>
         </div>
 
-       
+        {/* Taxa de Rejeição por Fornecedor */}
         {stats.rejectionRateBySupplier.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8 hover:shadow-lg transition-shadow">
             <div className="mb-6">
@@ -639,6 +742,7 @@ const DashboardAdvanced: React.FC = () => {
           </div>
         )}
 
+        {/* Estatísticas de Transportes e Veículos */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
             <div className="flex items-center gap-4 mb-6">
@@ -688,14 +792,17 @@ const DashboardAdvanced: React.FC = () => {
           </div>
         </div>
 
-        
+        {/* Top 5 Fornecedores */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-lg transition-shadow">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-xl font-bold text-gray-900">🏆 Top 5 Fornecedores</h3>
               <p className="text-sm text-gray-500 mt-1">Fornecedores com mais produtos fornecidos</p>
             </div>
-            <button className="text-sm text-blue-600 hover:text-blue-700 font-semibold hover:underline transition-all">
+            <button 
+              onClick={() => navigate('/fornecedores')}
+              className="text-sm text-blue-600 hover:text-blue-700 font-semibold hover:underline transition-all"
+            >
               Ver todos →
             </button>
           </div>
@@ -738,7 +845,7 @@ const DashboardAdvanced: React.FC = () => {
           </div>
         </div>
 
-       
+        {/* Resumo Final */}
         <div className="mt-8 bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl p-8 text-white">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             <div className="text-center">

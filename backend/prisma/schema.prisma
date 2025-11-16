@@ -30,12 +30,14 @@ model User {
   email       String            @unique
   password    String
   role        Role              @default(OPERATOR)
-  companyId   String?           // ✅ AGORA É OPCIONAL (para Super Admins)
+  isActive    Boolean           @default(true)  // ✅ ADICIONADO
+  avatarUrl   String?          
+  companyId   String?
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
   auditLogs   AuditLog[]
   productLogs ProductMovement[]
-  company     Company?          @relation(fields: [companyId], references: [id], onDelete: Cascade) // ✅ OPCIONAL
+  company     Company?          @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
 model Supplier {

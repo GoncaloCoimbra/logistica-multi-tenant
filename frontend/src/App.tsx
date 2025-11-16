@@ -13,7 +13,10 @@ import SupplierList from './pages/SupplierList';
 import VehicleList from './pages/VehicleList';
 import TransportList from './pages/TransportList';
 import Settings from './pages/Settings';
-import AuditLog from './pages/AuditLog'; // ✅ NOVO
+import AuditLog from './pages/AuditLog'; 
+import CompanyManagement from './pages/CompanyManagement';
+import GlobalUserManagement from './pages/GlobalUserManagement';
+import Profile from './pages/Profile'; 
 
 function App() {
   return (
@@ -42,6 +45,18 @@ function App() {
               <PrivateRoute>
                 <Layout>
                   <Dashboard />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          {/* ✅ NOVO - Perfil do Utilizador */}
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Profile />
                 </Layout>
               </PrivateRoute>
             }
@@ -129,7 +144,7 @@ function App() {
             }
           />
 
-          {/* ✅ NOVO - Histórico de Operações (apenas Admin) */}
+          {/* Histórico de Operações (apenas Admin) */}
           <Route
             path="/historico"
             element={

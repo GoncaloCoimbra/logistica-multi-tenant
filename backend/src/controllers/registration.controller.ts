@@ -46,7 +46,7 @@ export const registerCompanyAndUser = async (req: Request, res: Response) => {
     if (!emailRegex.test(userEmail)) return res.status(400).json({ error: 'Email do utilizador inválido' });
     if (userPassword.length < 6) return res.status(400).json({ error: 'A senha deve ter no mínimo 6 caracteres' });
 
-     
+    // Verificar duplicados
     const existingCompany = await prisma.company.findFirst({
       where: { OR: [{ nif: companyNif }, { email: companyEmail }] },
     });
@@ -78,7 +78,7 @@ export const registerCompanyAndUser = async (req: Request, res: Response) => {
           name: userName,
           email: userEmail,
           password: hashedPassword,
-          role: Role.ADMIN,         
+          role: Role.OPERATOR, 
           companyId: createdCompany.id,
         },
       });
@@ -86,7 +86,7 @@ export const registerCompanyAndUser = async (req: Request, res: Response) => {
       return { company: createdCompany, user: createdUser };
     });
 
-    console.log('✅ Criado company & user:', { companyId: company.id, userId: user.id });
+    console.log('✅ Criado company & user:', { companyId: company.id, userId: user.id, role: user.role });
 
     const token = jwt.sign(
       { userId: user.id, companyId: company.id, role: user.role },
@@ -103,7 +103,6 @@ export const registerCompanyAndUser = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('❌ Erro no registo:', error);
 
-    
     if (error?.code === 'P2002') {
       const target = error?.meta?.target ?? 'campo único';
       return res.status(409).json({ error: `Conflito de unicidade: ${target}` });

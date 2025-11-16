@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import path from 'path'; 
 
 // Importar todas as rotas
 import authRoutes from './routes/auth.routes';
@@ -23,7 +24,9 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // Middlewares
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -32,6 +35,9 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Health check
 app.get('/health', (req, res) => {
@@ -70,6 +76,7 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📡 Health check: http://localhost:${PORT}/health`);
+  console.log(`📁 Uploads: http://localhost:${PORT}/uploads`); 
   console.log(`📋 Routes registered:`);
   console.log(`   - /api/auth`);
   console.log(`   - /api/registration`);
@@ -82,4 +89,5 @@ app.listen(PORT, () => {
   console.log(`   - /api/notifications`);
   console.log(`   - /api/company`);
   console.log(`   - /api/auditlog`); 
+  console.log(`   - /api/superadmin`);
 });

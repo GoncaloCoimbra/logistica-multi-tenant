@@ -51,7 +51,7 @@ const NotificationPanel: React.FC = () => {
     }
   };
 
-  // ✅ MARCAR NOTIFICAÇÃO COMO LIDA
+  
   const markAsRead = async (notificationId: string, e?: React.MouseEvent) => {
     if (e) {
       e.stopPropagation();
@@ -76,7 +76,7 @@ const NotificationPanel: React.FC = () => {
     }
   };
 
-  // ✅ LIMPAR TODAS AS NOTIFICAÇÕES
+ 
   const clearAllNotifications = async () => {
     if (!window.confirm('Deseja limpar todas as notificações?')) {
       return;
@@ -97,7 +97,7 @@ const NotificationPanel: React.FC = () => {
     }
   };
 
-  // ✅ MARCAR TODAS COMO LIDAS
+ 
   const markAllAsRead = async () => {
     try {
       await api.patch('/notifications/mark-all-read');

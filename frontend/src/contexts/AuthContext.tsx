@@ -5,9 +5,10 @@ interface User {
   id: string;
   name: string;
   email: string;
-  role: 'SUPER_ADMIN' | 'ADMIN' | 'OPERATOR'; // ✅ ADICIONADO SUPER_ADMIN
-  companyId?: string; // ✅ AGORA É OPCIONAL
-  companyName?: string; // ✅ OPCIONAL
+  role: 'SUPER_ADMIN' | 'ADMIN' | 'OPERATOR';
+  companyId?: string;
+  companyName?: string;
+  avatarUrl?: string; 
 }
 
 interface AuthContextData {
@@ -15,10 +16,11 @@ interface AuthContextData {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  updateUserData: (userData: Partial<User>) => void;
   isAuthenticated: boolean;
-  isSuperAdmin: boolean; // ✅ NOVO
-  isAdmin: boolean; // ✅ NOVO
-  isOperator: boolean; // ✅ NOVO
+  isSuperAdmin: boolean;
+  isAdmin: boolean;
+  isOperator: boolean;
 }
 
 const AuthContext = createContext<AuthContextData | null>(null);
@@ -38,7 +40,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           
           const response = await api.get('/auth/me');
-          setUser(response.data);
+          const userData = response.data;
+          setUser(userData);
+          localStorage.setItem('user', JSON.stringify(userData));
         } catch (error) {
           console.error('Token inválido ou sessão expirada:', error);
           localStorage.removeItem('token');
@@ -72,7 +76,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     localStorage.removeItem('user');
     delete api.defaults.headers.common['Authorization'];
     setUser(null);
-    window.location.href = '/login'; 
+    window.location.href = '/login';
+  };
+
+  
+  const updateUserData = (userData: Partial<User>) => {
+    if (user) {
+      const updatedUser = { ...user, ...userData };
+      setUser(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    }
   };
 
   return (
@@ -82,10 +95,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loading,
         login,
         logout,
+        updateUserData, 
         isAuthenticated: !!user,
-        isSuperAdmin: user?.role === 'SUPER_ADMIN', // ✅ NOVO
-        isAdmin: user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN', // ✅ NOVO
-        isOperator: user?.role === 'OPERATOR', // ✅ NOVO
+        isSuperAdmin: user?.role === 'SUPER_ADMIN',
+        isAdmin: user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN',
+        isOperator: user?.role === 'OPERATOR',
       }}
     >
       {children}

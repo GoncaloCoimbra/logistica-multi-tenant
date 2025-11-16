@@ -117,18 +117,18 @@ export const createTransport = async (req: Request, res: Response): Promise<void
     const { 
       origin, 
       destination, 
-      expectedDate,         // Backend usa isso
-      departureDate,        // ✅ Frontend envia isso
-      estimatedArrival,     // ✅ Frontend envia isso
+      expectedDate,         
+      departureDate,       
+      estimatedArrival,     
       driver, 
       vehicleId, 
       productIds,
-      totalWeight,          // ✅ ADICIONAR
-      notes,                // ✅ ADICIONAR
+      totalWeight,          
+      notes,                
       status
     } = req.body;
 
-    // ✅ Usar departureDate como expectedDate se não vier expectedDate
+    
     const finalExpectedDate = expectedDate || departureDate;
 
     if (!origin || !destination || !finalExpectedDate) {
@@ -144,7 +144,7 @@ export const createTransport = async (req: Request, res: Response): Promise<void
       return;
     }
 
-    // ✅ Converter estimatedArrival se vier
+    
     const estimatedArrivalObj = estimatedArrival ? new Date(estimatedArrival) : null;
 
     if (vehicleId) {
@@ -185,13 +185,13 @@ export const createTransport = async (req: Request, res: Response): Promise<void
           origin: origin.trim(),
           destination: destination.trim(),
           expectedDate: expectedDateObj,
-          departureDate: expectedDateObj,              // ✅ ADICIONAR
-          estimatedArrival: estimatedArrivalObj,       // ✅ ADICIONAR
+          departureDate: expectedDateObj,              
+          estimatedArrival: estimatedArrivalObj,       
           driver: driver?.trim(),
           vehicleId: vehicleId || null,
           status: (status as TransportStatus) || TransportStatus.PENDING,
-          totalWeight: totalWeight ? parseFloat(totalWeight) : null,  // ✅ ADICIONAR
-          notes: notes?.trim(),                        // ✅ ADICIONAR
+          totalWeight: totalWeight ? parseFloat(totalWeight) : null,  
+          notes: notes?.trim(),                       
           companyId: req.user!.companyId,
         },
       });

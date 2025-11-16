@@ -81,13 +81,13 @@ export const createVehicle = async (req: Request, res: Response): Promise<void> 
 
     const { 
       licensePlate, 
-      model,        // ✅ ADICIONAR
-      brand,        // ✅ ADICIONAR
+      model,       
+      brand,       
       type, 
       capacity, 
       year, 
       observations,
-      status        // ✅ ADICIONAR
+      status        
     } = req.body;
 
     // Validações básicas
@@ -170,13 +170,13 @@ export const updateVehicle = async (req: Request, res: Response): Promise<void> 
     const { id } = req.params;
     const { 
       licensePlate, 
-      model,        // ✅ ADICIONAR
-      brand,        // ✅ ADICIONAR
+      model,        
+      brand,        
       type, 
       capacity, 
       year, 
       observations,
-      status        // ✅ ADICIONAR
+      status       
     } = req.body;
 
     const existingVehicle = await prisma.vehicle.findFirst({
@@ -196,10 +196,10 @@ export const updateVehicle = async (req: Request, res: Response): Promise<void> 
     if (licensePlate !== undefined) {
       dataToUpdate.licensePlate = licensePlate.trim().toUpperCase();
     }
-    if (model !== undefined) dataToUpdate.model = model?.trim();           // ✅ ADICIONAR
-    if (brand !== undefined) dataToUpdate.brand = brand?.trim();           // ✅ ADICIONAR
+    if (model !== undefined) dataToUpdate.model = model?.trim();           
+    if (brand !== undefined) dataToUpdate.brand = brand?.trim();           
     if (type !== undefined) dataToUpdate.type = type.trim();
-    if (status !== undefined) dataToUpdate.status = status;                // ✅ ADICIONAR
+    if (status !== undefined) dataToUpdate.status = status;                
     
     if (capacity !== undefined) {
       const capacityNum = parseFloat(capacity);

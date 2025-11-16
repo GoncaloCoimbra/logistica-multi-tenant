@@ -15,7 +15,7 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
 
     const { status, search, supplier, location, dateFrom, dateTo } = req.query;
 
-    // ✅ Super Admin vê TODOS os produtos de TODAS as empresas
+    
     const where: any = req.user.role === 'SUPER_ADMIN' 
       ? {} 
       : { companyId: req.user.companyId };
@@ -82,7 +82,7 @@ export const listProducts = async (req: Request, res: Response): Promise<void> =
             nif: true,
           },
         },
-        // ✅ Super Admin vê também a empresa do produto
+       
         company: req.user.role === 'SUPER_ADMIN' ? {
           select: {
             id: true,
@@ -110,7 +110,7 @@ export const getProduct = async (req: Request, res: Response): Promise<void> => 
 
     const { id } = req.params;
 
-    // ✅ Super Admin pode acessar qualquer produto, outros usuários apenas da sua empresa
+    
     const where: any = {
       id,
     };
@@ -345,7 +345,7 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    // ✅ Super Admin pode atualizar qualquer produto, outros usuários apenas da sua empresa
+    
     const where: any = {
       id,
     };
@@ -402,7 +402,7 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
 
     const { id } = req.params;
 
-    // ✅ Super Admin pode eliminar qualquer produto, outros usuários apenas da sua empresa
+    
     const where: any = {
       id,
     };
@@ -475,7 +475,7 @@ export const changeProductStatus = async (req: Request, res: Response): Promise<
 
     const targetStatus = newStatus as ProductStatus;
 
-    // ✅ Super Admin pode alterar status de qualquer produto, outros usuários apenas da sua empresa
+    
     const where: any = {
       id,
     };
@@ -604,7 +604,7 @@ export const getNextStates = async (req: Request, res: Response): Promise<void> 
 
     const { id } = req.params;
 
-    // ✅ Super Admin pode acessar qualquer produto, outros usuários apenas da sua empresa
+  
     const where: any = {
       id,
     };
@@ -646,7 +646,7 @@ export const getProductHistory = async (req: Request, res: Response): Promise<vo
 
     const { id } = req.params;
 
-    // ✅ Super Admin pode acessar qualquer produto, outros usuários apenas da sua empresa
+ 
     const where: any = {
       id,
     };
