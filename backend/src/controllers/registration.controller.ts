@@ -86,7 +86,7 @@ export const registerCompanyAndUser = async (req: Request, res: Response) => {
       return { company: createdCompany, user: createdUser };
     });
 
-    console.log('✅ Criado company & user:', { companyId: company.id, userId: user.id, role: user.role });
+    console.log(' Criado company & user:', { companyId: company.id, userId: user.id, role: user.role });
 
     const token = jwt.sign(
       { userId: user.id, companyId: company.id, role: user.role },

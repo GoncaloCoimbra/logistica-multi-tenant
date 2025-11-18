@@ -30,7 +30,7 @@ model User {
   email       String            @unique
   password    String
   role        Role              @default(OPERATOR)
-  isActive    Boolean           @default(true)  // ✅ ADICIONADO
+  isActive    Boolean           @default(true)  
   avatarUrl   String?          
   companyId   String?
   createdAt   DateTime          @default(now())

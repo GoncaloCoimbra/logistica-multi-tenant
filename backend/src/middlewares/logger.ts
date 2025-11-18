@@ -22,7 +22,7 @@ export const logger = {
   },
   
   success: (message: string, data?: any) => {
-    console.log(`✅ ${message}`, data || '');
+    console.log(` ${message}`, data || '');
   },
   
   warning: (message: string, data?: any) => {

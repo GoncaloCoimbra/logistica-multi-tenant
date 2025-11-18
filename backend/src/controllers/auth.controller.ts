@@ -9,6 +9,9 @@ const prisma = new PrismaClient();
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
+    
+    console.log('🔐 Login attempt:', email);
+    
     if (!email || !password) {
       res.status(400).json({ error: 'Email e password são obrigatórios' });
       return;
@@ -20,12 +23,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     });
 
     if (!user) {
+      console.log('❌ User not found:', email);
       res.status(401).json({ error: 'Credenciais inválidas' });
       return;
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
+      console.log('❌ Invalid password for:', email);
       res.status(401).json({ error: 'Credenciais inválidas' });
       return;
     }
@@ -37,20 +42,29 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       role: user.role as Role,
     } as MyJwtPayload);
 
+    const userData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      companyId: user.companyId,
+      companyName: user.company?.name,
+      avatarUrl: user.avatarUrl,
+    };
+
+    console.log(' Login successful:', {
+      userId: userData.id,
+      email: userData.email,
+      role: userData.role,
+      roleType: typeof userData.role
+    });
+
     res.json({
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        companyId: user.companyId,
-        companyName: user.company?.name,
-        avatarUrl: user.avatarUrl,
-      },
+      user: userData,
     });
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('❌ Login error:', error);
     res.status(500).json({ error: 'Erro ao fazer login' });
   }
 };
@@ -58,6 +72,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, password, companyName, companyNif, companyEmail } = req.body;
+    
+    console.log('📝 Register attempt:', email);
+    
     if (!name || !email || !password) {
       res.status(400).json({ error: 'Nome, email e password são obrigatórios' });
       return;
@@ -102,20 +119,24 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       role: user.role as Role,
     } as MyJwtPayload);
 
+    const userData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      companyId: user.companyId,
+      companyName: user.company?.name,
+      avatarUrl: user.avatarUrl,
+    };
+
+    console.log(' Register successful:', userData);
+
     res.status(201).json({
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        companyId: user.companyId,
-        companyName: user.company?.name,
-        avatarUrl: user.avatarUrl, 
-      },
+      user: userData,
     });
   } catch (error) {
-    console.error('Register error:', error);
+    console.error('❌ Register error:', error);
     res.status(500).json({ error: 'Erro ao registar utilizador' });
   }
 };
@@ -123,9 +144,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 export const me = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
+      console.log('❌ /auth/me - No user in request');
       res.status(401).json({ error: 'Não autenticado' });
       return;
     }
+
+    console.log('🔍 /auth/me - Request user:', req.user);
 
     const user = await prisma.user.findUnique({
       where: { id: req.user.userId },
@@ -147,13 +171,31 @@ export const me = async (req: Request, res: Response): Promise<void> => {
     });
 
     if (!user) {
+      console.log('❌ /auth/me - User not found in database');
       res.status(404).json({ error: 'Utilizador não encontrado' });
       return;
     }
 
-    res.json(user);
+    const userData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      companyId: user.companyId,
+      companyName: user.company?.name,
+      avatarUrl: user.avatarUrl,
+    };
+
+    console.log(' /auth/me - Response:', {
+      userId: userData.id,
+      email: userData.email,
+      role: userData.role,
+      roleType: typeof userData.role
+    });
+
+    res.json(userData);
   } catch (error) {
-    console.error('Me error:', error);
+    console.error('❌ /auth/me error:', error);
     res.status(500).json({ error: 'Erro ao obter dados do utilizador' });
   }
 };
@@ -207,8 +249,13 @@ export const updateProfile = async (req: Request, res: Response): Promise<void> 
     res.json({
       message: 'Perfil atualizado com sucesso',
       user: {
-        ...updatedUser,
-        companyName: updatedUser.company?.name
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        companyId: updatedUser.companyId,
+        companyName: updatedUser.company?.name,
+        avatarUrl: updatedUser.avatarUrl
       }
     });
   } catch (error) {
@@ -309,8 +356,13 @@ export const uploadAvatar = async (req: Request, res: Response): Promise<void> =
     res.json({
       message: 'Avatar atualizado com sucesso',
       user: {
-        ...updatedUser,
-        companyName: updatedUser.company?.name
+        id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        companyId: updatedUser.companyId,
+        companyName: updatedUser.company?.name,
+        avatarUrl: updatedUser.avatarUrl
       }
     });
   } catch (error) {

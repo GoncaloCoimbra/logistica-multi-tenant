@@ -17,7 +17,6 @@ interface Notification {
 
 const readNotifications = new Map<string, Set<string>>();
 
-  
 const getUserReadNotifications = (userId: string): Set<string> => {
   if (!readNotifications.has(userId)) {
     readNotifications.set(userId, new Set());
@@ -32,12 +31,31 @@ export const getNotifications = async (req: Request, res: Response): Promise<voi
       return;
     }
 
+    //  BYPASS: Super Admin não tem notificações (ou retorna vazio)
+    if (req.user.role === 'SUPER_ADMIN') {
+      res.json({
+        total: 0,
+        critical: 0,
+        high: 0,
+        medium: 0,
+        low: 0,
+        notifications: []
+      });
+      return;
+    }
+
+    //  VERIFICAR: Se não tem companyId, não pode acessar notificações
+    if (!req.user.companyId) {
+      res.status(403).json({ error: 'Usuário sem empresa associada' });
+      return;
+    }
+
     const notifications: Notification[] = [];
     const now = new Date();
     const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
     const readNotifs = getUserReadNotifications(req.user.userId);
 
-   
+    // Produtos parados em análise
     const productsInAnalysis = await prisma.product.findMany({
       where: {
         companyId: req.user.companyId,
@@ -70,7 +88,7 @@ export const getNotifications = async (req: Request, res: Response): Promise<voi
       });
     });
 
-   
+    // Produtos rejeitados
     const rejectedProducts = await prisma.product.findMany({
       where: {
         companyId: req.user.companyId,
@@ -148,7 +166,7 @@ export const getNotifications = async (req: Request, res: Response): Promise<voi
       });
     });
 
-   
+    // Produtos em preparação há muito tempo
     const productsInPreparation = await prisma.product.findMany({
       where: {
         companyId: req.user.companyId,
@@ -181,7 +199,7 @@ export const getNotifications = async (req: Request, res: Response): Promise<voi
       });
     });
 
-   
+    // Produtos parados no armazém
     const stagnantProducts = await prisma.product.findMany({
       where: {
         companyId: req.user.companyId,
@@ -216,7 +234,7 @@ export const getNotifications = async (req: Request, res: Response): Promise<voi
       });
     });
 
-    
+    // Ordenar por prioridade
     const priorityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
     notifications.sort((a, b) => {
       if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
@@ -242,7 +260,6 @@ export const getNotifications = async (req: Request, res: Response): Promise<voi
   }
 };
 
-
 export const markAsRead = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -267,7 +284,6 @@ export const markAsRead = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-
 export const markAllAsRead = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -275,7 +291,16 @@ export const markAllAsRead = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
-    
+    //  BYPASS: Super Admin
+    if (req.user.role === 'SUPER_ADMIN' || !req.user.companyId) {
+      res.json({ 
+        success: true,
+        message: 'Nenhuma notificação para marcar',
+        count: 0
+      });
+      return;
+    }
+
     const now = new Date();
     const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
 
@@ -349,7 +374,6 @@ export const markAllAsRead = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-
 export const clearAllNotifications = async (req: Request, res: Response): Promise<void> => {
   try {
     if (!req.user) {
@@ -357,10 +381,17 @@ export const clearAllNotifications = async (req: Request, res: Response): Promis
       return;
     }
 
- 
+    //  BYPASS: Super Admin
+    if (req.user.role === 'SUPER_ADMIN' || !req.user.companyId) {
+      res.json({ 
+        success: true,
+        message: 'Nenhuma notificação para limpar',
+        cleared: 0
+      });
+      return;
+    }
+
     const readNotifs = getUserReadNotifications(req.user.userId);
-    
-   
     const now = new Date();
     const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
 
@@ -412,7 +443,6 @@ export const clearAllNotifications = async (req: Request, res: Response): Promis
       })
     ]);
 
-    // Adicionar todos ao Set de lidas
     productsInAnalysis.forEach(p => readNotifs.add(`product-analysis-${p.id}`));
     rejectedProducts.forEach(p => readNotifs.add(`product-rejected-${p.id}`));
     delayedTransports.forEach(t => readNotifs.add(`transport-delayed-${t.id}`));
@@ -435,6 +465,18 @@ export const getAlertStats = async (req: Request, res: Response): Promise<void> 
   try {
     if (!req.user) {
       res.status(401).json({ error: 'Não autenticado' });
+      return;
+    }
+
+    //  BYPASS: Super Admin
+    if (req.user.role === 'SUPER_ADMIN' || !req.user.companyId) {
+      res.json({
+        productsInAnalysis: 0,
+        rejectedProducts: 0,
+        delayedTransports: 0,
+        stagnantProducts: 0,
+        totalAlerts: 0
+      });
       return;
     }
 

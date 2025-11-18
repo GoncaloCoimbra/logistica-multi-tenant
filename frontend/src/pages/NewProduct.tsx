@@ -329,7 +329,7 @@ const NewProduct: React.FC = () => {
               <div className="border-b border-gray-200 pb-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Fornecedor e Localização</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* ✅ DROPDOWN DE FORNECEDORES */}
+                  {/*  DROPDOWN DE FORNECEDORES */}
                   <div>
                     <label htmlFor="supplierId" className="block text-sm font-medium text-gray-700 mb-2">
                       Fornecedor <span className="text-red-500">*</span>

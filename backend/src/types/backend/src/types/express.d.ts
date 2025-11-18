@@ -1,4 +1,3 @@
- backend/src/types/express.d.ts
 import 'express';
 
 declare module 'express-serve-static-core' {
@@ -7,6 +6,7 @@ declare module 'express-serve-static-core' {
       userId: string;
       companyId: string;
       role: string;
+      email: string; 
     };
   }
 }

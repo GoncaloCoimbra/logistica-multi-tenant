@@ -6,6 +6,9 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import { Register } from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import SuperAdminDashboard from './pages/SuperAdminDashboard';
+import CompanyManagement from './pages/CompanyManagement';
+import GlobalUserManagement from './pages/GlobalUserManagement';
 import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
 import NewProduct from './pages/NewProduct';
@@ -13,10 +16,8 @@ import SupplierList from './pages/SupplierList';
 import VehicleList from './pages/VehicleList';
 import TransportList from './pages/TransportList';
 import Settings from './pages/Settings';
-import AuditLog from './pages/AuditLog'; 
-import CompanyManagement from './pages/CompanyManagement';
-import GlobalUserManagement from './pages/GlobalUserManagement';
-import Profile from './pages/Profile'; 
+import AuditLog from './pages/AuditLog';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -27,7 +28,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Dashboard */}
+          {/* Dashboard Normal */}
           <Route
             path="/"
             element={
@@ -50,7 +51,43 @@ function App() {
             }
           />
 
-          {/* ✅ NOVO - Perfil do Utilizador */}
+          {/*  SUPER ADMIN DASHBOARD */}
+          <Route
+            path="/superadmin"
+            element={
+              <PrivateRoute requireSuperAdmin>
+                <Layout>
+                  <SuperAdminDashboard />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          {/*  Gestão de Empresas (Super Admin) */}
+          <Route
+            path="/super-admin/companies"
+            element={
+              <PrivateRoute requireSuperAdmin>
+                <Layout>
+                  <CompanyManagement />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          {/*  Gestão Global de Utilizadores (Super Admin) */}
+          <Route
+            path="/super-admin/users"
+            element={
+              <PrivateRoute requireSuperAdmin>
+                <Layout>
+                  <GlobalUserManagement />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+
+          {/* Perfil do Utilizador */}
           <Route
             path="/profile"
             element={
@@ -148,7 +185,7 @@ function App() {
           <Route
             path="/historico"
             element={
-              <PrivateRoute>
+              <PrivateRoute requireAdmin>
                 <Layout>
                   <AuditLog />
                 </Layout>

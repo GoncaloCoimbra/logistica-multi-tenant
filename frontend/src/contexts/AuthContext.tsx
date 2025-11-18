@@ -34,22 +34,49 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const token = localStorage.getItem('token');
       const storedUser = localStorage.getItem('user');
 
+      console.log('🔄 AuthContext - Loading user...', { 
+        hasToken: !!token, 
+        hasStoredUser: !!storedUser 
+      });
+
       if (token && storedUser) {
         try {
-          setUser(JSON.parse(storedUser));
+          const parsedUser = JSON.parse(storedUser);
+          console.log('📦 AuthContext - Stored user:', {
+            email: parsedUser.email,
+            role: parsedUser.role,
+            roleType: typeof parsedUser.role
+          });
+          
+          setUser(parsedUser);
           api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
           
+          //  Revalidar com backend
+          console.log('🔍 AuthContext - Revalidating with /auth/me...');
           const response = await api.get('/auth/me');
           const userData = response.data;
+          
+          console.log(' AuthContext - User from backend:', {
+            email: userData.email,
+            role: userData.role,
+            roleType: typeof userData.role,
+            isSuperAdmin: userData.role === 'SUPER_ADMIN'
+          });
+          
           setUser(userData);
           localStorage.setItem('user', JSON.stringify(userData));
-        } catch (error) {
-          console.error('Token inválido ou sessão expirada:', error);
+        } catch (error: any) {
+          console.error('❌ AuthContext - Error loading user:', {
+            message: error.message,
+            response: error.response?.data
+          });
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           setUser(null);
           delete api.defaults.headers.common['Authorization'];
         }
+      } else {
+        console.log('⚠️ AuthContext - No token or user found');
       }
       setLoading(false);
     };
@@ -59,19 +86,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (email: string, password: string) => {
     try {
+      console.log('🔐 AuthContext - Login attempt:', email);
+      
       const response = await api.post('/auth/login', { email, password });
       const { token, user: userData } = response.data;
+
+      console.log(' AuthContext - Login success:', {
+        userId: userData.id,
+        email: userData.email,
+        role: userData.role,
+        roleType: typeof userData.role,
+        isSuperAdmin: userData.role === 'SUPER_ADMIN'
+      });
 
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(userData);
     } catch (error: any) {
+      console.error('❌ AuthContext - Login error:', error);
       throw new Error(error.response?.data?.error || 'Erro ao fazer login');
     }
   };
 
   const logout = () => {
+    console.log('🚪 AuthContext - Logout');
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     delete api.defaults.headers.common['Authorization'];
@@ -79,14 +118,36 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     window.location.href = '/login';
   };
 
-  
   const updateUserData = (userData: Partial<User>) => {
     if (user) {
       const updatedUser = { ...user, ...userData };
+      console.log('🔄 AuthContext - Updating user data:', {
+        email: updatedUser.email,
+        role: updatedUser.role
+      });
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
     }
   };
+
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN';
+  const isOperator = user?.role === 'OPERATOR';
+
+  //  Log detalhado sempre que user mudar
+  useEffect(() => {
+    if (user) {
+      console.log('👤 AuthContext - Current user state:', { 
+        userEmail: user.email,
+        userRole: user.role,
+        userRoleType: typeof user.role,
+        isSuperAdmin, 
+        isAdmin, 
+        isOperator,
+        companyId: user.companyId
+      });
+    }
+  }, [user, isSuperAdmin, isAdmin, isOperator]);
 
   return (
     <AuthContext.Provider
@@ -95,11 +156,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loading,
         login,
         logout,
-        updateUserData, 
+        updateUserData,
         isAuthenticated: !!user,
-        isSuperAdmin: user?.role === 'SUPER_ADMIN',
-        isAdmin: user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN',
-        isOperator: user?.role === 'OPERATOR',
+        isSuperAdmin,
+        isAdmin,
+        isOperator,
       }}
     >
       {children}

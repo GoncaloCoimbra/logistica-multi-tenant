@@ -14,7 +14,7 @@ interface User {
     id: string;
     name: string;
     nif: string;
-  };
+  } | null; // ADICIONADO: company pode ser null
 }
 
 interface Company {
@@ -91,9 +91,9 @@ const GlobalUserManagement: React.FC = () => {
     const matchesSearch = 
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.company.name.toLowerCase().includes(searchTerm.toLowerCase());
+      (user.company?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false); // CORRIGIDO
     
-    const matchesCompany = !filterCompany || user.company.id === filterCompany;
+    const matchesCompany = !filterCompany || user.company?.id === filterCompany; // CORRIGIDO
     const matchesRole = !filterRole || user.role === filterRole;
 
     return matchesSearch && matchesCompany && matchesRole;
@@ -322,8 +322,15 @@ const GlobalUserManagement: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{user.company.name}</div>
-                        <div className="text-sm text-gray-500">NIF: {user.company.nif}</div>
+                        {/* CORRIGIDO: Verifica se company existe */}
+                        {user.company ? (
+                          <>
+                            <div className="text-sm text-gray-900">{user.company.name}</div>
+                            <div className="text-sm text-gray-500">NIF: {user.company.nif}</div>
+                          </>
+                        ) : (
+                          <div className="text-sm text-gray-400 italic">Sem empresa</div>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${ROLE_COLORS[user.role]}`}>
@@ -339,7 +346,7 @@ const GlobalUserManagement: React.FC = () => {
                             onClick={() => handleEdit(user)}
                             className="text-blue-600 hover:text-blue-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             title="Editar"
-                            disabled={user.role === 'SUPER_ADMIN'}
+                            disabled={user.role === 'SUPER_ADMIN' || !user.company}
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -378,9 +385,9 @@ const GlobalUserManagement: React.FC = () => {
         />
       )}
 
-      {showEditModal && selectedUser && (
+      {showEditModal && selectedUser && selectedUser.company && (
         <EditGlobalUserModal
-          user={selectedUser}
+          user={selectedUser as User & { company: { id: string; name: string; nif: string } }}
           companies={companies}
           onClose={() => {
             setShowEditModal(false);

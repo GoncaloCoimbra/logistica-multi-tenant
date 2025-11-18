@@ -22,7 +22,7 @@ export const listUsers = async (req: Request, res: Response) => {
         name: true,
         email: true,
         role: true,
-        isActive: true,  // ✅ Agora vem do banco
+        isActive: true, 
         avatarUrl: true,
         createdAt: true,
         updatedAt: true,
@@ -50,7 +50,7 @@ export const createUser = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Não autenticado' });
     }
 
-    // ✅ Apenas ADMIN pode criar utilizadores (não precisa ser SUPER_ADMIN)
+    
     if (requestUserRole !== 'ADMIN' && requestUserRole !== 'SUPER_ADMIN') {
       return res.status(403).json({ message: 'Apenas administradores podem criar utilizadores' });
     }
@@ -68,7 +68,7 @@ export const createUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Password deve ter pelo menos 6 caracteres' });
     }
 
-    // ✅ Verificar se email já existe (em QUALQUER empresa)
+    
     const existingUser = await prisma.user.findUnique({
       where: { email: email.trim().toLowerCase() }
     });
@@ -85,7 +85,7 @@ export const createUser = async (req: Request, res: Response) => {
         email: email.trim().toLowerCase(),
         password: hashedPassword,
         role,
-        isActive: true,  // ✅ Por padrão ativo
+        isActive: true,  
         companyId,
       },
       select: {
@@ -136,7 +136,7 @@ export const updateUser = async (req: Request, res: Response) => {
       return res.status(403).json({ message: 'Apenas administradores podem editar utilizadores' });
     }
 
-    // ✅ Verificar se user existe e pertence à empresa
+  
     const user = await prisma.user.findFirst({
       where: { id, companyId }
     });
@@ -145,12 +145,12 @@ export const updateUser = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Utilizador não encontrado' });
     }
 
-    // ✅ Não permitir que o utilizador edite o próprio role
+    //  Não permitir que o utilizador edite o próprio role
     if (id === requestUserId && role !== undefined && role !== user.role) {
       return res.status(403).json({ message: 'Não pode alterar a sua própria função' });
     }
 
-    // ✅ Não permitir desativar a si próprio
+    //  Não permitir desativar a si próprio
     if (id === requestUserId && isActive === false) {
       return res.status(403).json({ message: 'Não pode desativar a sua própria conta' });
     }
@@ -189,7 +189,7 @@ export const updateUser = async (req: Request, res: Response) => {
       updateData.role = role;
     }
 
-    // ✅ Suporta alteração de status
+    //  Suporta alteração de status
     if (isActive !== undefined) {
       updateData.isActive = isActive;
     }
@@ -256,7 +256,7 @@ export const deleteUser = async (req: Request, res: Response) => {
       return res.status(403).json({ message: 'Apenas administradores podem eliminar utilizadores' });
     }
 
-    // ✅ Não permitir eliminar a si próprio
+    //  Não permitir eliminar a si próprio
     if (id === requestUserId) {
       return res.status(400).json({ message: 'Não pode eliminar a sua própria conta' });
     }
@@ -270,7 +270,7 @@ export const deleteUser = async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'Utilizador não encontrado' });
     }
 
-    // ✅ OPÇÃO 1: Soft Delete (Desativar) - RECOMENDADO
+    //  OPÇÃO 1: Soft Delete (Desativar) - RECOMENDADO
     // Apenas marca como inativo sem eliminar do banco
     await prisma.user.update({
       where: { id },
@@ -298,7 +298,7 @@ export const deleteUser = async (req: Request, res: Response) => {
       }
     });
 
-    /* ✅ OPÇÃO 2: Hard Delete (Eliminar permanentemente)
+    /*  OPÇÃO 2: Hard Delete (Eliminar permanentemente)
     // Descomentar se quiser eliminar permanentemente
     
     // Verificar dependências
@@ -345,7 +345,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 };
 
 /**
- * ✅ NOVO: Reativar utilizador desativado
+ *  NOVO: Reativar utilizador desativado
  */
 export const reactivateUser = async (req: Request, res: Response) => {
   try {

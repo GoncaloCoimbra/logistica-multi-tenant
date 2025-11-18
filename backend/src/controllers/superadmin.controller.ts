@@ -53,7 +53,7 @@ export const createCompany = async (req: Request, res: Response) => {
   try {
     const { name, nif, address, email, phone, adminUser } = req.body;
 
-    // Validações
+   
     if (!name || !nif || !email) {
       return res.status(400).json({ 
         message: 'Nome, NIF e Email da empresa são obrigatórios' 

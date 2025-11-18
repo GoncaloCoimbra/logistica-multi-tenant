@@ -50,7 +50,7 @@ const UserManagementTable: React.FC = () => {
   };
 
   const handleToggleStatus = async (user: User) => {
-    // ✅ Não permitir desativar a si próprio
+    //  Não permitir desativar a si próprio
     if (user.id === currentUser?.id) {
       setError('Não pode desativar a sua própria conta');
       setTimeout(() => setError(''), 5000);
@@ -135,7 +135,7 @@ const UserManagementTable: React.FC = () => {
     );
   };
 
-  // ✅ Filtrar utilizadores por status
+  //  Filtrar utilizadores por status
   const filteredUsers = users.filter(user => {
     if (filterStatus === 'active') return user.isActive;
     if (filterStatus === 'inactive') return !user.isActive;
@@ -179,7 +179,7 @@ const UserManagementTable: React.FC = () => {
         </div>
       )}
 
-      {/* ✅ Estatísticas */}
+      {/*  Estatísticas */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
         <div className="bg-white rounded-lg border border-gray-200 p-4">
           <div className="text-sm text-gray-600">Total</div>
@@ -214,7 +214,7 @@ const UserManagementTable: React.FC = () => {
           </div>
           
           <div className="flex items-center space-x-3">
-            {/* ✅ Filtro por Status */}
+            {/*  Filtro por Status */}
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as any)}

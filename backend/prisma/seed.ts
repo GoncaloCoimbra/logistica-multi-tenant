@@ -6,9 +6,9 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting seed...\n');
 
-  // ============================================
+
   // 1️⃣ SUPER ADMIN (SEM EMPRESA)
-  // ============================================
+  
   console.log('👑 Creating Super Admin...');
   
   const superAdminPassword = await bcrypt.hash('superadmin123', 10);
@@ -25,11 +25,11 @@ async function main() {
     },
   });
 
-  console.log('✅ Super Admin created:', superAdmin.email);
+  console.log(' Super Admin created:', superAdmin.email);
 
-  // ============================================
+  
   // 2️⃣ EMPRESA 1 - Logística Demo
-  // ============================================
+ 
   console.log('\n🏢 Creating Company 1...');
 
   const company1 = await prisma.company.upsert({
@@ -44,7 +44,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Company created:', company1.name);
+  console.log(' Company created:', company1.name);
 
   // Admin da Empresa 1
   const admin1Password = await bcrypt.hash('admin123', 10);
@@ -61,7 +61,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Admin user created:', admin1.email);
+  console.log(' Admin user created:', admin1.email);
 
   // Operador da Empresa 1
   const operator1Password = await bcrypt.hash('operator123', 10);
@@ -78,7 +78,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Operator user created:', operator1.email);
+  console.log(' Operator user created:', operator1.email);
 
   // Fornecedor da Empresa 1
   const supplier1 = await prisma.supplier.create({
@@ -94,7 +94,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Supplier created:', supplier1.name);
+  console.log(' Supplier created:', supplier1.name);
 
   // Veículo da Empresa 1
   const vehicle1 = await prisma.vehicle.create({
@@ -110,7 +110,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Vehicle created:', vehicle1.licensePlate);
+  console.log(' Vehicle created:', vehicle1.licensePlate);
 
   // Produtos da Empresa 1
   const products1 = await Promise.all([
@@ -158,7 +158,7 @@ async function main() {
     }),
   ]);
 
-  console.log(`✅ ${products1.length} products created for Company 1`);
+  console.log(` ${products1.length} products created for Company 1`);
 
   // Movimento de produto
   await prisma.productMovement.create({
@@ -173,11 +173,11 @@ async function main() {
     },
   });
 
-  console.log('✅ Product movement created');
+  console.log(' Product movement created');
 
-  // ============================================
+  
   // 3️⃣ EMPRESA 2 - TransPorto Express
-  // ============================================
+  
   console.log('\n🏢 Creating Company 2...');
 
   const company2 = await prisma.company.upsert({
@@ -192,7 +192,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Company created:', company2.name);
+  console.log(' Company created:', company2.name);
 
   // Admin da Empresa 2
   const admin2Password = await bcrypt.hash('admin456', 10);
@@ -207,7 +207,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Admin user created:', admin2.email);
+  console.log(' Admin user created:', admin2.email);
 
   // Operador da Empresa 2
   const operator2Password = await bcrypt.hash('operator456', 10);
@@ -222,7 +222,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Operator user created:', operator2.email);
+  console.log(' Operator user created:', operator2.email);
 
   // Fornecedor da Empresa 2
   const supplier2 = await prisma.supplier.create({
@@ -238,7 +238,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Supplier created:', supplier2.name);
+  console.log(' Supplier created:', supplier2.name);
 
   // Veículo da Empresa 2
   const vehicle2 = await prisma.vehicle.create({
@@ -254,7 +254,7 @@ async function main() {
     },
   });
 
-  console.log('✅ Vehicle created:', vehicle2.licensePlate);
+  console.log(' Vehicle created:', vehicle2.licensePlate);
 
   // Produtos da Empresa 2
   const products2 = await Promise.all([
@@ -288,7 +288,7 @@ async function main() {
     }),
   ]);
 
-  console.log(`✅ ${products2.length} products created for Company 2`);
+  console.log(` ${products2.length} products created for Company 2`);
 
   
   console.log('\n📝 Creating audit logs...');
@@ -322,7 +322,7 @@ async function main() {
     ],
   });
 
-  console.log('✅ Audit logs created');
+  console.log(' Audit logs created');
 
   
   console.log('\n' + '='.repeat(50));
