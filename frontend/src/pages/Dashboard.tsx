@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import api from '../api/api';
 
+
+
 interface DashboardStats {
   totalProducts: number;
   productsByStatus: Array<{

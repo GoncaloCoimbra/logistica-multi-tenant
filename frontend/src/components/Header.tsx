@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import NotificationPanel from './NotificationPanel';
@@ -7,6 +7,9 @@ const Header: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
 
   const handleLogout = () => {
     logout();
@@ -110,9 +113,52 @@ const Header: React.FC = () => {
     }
   };
 
+  // Funções do calendário
+  const getMesesPortugues = () => [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
+
+  const getDiasCalendario = (mes: Date) => {
+    const primeiroDia = new Date(mes.getFullYear(), mes.getMonth(), 1);
+    const ultimoDia = new Date(mes.getFullYear(), mes.getMonth() + 1, 0);
+    const diasNoMes = ultimoDia.getDate();
+    const diaSemanaInicio = primeiroDia.getDay();
+    
+    const dias = [];
+    
+    // Dias vazios do início
+    for (let i = 0; i < diaSemanaInicio; i++) {
+      dias.push(null);
+    }
+    
+    // Dias do mês
+    for (let dia = 1; dia <= diasNoMes; dia++) {
+      dias.push(new Date(mes.getFullYear(), mes.getMonth(), dia));
+    }
+    
+    return dias;
+  };
+
+  const mesmosDias = (data1: Date, data2: Date) => {
+    return data1.getDate() === data2.getDate() &&
+           data1.getMonth() === data2.getMonth() &&
+           data1.getFullYear() === data2.getFullYear();
+  };
+
+  const mudarMes = (direcao: number) => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + direcao, 1));
+  };
+
+  const handleSelectDate = (date: Date) => {
+    setSelectedDate(date);
+    // Aqui podes adicionar lógica adicional, como navegar para uma página
+    console.log('Data selecionada:', date.toLocaleDateString('pt-PT'));
+  };
+
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-3 group">
@@ -144,25 +190,132 @@ const Header: React.FC = () => {
             </nav>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-1">
             <NotificationPanel />
 
-            <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-            </button>
+            {/* Botão do Calendário com Dropdown */}
+            <div className="relative">
+              <button 
+                onClick={() => setShowCalendar(!showCalendar)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors relative"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </button>
+
+              {/* Dropdown do Calendário */}
+              {showCalendar && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-10" 
+                    onClick={() => setShowCalendar(false)}
+                  ></div>
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden">
+                    {/* Header do Calendário */}
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <button
+                          onClick={() => mudarMes(-1)}
+                          className="p-1 hover:bg-blue-500 rounded transition-colors"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <h3 className="text-lg font-semibold">
+                          {getMesesPortugues()[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+                        </h3>
+                        <button
+                          onClick={() => mudarMes(1)}
+                          className="p-1 hover:bg-blue-500 rounded transition-colors"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                      <p className="text-sm text-blue-100">
+                        Data selecionada: {selectedDate.toLocaleDateString('pt-PT')}
+                      </p>
+                    </div>
+                    
+                    {/* Corpo do Calendário */}
+                    <div className="p-4">
+                      {/* Dias da semana */}
+                      <div className="grid grid-cols-7 gap-1 mb-2">
+                        {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(dia => (
+                          <div key={dia} className="h-8 flex items-center justify-center text-xs font-semibold text-gray-500">
+                            {dia}
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {/* Dias do mês */}
+                      <div className="grid grid-cols-7 gap-1">
+                        {getDiasCalendario(currentMonth).map((dia, index) => {
+                          if (!dia) {
+                            return <div key={`empty-${index}`} className="h-10"></div>;
+                          }
+                          
+                          const hoje = new Date();
+                          const ehHoje = mesmosDias(dia, hoje);
+                          const ehSelecionado = mesmosDias(dia, selectedDate);
+                          const ehMesAtual = dia.getMonth() === currentMonth.getMonth();
+                          
+                          return (
+                            <button
+                              key={index}
+                              onClick={() => handleSelectDate(dia)}
+                              disabled={!ehMesAtual}
+                              className={`h-10 flex items-center justify-center text-sm rounded-lg transition-all ${
+                                ehSelecionado
+                                  ? 'bg-blue-600 text-white font-bold shadow-lg scale-105'
+                                  : ehHoje
+                                  ? 'bg-blue-100 text-blue-700 font-semibold'
+                                  : ehMesAtual
+                                  ? 'text-gray-700 hover:bg-gray-100 hover:scale-105'
+                                  : 'text-gray-300 cursor-not-allowed'
+                              }`}
+                            >
+                              {dia.getDate()}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="bg-gray-50 px-4 py-3 border-t border-gray-100 flex justify-between items-center">
+                      <button
+                        onClick={() => {
+                          const hoje = new Date();
+                          setCurrentMonth(hoje);
+                          setSelectedDate(hoje);
+                        }}
+                        className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                      >
+                        Hoje
+                      </button>
+                      <p className="text-xs text-gray-500">
+                        Sistema de Gestão Logística
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
 
             {user && (
-              <div className="flex items-center space-x-3 pl-4 border-l border-gray-200">
-                <div className="hidden md:block text-right">
-                  <p className="text-sm font-semibold text-gray-900">{user.name}</p>
-                  <p className="text-xs text-gray-500">
+              <div className="flex items-center space-x-1 pl-1 ml-0 border-l border-gray-200">
+                <div className="hidden md:block text-right min-w-[90px] mr-1">
+                  <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
+                  <p className="text-xs text-gray-500 whitespace-nowrap">
                     {getRoleLabel(user.role)}
                   </p>
                 </div>
                 <div className="relative group">
-                  <button className="flex items-center space-x-2">
+                  <button className="flex items-center space-x-1">
                     <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md ring-2 ring-white overflow-hidden">
                       {getAvatarUrl() ? (
                         <img 
