@@ -7,7 +7,7 @@ async function main() {
   console.log('🌱 Starting seed...\n');
 
 
-  // 1️⃣ SUPER ADMIN (SEM EMPRESA)
+  // 1️ SUPER ADMIN (SEM EMPRESA)
   
   console.log('👑 Creating Super Admin...');
   
@@ -28,7 +28,7 @@ async function main() {
   console.log(' Super Admin created:', superAdmin.email);
 
   
-  // 2️⃣ EMPRESA 1 - Logística Demo
+  // 2️ EMPRESA 1 - Logística Demo
  
   console.log('\n🏢 Creating Company 1...');
 
@@ -176,7 +176,7 @@ async function main() {
   console.log(' Product movement created');
 
   
-  // 3️⃣ EMPRESA 2 - TransPorto Express
+  // 3 EMPRESA 2 - TransPorto Express
   
   console.log('\n🏢 Creating Company 2...');
 

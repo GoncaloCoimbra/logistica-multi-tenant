@@ -88,22 +88,24 @@ const GlobalUserManagement: React.FC = () => {
   };
 
   const filteredUsers = users.filter(user => {
-  const matchesSearch =
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.company?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
+    const matchesSearch = 
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.company?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false); // CORRIGIDO
+    
+    const matchesCompany = !filterCompany || user.company?.id === filterCompany; // CORRIGIDO
+    const matchesRole = !filterRole || user.role === filterRole;
 
-  const matchesCompany = !filterCompany || user.company?.id === filterCompany;
+    return matchesSearch && matchesCompany && matchesRole;
+  });
 
-//role muito importante
-
-// Verifica se o utilizador corresponde ao filtro de função selecionado.
-// Se nenhum filtro estiver escolhido (filterRole vazio), aceita todos os utilizadores.
-// Caso contrário, só devolve true se o utilizador tiver exatamente a função escolhida.
-  const matchesRole = !filterRole || user.role === filterRole;
-
-  return matchesSearch && matchesCompany && matchesRole;
-});
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

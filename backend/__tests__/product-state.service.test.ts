@@ -159,17 +159,7 @@ describe('ProductStateService', () => {
       expect(result.reason).toContain('não é permitida');
     });
 
-    // NOTA: SUPER_ADMIN não existe no schema Prisma atual (apenas ADMIN e OPERATOR)
-    // Se quiser adicionar SUPER_ADMIN, atualize o schema e depois adicione este teste
-    // test('SUPER_ADMIN deve poder fazer qualquer transição válida', () => {
-    //   const result = ProductStateService.canUserMakeTransition(
-    //     ProductStatus.IN_ANALYSIS,
-    //     ProductStatus.APPROVED,
-    //     Role.SUPER_ADMIN
-    //   );
-    //   expect(result.allowed).toBe(true);
-    // });
-
+    
     test('deve retornar motivo claro ao negar permissão', () => {
       const result = ProductStateService.canUserMakeTransition(
         ProductStatus.IN_ANALYSIS,
