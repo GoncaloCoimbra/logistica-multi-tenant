@@ -46,53 +46,56 @@ const Footer: React.FC = () => {
               </a>
             </div>
           </div>
+{/* Links Rápidos */}
+<div>
+  <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Links Rápidos</h3>
+  <ul className="space-y-3">
+    <li>
+      <a href="http://localhost:3000/dashboard" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
+        <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+        Dashboard
+      </a>
+    </li>
 
-          {/* Links Rápidos */}
-          <div>
-            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Links Rápidos</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/dashboard" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link to="/produtos" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  Produtos
-                </Link>
-              </li>
-              <li>
-                <Link to="/fornecedores" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  Fornecedores
-                </Link>
-              </li>
-              <li>
-                <Link to="/transportes" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  Transportes
-                </Link>
-              </li>
-              <li>
-                <Link to="/historico" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
-                  <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  Histórico
-                </Link>
-              </li>
-            </ul>
-          </div>
+    <li>
+      <a href="http://localhost:3000/produtos" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
+        <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+        Produtos
+      </a>
+    </li>
+
+    <li>
+      <a href="http://localhost:3000/fornecedores" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
+        <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+        Fornecedores
+      </a>
+    </li>
+
+    <li>
+      <a href="http://localhost:3000/transportes" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
+        <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+        Transportes
+      </a>
+    </li>
+
+    <li>
+      <a href="http://localhost:3000/historico" className="text-sm hover:text-blue-400 transition-colors flex items-center group">
+        <svg className="w-4 h-4 mr-2 text-gray-500 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+        Histórico
+      </a>
+    </li>
+  </ul>
+</div>
 
           {/* Recursos */}
           <div>

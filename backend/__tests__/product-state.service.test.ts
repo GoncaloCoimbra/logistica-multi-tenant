@@ -4,9 +4,9 @@ import { ProductStateService } from '../src/services/product-state.service';
 
 describe('ProductStateService', () => {
   
-  // ========================================
+  
   // TESTES: isTransitionAllowed
-  // ========================================
+ 
   describe('isTransitionAllowed', () => {
     
     test('deve permitir RECEIVED -> IN_ANALYSIS', () => {
@@ -74,9 +74,9 @@ describe('ProductStateService', () => {
     });
   });
 
-  // ========================================
+ 
   // TESTES: getTransitionRequirements
-  // ========================================
+ 
   describe('getTransitionRequirements', () => {
     
     test('deve retornar requirements para IN_ANALYSIS -> APPROVED', () => {
@@ -115,9 +115,9 @@ describe('ProductStateService', () => {
     });
   });
 
-  // ========================================
+ 
   // TESTES: canUserMakeTransition
-  // ========================================
+ 
   describe('canUserMakeTransition', () => {
     
     test('ADMIN deve poder fazer IN_ANALYSIS -> APPROVED', () => {
@@ -182,9 +182,9 @@ describe('ProductStateService', () => {
     });
   });
 
-  // ========================================
+ 
   // TESTES: validateRequiredFields
-  // ========================================
+ 
   describe('validateRequiredFields', () => {
     
     test('deve validar com sucesso quando todos os campos estão presentes', () => {
@@ -205,7 +205,7 @@ describe('ProductStateService', () => {
 
     test('deve FALHAR quando reason está vazio (string vazia)', () => {
       const data = {
-        reason: '   ',  // Apenas espaços
+        reason: '   ', 
       };
       
       const result = ProductStateService.validateRequiredFields(
@@ -298,9 +298,9 @@ describe('ProductStateService', () => {
     });
   });
 
-  // ========================================
+ 
   // TESTES: getNextPossibleStates
-  // ========================================
+ 
   describe('getNextPossibleStates', () => {
     
     test('deve retornar próximos estados para RECEIVED', () => {
@@ -360,9 +360,9 @@ describe('ProductStateService', () => {
     });
   });
 
-  // ========================================
+ 
   // TESTES: isFinalState
-  // ========================================
+ 
   describe('isFinalState', () => {
     
     test('DELIVERED deve ser estado final', () => {
@@ -396,9 +396,9 @@ describe('ProductStateService', () => {
     });
   });
 
-  // ========================================
+ 
   // TESTES DE INTEGRAÇÃO: Fluxos Completos
-  // ========================================
+ 
   describe('Fluxos de Transição Completos', () => {
     
     test('Fluxo Completo: RECEIVED -> DELIVERED (caminho feliz)', () => {
@@ -506,9 +506,9 @@ describe('ProductStateService', () => {
     });
   });
 
-  // ========================================
+ 
   // TESTES DE EDGE CASES
-  // ========================================
+ 
   describe('Edge Cases e Cenários Especiais', () => {
     
     test('deve retornar array de estados mesmo quando vazio', () => {
@@ -532,7 +532,7 @@ describe('ProductStateService', () => {
 
     test('deve rejeitar strings vazias após trim', () => {
       const data = {
-        reason: '     '  // Apenas espaços
+        reason: '     ' 
       };
       
       const result = ProductStateService.validateRequiredFields(

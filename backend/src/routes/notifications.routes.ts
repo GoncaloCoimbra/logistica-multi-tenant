@@ -13,8 +13,8 @@ const router = Router();
 router.use(authenticate);
 router.get('/', getNotifications);
 router.get('/stats', getAlertStats);
-router.patch('/:id/read', markAsRead);              // Marcar uma como lida
-router.patch('/mark-all-read', markAllAsRead);      // Marcar todas como lidas
-router.delete('/all', clearAllNotifications);       // Limpar todas
+router.patch('/:id/read', markAsRead);             
+router.patch('/mark-all-read', markAllAsRead);      
+router.delete('/all', clearAllNotifications);       
 
 export default router;

@@ -4,7 +4,7 @@ import {
   createUser, 
   updateUser, 
   deleteUser,
-  reactivateUser  //  Nova função
+  reactivateUser    Nova função
 } from '../controllers/users.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 import { requireAdmin } from '../middlewares/roleCheck.middleware';
