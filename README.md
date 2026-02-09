@@ -727,7 +727,7 @@ Contribuições são bem-vindas! Este projeto foi desenvolvido para a comunidade
 - Atualiza a documentação conforme necessário
 - Mantém commits pequenos e focados
 
----
+
 
 ## 📄 Licença
 
@@ -735,14 +735,6 @@ Este projeto está sob a licença MIT. Vê o ficheiro [LICENSE](LICENSE) para ma
 
 ---
 
-## 👥 Comunidade
-
-Este projeto foi desenvolvido para a comunidade [**Commit PT**]
-Junta-te à comunidade para:
-- Tirar dúvidas sobre o projeto
-- Partilhar melhorias
-- Colaborar com outros developers
-- Mostrar o teu portfolio
 
 ---
 
