@@ -77,79 +77,79 @@ This repository contains a complete multi-tenant logistics management platform. 
 
 ---
 
-## ✅ Melhorias necessárias para chegar a 10/10
+## ✅ Improvements needed to reach 10/10
 
-Abaixo está uma lista das mudanças que elevam cada categoria à perfeição. Algumas delas já estão parcialmente implementadas; outras requerem trabalho adicional.
+Below is a list of changes that elevate each category to perfection. Some of them are already partially implemented; others require additional work.
 
-### Estrutura de Código (atualmente 8/10)
-1. **Depreciar e remover `backend`**. A base activa é `backend-nest`; mantenha o diretório Express apenas por compatibilidade até eliminar. Documentação clara sobre a decisão está acima.
-2. Adotar um monorepo com workspaces (já iniciado) e scripts de automação.
-3. Eliminar arquivos desnecessários e adicionar `CONTRIBUTING.md` e `CODE_OF_CONDUCT.md`.
-4. Garantir que todos os caminhos de importação usem `tsconfig-paths` e não existam `@ts-nocheck`.
+### Code Structure (currently 8/10)
+1. **Deprecate and remove `backend`**. The active base is `backend-nest`; keep the Express directory only for compatibility until elimination. Clear documentation about the decision is above.
+2. Adopt a monorepo with workspaces (already started) and automation scripts.
+3. Eliminate unnecessary files and add `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.
+4. Ensure that all import paths use `tsconfig-paths` and there are no `@ts-nocheck`.
 
-### Backend (arquitetura, testes) – 8/10
-1. Completar cobertura de testes para 100 % (incluir casos de erro, validações e middlewares).
-2. Implementar mocks nos testes e separar unitários de e2e.
-3. Criar pipelines de CI (GitHub Actions) que rodem lint, build, tests e prisma migrate.
-4. Adicionar documentação de API automática (Swagger) com exemplos válidos.
-5. Validar existence de `DATABASE_URL` e mostrar erro amigável se ausente.
-6. Consolidar build/serviço Docker (incluindo `backend-nest` na compose) e `k8s` Helm chart com readiness/liveness.
+### Backend (architecture, tests) – 8/10
+1. Complete test coverage for 100% (include error cases, validations and middlewares).
+2. Implement mocks in tests and separate unit tests from e2e.
+3. Create CI pipelines (GitHub Actions) that run lint, build, tests and prisma migrate.
+4. Add automatic API documentation (Swagger) with valid examples.
+5. Validate existence of `DATABASE_URL` and show friendly error if absent.
+6. Consolidate Docker build/service (including `backend-nest` in compose) and `k8s` Helm chart with readiness/liveness.
 
 ### Frontend – 7/10
-1. Escrever testes de componentes e de fluxo com React Testing Library e end‑to‑end com Cypress ou Playwright.
-2. Melhorar organização de pastas (separar “pages” e “components” com index.tsx que exporta) e aplicar pattern atomic design.
-3. Configurar Storybook para visualizar componentes isolados.
-4. Garantir que todas as chamadas Axios manipulem erros e exibam loaders.
-5. Adicionar lint/format (ESLint + Prettier) e hooks pre‑commit (`husky`).
+1. Write component tests and flow tests with React Testing Library and end-to-end with Cypress or Playwright.
+2. Improve folder organization (separate "pages" and "components" with index.tsx that exports) and apply atomic design pattern.
+3. Configure Storybook to visualize isolated components.
+4. Ensure that all Axios calls handle errors and display loaders.
+5. Add lint/format (ESLint + Prettier) and pre-commit hooks (`husky`).
 
-### Documentação – 8/10
-1. Completar README principal (feito acima) e adicionar guias específicos (`docs/UX`, `docs/DEPLOYMENT.md`).
-2. Incluir capturas de ecrã reais, diagramas de arquitetura e instruções de configuração de ambiente (cloud, k8s).
-3. Fornecer changelog e roteiro de funcionalidades futuras.
-4. Escrever documentação de design de API (OpenAPI/Swagger) e de uso do frontend (páginas explicadas).
+### Documentation – 8/10
+1. Complete main README (done above) and add specific guides (`docs/UX`, `docs/DEPLOYMENT.md`).
+2. Include real screenshots, architecture diagrams and environment configuration instructions (cloud, k8s).
+3. Provide changelog and roadmap of future features.
+4. Write API design documentation (OpenAPI/Swagger) and frontend usage (explained pages).
 
-### UX/UI – 6/10 (estimado)
-1. Realizar testes de usabilidade com utilizadores reais para identificar pontos de fricção.
-2. Criar um design system ou utilizar uma biblioteca (Tailwind + componente customizados) com tokens de cor, tipografia e espaçamento.
-3. Garantir responsividade em todos os tamanhos de ecrã e implementar dark mode.
-4. Auditar e corrigir problemas de acessibilidade (ARIA roles, contraste, navegação por teclado).
-5. Documentar fluxo de navegação e estados (loading, error, vazio).
+### UX/UI – 6/10 (estimated)
+1. Conduct usability tests with real users to identify friction points.
+2. Create a design system or use a library (Tailwind + custom components) with color, typography and spacing tokens.
+3. Ensure responsiveness on all screen sizes and implement dark mode.
+4. Audit and fix accessibility issues (ARIA roles, contrast, keyboard navigation).
+5. Document navigation flow and states (loading, error, empty).
 
-### Estado “produtivo” – 6/10
-1. Adicionar monitorização (Prometheus + Grafana, ou Sentry) e logging estruturado no backend.
-2. Implementar estratégia de deploy (scripts Terraform/Helm) e instruções para rollback.
-3. Incluir política de backups, migrações automatizadas e testes de carga.
-4. Habilitar HTTPS, CORS estrito, proteção CSRF e revisão de segurança.
-5. Configurar CI/CD que constrói imagens Docker e publica em registry.
-6. Automatizar geração de artefatos (bundle analysis, minimização, análises de performance).
+### Production State – 6/10
+1. Add monitoring (Prometheus + Grafana, or Sentry) and structured logging in the backend.
+2. Implement deployment strategy (Terraform/Helm scripts) and rollback instructions.
+3. Include backup policy, automated migrations and load tests.
+4. Enable HTTPS, strict CORS, CSRF protection and security review.
+5. Configure CI/CD that builds Docker images and publishes to registry.
+6. Automate artifact generation (bundle analysis, minimization, performance analyses).
 
 ---
 
 ## 📚 Documentação
 
-Referências principais:
+Main references:
 
 - **Backend**: NestJS + Prisma ORM
-- **Frontend**: React moderno com Vite
+- **Frontend**: Modern React with Vite
 - **DevOps**: Docker Compose + Kubernetes-ready
 
 ---
 
-## 🤝 Contribuindo
+## 🤝 Contributing
 
-1. Abra uma issue antes de começar um trabalho extenso.
-2. Crie branches de feature com `feature/descricao` ou `bugfix/descricao`.
-3. Execute testes antes de submeter PR.
-4. Escreva testes para qualquer funcionalidade nova ou bug corrigido.
+1. Open an issue before starting extensive work.
+2. Create feature branches with `feature/description` or `bugfix/description`.
+3. Run tests before submitting PR.
+4. Write tests for any new functionality or fixed bug.
 
 ---
 
-## 🎯 Próximos Passos
+## 🎯 Next Steps
 
-- Completar test suite (unit, integration, e2e)
-- Adicionar Swagger docs automático
-- Implementar GitHub Actions CI/CD
-- Deploy em staging (Kubernetes)
-- Documentação de segurança e audits
+- Complete test suite (unit, integration, e2e)
+- Add automatic Swagger docs
+- Implement GitHub Actions CI/CD
+- Deploy to staging (Kubernetes)
+- Security documentation and audits
 
-Boa sorte e bom trabalho! 😊
+Good luck and good work! 😊
