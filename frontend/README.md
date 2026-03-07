@@ -1,26 +1,26 @@
 # Frontend - React + Vite + Tailwind
 
-Interface moderna para a plataforma de gestão logística multi-tenant.
+Modern interface for the multi-tenant logistics management platform.
 
-## Inicialização Rápida
+## Quick Start
 
 ```bash
-# Na raiz, instalar dependências
+# In root, install dependencies
 npm install
 
-# Criar .env.local ou .env
+# Create .env.local or .env
 cp .env.example .env.local
 
-# Rodar em desenvolvimento
+# Run in development
 npm run --workspace=frontend dev
 
-# Build para produção
+# Build for production
 npm run --workspace=frontend build
 
-# Testes com cobertura
+# Tests with coverage
 npm run --workspace=frontend test
 
-# Testes com watch mode
+# Tests with watch mode
 npm run --workspace=frontend test:watch
 
 # Lint
@@ -30,7 +30,7 @@ npm run --workspace=frontend lint
 npm run --workspace=frontend format
 ```
 
-## Estrutura
+## Structure
 
 ```
 src/
@@ -38,11 +38,11 @@ src/
 ├─ App.tsx                # Root component
 ├─ api/
 │  └─ client.ts          # Axios instance + interceptors
-├─ components/            # Componentes reutilizáveis
+├─ components/            # Reusable components
 │  ├─ common/
 │  ├─ layout/
 │  └─ ...
-├─ pages/                 # Páginas (rotas)
+├─ pages/                 # Pages (routes)
 │  ├─ Dashboard.tsx
 │  ├─ Products/
 │  ├─ Vehicles/
@@ -50,10 +50,10 @@ src/
 ├─ hooks/                 # Custom hooks
 │  └─ useAuth.ts
 ├─ contexts/              # Context API
-├─ services/              # Lógica de dados (não-API)
+├─ services/              # Data logic (non-API)
 ├─ types/                 # TypeScript types
-├─ utils/                 # Funções utilitárias
-└─ styles/                # CSS global
+├─ utils/                 # Utility functions
+└─ styles/                # Global CSS
 
 public/
 ├─ index.html
@@ -61,7 +61,7 @@ public/
 └─ manifest.json
 ```
 
-## Variáveis de Ambiente
+## Environment Variables
 
 ```bash
 # .env.local
@@ -69,17 +69,17 @@ REACT_APP_API_URL=http://localhost:3000/api
 REACT_APP_ENV=development
 ```
 
-## Testes
+## Tests
 
 ```bash
-# Rodar testes com coverage
+# Run tests with coverage
 npm run --workspace=frontend test
 
-# Watch mode (útil durante desenvolvimento)
+# Watch mode (useful during development)
 npm run --workspace=frontend test:watch
 ```
 
-### Exemplo de Teste com React Testing Library
+### Test Example with React Testing Library
 
 ```typescript
 import { render, screen } from '@testing-library/react';
@@ -87,13 +87,13 @@ import userEvent from '@testing-library/user-event';
 import { MyComponent } from './MyComponent';
 
 describe('MyComponent', () => {
-  it('deve renderizar botão', () => {
+  it('should render button', () => {
     render(<MyComponent />);
     const button = screen.getByRole('button', { name: /click/i });
     expect(button).toBeInTheDocument();
   });
 
-  it('deve chamar callback ao clicar', async () => {
+  it('should call callback when clicked', async () => {
     const onClick = jest.fn();
     const user = userEvent.setup();
     render(<MyComponent onClick={onClick} />);
@@ -106,9 +106,9 @@ describe('MyComponent', () => {
 });
 ```
 
-## API e Integração
+## API and Integration
 
-Todos os requests HTTP devem passar por `src/api/client.ts`:
+All HTTP requests should go through `src/api/client.ts`:
 
 ```typescript
 import { apiClient } from '@api/client';
@@ -118,11 +118,11 @@ const users = await apiClient.get('/users');
 
 // POST
 const newProduct = await apiClient.post('/products', {
-  name: 'Produto',
+  name: 'Product',
   price: 100
 });
 
-// Interceptor de erro centralizado
+// Centralized error interceptor
 apiClient.interceptors.response.use(
   response => response,
   error => {
@@ -131,27 +131,27 @@ apiClient.interceptors.response.use(
 );
 ```
 
-## Design System e Tailwind
+## Design System and Tailwind
 
-- Cores: definidas em `tailwind.config.js`
-- Componentes: reutilizáveis em `components/`
-- Tema: suporte a dark mode via `ThemeProvider`
+- Colors: defined in `tailwind.config.js`
+- Components: reusable in `components/`
+- Theme: dark mode support via `ThemeProvider`
 
-## Documentação Adicional
+## Additional Documentation
 
-- [UX_UI.md](../docs/UX_UI.md) - Padrões de design e UX
-- [CONTRIBUTING.md](../CONTRIBUTING.md) - Como contribuir
-- [DEPLOYMENT.md](../docs/DEPLOYMENT.md) - Deploy em produção
-
----
-
-**Última atualização:** Fevereiro 2026
+- [UX_UI.md](../docs/UX_UI.md) - Design and UX patterns
+- [CONTRIBUTING.md](../CONTRIBUTING.md) - How to contribute
+- [DEPLOYMENT.md](../docs/DEPLOYMENT.md) - Deploy to production
 
 ---
 
-##  Sistema de Gestão Logística Multi-Tenant
+**Last update:** February 2026
 
-> Plataforma completa de gestão logística desenvolvida para servir múltiplas empresas com isolamento total de dados, controlo de inventário em tempo real e máquina de estados robusta.
+---
+
+## Multi-Tenant Logistics Management System
+
+> Complete logistics management platform developed to serve multiple companies with total data isolation, real-time inventory control, and robust state machine.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
@@ -159,139 +159,139 @@ apiClient.interceptors.response.use(
 
 ---
 
-## 📋 Índice
+## 📋 Index
 
-- [Sobre o Projecto](#sobre-o-projecto)
-- [Funcionalidades](#funcionalidades)
-- [Stack Tecnológica](#stack-tecnológica)
-- [Arquitetura](#arquitetura)
-- [Começar](#começar)
-  - [Pré-requisitos](#pré-requisitos)
-  - [Instalação](#instalação)
-  - [Configuração](#configuração)
-- [Estrutura do Projecto](#estrutura-do-projecto)
-- [Utilização](#utilização)
+- [About the Project](#about-the-project)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Architecture](#architecture)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Project Structure](#project-structure)
+- [Usage](#usage)
 - [API Endpoints](#api-endpoints)
-- [Estados dos Produtos](#estados-dos-produtos)
-- [Permissões](#permissões)
-- [Guia de Desenvolvimento](#guia-de-desenvolvimento)
-- [Roteiro de Desenvolvimento](#roteiro-de-desenvolvimento)
-- [Contribuir](#contribuir)
+- [Product States](#product-states)
+- [Permissions](#permissions)
+- [Development Guide](#development-guide)
+- [Development Roadmap](#development-roadmap)
+- [Contribute](#contribute)
 
 
 ---
 
-## 🎯 Sobre o Projeto
+## 🎯 About the Project
 
-Esta plataforma permite gerir todo o ciclo de vida de produtos num armazém, desde a receção até à entrega final. O sistema foi desenvolvido com arquitetura **multi-tenant**, garantindo que cada empresa opera de forma totalmente isolada e segura.
+This platform allows managing the entire product lifecycle in a warehouse, from reception to final delivery. The system was developed with **multi-tenant** architecture, ensuring that each company operates in a completely isolated and secure manner.
 
-###  Capturas de Ecrã
+### Screenshots
 
 <details>
-<summary>Ver screenshots</summary>
+<summary>View screenshots</summary>
 
-**Dashboard com Métricas em Tempo Real**
-- Resumo do inventário por estado
-- Gráficos de distribuição
-- Top 5 fornecedores
+**Dashboard with Real-Time Metrics**
+- Inventory summary by state
+- Distribution charts
+- Top 5 suppliers
 
-**Lista de Produtos com Filtros Avançados**
-- Pesquisa por código, descrição ou fornecedor
-- Filtro por estado, localização e data
-- Ordenação e paginação
+**Product List with Advanced Filters**
+- Search by code, description or supplier
+- Filter by state, location, and date
+- Sorting and pagination
 
-**Gestão de Fornecedores e Veículos**
-- CRUD completo
-- Integração com produtos e transportes
+**Supplier and Vehicle Management**
+- Complete CRUD
+- Integration with products and transports
 
-**Histórico de Operações**
-- Auditoria completa
-- Filtros por ação, entidade e utilizador
-- Registo de todas as alterações
+**Operations History**
+- Complete audit
+- Filters by action, entity and user
+- Record of all changes
 
 </details>
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Features
 
-###  Autenticação e Segurança
-- Sistema multi-tenant com isolamento total de dados
-- Três perfis: **Super Admin**, **Administrador** e **Operador**
-- Autenticação JWT com refresh tokens
-- Proteção contra SQL injection via Prisma ORM
+### Authentication and Security
+- Multi-tenant system with total data isolation
+- Three profiles: **Super Admin**, **Administrator** and **Operator**
+- JWT authentication with refresh tokens
+- SQL injection protection via Prisma ORM
 
-###  Gestão de Inventário
-- **CRUD completo** de produtos
-- Máquina de estados para controlo do ciclo de vida
-- Histórico completo de movimentações
-- Rastreabilidade total de cada produto
-- Filtros avançados (estado, localização, fornecedor, data)
+### Inventory Management
+- **Complete CRUD** of products
+- State machine for lifecycle control
+- Complete movement history
+- Total traceability of each product
+- Advanced filters (state, location, supplier, date)
 
-###  Dashboard Analítico
-- Resumo do inventário por estado
-- Gráficos de distribuição (donut e barras)
-- Estatísticas de movimentações (últimos 30 dias)
-- Top 5 fornecedores
-- Métricas de desempenho em tempo real
+### Analytics Dashboard
+- Inventory summary by state
+- Distribution charts (donut and bars)
+- Movement statistics (last 30 days)
+- Top 5 suppliers
+- Real-time performance metrics
 
-### 🚚 Gestão de Transportes
-- Registo de veículos da frota
-- Criação e acompanhamento de transportes
-- Integração com produtos e estados
-- Status: Em Trânsito, Entregue, Cancelado
+### 🚚 Transport Management
+- Fleet vehicle registration
+- Transport creation and tracking
+- Integration with products and states
+- Status: In Transit, Delivered, Cancelled
 
-### 👥 Gestão de Fornecedores
-- CRUD completo de fornecedores
-- Vinculação com produtos
-- Histórico de fornecimentos
+### 👥 Supplier Management
+- Complete CRUD of suppliers
+- Product linkage
+- Supply history
 
-### 📜 Auditoria e Histórico
-- Registo automático de todas as operações
-- Filtros por: data, ação, entidade, utilizador
-- Rastreamento completo de alterações
-- Logs imutáveis com timestamps
+### 📜 Audit and History
+- Automatic recording of all operations
+- Filters by: date, action, entity, user
+- Complete tracking of changes
+- Immutable logs with timestamps
 
-### 🔔 Sistema de Notificações
-- Alertas de produtos parados em análise
-- Notificações em tempo real
-- Histórico de notificações
+### 🔔 Notification System
+- Alerts for products stuck in analysis
+- Real-time notifications
+- Notification history
 
 ---
 
-## 🛠️ Stack Tecnológica
+## 🛠️ Technology Stack
 
 ### Backend
-| Tecnologia | Versão | Descrição |
-|------------|--------|-----------|
-| **Node.js** | 18+ | Runtime JavaScript |
-| **TypeScript** | ^5.0 | Superset tipado de JavaScript |
-| **Express.js** | ^4.18 | Framework web minimalista |
-| **Prisma** | ^5.0 | ORM moderno para Node.js |
-| **PostgreSQL** | 15 | Base de dados relacional |
-| **JWT** | - | Autenticação stateless |
-| **Zod** | ^3.22 | Validação de schemas TypeScript |
+| Technology | Version | Description |
+|------------|---------|-------------|
+| **Node.js** | 18+ | JavaScript Runtime |
+| **TypeScript** | ^5.0 | Typed JavaScript Superset |
+| **Express.js** | ^4.18 | Minimalist web framework |
+| **Prisma** | ^5.0 | Modern ORM for Node.js |
+| **PostgreSQL** | 15 | Relational database |
+| **JWT** | - | Stateless authentication |
+| **Zod** | ^3.22 | TypeScript schema validation |
 
 ### Frontend
-| Tecnologia | Versão | Descrição |
-|------------|--------|-----------|
-| **React** | 18 | Biblioteca UI |
-| **TypeScript** | ^5.0 | Tipagem estática |
-| **React Router** | v6 | Roteamento SPA |
-| **Tailwind CSS** | ^3.4 | Framework CSS utility-first |
-| **Recharts** | ^2.5 | Gráficos para React |
-| **Axios** | ^1.6 | Cliente HTTP |
-| **React Hot Toast** | - | Notificações toast |
+| Technology | Version | Description |
+|------------|---------|-------------|
+| **React** | 18 | UI Library |
+| **TypeScript** | ^5.0 | Static typing |
+| **React Router** | v6 | SPA routing |
+| **Tailwind CSS** | ^3.4 | Utility-first CSS framework |
+| **Recharts** | ^2.5 | Charts for React |
+| **Axios** | ^1.6 | HTTP client |
+| **React Hot Toast** | - | Toast notifications |
 
 ### DevOps
 - **Docker** & **Docker Compose**
-- **PostgreSQL 15** (containerizado)
+- **PostgreSQL 15** (containerized)
 
 ---
 
-## 🏗️ Arquitetura
+## 🏗️ Architecture
 
-### Padrão Multi-Tenant
+### Multi-Tenant Pattern
 
 ```
 ┌─────────────────────────────────────────┐
@@ -324,49 +324,49 @@ Esta plataforma permite gerir todo o ciclo de vida de produtos num armazém, des
 └─────────────────────────────────────────┘
 ```
 
-### Máquina de Estados
+### State Machine
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Recebido
-    Recebido --> EmAnalise
-    EmAnalise --> Aprovado
-    EmAnalise --> Rejeitado
-    Rejeitado --> EmDevolucao
-    Aprovado --> EmArmazenamento
-    EmArmazenamento --> EmPreparacao
-    EmArmazenamento --> EmExpedicao
-    EmPreparacao --> EmExpedicao
-    EmPreparacao --> Cancelado
-    EmExpedicao --> Entregue
-    EmDevolucao --> Recebido
-    EmDevolucao --> Eliminado
-    Cancelado --> EmArmazenamento
-    Entregue --> [*]
-    Eliminado --> [*]
+    [*] --> Received
+    Received --> UnderAnalysis
+    UnderAnalysis --> Approved
+    UnderAnalysis --> Rejected
+    Rejected --> InReturn
+    Approved --> InStorage
+    InStorage --> InPreparation
+    InStorage --> InExpedition
+    InPreparation --> InExpedition
+    InPreparation --> Cancelled
+    InExpedition --> Delivered
+    InReturn --> Received
+    InReturn --> Eliminated
+    Cancelled --> InStorage
+    Delivered --> [*]
+    Eliminated --> [*]
 ```
 
 ---
 
-## 🚀 Começar
+## 🚀 Getting Started
 
-### Pré-requisitos
+### Prerequisites
 
-Certifica-te de ter instalado:
-- **Node.js** 18 ou superior
-- **npm** ou **yarn**
-- **Docker** e **Docker Compose** (opcional, mas recomendado)
-- **PostgreSQL 15** (se não usar Docker)
+Make sure you have installed:
+- **Node.js** 18 or higher
+- **npm** or **yarn**
+- **Docker** and **Docker Compose** (optional, but recommended)
+- **PostgreSQL 15** (if not using Docker)
 
-### Instalação
+### Installation
 
-1. **Clona o repositório**
+1. **Clone the repository**
 ```bash
-git clone https://github.com/teu-usuario/logistica-multi-tenant.git
+git clone https://github.com/your-user/logistica-multi-tenant.git
 cd logistica-multi-tenant
 ```
 
-2. **Instala as dependências**
+2. **Install dependencies**
 
 Backend:
 ```bash
@@ -380,71 +380,71 @@ cd frontend
 npm install
 ```
 
-### Configuração
+### Configuration
 
-1. **Variáveis de Ambiente**
+1. **Environment Variables**
 
-Cria um ficheiro `.env` na pasta `backend/`:
+Create a `.env` file in the `backend/` folder:
 
 ```env
-# Ambiente
+# Environment
 NODE_ENV=development
 
-# Servidor
+# Server
 PORT=3000
 
-# Base de Dados
+# Database
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/logistica
 
 # JWT
-JWT_SECRET=sua-chave-secreta-super-segura-minimo-32-caracteres-aleatorios
+JWT_SECRET=your-super-secure-secret-key-minimum-32-random-characters
 JWT_EXPIRES_IN=7d
 
-# CORS (opcional)
+# CORS (optional)
 CORS_ORIGIN=http://localhost:3000
 ```
 
-2. **Base de Dados com Docker (Recomendado)**
+2. **Database with Docker (Recommended)**
 
 ```bash
-# Inicia o PostgreSQL
+# Start PostgreSQL
 docker-compose up -d
 
-# Executa as migrações
+# Run migrations
 cd backend
 npx prisma migrate dev
 npx prisma generate
 ```
 
-**Ou sem Docker:**
+**Or without Docker:**
 
 ```bash
-# Cria a base de dados manualmente no PostgreSQL
+# Create database manually in PostgreSQL
 createdb logistica
 
-# Executa as migrações
+# Run migrations
 cd backend
 npx prisma migrate dev
 npx prisma generate
 ```
 
-3. **Seed da Base de Dados (Opcional)**
+3. **Database Seed (Optional)**
 
 ```bash
 cd backend
 npm run seed
 ```
 
-Isto cria:
+This creates:
 - 1 Super Admin
-- 1 Empresa exemplo
-- 1 Administrador
-- 1 Operador
-- Alguns produtos de teste
+- 1 Example Company
+- 1 Administrator
+- 1 Operator
+- Some test products
 
-### Executar a Aplicação
+### Run the Application
 
-**Modo Desenvolvimento:**
+**Development Mode:**
 
 Terminal 1 - Backend:
 ```bash
@@ -567,57 +567,57 @@ logistica-multi-tenant/
 
 ---
 
-## 📖 Utilização
+## 📖 Usage
 
-### 🎬 Fluxo Básico de Operação
+### 🎬 Basic Operation Flow
 
-#### 1. Registo da Empresa
+#### 1. Company Registration
 
-1. Acede a **http://localhost:3000/register**
-2. Preenche:
-   - Nome da empresa
-   - NIF
-   - Email, telefone, morada
-   - Dados do utilizador administrador
-3. Após registo, faz login com as credenciais criadas
+1. Go to **http://localhost:3000/register**
+2. Fill in:
+   - Company name
+   - Tax ID
+   - Email, phone, address
+   - Administrator user data
+3. After registration, login with the created credentials
 
 #### 2. Login
 
 - **URL**: http://localhost:3000/login
-- Credenciais de teste (após seed):
-  - **Admin**: `admin@exemplo.pt` / `admin123`
-  - **Operador**: `operador@exemplo.pt` / `operador123`
+- Test credentials (after seed):
+  - **Admin**: `admin@example.pt` / `admin123`
+  - **Operator**: `operator@example.pt` / `operator123`
 
-#### 3. Adicionar Produto
+#### 3. Add Product
 
-1. Vai a **Produtos** → **Novo Produto**
-2. Preenche os dados obrigatórios:
-   - Código único
-   - Descrição
-   - Quantidade e unidade
-   - Fornecedor
-   - Localização (opcional)
-   - Observações (opcional)
-3. O produto é criado automaticamente no estado **Recebido**
+1. Go to **Products** → **New Product**
+2. Fill in required data:
+   - Unique code
+   - Description
+   - Quantity and unit
+   - Supplier
+   - Location (optional)
+   - Notes (optional)
+3. Product is automatically created in **Received** state
 
-#### 4. Gerir Estados
+#### 4. Manage States
 
-1. Na lista de produtos, clica num produto
-2. Clica em **Alterar Estado**
-3. Seleciona o próximo estado permitido (transições validadas automaticamente)
-4. Adiciona observações se necessário
-5. Confirma a transição
+1. In product list, click on a product
+2. Click **Change State**
+3. Select next allowed state (transitions validated automatically)
+4. Add notes if necessary
+5. Confirm transition
 
-**Exemplo de Fluxo:**
+**Example Flow:**
 ```
-Recebido → Em Análise → Aprovado → Em Armazenamento → 
-Em Preparação → Em Expedição → Entregue
+Received → Under Analysis → Approved → In Storage → 
+In Preparation → In Expedition → Delivered
 ```
 
-#### 5. Consultar Histórico
+#### 5. Check History
 
-- Clica num produto para ver todas as movimentações
-- Ou vai a **Histórico** para ver todas as operações do sistema
+- Click on a product to see all movements
+- Or go to **History** to see all system operations
 - Filtra por data, ação, entidade ou utilizador
 
 #### 6. Dashboard
@@ -702,51 +702,51 @@ Em Preparação → Em Expedição → Entregue
 
 ---
 
-## 🔄 Estados dos Produtos
+## 🔄 Product States
 
-### Estados Disponíveis
+### Available States
 
-| Estado | Descrição | Próximos Estados Permitidos |
-|--------|-----------|----------------------------|
-| **Recebido** | Produto acabado de chegar ao armazém | Em Análise |
-| **Em Análise** | Produto a ser inspecionado | Aprovado, Rejeitado |
-| **Aprovado** | Produto aprovado para armazenamento | Em Armazenamento |
-| **Rejeitado** | Produto não conforme | Em Devolução |
-| **Em Armazenamento** | Produto guardado no armazém | Em Preparação, Em Expedição |
-| **Em Preparação** | Produto a ser preparado para envio | Em Expedição, Cancelado |
-| **Em Expedição** | Produto em transporte | Entregue |
-| **Entregue** | Produto entregue ao cliente (final) | - |
-| **Em Devolução** | Produto em processo de devolução | Recebido, Eliminado |
-| **Cancelado** | Preparação cancelada | Em Armazenamento |
-| **Eliminado** | Produto descartado (final) | - |
+| State | Description | Next Allowed States |
+|-------|-------------|-------------------|
+| **Received** | Product just arrived at warehouse | Under Analysis |
+| **Under Analysis** | Product being inspected | Approved, Rejected |
+| **Approved** | Product approved for storage | In Storage |
+| **Rejected** | Non-conforming product | In Return |
+| **In Storage** | Product stored in warehouse | In Preparation, In Expedition |
+| **In Preparation** | Product being prepared for shipment | In Expedition, Cancelled |
+| **In Expedition** | Product in transport | Delivered |
+| **Delivered** | Product delivered to client (final) | - |
+| **In Return** | Product in return process | Received, Eliminated |
+| **Cancelled** | Preparation cancelled | In Storage |
+| **Eliminated** | Product discarded (final) | - |
 
-### Regras de Transição
+### Transition Rules
 
-- **Apenas transições válidas** são permitidas (validadas no backend)
-- Alguns estados requerem **observações obrigatórias**
-- O histórico de transições é **imutável** e sempre registado
-- Permissões são verificadas antes de cada transição
+- **Only valid transitions** are allowed (validated in backend)
+- Some states require **mandatory notes**
+- Transition history is **immutable** and always recorded
+- Permissions are checked before each transition
 
 ---
 
-##  Permissões
+## Permissions
 
 ### Super Admin
 
-**Acesso total ao sistema:**
-- Gestão de todas as empresas
-- Criação de novos utilizadores globais
-- Acesso a dashboards agregados
-- Configurações do sistema
+**Full system access:**
+- Management of all companies
+- Creation of new global users
+- Access to aggregated dashboards
+- System configurations
 
-### Administrador (por empresa)
+### Administrator (per company)
 
-**Acesso total dentro da sua empresa:**
-- Aprovar ou rejeitar produtos
-- Alterar qualquer estado
-- Gerir utilizadores da empresa
-- Aceder a todos os módulos
-- Eliminar produtos, fornecedores, veículos
+**Full access within their company:**
+- Approve or reject products
+- Change any state
+- Manage company users
+- Access all modules
+- Delete products, suppliers, vehicles
 
 ### Operador (por empresa)
 
@@ -758,25 +758,25 @@ Em Preparação → Em Expedição → Entregue
 
 ---
 
-## 💻 Guia de Desenvolvimento
+## 💻 Development Guide
 
-### Antes de Programar
+### Before Programming
 
-📖 **Lê o documento de requisitos 3 vezes:**
+📖 **Read the requirements document 3 times:**
 
-1. **Primeira leitura**: Compreender o âmbito geral
-2. **Segunda leitura**: Destacar campos obrigatórios, transições, regras de negócio
-3. **Terceira leitura**: Fazer anotações sobre implementação
+1. **First reading**: Understand the general scope
+2. **Second reading**: Highlight mandatory fields, transitions, business rules
+3. **Third reading**: Make notes about implementation
 
-### Planear Antes de Codificar
+### Plan Before Coding
 
-Desenha no papel ou ferramenta visual:
+Draw on paper or visual tool:
 
-1. **Estrutura da Base de Dados**
-   - Tabelas e campos
-   - Relações (FK)
-   - Índices importantes
-   - ⚠️ Não esquecer `companyId` em tabelas multi-tenant
+1. **Database Structure**
+   - Tables and fields
+   - Relationships (FK)
+   - Important indexes
+   - ⚠️ Don't forget `companyId` in multi-tenant tables
 
 2. **Fluxo de Estados**
    - Diagrama com todos os estados
@@ -861,32 +861,32 @@ Acede a http://localhost:5555
 
 ---
 
-## 🤝 Contribuir
+## 🤝 Contribute
 
-Contribuições são bem-vindas! Este projeto foi desenvolvido para a comunidade **Commit PT** no Discord.
+Contributions are welcome! This project was developed for the **Commit PT** community on Discord.
 
-1. Faz fork do projeto
-2. Cria uma branch para a tua feature (`git checkout -b feature/MinhaFeature`)
-3. Commit as alterações (`git commit -m 'Adiciona MinhaFeature'`)
-4. Push para a branch (`git push origin feature/MinhaFeature`)
-5. Abre um Pull Request
+1. Fork the project
+2. Create a branch for your feature (`git checkout -b feature/MyFeature`)
+3. Commit changes (`git commit -m 'Add MyFeature'`)
+4. Push to the branch (`git push origin feature/MyFeature`)
+5. Open a Pull Request
 
-### Diretrizes
+### Guidelines
 
-- Segue o estilo de código existente
-- Adiciona testes para novas funcionalidades
-- Atualiza a documentação conforme necessário
-- Mantém commits pequenos e focados
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Vê o ficheiro [LICENSE](LICENSE) para mais detalhes.
+- Follow the existing code style
+- Add tests for new features
+- Update documentation as needed
+- Keep commits small and focused
 
 ---
 
-## 👥 Comunidade
+## 📄 License
+
+This project is under the MIT license. See the [LICENSE](LICENSE) file for more details.
+
+---
+
+## 👥 Community
 
 Este projeto foi desenvolvido para a comunidade [**Commit PT**]
 Junta-te à comunidade para:
@@ -897,15 +897,15 @@ Junta-te à comunidade para:
 
 ---
 
-## 📞 Suporte
+## 📞 Support
 
-Se encontraste algum problema ou tens sugestões:
+If you found any issues or have suggestions:
 
-1. Verifica as [Issues](**vou adicionar quando acabar**) existentes
-2. Cria uma nova issue se necessário
-3. Contactar o criador
-
-
+1. Check existing [Issues](**will add when finished**)
+2. Create a new issue if necessary
+3. Contact the creator
 
 
-**Desenvolvido com pelo gonçalo coimbra**
+
+
+**Developed by Gonçalo Coimbra**
