@@ -1,45 +1,45 @@
 # Quick Start Guide
 
-Guia rápido para começar a trabalhar no projeto em 5 minutos.
+Quick guide to start working on the project in 5 minutes.
 
-## 1️⃣ Clone e Instale (1 minuto)
+## 1️⃣ Clone and Install (1 minute)
 
 ```bash
 # Clone
-git clone https://github.com/seu-repo/logistica-multi-tenant.git
+git clone https://github.com/your-repo/logistica-multi-tenant.git
 cd logistica-multi-tenant
 
-# Instale tudo (monorepo)
+# Install everything (monorepo)
 npm install
 ```
 
-## 2️⃣ Configurar Ambiente (2 minutos)
+## 2️⃣ Configure Environment (2 minutes)
 
 ```bash
 # Backend
 cp backend-nest/.env.example backend-nest/.env
-# Editar .env se necessário (DATABASE_URL, JWT_SECRET)
+# Edit .env if necessary (DATABASE_URL, JWT_SECRET)
 
 # Frontend  
 cp frontend/.env.example frontend/.env
 ```
 
-## 3️⃣ Base de Dados (1 minuto)
+## 3️⃣ Database (1 minute)
 
 ```bash
-# Subir Postgres com Docker Compose
+# Start Postgres with Docker Compose
 docker-compose up -d
 
-# Rodar migrações
+# Run migrations
 npm run --workspace=backend-nest prisma:migrate dev
 
-# Seed (dados de teste)
+# Seed (test data)
 npm run --workspace=backend-nest seed
 ```
 
-## 4️⃣ Rodara a Aplicação (1 minuto)
+## 4️⃣ Run the Application (1 minute)
 
-**Opção A: Em terminais separados**
+**Option A: In separate terminals**
 
 ```bash
 # Terminal 1 - Backend
@@ -49,53 +49,53 @@ npm run --workspace=backend-nest start:dev
 npm run --workspace=frontend dev
 ```
 
-**Opção B: Concorrente (os dois juntos)**
+**Option B: Concurrent (both together)**
 
 ```bash
 npm run start-all
 ```
 
-## ✅ Validação
+## ✅ Validation
 
-- **Frontend**: http://localhost:5173 (Vite) ou http://localhost:3000 (React Scripts)
-- **Backend**: http://localhost:3000 (com /api prefix)
+- **Frontend**: http://localhost:5173 (Vite) or http://localhost:3000 (React Scripts)
+- **Backend**: http://localhost:3000 (with /api prefix)
 - **API Docs**: http://localhost:3000/api/docs (Swagger)
 - **Health Check**: http://localhost:3000/api/health
 
-Deverá ver JSON: `{"status":"ok","timestamp":"..."}`
+You should see JSON: `{"status":"ok","timestamp":"..."}`
 
-## 📁 Próximas Leituras
+## 📁 Next Readings
 
-| Quando | Leia |
-|--------|------|
-| Desenvolvendo | [backend-nest/README.md](./backend-nest/README.md) |
-| Contribuindo | [CONTRIBUTING.md](./CONTRIBUTING.md) |
-| Dúvida estrutura | [ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
-| Testes | [TESTING_STRATEGY.md](./docs/TESTING_STRATEGY.md) |
+| When | Read |
+|------|------|
+| Developing | [backend-nest/README.md](./backend-nest/README.md) |
+| Contributing | [CONTRIBUTING.md](./CONTRIBUTING.md) |
+| Structure doubt | [ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
+| Tests | [TESTING_STRATEGY.md](./docs/TESTING_STRATEGY.md) |
 | Deploy | [DEPLOYMENT.md](./docs/DEPLOYMENT.md) |
 
-## 🛠️ Comandos Úteis
+## 🛠️ Useful Commands
 
 ```bash
-# Lint (checar código)
+# Lint (check code)
 npm run lint-all
 
-# Format (arrumar código)
+# Format (fix code)
 npm run format-all
 
-# Testes
+# Tests
 npm run test-all
 
 # Build
 npm run build-all
 
-# Limpar código e dependências
+# Clean code and dependencies
 npm run format-all && npm run lint-all
 
-# Ver status do Prisma
+# View Prisma status
 npm run --workspace=backend-nest prisma:studio
 
-# Resetar BD (cuidado!)
+# Reset DB (careful!)
 npm run --workspace=backend-nest prisma migrate reset
 ```
 

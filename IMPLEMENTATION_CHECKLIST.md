@@ -1,115 +1,115 @@
-# Checklist de Implementação - Logística Multi-Tenant
+# Implementation Checklist - Multi-Tenant Logistics
 
-## ✅ Estrutura de Código (COMPLETO)
+## ✅ Code Structure (COMPLETE)
 
-- [x] **Monorepo com npm workspaces**
-  - [x] Configurar workspaces em package.json
-  - [x] Adicionar backend-nest e frontend
-  - [x] Testar `npm install` da raiz
+- [x] **Monorepo with npm workspaces**
+  - [x] Configure workspaces in package.json
+  - [x] Add backend-nest and frontend
+  - [x] Test `npm install` from root
 
-- [x] **Decisão Backend vs Backend-Nest**
-  - [x] Documentar em ARCHITECTURE.md
-  - [x] Deprecar backend (Express)
-  - [x] Criar README em backend/ explicando
-  - [x] Marcar backend-nest como principal
+- [x] **Backend vs Backend-Nest Decision**
+  - [x] Document in ARCHITECTURE.md
+  - [x] Deprecate backend (Express)
+  - [x] Create README in backend/ explaining
+  - [x] Mark backend-nest as main
 
-- [x] **Remover @ts-nocheck e padrões**
-  - [x] Remove de backend/src/server.ts
-  - [x] Preparar estrutura para remover mais
-  - [x] Proibir em código novo (CONTRIBUTING.md)
+- [x] **Remove @ts-nocheck and patterns**
+  - [x] Remove from backend/src/server.ts
+  - [x] Prepare structure to remove more
+  - [x] Prohibit in new code (CONTRIBUTING.md)
 
-- [x] **Scripts Globais**
+- [x] **Global Scripts**
   - [x] npm run lint-all
   - [x] npm run test-all
   - [x] npm run build-all
   - [x] npm run format-all
   - [x] npm run start-all
 
-- [x] **Importações e Paths**
-  - [x] Validar tsconfig.json aliases
-  - [x] Documentar no CONTRIBUTING.md
-  - [x] @common/*, @modules/*, @auth/* prontos
+- [x] **Imports and Paths**
+  - [x] Validate tsconfig.json aliases
+  - [x] Document in CONTRIBUTING.md
+  - [x] @common/*, @modules/*, @auth/* ready
 
 ---
 
-## ✅ DevOps & CI/CD (COMPLETO)
+## ✅ DevOps & CI/CD (COMPLETE)
 
 - [x] **Husky + Lint-Staged**
-  - [x] Instalar husky via package.json
-  - [x] Criar .husky/pre-commit
-  - [x] Configurar lint-staged
-  - [x] Testar commit local
+  - [x] Install husky via package.json
+  - [x] Create .husky/pre-commit
+  - [x] Configure lint-staged
+  - [x] Test local commit
 
 - [x] **GitHub Actions Pipeline**
-  - [x] Atualizar .github/workflows/ci.yml
-  - [x] Jobs: lint, test, build (paralelo)
-  - [x] Node.js 20 configurado
-  - [x] Suporte a workspaces
+  - [x] Update .github/workflows/ci.yml
+  - [x] Jobs: lint, test, build (parallel)
+  - [x] Node.js 20 configured
+  - [x] Workspaces support
 
 - [x] **Backend Setup**
-  - [x] Swagger/OpenAPI em main.ts
-  - [x] DocumentBuilder com tags
-  - [x] Rota /api/docs disponível
-  - [x] Segurança (Bearer, tenant-id)
+  - [x] Swagger/OpenAPI in main.ts
+  - [x] DocumentBuilder with tags
+  - [x] Route /api/docs available
+  - [x] Security (Bearer, tenant-id)
 
 - [x] **Frontend Setup**
-  - [x] ESLint configurado (.eslintrc.json)
-  - [x] Prettier configurado (.prettierrc)
+  - [x] ESLint configured (.eslintrc.json)
+  - [x] Prettier configured (.prettierrc)
   - [x] Scripts: lint, format, test
   - [x] DevDependencies: eslint, prettier, jest-axe
 
 ---
 
-## ✅ Documentação (COMPLETO)
+## ✅ Documentation (COMPLETE)
 
-### Documentos Centrais
-- [x] **README.md** - Atualizado com links
-- [x] **DOCUMENTATION_INDEX.md** - Índice centralizado (novo)
-- [x] **QUICKSTART.md** - 5 minutos para começar (novo)
+### Central Documents
+- [x] **README.md** - Updated with links
+- [x] **DOCUMENTATION_INDEX.md** - Centralized index (new)
+- [x] **QUICKSTART.md** - 5 minutes to start (new)
 
-### Documentos de Processo
-- [x] **CONTRIBUTING.md** - Padrões, branches, testes
-- [x] **CODE_OF_CONDUCT.md** - Já existente, revisado
-- [x] **CHANGELOG.md** - Histórico de versões (novo)
-- [x] **ROADMAP.md** - Q1-Q4 2026 com metas (novo)
+### Process Documents
+- [x] **CONTRIBUTING.md** - Standards, branches, tests
+- [x] **CODE_OF_CONDUCT.md** - Already existing, reviewed
+- [x] **CHANGELOG.md** - Version history (new)
+- [x] **ROADMAP.md** - Q1-Q4 2026 with goals (new)
 
-### Documentos Técnicos
-- [x] **docs/ARCHITECTURE.md** - Decisões de design (novo)
-- [x] **docs/DEPLOYMENT.md** - Docker, K8s, Helm, backup (novo)
-- [x] **docs/ENVIRONMENT_VARIABLES.md** - Todas as env vars (novo)
-- [x] **docs/TESTING_STRATEGY.md** - Testes e cobertura (novo)
-- [x] **docs/UX_UI.md** - Design system (novo)
+### Technical Documents
+- [x] **docs/ARCHITECTURE.md** - Design decisions (new)
+- [x] **docs/DEPLOYMENT.md** - Docker, K8s, Helm, backup (new)
+- [x] **docs/ENVIRONMENT_VARIABLES.md** - All env vars (new)
+- [x] **docs/TESTING_STRATEGY.md** - Tests and coverage (new)
+- [x] **docs/UX_UI.md** - Design system (new)
 
-### Documentos Específicos de Projeto
-- [x] **backend-nest/README.md** - Guia específico (atualizado)
-- [x] **frontend/README.md** - Guia específico (atualizado)
-- [x] **backend/README.md** - Documento de deprecação (novo)
+### Project-Specific Documents
+- [x] **backend-nest/README.md** - Specific guide (updated)
+- [x] **frontend/README.md** - Specific guide (updated)
+- [x] **backend/README.md** - Deprecation document (new)
 
-### Documento de Conclusão
-- [x] **PROJECT_COMPLETION_REPORT.md** - Sumário de trabalho (novo)
-- [x] **IMPROVEMENTS_SUMMARY.md** - Sumário técnico (novo)
+### Conclusion Document
+- [x] **PROJECT_COMPLETION_REPORT.md** - Work summary (new)
+- [x] **IMPROVEMENTS_SUMMARY.md** - Technical summary (new)
 
 ---
 
-## ✅ Backend (backend-nest) (PARCIAL)
+## ✅ Backend (backend-nest) (PARTIAL)
 
-### Implementado ✅
+### Implemented ✅
 - [x] Swagger/OpenAPI setup
-- [x] Documentação automática
-- [x] CORS configurado
-- [x] Validação de env vars
-- [x] Estrutura modular
-- [x] Aliases TypeScript
+- [x] Automatic documentation
+- [x] CORS configured
+- [x] Env vars validation
+- [x] Modular structure
+- [x] TypeScript aliases
 
-### Planejado (Q1) ⏳
-- [ ] Logging estruturado (Pino)
-- [ ] Cobertura testes 80%+
+### Planned (Q1) ⏳
+- [ ] Structured logging (Pino)
+- [ ] Test coverage 80%+
 - [ ] E2E tests
-- [ ] Mocks para BD
+- [ ] DB mocks
 - [ ] Unit tests services/controllers
-- [ ] Testes de validação e erro
+- [ ] Validation and error tests
 
-### Planejado (Q2) ⏳
+### Planned (Q2) ⏳
 - [ ] Prometheus metrics
 - [ ] Grafana dashboard
 - [ ] Sentry error tracking
@@ -119,107 +119,107 @@
 
 ---
 
-## ✅ Frontend (React) (PARCIAL)
+## ✅ Frontend (React) (PARTIAL)
 
-### Implementado ✅
-- [x] ESLint configurado
-- [x] Prettier configurado
+### Implemented ✅
+- [x] ESLint configured
+- [x] Prettier configured
 - [x] Scripts lint/format/test
-- [x] Documentação de estrutura
+- [x] Structure documentation
 
-### Planejado (Q1) ⏳
+### Planned (Q1) ⏳
 - [ ] React Testing Library (60%+)
 - [ ] Cypress E2E tests
-- [ ] Testes de componentes
-- [ ] Testes de hooks
+- [ ] Component tests
+- [ ] Hook tests
 - [ ] Coverage reports
 
-### Planejado (Q2-Q3) ⏳
+### Planned (Q2-Q3) ⏳
 - [ ] Storybook
-- [ ] Dark mode completo
-- [ ] Acessibilidade (axe, WCAG 2.1)
-- [ ] Responsividade mobile
+- [ ] Complete dark mode
+- [ ] Accessibility (axe, WCAG 2.1)
+- [ ] Mobile responsiveness
 - [ ] Code-splitting
 
 ---
 
-## ✅ Documentação de Procedimentos (COMPLETO)
+## ✅ Procedure Documentation (COMPLETE)
 
-### Desenvolvimento
-- [x] Setup local (QUICKSTART.md)
-- [x] Padrões de código (CONTRIBUTING.md)
-- [x] Testes (TESTING_STRATEGY.md)
-- [x] Commits com Husky
+### Development
+- [x] Local setup (QUICKSTART.md)
+- [x] Code standards (CONTRIBUTING.md)
+- [x] Tests (TESTING_STRATEGY.md)
+- [x] Commits with Husky
 - [x] Pull requests
 
 ### Deployment
 - [x] Docker (Dockerfile, docker-compose)
 - [x] Kubernetes manifests
 - [x] Helm charts
-- [x] Variáveis de ambiente
+- [x] Environment variables
 - [x] Secrets management
-- [x] Backup e recovery
+- [x] Backup and recovery
 - [x] Rollback strategy
 
-### Operações
-- [x] Monitoring (documentado, não implementado)
-- [x] Logging (documentado)
-- [x] Alertas (documentado)
-- [x] SLA/SLI (documentado)
-- [x] Runbooks (guia documentado)
+### Operations
+- [x] Monitoring (documented, not implemented)
+- [x] Logging (documented)
+- [x] Alerts (documented)
+- [x] SLA/SLI (documented)
+- [x] Runbooks (documented guide)
 
 ---
 
-## 📋 Validação & Testes
+## 📋 Validation & Tests
 
-- [x] Monorepo instalação funciona
-- [x] Scripts globais funcionam
-- [x] CI/CD pipeline valida
-- [x] Swagger disponível
-- [x] Documentação links consistentes
-- [ ] Testes locais passam (depende de implementação)
-- [ ] E2E tests rodáveis (próximo)
+- [x] Monorepo installation works
+- [x] Global scripts work
+- [x] CI/CD pipeline validates
+- [x] Swagger available
+- [x] Documentation links consistent
+- [ ] Local tests pass (depends on implementation)
+- [ ] E2E tests runnable (next)
 
 ---
 
-## 🚀 Próximos Passos (Primeiro Dia)
+## 🚀 Next Steps (First Day)
 
-### Para Revisor
-- [ ] Ler [PROJECT_COMPLETION_REPORT.md](./PROJECT_COMPLETION_REPORT.md)
-- [ ] Ler [QUICKSTART.md](./QUICKSTART.md)
-- [ ] Rodar `npm install` (validar)
-- [ ] Rodar `npm run lint-all` (validar)
-- [ ] Reviewar documentação chave
-- [ ] Mergear branch se OK
+### For Reviewer
+- [ ] Read [PROJECT_COMPLETION_REPORT.md](./PROJECT_COMPLETION_REPORT.md)
+- [ ] Read [QUICKSTART.md](./QUICKSTART.md)
+- [ ] Run `npm install` (validate)
+- [ ] Run `npm run lint-all` (validate)
+- [ ] Review key documentation
+- [ ] Merge branch if OK
 
-### Para Equipe Dev
-- [ ] Ler [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)
-- [ ] Seguir [QUICKSTART.md](./QUICKSTART.md)
-- [ ] Ler [CONTRIBUTING.md](./CONTRIBUTING.md)
-- [ ] Explorar backend-nest e frontend READMEs
-- [ ] Verificar Swagger em http://localhost:3000/api/docs
-- [ ] Question time - esclarecer dúvidas
+### For Dev Team
+- [ ] Read [DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)
+- [ ] Follow [QUICKSTART.md](./QUICKSTART.md)
+- [ ] Read [CONTRIBUTING.md](./CONTRIBUTING.md)
+- [ ] Explore backend-nest and frontend READMEs
+- [ ] Check Swagger at http://localhost:3000/api/docs
+- [ ] Question time - clarify doubts
 
 ---
 
 ## 📈 Success Metrics
 
-| Métrica | Antes | Depois | Status |
-|---------|-------|--------|--------|
-| Documentação (páginas) | 1 | 12 | ✅ |
-| Estrutura clara | confusa | documentada | ✅ |
+| Metric | Before | After | Status |
+|--------|--------|-------|--------|
+| Documentation (pages) | 1 | 12 | ✅ |
+| Clear structure | confusing | documented | ✅ |
 | Onboarding (min) | 30 | 5 | ✅ |
-| Scripts globais | 0 | 5 | ✅ |
+| Global scripts | 0 | 5 | ✅ |
 | CI/CD jobs | 2 | 3 | ✅ |
-| TypeScript coverage | baixa | mapeada | ✅ |
-| Testes coverage | desconhecida | 80% meta | ⏳ |
-| Monorepo | não | sim | ✅ |
+| TypeScript coverage | low | mapped | ✅ |
+| Test coverage | unknown | 80% goal | ⏳ |
+| Monorepo | no | yes | ✅ |
 
 ---
 
-## 📍 Localização de Todos os Arquivos Novos
+## 📍 Location of All New Files
 
-### Raiz (11 arquivos)
+### Root (11 files)
 ```
 ./QUICKSTART.md
 ./IMPROVEMENTS_SUMMARY.md
@@ -227,14 +227,14 @@
 ./PROJECT_COMPLETION_REPORT.md
 ./ROADMAP.md
 ./CHANGELOG.md
-./CONTRIBUTING.md (atualizado)
-./README.md (atualizado)
-./package.json (atualizado)
-./.husky/pre-commit (novo)
-./backend/README.md (novo)
+./CONTRIBUTING.md (updated)
+./README.md (updated)
+./package.json (updated)
+./.husky/pre-commit (new)
+./backend/README.md (new)
 ```
 
-### docs/ (5 arquivos)
+### docs/ (5 files)
 ```
 ./docs/ARCHITECTURE.md
 ./docs/DEPLOYMENT.md
@@ -243,10 +243,10 @@
 ./docs/UX_UI.md
 ```
 
-### backend-nest/ (1 arquivo)
+### backend-nest/ (1 file)
 ```
-./backend-nest/README.md (atualizado)
-./backend-nest/src/main.ts (Swagger adicionado)
+./backend-nest/README.md (updated)
+./backend-nest/src/main.ts (Swagger added)
 ```
 
 ### frontend/ (3 arquivos)

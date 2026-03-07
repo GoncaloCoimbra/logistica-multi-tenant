@@ -1,53 +1,53 @@
 # Changelog
 
-Todos as mudanças notáveis neste projeto estão documentadas aqui.
+All notable changes in this project are documented here.
 
-O formato é baseado em [Keep a Changelog](https://keepachangelog.com/), e o projeto adota [Semantic Versioning](https://semver.org/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/), and the project adopts [Semantic Versioning](https://semver.org/).
 
-## [Não lançado]
+## [Unreleased]
 
 ### Added
-- Monorepo com npm workspaces (`backend-nest`, `frontend`)
-- Scripts globais: `npm run lint-all`, `test-all`, `build-all`, `format-all`
-- Husky + lint-staged para CI local (pre-commit hooks)
-- CI/CD pipeline com GitHub Actions (lint, test, build)
-- Swagger/OpenAPI documentation em `/api/docs`
-- CONTRIBUTING.md e guias de arquitetura
-- Documentação de deployment (Docker, Kubernetes, Helm)
-- Guia de UX/UI e design system
-- Deprecação oficial do `backend` (Express); `backend-nest` é a base ativa
+- Monorepo with npm workspaces (`backend-nest`, `frontend`)
+- Global scripts: `npm run lint-all`, `test-all`, `build-all`, `format-all`
+- Husky + lint-staged for local CI (pre-commit hooks)
+- CI/CD pipeline with GitHub Actions (lint, test, build)
+- Swagger/OpenAPI documentation at `/api/docs`
+- CONTRIBUTING.md and architecture guides
+- Deployment documentation (Docker, Kubernetes, Helm)
+- UX/UI guide and design system
+- Official deprecation of `backend` (Express); `backend-nest` is the active base
 
 ### Changed
-- Atualizado `.github/workflows/ci.yml` para usar monorepo
-- Reorganizado `tsconfig.json` com aliases (`@common/*`, `@modules/*`, etc.)
-- Simplificado processo de startup (um único `npm install`)
+- Updated `.github/workflows/ci.yml` to use monorepo
+- Reorganized `tsconfig.json` with aliases (`@common/*`, `@modules/*`, etc.)
+- Simplified startup process (single `npm install`)
 
 ### Removed
-- Remoção de `@ts-nocheck` do código legado
-- Limpeza de dependências não utilizadas
+- Removal of `@ts-nocheck` from legacy code
+- Cleanup of unused dependencies
 
 ### Fixed
-- Validação de `DATABASE_URL` no startup
-- Tratamento de erros melhorado em middleware
+- Validation of `DATABASE_URL` on startup
+- Improved error handling in middleware
 
 ## [0.1.0] - 2025-02-15
 
 ### Added
-- Projeto inicial com `backend` (Express) + `backend-nest` (NestJS) + `frontend` (React)
-- Autenticação JWT com roles (ADMIN, USER, SUPPLIER)
-- Sistema multi-tenant com suporte a múltiplas empresas
-- Modelos Prisma para usuarios, products, vehicles, transports, companies
-- Endpoints API básicos para CRUD de produtos e veículos
-- Frontend com Dashboard, produto list/detail, mapa de transportes
-- Docker Compose para desenvolvimento local
-- Kubernetes manifests para deploy
-- Suport a uploads de arquivos (avatares, documentos)
-- Logging básico e interceptors de auditoria
-- Testes iniciais (Jest + Supertest)
+- Initial project with `backend` (Express) + `backend-nest` (NestJS) + `frontend` (React)
+- JWT authentication with roles (ADMIN, USER, SUPPLIER)
+- Multi-tenant system with support for multiple companies
+- Prisma models for users, products, vehicles, transports, companies
+- Basic API endpoints for CRUD of products and vehicles
+- Frontend with Dashboard, product list/detail, transport map
+- Docker Compose for local development
+- Kubernetes manifests for deployment
+- Support for file uploads (avatars, documents)
+- Basic logging and audit interceptors
+- Initial tests (Jest + Supertest)
 
 ---
 
-## Guia de Versioning
+## Versioning Guide
 
 **Bumping de versão:**
 
