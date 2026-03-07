@@ -152,49 +152,6 @@ export class AuthService {
     };
   }
 
-  //  REFRESH TOKEN 
-  async refreshToken(refreshToken: string): Promise<AuthResponseDto> {
-    try {
-      const payload = this.jwtService.verify(refreshToken, {
-        secret: process.env.JWT_SECRET || 'default-secret-key',
-      });
-
-      const user = await this.prisma.user.findUnique({
-        where: { id: payload.sub },
-      });
-
-      if (!user || !user.isActive)
-        throw new UnauthorizedException('Utilizador não encontrado ou inativo');
-
-      // Verify refresh token exists and is not revoked
-      const tokensForUser = await (this.prisma as any).refreshToken.findMany({
-        where: { userId: user.id, revoked: false },
-      });
-
-      let found = false;
-      for (const t of tokensForUser) {
-        // compare hashes
-        if (await bcrypt.compare(refreshToken, t.tokenHash)) {
-          // check expiry
-          if (t.expiresAt.getTime() < Date.now()) break;
-          found = true;
-          break;
-        }
-      }
-
-      if (!found) throw new UnauthorizedException('Refresh token inválido ou revogado');
-
-      const tokens = await this.generateTokens(user.id, user.email, user.role);
-
-      return {
-        ...tokens,
-        user: this.formatUser(user),
-      };
-    } catch (e) {
-      throw new UnauthorizedException('Refresh token inválido');
-    }
-  }
-
   //  VALIDATE USER 
   async validateUser(email: string, password: string) {
     const user = await this.prisma.user.findUnique({
@@ -302,7 +259,64 @@ export class AuthService {
     return { user: this.formatUser(updatedUser) };
   }
 
-  //  REMOVE AVATAR 
+  //  REFRESH TOKEN
+  async refreshToken(refreshToken: string): Promise<AuthResponseDto> {
+    try {
+      // Verify the refresh token
+      const payload = await this.jwtService.verifyAsync(refreshToken, {
+        secret: process.env.JWT_SECRET || 'default-secret-key',
+      });
+
+      // Check if refresh token exists and is not revoked
+      const tokens = await (this.prisma as any).refreshToken.findMany({
+        where: {
+          userId: payload.sub,
+          revoked: false,
+          expiresAt: { gt: new Date() },
+        },
+      });
+
+      let validToken = false;
+      for (const t of tokens) {
+        if (await bcrypt.compare(refreshToken, t.tokenHash)) {
+          validToken = true;
+          // Revoke the used refresh token
+          await (this.prisma as any).refreshToken.update({
+            where: { id: t.id },
+            data: { revoked: true },
+          });
+          break;
+        }
+      }
+
+      if (!validToken) {
+        throw new UnauthorizedException('Refresh token inválido ou expirado');
+      }
+
+      // Get user
+      const user = await this.prisma.user.findUnique({
+        where: { id: payload.sub },
+        include: { company: true },
+      });
+
+      if (!user || !user.isActive) {
+        throw new UnauthorizedException('Utilizador não encontrado ou inativo');
+      }
+
+      // Generate new tokens
+      const newTokens = await this.generateTokens(user.id, user.email, user.role);
+
+      return {
+        ...newTokens,
+        user: this.formatUser(user),
+      };
+    } catch (error) {
+      this.logger.error('Erro ao renovar token:', error.message);
+      throw new UnauthorizedException('Token de refresh inválido');
+    }
+  }
+
+  //  REMOVE AVATAR
   async removeAvatar(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },

@@ -19,6 +19,7 @@ import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
 import { AuthResponseDto } from '../dto/auth-response.dto';
 import { UpdateProfileDto, ChangePasswordDto } from '../dto/update-profile.dto';
+import { RefreshTokenDto } from '../dto/refresh-token.dto';
 import { Public } from '../decorators/public.decorator';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
@@ -78,10 +79,8 @@ export class AuthController {
     type: AuthResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Refresh token inválido' })
-  async refreshToken(
-    @Body('refreshToken') refreshToken: string,
-  ): Promise<AuthResponseDto> {
-    return this.authService.refreshToken(refreshToken);
+  async refreshToken(@Body() refreshTokenDto: RefreshTokenDto): Promise<AuthResponseDto> {
+    return this.authService.refreshToken(refreshTokenDto.refreshToken);
   }
 
   //  REVOKE REFRESH TOKEN
