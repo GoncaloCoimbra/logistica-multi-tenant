@@ -24,10 +24,10 @@ const AdminHome: React.FC = () => {
       </header>
       <main className={`flex-1 ${theme.backgrounds.page} py-8 px-4 sm:px-6 lg:px-8`}> 
         <h1 className="text-3xl font-bold text-white mb-4">
-          Bem-vindo, {user?.name || 'Administrador'}!
+          Welcome, {user?.name || 'Administrator'}!
         </h1>
         <p className="text-slate-300">
-          Use o menu lateral para navegar — o dashboard principal já está disponível em <a className="text-blue-400 underline" href="/dashboard">/dashboard</a>.
+          Use the side menu to navigate — the main dashboard is already available at <a className="text-blue-400 underline" href="/dashboard">/dashboard</a>.
         </p>
       </main>
     </div>

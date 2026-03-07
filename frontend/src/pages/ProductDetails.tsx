@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import api from '../api/api';
+import { useProduct, useProductWithMovements } from '../hooks/useProducts';
 import { getStatusBadgeClass, statusLabels } from '../theme.config';
+import { apiClient } from '../api/config';
 
 interface Product {
   id: string;
@@ -45,13 +46,19 @@ interface ActiveFilter {
   value: string;
 }
 
+const filterLabels: Record<string, string> = {
+  supplier: 'Fornecedor',
+  vehicle: 'Veículo',
+  status: 'Status',
+  location: 'Localização',
+};
+
 const ProductDetails: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: product, isLoading: loading, error } = useProductWithMovements(id!);
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
   const [showAddFilter, setShowAddFilter] = useState(false);
   const [newFilterType, setNewFilterType] = useState<'supplier' | 'vehicle' | 'status' | 'location'>('supplier');
@@ -62,30 +69,31 @@ const ProductDetails: React.FC = () => {
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadProduct();
-    loadFiltersFromURL();
-  }, [id]);
-
+  // Load filters from URL params
   const loadFiltersFromURL = () => {
+    const params = new URLSearchParams(searchParams);
     const filters: ActiveFilter[] = [];
     
-    const supplier = searchParams.get('supplier');
+    // Parse supplier filter
+    const supplier = params.get('supplier');
     if (supplier) {
       filters.push({ type: 'supplier', label: 'Fornecedor', value: supplier });
     }
     
-    const vehicle = searchParams.get('vehicle');
+    // Parse vehicle filter
+    const vehicle = params.get('vehicle');
     if (vehicle) {
       filters.push({ type: 'vehicle', label: 'Veículo', value: vehicle });
     }
     
-    const status = searchParams.get('status');
+    // Parse status filter
+    const status = params.get('status');
     if (status) {
-      filters.push({ type: 'status', label: 'Estado', value: statusLabels.product[status] || status });
+      filters.push({ type: 'status', label: 'Status', value: status });
     }
     
-    const location = searchParams.get('location');
+    // Parse location filter
+    const location = params.get('location');
     if (location) {
       filters.push({ type: 'location', label: 'Localização', value: location });
     }
@@ -93,16 +101,9 @@ const ProductDetails: React.FC = () => {
     setActiveFilters(filters);
   };
 
-  const loadProduct = async () => {
-    try {
-      const response = await api.get(`/products/${id}/movements`);
-      setProduct(response.data);
-    } catch (error) {
-      console.error('Erro ao carregar produto:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    loadFiltersFromURL();
+  }, [id]);
 
   // 🗑️ Função para deletar produto
   const handleDeleteProduct = async () => {
@@ -112,7 +113,7 @@ const ProductDetails: React.FC = () => {
     setDeleteError(null);
 
     try {
-      await api.delete(`/products/${product.id}`);
+      await apiClient.delete(`/products/${product.id}`);
       
       // Sucesso - redirecionar para lista
       navigate('/produtos', { 
@@ -126,7 +127,7 @@ const ProductDetails: React.FC = () => {
       console.error('Response completo:', error.response);
       
       // Capturar mensagem de erro da API - garantir que seja sempre string
-      let errorMessage = 'Erro ao eliminar produto. Tente novamente.';
+      let errorMessage = 'Error deleting product. Please try again.';
       
       if (error.response) {
         const { status, data } = error.response;
@@ -191,13 +192,13 @@ const ProductDetails: React.FC = () => {
   };
 
   const handleRemoveFilter = (index: number) => {
-    setActiveFilters(activeFilters.filter((_, i) => i !== index));
+    setActiveFilters(activeFilters.filter((_: ActiveFilter, i: number) => i !== index));
   };
 
   const handleBackToList = () => {
     const params = new URLSearchParams();
     
-    activeFilters.forEach(filter => {
+    activeFilters.forEach((filter: ActiveFilter) => {
       params.append(filter.type, filter.value);
     });
     
@@ -421,7 +422,7 @@ const ProductDetails: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {product.movements.map((movement) => (
+            {product.movements.map((movement: Movement) => (
               <div 
                 key={movement.id} 
                 className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 rounded-lg p-4 border border-amber-500/20 hover:border-amber-500/40 transition-all"

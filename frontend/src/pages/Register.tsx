@@ -77,35 +77,35 @@ const Register: React.FC = () => {
       const response = await api.get('/companies/public');
       setCompanies(response.data || []);
     } catch {
-      setError('Erro ao carregar lista de empresas');
+      setError('Error loading company list');
     } finally {
       setLoadingCompanies(false);
     }
   };
 
   const validateCompanyForm = (): string | null => {
-    if (!companyData.companyName.trim()) return 'Nome da empresa é obrigatório';
-    if (!companyData.nif.trim()) return 'NIF é obrigatório';
-    if (!/^\d{9}$/.test(companyData.nif)) return 'NIF deve ter 9 dígitos';
-    if (!companyData.companyEmail.trim()) return 'Email da empresa é obrigatório';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(companyData.companyEmail)) return 'Email da empresa inválido';
-    if (!companyData.adminName.trim()) return 'Nome do administrador é obrigatório';
-    if (!companyData.adminEmail.trim()) return 'Email pessoal é obrigatório';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(companyData.adminEmail)) return 'Email pessoal inválido';
-    if (!companyData.password) return 'Password é obrigatória';
-    if (companyData.password.length < 6) return 'Password deve ter no mínimo 6 caracteres';
-    if (companyData.password !== companyData.confirmPassword) return 'As passwords não coincidem';
+    if (!companyData.companyName.trim()) return 'Company name is required';
+    if (!companyData.nif.trim()) return 'Tax ID is required';
+    if (!/^\d{9}$/.test(companyData.nif)) return 'Tax ID must have 9 digits';
+    if (!companyData.companyEmail.trim()) return 'Company email is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(companyData.companyEmail)) return 'Invalid company email';
+    if (!companyData.adminName.trim()) return 'Administrator name is required';
+    if (!companyData.adminEmail.trim()) return 'Personal email is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(companyData.adminEmail)) return 'Invalid personal email';
+    if (!companyData.password) return 'Password is required';
+    if (companyData.password.length < 6) return 'Password must be at least 6 characters';
+    if (companyData.password !== companyData.confirmPassword) return 'Passwords do not match';
     return null;
   };
 
   const validateOperatorForm = (): string | null => {
-    if (!operatorData.selectedCompany) return 'Selecione uma empresa';
-    if (!operatorData.operatorName.trim()) return 'Nome é obrigatório';
-    if (!operatorData.operatorEmail.trim()) return 'Email é obrigatório';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(operatorData.operatorEmail)) return 'Email inválido';
-    if (!operatorData.password) return 'Password é obrigatória';
-    if (operatorData.password.length < 6) return 'Password deve ter no mínimo 6 caracteres';
-    if (operatorData.password !== operatorData.confirmPassword) return 'As passwords não coincidem';
+    if (!operatorData.selectedCompany) return 'Select a company';
+    if (!operatorData.operatorName.trim()) return 'Name is required';
+    if (!operatorData.operatorEmail.trim()) return 'Email is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(operatorData.operatorEmail)) return 'Invalid email';
+    if (!operatorData.password) return 'Password is required';
+    if (operatorData.password.length < 6) return 'Password must be at least 6 characters';
+    if (operatorData.password !== operatorData.confirmPassword) return 'Passwords do not match';
     return null;
   };
 
@@ -118,7 +118,7 @@ const Register: React.FC = () => {
     try {
       await register({ name: companyData.adminName, email: companyData.adminEmail, password: companyData.password, role: 'ADMIN' });
     } catch (err: any) {
-      setError(err?.message || 'Erro ao criar conta');
+      setError(err?.message || 'Error creating account');
       setLoading(false);
     }
   };
@@ -153,7 +153,7 @@ const Register: React.FC = () => {
   const InfoBox = ({ items }: { items: string[] }) => (
     <div className="rounded-xl p-4" style={{ background: `${ds.accent}08`, border: `1px solid ${ds.accent}20` }}>
       <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: ds.accent }}>
-        Após o registo
+        After registration
       </p>
       <ul className="space-y-2">
         {items.map((item, i) => (
@@ -196,17 +196,17 @@ const Register: React.FC = () => {
         </div>
 
         <h2 className="text-2xl font-bold mt-6 mb-1" style={{ color: ds.textPrimary }}>
-          Criar Nova Conta
+          Create New Account
         </h2>
         <p className="text-sm mb-8" style={{ color: ds.textSecondary }}>
-          Escolha o tipo de conta e preencha os dados
+          Choose the account type and fill in the data
         </p>
 
         {/* ── Tabs ── */}
         <div className="flex rounded-xl p-1 mb-8 gap-1" style={{ background: ds.bg, border: `1px solid ${ds.border}` }}>
           {(['company', 'operator'] as const).map(tab => {
             const active = activeTab === tab;
-            const label = tab === 'company' ? 'Empresa / Admin' : 'Utilizador / Operador';
+            const label = tab === 'company' ? 'Company / Admin' : 'User / Operator';
             const icon = tab === 'company'
               ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
               : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>;
@@ -250,20 +250,20 @@ const Register: React.FC = () => {
             <div>
               <SectionHeader
                 icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>}
-                title="Dados da Empresa"
+                title="Company Data"
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
                   <label className={labelClass} style={{ color: ds.textMuted }}>
-                    Nome da Empresa <span style={{ color: ds.danger }}>*</span>
+                    Company Name <span style={{ color: ds.danger }}>*</span>
                   </label>
                   <input type="text" value={companyData.companyName}
                     onChange={e => setCompanyData({ ...companyData, companyName: e.target.value })}
-                    className={inputClass} placeholder="Ex: LogiTransport Lda" disabled={loading} required />
+                    className={inputClass} placeholder="E.g.: LogiTransport Ltd" disabled={loading} required />
                 </div>
                 <div>
                   <label className={labelClass} style={{ color: ds.textMuted }}>
-                    NIF <span style={{ color: ds.danger }}>*</span>
+                    Tax ID <span style={{ color: ds.danger }}>*</span>
                   </label>
                   <input type="text" value={companyData.nif}
                     onChange={e => setCompanyData({ ...companyData, nif: e.target.value.replace(/\D/g, '') })}
@@ -271,23 +271,23 @@ const Register: React.FC = () => {
                 </div>
                 <div>
                   <label className={labelClass} style={{ color: ds.textMuted }}>
-                    Email da Empresa <span style={{ color: ds.danger }}>*</span>
+                    Company Email <span style={{ color: ds.danger }}>*</span>
                   </label>
                   <input type="email" value={companyData.companyEmail}
                     onChange={e => setCompanyData({ ...companyData, companyEmail: e.target.value })}
-                    className={inputClass} placeholder="geral@empresa.com" disabled={loading} required />
+                    className={inputClass} placeholder="general@company.com" disabled={loading} required />
                 </div>
                 <div>
-                  <label className={labelClass} style={{ color: ds.textMuted }}>Telefone</label>
+                  <label className={labelClass} style={{ color: ds.textMuted }}>Phone</label>
                   <input type="text" value={companyData.phone}
                     onChange={e => setCompanyData({ ...companyData, phone: e.target.value })}
                     className={inputClass} placeholder="+351 912 345 678" disabled={loading} />
                 </div>
                 <div>
-                  <label className={labelClass} style={{ color: ds.textMuted }}>Morada</label>
+                  <label className={labelClass} style={{ color: ds.textMuted }}>Address</label>
                   <input type="text" value={companyData.address}
                     onChange={e => setCompanyData({ ...companyData, address: e.target.value })}
-                    className={inputClass} placeholder="Rua do Exemplo, 123" disabled={loading} />
+                    className={inputClass} placeholder="Example Street, 123" disabled={loading} />
                 </div>
               </div>
             </div>
@@ -296,24 +296,24 @@ const Register: React.FC = () => {
             <div>
               <SectionHeader
                 icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>}
-                title="Conta de Administrador"
+                title="Administrator Account"
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
                   <label className={labelClass} style={{ color: ds.textMuted }}>
-                    Nome Completo <span style={{ color: ds.danger }}>*</span>
+                    Full Name <span style={{ color: ds.danger }}>*</span>
                   </label>
                   <input type="text" value={companyData.adminName}
                     onChange={e => setCompanyData({ ...companyData, adminName: e.target.value })}
-                    className={inputClass} placeholder="João Silva" disabled={loading} required />
+                    className={inputClass} placeholder="John Doe" disabled={loading} required />
                 </div>
                 <div className="md:col-span-2">
                   <label className={labelClass} style={{ color: ds.textMuted }}>
-                    Email Pessoal <span style={{ color: ds.danger }}>*</span>
+                    Personal Email <span style={{ color: ds.danger }}>*</span>
                   </label>
                   <input type="email" value={companyData.adminEmail}
                     onChange={e => setCompanyData({ ...companyData, adminEmail: e.target.value })}
-                    className={inputClass} placeholder="joao.silva@email.com" disabled={loading} required />
+                    className={inputClass} placeholder="john.doe@email.com" disabled={loading} required />
                 </div>
                 <div>
                   <label className={labelClass} style={{ color: ds.textMuted }}>
@@ -325,25 +325,25 @@ const Register: React.FC = () => {
                 </div>
                 <div>
                   <label className={labelClass} style={{ color: ds.textMuted }}>
-                    Confirmar Password <span style={{ color: ds.danger }}>*</span>
+                    Confirm Password <span style={{ color: ds.danger }}>*</span>
                   </label>
                   <input type="password" value={companyData.confirmPassword}
                     onChange={e => setCompanyData({ ...companyData, confirmPassword: e.target.value })}
-                    className={inputClass} placeholder="Repita a password" disabled={loading} required />
+                    className={inputClass} placeholder="Repeat password" disabled={loading} required />
                 </div>
               </div>
             </div>
 
             <InfoBox items={[
-              'Será criado como <strong>Administrador</strong> da sua empresa',
-              'Terá acesso total para gerir transportes, fornecedores e relatórios',
-              'Poderá criar e gerir outros utilizadores da empresa',
+              'Will be created as <strong>Administrator</strong> of your company',
+              'Will have full access to manage transports, suppliers and reports',
+              'Can create and manage other company users',
             ]} />
 
             <button type="submit" disabled={loading}
               className="w-full font-semibold py-3 rounded-xl transition-all duration-200 active:scale-[0.98] text-sm"
               style={{ background: loading ? `${ds.accent}70` : ds.accent, color: 'white', cursor: loading ? 'not-allowed' : 'pointer' }}>
-              {loading ? 'A criar conta...' : 'Criar Conta'}
+              {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
         )}
@@ -355,7 +355,7 @@ const Register: React.FC = () => {
           <form onSubmit={handleOperatorSubmit} className="space-y-7">
             <div>
               <label className={labelClass} style={{ color: ds.textMuted }}>
-                Empresa <span style={{ color: ds.danger }}>*</span>
+                Company <span style={{ color: ds.danger }}>*</span>
               </label>
               <select
                 value={operatorData.selectedCompany}
@@ -365,7 +365,7 @@ const Register: React.FC = () => {
                 required
               >
                 <option value="" style={{ background: ds.bgCard }}>
-                  {loadingCompanies ? 'A carregar empresas...' : 'Selecione uma empresa'}
+                  {loadingCompanies ? 'Loading companies...' : 'Select a company'}
                 </option>
                 {companies.map(c => (
                   <option key={c.id} value={c.id} style={{ background: ds.bgCard }}>
@@ -378,7 +378,7 @@ const Register: React.FC = () => {
                   <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
                   </svg>
-                  Nenhuma empresa disponível. Contacte o administrador.
+                  No company available. Contact the administrator.
                 </p>
               )}
             </div>
@@ -386,24 +386,24 @@ const Register: React.FC = () => {
             <div>
               <SectionHeader
                 icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>}
-                title="Dados Pessoais"
+                title="Personal Data"
               />
               <div className="space-y-4">
                 <div>
                   <label className={labelClass} style={{ color: ds.textMuted }}>
-                    Nome Completo <span style={{ color: ds.danger }}>*</span>
+                    Full Name <span style={{ color: ds.danger }}>*</span>
                   </label>
                   <input type="text" value={operatorData.operatorName}
                     onChange={e => setOperatorData({ ...operatorData, operatorName: e.target.value })}
-                    className={inputClass} placeholder="Maria Santos" disabled={loading} required />
+                    className={inputClass} placeholder="Mary Santos" disabled={loading} required />
                 </div>
                 <div>
                   <label className={labelClass} style={{ color: ds.textMuted }}>
-                    Email Pessoal <span style={{ color: ds.danger }}>*</span>
+                    Personal Email <span style={{ color: ds.danger }}>*</span>
                   </label>
                   <input type="email" value={operatorData.operatorEmail}
                     onChange={e => setOperatorData({ ...operatorData, operatorEmail: e.target.value })}
-                    className={inputClass} placeholder="maria.santos@email.com" disabled={loading} required />
+                    className={inputClass} placeholder="mary.santos@email.com" disabled={loading} required />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -416,20 +416,20 @@ const Register: React.FC = () => {
                   </div>
                   <div>
                     <label className={labelClass} style={{ color: ds.textMuted }}>
-                      Confirmar Password <span style={{ color: ds.danger }}>*</span>
+                      Confirm Password <span style={{ color: ds.danger }}>*</span>
                     </label>
                     <input type="password" value={operatorData.confirmPassword}
                       onChange={e => setOperatorData({ ...operatorData, confirmPassword: e.target.value })}
-                      className={inputClass} placeholder="Repita a password" disabled={loading} required />
+                      className={inputClass} placeholder="Repeat password" disabled={loading} required />
                   </div>
                 </div>
               </div>
             </div>
 
             <InfoBox items={[
-              'Será criado como <strong>Operador</strong> da empresa selecionada',
-              'Poderá gerir transportes e visualizar relatórios',
-              'O administrador poderá aprovar ou recusar o seu acesso',
+              'Will be created as <strong>Operator</strong> of the selected company',
+              'Can manage transports and view reports',
+              'The administrator can approve or reject your access',
             ]} />
 
             <button type="submit" disabled={loading || companies.length === 0}
@@ -439,14 +439,14 @@ const Register: React.FC = () => {
                 color: 'white',
                 cursor: (loading || companies.length === 0) ? 'not-allowed' : 'pointer',
               }}>
-              {loading ? 'A criar conta...' : 'Criar Conta'}
+              {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
         )}
 
         {/* Login link */}
         <div className="mt-8 pt-6 flex items-center gap-4" style={{ borderTop: `1px solid ${ds.border}` }}>
-          <p className="text-sm flex-shrink-0" style={{ color: ds.textMuted }}>Já tem conta?</p>
+          <p className="text-sm flex-shrink-0" style={{ color: ds.textMuted }}>Already have an account?</p>
           <div className="flex-1 h-px" style={{ background: ds.border }} />
           <button
             type="button"
@@ -454,7 +454,7 @@ const Register: React.FC = () => {
             className="text-sm font-semibold transition-colors flex-shrink-0"
             style={{ color: ds.accent }}
           >
-            Fazer Login →
+            Login →
           </button>
         </div>
       </div>

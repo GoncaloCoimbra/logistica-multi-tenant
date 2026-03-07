@@ -38,10 +38,10 @@ const Settings: React.FC = () => {
     try {
       setLoading(true);
       setError('');
-      console.log('🔍 Carregando informações da empresa...');
+      console.log('🔍 Loading company information...');
       
-      const response = await api.get('/company/info');
-      console.log(' Informações carregadas:', response.data);
+      const response = await api.get('/companies/info');
+      console.log(' Company information loaded:', response.data);
       
       setCompanyInfo(response.data);
       setFormData({
@@ -52,9 +52,9 @@ const Settings: React.FC = () => {
         phone: response.data.phone || '',
       });
     } catch (err: any) {
-      console.error(' Erro ao carregar informações:', err);
+      console.error(' Error loading company information:', err);
       
-      let errorMessage = 'Erro ao carregar informações da empresa';
+      let errorMessage = 'Error loading company information';
       
       if (err.response?.data?.message) {
         errorMessage = err.response.data.message;
@@ -77,20 +77,20 @@ const Settings: React.FC = () => {
     setSuccess('');
 
     try {
-      console.log('💾 Atualizando informações da empresa...', formData);
+      console.log('💾 Updating company information...', formData);
       
-      await api.put('/company/info', formData);
+      await api.put('/companies/info', formData);
       
-      setSuccess('Informações atualizadas com sucesso!');
-      console.log(' Informações atualizadas com sucesso');
+      setSuccess('Information updated successfully!');
+      console.log(' Information updated successfully');
       
       await loadCompanyInfo();
       
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
-      console.error(' Erro ao atualizar informações:', err);
+      console.error(' Error updating information:', err);
       
-      let errorMessage = 'Erro ao atualizar informações';
+      let errorMessage = 'Error updating information';
       
       if (err.response?.data?.message) {
         errorMessage = err.response.data.message;
@@ -120,7 +120,7 @@ const Settings: React.FC = () => {
       <div className={`${theme.backgrounds.page} min-h-screen flex items-center justify-center`}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-[#3b82f6] mx-auto mb-4"></div>
-          <p className="text-[#cbd5e1] font-medium">A carregar configurações...</p>
+          <p className="text-[#cbd5e1] font-medium">Loading settings...</p>
         </div>
       </div>
     );
@@ -131,9 +131,9 @@ const Settings: React.FC = () => {
       {/* Header */}
       <div className={theme.backgrounds.header}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl font-bold text-white">Configurações</h1>
+          <h1 className="text-3xl font-bold text-white">Settings</h1>
           <p className="text-sm text-[#cbd5e1] mt-1">
-            Gerir informações da empresa e utilizadores
+            Manage company information and users
           </p>
         </div>
       </div>
@@ -154,7 +154,7 @@ const Settings: React.FC = () => {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
-                <span>Informações da Empresa</span>
+                <span>Company Information</span>
               </div>
             </button>
 
@@ -171,14 +171,14 @@ const Settings: React.FC = () => {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
-                  <span>Gestão de Utilizadores</span>
+                  <span>User Management</span>
                 </div>
               </button>
             )}
           </nav>
         </div>
 
-        {/* Mensagens de Sucesso/Erro */}
+        {/* Success/Error Messages */}
         {success && (
           <div className={theme.alerts.success}>
             <div className="flex items-center">
@@ -201,15 +201,15 @@ const Settings: React.FC = () => {
           </div>
         )}
 
-        {/* Conteúdo das Tabs */}
+        {/* Tab Content */}
         {activeTab === 'company' && (
           <div className={theme.cards.form}>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Nome da Empresa */}
+                {/* Company Name */}
                 <div>
                   <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
-                    Nome da Empresa *
+                    Company Name *
                   </label>
                   <input
                     type="text"
@@ -225,7 +225,7 @@ const Settings: React.FC = () => {
                 {/* NIF */}
                 <div>
                   <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
-                    NIF *
+                    Tax ID *
                   </label>
                   <input
                     type="text"
@@ -236,10 +236,10 @@ const Settings: React.FC = () => {
                     required
                     maxLength={9}
                     pattern="[0-9]{9}"
-                    title="O NIF deve ter 9 dígitos"
+                    title="Tax ID must have 9 digits"
                     className={isAdmin ? theme.inputs.base : theme.inputs.disabled}
                   />
-                  <p className="text-xs text-[#64748b] mt-1">9 dígitos</p>
+                  <p className="text-xs text-[#64748b] mt-1">9 digits</p>
                 </div>
 
                 {/* Email */}
@@ -254,7 +254,7 @@ const Settings: React.FC = () => {
                     onChange={handleChange}
                     disabled={!isAdmin}
                     className={isAdmin ? theme.inputs.base : theme.inputs.disabled}
-                    placeholder="empresa@exemplo.com"
+                    placeholder="company@example.com"
                   />
                 </div>
 
@@ -274,10 +274,10 @@ const Settings: React.FC = () => {
                   />
                 </div>
 
-                {/* Morada */}
+                {/* Address */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
-                    Morada
+                    Address
                   </label>
                   <input
                     type="text"
@@ -286,7 +286,7 @@ const Settings: React.FC = () => {
                     onChange={handleChange}
                     disabled={!isAdmin}
                     className={isAdmin ? theme.inputs.base : theme.inputs.disabled}
-                    placeholder="Rua, Número, Código Postal, Cidade"
+                    placeholder="Street, Number, Postal Code, City"
                   />
                 </div>
               </div>
@@ -301,14 +301,14 @@ const Settings: React.FC = () => {
                     {saving ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        <span>A guardar...</span>
+                        <span>Saving...</span>
                       </>
                     ) : (
                       <>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
-                        <span>Guardar Alterações</span>
+                        <span>Save Changes</span>
                       </>
                     )}
                   </button>
@@ -321,7 +321,7 @@ const Settings: React.FC = () => {
                     <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                     </svg>
-                    <span className="font-medium">Apenas administradores podem editar as informações da empresa</span>
+                    <span className="font-medium">Only administrators can edit company information</span>
                   </div>
                 </div>
               )}

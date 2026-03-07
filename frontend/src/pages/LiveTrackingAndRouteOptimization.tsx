@@ -850,7 +850,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
                               <p className="font-bold text-white">{veiculo.odometro != null ? veiculo.odometro.toLocaleString() : 'N/A'} km</p>
                             </div>
                             <div className="text-center">
-                              <p className="text-slate-400">Última Atualização</p>
+                              <p className="text-slate-400">Last Update</p>
                               <p className="font-bold text-white">
                                 {veiculo.ultimaAtualizacao ? `${Math.floor((Date.now() - new Date(veiculo.ultimaAtualizacao).getTime()) / 60000)} min` : 'N/A'}
                               </p>

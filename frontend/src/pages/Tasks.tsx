@@ -327,7 +327,7 @@ const Tasks: React.FC = () => {
       <div className="bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
-          <p className="text-slate-300">Carregando tarefas...</p>
+          <p className="text-slate-600 dark:text-slate-300">Loading tasks...</p>
         </div>
       </div>
     );
@@ -754,7 +754,7 @@ const Tasks: React.FC = () => {
                 disabled={savingTask}
                 className={`flex-1 px-4 py-2 ${savingTask ? 'bg-amber-400/60 cursor-not-allowed' : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700'} text-white rounded-lg transition-all font-bold`}
               >
-                {savingTask ? 'Atualizando...' : 'Salvar Alterações'}
+                {savingTask ? 'Updating...' : 'Save Changes'}
               </button>
               <button
                 onClick={() => {

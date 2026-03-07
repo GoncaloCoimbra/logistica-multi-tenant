@@ -106,7 +106,7 @@ const AuditLog: React.FC = () => {
       console.error('Erro ao limpar histórico:', error);
       
       // Garantir que errorMsg é sempre uma string
-      let errorMsg = 'Erro ao limpar histórico. Tente novamente mais tarde.';
+      let errorMsg = 'Error clearing history. Please try again later.';
       
       if (error.response?.data) {
         const data = error.response.data;

@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/api";
+import { useSuppliers } from "../hooks/useSuppliers";
+import { useCreateProduct } from "../hooks/useProducts";
 
 interface Supplier {
   id: string;
@@ -31,8 +32,8 @@ interface FormErrors {
 
 const NewProduct: React.FC = () => {
   const navigate = useNavigate();
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [loadingSuppliers, setLoadingSuppliers] = useState(true);
+  const { data: suppliers, isLoading: loadingSuppliers } = useSuppliers();
+  const createProductMutation = useCreateProduct();
   
   const [formData, setFormData] = useState<FormState>({
     internalCode: "",
@@ -50,48 +51,32 @@ const NewProduct: React.FC = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [apiError, setApiError] = useState<string>("");
 
-  useEffect(() => {
-    loadSuppliers();
-  }, []);
-
-  const loadSuppliers = async () => {
-    try {
-      const response = await api.get('/suppliers');
-      setSuppliers(response.data);
-    } catch (error) {
-      console.error('Erro ao carregar fornecedores:', error);
-      setApiError('Erro ao carregar lista de fornecedores');
-    } finally {
-      setLoadingSuppliers(false);
-    }
-  };
-
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
     if (!formData.internalCode.trim()) {
-      newErrors.internalCode = "Código interno é obrigatório";
+      newErrors.internalCode = "Internal code is required";
     }
 
     if (!formData.description.trim()) {
-      newErrors.description = "Descrição é obrigatória";
+      newErrors.description = "Description is required";
     }
 
     const quantityNum = Number(formData.quantity);
     if (formData.quantity === "" || isNaN(quantityNum) || quantityNum <= 0) {
-      newErrors.quantity = "Quantidade deve ser maior que zero";
+      newErrors.quantity = "Quantity must be greater than zero";
     }
 
     if (!formData.unit.trim()) {
-      newErrors.unit = "Unidade é obrigatória";
+      newErrors.unit = "Unit is required";
     }
 
     if (!formData.supplierId) {
-      newErrors.supplierId = "Fornecedor é obrigatório";
+      newErrors.supplierId = "Supplier is required";
     }
 
     if (!formData.status) {
-      newErrors.status = "Status é obrigatório";
+      newErrors.status = "Status is required";
     }
 
     setErrors(newErrors);
@@ -124,29 +109,22 @@ const NewProduct: React.FC = () => {
     
     if (!validateForm()) return;
 
-    setIsSubmitting(true);
-    try {
-      const payload = {
-        internalCode: formData.internalCode.trim(),
-        description: formData.description.trim(),
-        quantity: Number(formData.quantity),
-        unit: formData.unit.trim(),
-        totalWeight: formData.totalWeight ? Number(formData.totalWeight) : undefined,
-        totalVolume: formData.totalVolume ? Number(formData.totalVolume) : undefined,
-        currentLocation: formData.currentLocation.trim() || undefined,
-        supplierId: formData.supplierId,
-        status: formData.status,
-      };
+    const payload = {
+      internalCode: formData.internalCode.trim(),
+      description: formData.description.trim(),
+      quantity: Number(formData.quantity),
+      unit: formData.unit.trim(),
+      totalWeight: formData.totalWeight ? Number(formData.totalWeight) : undefined,
+      totalVolume: formData.totalVolume ? Number(formData.totalVolume) : undefined,
+      currentLocation: formData.currentLocation.trim() || undefined,
+      supplierId: formData.supplierId,
+      status: formData.status,
+    };
 
-      console.log("📤 Enviando produto:", payload);
-      const response = await api.post("/products", payload);
-      console.log(" Produto criado:", response.data);
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+    try {
+      await createProductMutation.mutateAsync(payload);
       alert(" Produto criado com sucesso!");
       navigate("/produtos");
-      
     } catch (error: any) {
       console.error(" Erro ao criar produto:", error);
       
@@ -159,19 +137,19 @@ const NewProduct: React.FC = () => {
           } else if (typeof data.message === 'object') {
             setApiError(JSON.stringify(data.message));
           } else {
-            setApiError(data.message || data.error || "Dados inválidos");
+            setApiError(data.message || data.error || "Invalid data");
           }
         } else if (status === 404) {
-          setApiError("Fornecedor não encontrado.");
+          setApiError("Supplier not found.");
         } else if (status === 409) {
-          setApiError("Já existe um produto com este código interno.");
+          setApiError("A product with this internal code already exists.");
         } else {
-          setApiError(data.message || data.error || `Erro do servidor (${status})`);
+          setApiError(data.message || data.error || `Server error (${status})`);
         }
       } else if (error.request) {
-        setApiError("Sem resposta do servidor. Verifique sua conexão.");
+        setApiError("No server response. Check your connection.");
       } else {
-        setApiError("Erro inesperado: " + error.message);
+        setApiError("Unexpected error: " + error.message);
       }
     } finally {
       setIsSubmitting(false);
@@ -420,7 +398,7 @@ const NewProduct: React.FC = () => {
                         }`}
                       >
                         <option value="" className="bg-[#1e293b] text-amber-300/50">Selecione um fornecedor</option>
-                        {suppliers.map((supplier) => (
+                        {suppliers?.map((supplier) => (
                           <option key={supplier.id} value={supplier.id} className="bg-[#1e293b]">
                             {supplier.name} (NIF: {supplier.nif})
                           </option>
@@ -435,7 +413,7 @@ const NewProduct: React.FC = () => {
                         {errors.supplierId}
                       </p>
                     )}
-                    {!loadingSuppliers && suppliers.length === 0 && (
+                    {!loadingSuppliers && suppliers?.length === 0 && (
                       <div className="mt-3 p-3 bg-gradient-to-r from-amber-900/20 to-amber-900/10 rounded-lg border border-amber-500/20">
                         <p className="text-sm text-amber-300/80 flex items-center gap-2">
                           <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

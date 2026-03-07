@@ -25,8 +25,8 @@ interface Company {
 
 const ROLE_LABELS: Record<string, string> = {
   SUPER_ADMIN: 'Super Admin',
-  ADMIN: 'Administrador',
-  OPERATOR: 'Operador'
+  ADMIN: 'Administrator',
+  OPERATOR: 'Operator'
 };
 
 const ROLE_COLORS: Record<string, string> = {
@@ -265,7 +265,7 @@ const GlobalUserManagement: React.FC = () => {
                 </p>
               </div>
             </div>
-            <p className="text-sm font-medium text-slate-400">Administradores</p>
+            <p className="text-sm font-medium text-slate-400">Administrators</p>
           </div>
 
           <div className={theme.cards.stat}>
@@ -281,7 +281,7 @@ const GlobalUserManagement: React.FC = () => {
                 </p>
               </div>
             </div>
-            <p className="text-sm font-medium text-slate-400">Operadores</p>
+            <p className="text-sm font-medium text-slate-400">Operators</p>
           </div>
         </div>
 
@@ -424,7 +424,7 @@ const GlobalUserManagement: React.FC = () => {
             <span>Sistema global de utilizadores</span>
           </div>
           <div>
-            <span>Última atualização: {new Date().toLocaleDateString('pt-PT')}</span>
+            <span>Last update: {new Date().toLocaleDateString('pt-PT')}</span>
           </div>
         </div>
       </div>

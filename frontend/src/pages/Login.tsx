@@ -60,7 +60,7 @@ const Login: React.FC = () => {
       await login(email, password);
     } catch (err: any) {
       const msg = err?.message || err?.toString?.() || 'Erro desconhecido ao fazer login';
-      setError(typeof msg === 'string' ? msg : 'Erro interno. Tente novamente.');
+      setError(typeof msg === 'string' ? msg : 'Internal error. Please try again.');
       setLoading(false);
     }
   };
@@ -112,23 +112,23 @@ const Login: React.FC = () => {
             style={{ background: `${ds.accent}15`, color: ds.accent, border: `1px solid ${ds.accent}30` }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-            Sistema em operação
+            System Online
           </div>
           <h1
             className="font-bold leading-[1.1] mb-6"
             style={{ fontSize: '3.2rem', color: ds.textPrimary }}
           >
-            Logística<br />
-            <span style={{ color: ds.accent }}>precisa</span> e<br />
-            inteligente.
+            Logistics<br />
+            <span style={{ color: ds.accent }}>precise</span> and<br />
+            intelligent.
           </h1>
           <p style={{ color: ds.textSecondary }} className="text-lg leading-relaxed max-w-sm">
-            Controle total sobre transportes, fornecedores e inventário numa plataforma unificada.
+            Complete control over transports, suppliers and inventory in a unified platform.
           </p>
         </div>
 
         <div className="relative z-10 text-xs" style={{ color: ds.textMuted }}>
-          © 2025 LogiSphere · Todos os direitos reservados
+          © 2025 LogiSphere · All rights reserved
         </div>
       </div>
 
@@ -143,10 +143,10 @@ const Login: React.FC = () => {
 
           <div className="mb-8">
             <h2 className="text-3xl font-bold mb-2" style={{ color: ds.textPrimary }}>
-              Bem-vindo
+              Welcome
             </h2>
             <p style={{ color: ds.textSecondary }} className="text-sm">
-              Entre com as suas credenciais para continuar
+              Enter your credentials to continue
             </p>
           </div>
 
@@ -177,14 +177,14 @@ const Login: React.FC = () => {
                 onChange={e => setEmail(e.target.value)}
                 required
                 className={inputClass}
-                placeholder="seu@email.com"
+                placeholder="your@email.com"
                 disabled={loading}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-2" style={{ color: ds.textSecondary }}>
-                Senha
+                Password
               </label>
               <input
                 type="password"

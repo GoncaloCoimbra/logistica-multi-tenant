@@ -358,7 +358,7 @@ const SuperAdminHome: React.FC = () => {
                 <span>Sistema em funcionamento</span>
               </div>
               <div>
-                <span>Última atualização: {new Date().toLocaleDateString('pt-BR')}</span>
+                <span>Last update: {new Date().toLocaleDateString('pt-BR')}</span>
               </div>
             </div>
           </div>

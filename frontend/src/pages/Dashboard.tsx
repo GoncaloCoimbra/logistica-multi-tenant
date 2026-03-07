@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -6,7 +6,9 @@ import {
   BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
-import api from '../api/api';
+import { AxiosError } from 'axios';
+import { useDashboardProductStats, useDashboardActivity } from '../hooks/useDashboard';
+import { useSuppliers } from '../hooks/useSuppliers';
 import { statusLabels, statusColors, theme } from '../theme.config';
 
 // ─── Font Injection ────────────────────────────────────────────────────────────
@@ -21,20 +23,20 @@ const injectFonts = () => {
 
 // ─── Design Tokens ─────────────────────────────────────────────────────────────
 const ds = {
-  bg:            '#07090f',
-  bgCard:        '#0d1117',
-  bgInput:       '#0a0e17',
-  border:        '#1a2234',
-  accent:        '#8b5cf6',
-  accentHover:   '#6d28d9',
-  textPrimary:   '#f0f4ff',
-  textSecondary: '#7a8fa8',
-  textMuted:     '#3a4d63',
-  success:       '#34d399',
-  warning:       '#f59e0b',
-  danger:        '#f87171',
-  purple:        '#a78bfa',
-  orange:        '#fb923c',
+  bg:            'bg-gray-50 dark:bg-[#07090f]',
+  bgCard:        'bg-white dark:bg-[#0d1117]',
+  bgInput:       'bg-gray-50 dark:bg-[#0a0e17]',
+  border:        'border-gray-200 dark:border-[#1a2234]',
+  accent:        'text-blue-600 dark:text-[#8b5cf6]',
+  accentHover:   'text-blue-700 dark:text-[#6d28d9]',
+  textPrimary:   'text-gray-900 dark:text-[#f0f4ff]',
+  textSecondary: 'text-gray-600 dark:text-[#7a8fa8]',
+  textMuted:     'text-gray-500 dark:text-[#3a4d63]',
+  success:       'text-green-600 dark:text-[#34d399]',
+  warning:       'text-yellow-600 dark:text-[#f59e0b]',
+  danger:        'text-red-600 dark:text-[#f87171]',
+  purple:        'text-purple-600 dark:text-[#a78bfa]',
+  orange:        'text-orange-600 dark:text-[#fb923c]',
 };
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -62,8 +64,8 @@ interface DashboardStats {
 
 const Card: React.FC<{ children: React.ReactNode; className?: string; style?: React.CSSProperties }> = ({ children, className = '', style }) => (
   <div
-    className={`rounded-2xl ${className}`}
-    style={{ background: ds.bgCard, border: `1px solid ${ds.border}`, ...style }}
+    className={`rounded-2xl ${ds.bgCard} border ${ds.border} p-6 hover:border-blue-300 dark:hover:border-[#3b82f6]/20 transition-all hover:shadow-xl ${className}`}
+    style={style}
   >
     {children}
   </div>
@@ -72,16 +74,15 @@ const Card: React.FC<{ children: React.ReactNode; className?: string; style?: Re
 const DarkTooltip: React.FC<any> = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl p-3 text-xs shadow-2xl"
-      style={{ background: '#111822', border: `1px solid ${ds.border}`, minWidth: 130 }}>
-      {label && <p className="font-semibold mb-2" style={{ color: ds.textPrimary }}>{label}</p>}
+    <div className="rounded-xl p-3 text-xs shadow-2xl bg-gray-900 dark:bg-[#111822] border border-gray-700 dark:border-[#334155] min-w-[130px]">
+      {label && <p className="font-semibold mb-2 text-white dark:text-[#f0f4ff]">{label}</p>}
       {payload.map((entry: any, i: number) => (
-        <p key={i} className="flex items-center justify-between gap-3" style={{ color: ds.textSecondary }}>
+        <p key={i} className="flex items-center justify-between gap-3 text-gray-300 dark:text-[#7a8fa8]">
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full" style={{ background: entry.color || entry.fill }} />
             {entry.name}
           </span>
-          <span className="font-bold" style={{ color: ds.textPrimary, fontFamily: "'DM Mono', monospace" }}>
+          <span className="font-bold text-white dark:text-[#f0f4ff] font-mono">
             {entry.value}
           </span>
         </p>
@@ -95,62 +96,31 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const [stats, setStats] = useState<DashboardStats>({
-    totalProducts: 0,
-    productsByStatus: [],
-    recentMovements: 0,
-    summary: { received: 0, inAnalysis: 0, inStorage: 0, delivered: 0, rejected: 0 },
-    percentages: { received: '0', inStorage: '0', delivered: '0', rejected: '0' },
-    topSuppliers: [],
-  });
-  const [loading, setLoading]                   = useState(true);
-  const [error, setError]                       = useState<string | null>(null);
+  const { data: stats, isLoading: loading, error, refetch: refetchStats } = useDashboardProductStats();
+  const { data: activity } = useDashboardActivity(10);
+  const { data: suppliers } = useSuppliers();
+
   const [showSuppliersModal, setShowSuppliersModal] = useState(false);
-  const [allSuppliers, setAllSuppliers]         = useState<any[]>([]);
-  const [expandedChart, setExpandedChart]       = useState<string | null>(null);
-
-  useEffect(() => {
-    injectFonts();
-    loadStats();
-  }, []);
-
-  const loadStats = async () => {
-    try {
-      setError(null);
-      const response = await api.get('/dashboard/stats');
-      const data = response.data;
-      setStats({
-        totalProducts:    data.totalProducts    || 0,
-        productsByStatus: Array.isArray(data.productsByStatus) ? data.productsByStatus : [],
-        recentMovements:  data.recentMovements  || 0,
-        summary:          data.summary          || { received: 0, inAnalysis: 0, inStorage: 0, delivered: 0, rejected: 0 },
-        percentages:      data.percentages      || { received: '0', inStorage: '0', delivered: '0', rejected: '0' },
-        topSuppliers:     Array.isArray(data.topSuppliers) ? data.topSuppliers : [],
-      });
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao carregar dados do dashboard');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [allSuppliers, setAllSuppliers] = useState<any[]>([]);
+  const [expandedChart, setExpandedChart] = useState<string | null>(null);
 
   const handleExportReport = () => {
-    if (stats.totalProducts === 0) { alert('Não há dados para exportar'); return; }
+    if (!stats || stats.totalProducts === 0) { alert('No data to export'); return; }
     const csv = [
-      ['Relatório de Performance – LogiSphere'],
-      ['Data', new Date().toLocaleDateString('pt-PT')],
+      ['Performance Report – LogiSphere'],
+      ['Date', new Date().toLocaleDateString('en-US')],
       [''],
-      ['RESUMO GERAL'],
-      ['Total de Produtos', stats.totalProducts],
-      ['Recebidos',         stats.summary.received],
-      ['Em Análise',        stats.summary.inAnalysis],
-      ['Em Armazenamento',  stats.summary.inStorage],
-      ['Entregues',         stats.summary.delivered],
-      ['Rejeitados',        stats.summary.rejected],
+      ['GENERAL SUMMARY'],
+      ['Total Products', stats.totalProducts],
+      ['Received',         stats.summary.received],
+      ['In Analysis',        stats.summary.inAnalysis],
+      ['In Storage',  stats.summary.inStorage],
+      ['Delivered',         stats.summary.delivered],
+      ['Rejected',        stats.summary.rejected],
       [''],
-      ['TOP 5 FORNECEDORES'],
-      ['Posição', 'Nome', 'Produtos', '%'],
-      ...stats.topSuppliers.map((s, i) => {
+      ['TOP 5 SUPPLIERS'],
+      ['Position', 'Name', 'Products', '%'],
+      ...stats.topSuppliers.map((s: any, i: number) => {
         const pct = stats.totalProducts > 0 ? ((s.productCount / stats.totalProducts) * 100).toFixed(1) : '0';
         return [`#${i + 1}`, s.name, s.productCount, `${pct}%`];
       }),
@@ -165,25 +135,18 @@ const Dashboard: React.FC = () => {
     document.body.removeChild(link);
   };
 
-  const loadAllSuppliers = async () => {
-    try {
-      const response = await api.get('/suppliers');
-      setAllSuppliers(Array.isArray(response.data) ? response.data : []);
-      setShowSuppliersModal(true);
-    } catch {
-      alert('Erro ao carregar fornecedores');
-    }
+  const loadAllSuppliers = () => {
+    setAllSuppliers(suppliers || []);
+    setShowSuppliersModal(true);
   };
 
   // ── Loading ──
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center"
-        style={{ background: ds.bg, fontFamily: "'Outfit', sans-serif" }}>
+      <div className={`min-h-screen flex items-center justify-center ${ds.bg}`}>
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full border-2 border-t-transparent animate-spin mx-auto mb-4"
-            style={{ borderColor: `${ds.accent} transparent transparent transparent` }} />
-          <p className="text-sm" style={{ color: ds.textMuted }}>A carregar dashboard...</p>
+          <div className="w-12 h-12 rounded-full border-2 border-t-transparent animate-spin mx-auto mb-4 border-blue-500 dark:border-[#3b82f6]" />
+          <p className={`text-sm ${ds.textMuted}`}>Loading dashboard...</p>
         </div>
       </div>
     );
@@ -192,27 +155,28 @@ const Dashboard: React.FC = () => {
   // ── Error ──
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center"
-        style={{ background: ds.bg, fontFamily: "'Outfit', sans-serif" }}>
+      <div className={`min-h-screen flex items-center justify-center ${ds.bg}`}>
         <div className="text-center max-w-sm">
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4"
-            style={{ background: `${ds.danger}15`, border: `1px solid ${ds.danger}30` }}>
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: ds.danger }}>
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-500/50">
+            <svg className="w-7 h-7 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
           </div>
-          <h2 className="text-lg font-bold mb-2" style={{ color: ds.textPrimary }}>Erro ao carregar dados</h2>
-          <p className="text-sm mb-6" style={{ color: ds.textSecondary }}>{error}</p>
+          <h2 className={`text-lg font-bold mb-2 ${ds.textPrimary}`}>Error loading data</h2>
+          <p className={`text-sm mb-6 ${ds.textSecondary}`}>
+            {typeof error === 'string' ? error : 
+             error instanceof AxiosError ? 
+               error.response?.data?.message || error.message || 'Error loading data' : 
+               error?.message || 'Error loading data'}
+          </p>
           <div className="flex gap-3 justify-center">
-            <button onClick={() => { setLoading(true); loadStats(); }}
-              className="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
-              style={{ background: ds.accent, color: '#fff' }}>
-              Tentar novamente
+            <button onClick={() => refetchStats()}
+              className="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all bg-blue-500 dark:bg-[#3b82f6] text-white hover:bg-blue-600 dark:hover:bg-[#2563eb]">
+              Try again
             </button>
             <button onClick={() => navigate('/')}
-              className="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
-              style={{ background: ds.bgCard, border: `1px solid ${ds.border}`, color: ds.textSecondary }}>
-              Voltar ao início
+              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${ds.bgCard} border ${ds.border} ${ds.textSecondary} hover:bg-gray-50 dark:hover:bg-[#1e293b]`}>
+              Go back
             </button>
           </div>
         </div>
@@ -221,27 +185,27 @@ const Dashboard: React.FC = () => {
   }
 
   // ── Chart data ──
-  const pieData = stats.productsByStatus.map(item => ({
+  const pieData = stats.productsByStatus.map((item: any) => ({
     name:  statusLabels.product[item.status] || item.status,
     value: item.count,
     color: statusColors.product[item.status] || '#6B7280',
   }));
 
   const barData = [
-    { name: 'Recebidos',        value: stats.summary.received,   fill: ds.accent   },
-    { name: 'Em Análise',       value: stats.summary.inAnalysis, fill: ds.warning  },
-    { name: 'Armazenamento',    value: stats.summary.inStorage,  fill: ds.purple   },
-    { name: 'Entregues',        value: stats.summary.delivered,  fill: ds.success  },
-    { name: 'Rejeitados',       value: stats.summary.rejected,   fill: ds.danger   },
+    { name: 'Received',        value: stats.summary.received,   fill: ds.accent   },
+    { name: 'In Analysis',       value: stats.summary.inAnalysis, fill: ds.warning  },
+    { name: 'Storage',    value: stats.summary.inStorage,  fill: ds.purple   },
+    { name: 'Delivered',        value: stats.summary.delivered,  fill: ds.success  },
+    { name: 'Rejected',       value: stats.summary.rejected,   fill: ds.danger   },
   ];
 
   // ── Metric cards config ──
   const metricCards = [
     {
-      label:   'Total de Produtos',
+      label:   'Total Products',
       value:   stats.totalProducts,
       color:   ds.accent,
-      badge:   stats.percentages.received !== '0' ? `${stats.percentages.received}% recebidos` : null,
+      badge:   stats.percentages.received !== '0' ? `${stats.percentages.received}% received` : null,
       icon: (
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -250,10 +214,10 @@ const Dashboard: React.FC = () => {
       ),
     },
     {
-      label:   'Em Armazenamento',
+      label:   'In Storage',
       value:   stats.summary.inStorage,
       color:   ds.purple,
-      badge:   stats.percentages.inStorage !== '0' ? `${stats.percentages.inStorage}% do total` : null,
+      badge:   stats.percentages.inStorage !== '0' ? `${stats.percentages.inStorage}% of total` : null,
       icon: (
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -262,10 +226,10 @@ const Dashboard: React.FC = () => {
       ),
     },
     {
-      label:   'Entregues',
+      label:   'Delivered',
       value:   stats.summary.delivered,
       color:   ds.success,
-      badge:   stats.percentages.delivered !== '0' ? `${stats.percentages.delivered}% do total` : null,
+      badge:   stats.percentages.delivered !== '0' ? `${stats.percentages.delivered}% of total` : null,
       icon: (
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -274,10 +238,10 @@ const Dashboard: React.FC = () => {
       ),
     },
     {
-      label:   'Movimentações (30d)',
+      label:   'Movements (30d)',
       value:   stats.recentMovements,
       color:   ds.orange,
-      badge:   'últimos 30 dias',
+      badge:   'last 30 days',
       icon: (
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -295,37 +259,35 @@ const Dashboard: React.FC = () => {
   );
 
   return (
-    <div style={{ fontFamily: "'Outfit', -apple-system, sans-serif", background: ds.bg, minHeight: '100vh' }}>
+    <div className={`font-['Outfit'] min-h-screen ${ds.bg}`}>
 
       {/* ── Page Header ── */}
-      <div style={{ background: ds.bgCard, borderBottom: `1px solid ${ds.border}` }}>
+      <div className={`${ds.bgCard} border-b ${ds.border}`}>
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold" style={{ color: ds.textPrimary }}>
+            <h1 className={`text-2xl font-bold ${ds.textPrimary}`}>
               Performance Report
             </h1>
-            <p className="text-sm mt-0.5" style={{ color: ds.textMuted }}>
-              Visão geral do sistema logístico
+            <p className={`text-sm mt-0.5 ${ds.textMuted}`}>
+              Logistics system overview
             </p>
           </div>
           <div className="flex items-center gap-3">
             {/* Period badge */}
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm"
-              style={{ background: ds.bg, border: `1px solid ${ds.border}`, color: ds.textSecondary }}>
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: ds.accent }}>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm ${ds.bg} border ${ds.border} ${ds.textSecondary}`}>
+              <svg className={`w-4 h-4 ${ds.accent}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
               </svg>
-              Últimos 30 dias
+              Last 30 days
             </div>
             {/* Refresh */}
             <button
-              onClick={() => { setLoading(true); loadStats(); }}
-              className="p-2 rounded-xl transition-all duration-200"
-              style={{ background: ds.bg, border: `1px solid ${ds.border}` }}
-              title="Atualizar"
+              onClick={() => refetchStats()}
+              className={`p-2 rounded-xl transition-all duration-200 ${ds.bg} border ${ds.border}`}
+              title="Refresh"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: ds.accent }}>
+              <svg className={`w-4 h-4 ${ds.accent}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
               </svg>
@@ -409,7 +371,7 @@ const Dashboard: React.FC = () => {
                     paddingAngle={3}
                     dataKey="value"
                   >
-                    {pieData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                    {pieData.map((entry: any, i: number) => <Cell key={i} fill={entry.color} />)}
                   </Pie>
                   <Tooltip content={<DarkTooltip />} />
                   <Legend
@@ -526,7 +488,7 @@ const Dashboard: React.FC = () => {
             </div>
           ) : (
             <div className="space-y-2">
-              {stats.topSuppliers.map((supplier, i) => {
+              {stats.topSuppliers.map((supplier: any, i: number) => {
                 const pct = stats.totalProducts > 0
                   ? (supplier.productCount / stats.totalProducts) * 100
                   : 0;

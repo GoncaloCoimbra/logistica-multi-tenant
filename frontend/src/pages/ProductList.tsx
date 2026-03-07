@@ -1,31 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/api';
+import { useProducts } from '../hooks/useProducts';
 import { getStatusBadgeClass, statusLabels } from '../theme.config';
 import { useFilters } from '../hooks/useFilters';
 import FilterChips from '../components/FilterChips';
 import FilterSelector from '../components/FilterSelector';
 
-interface Product {
-  id: string;
-  internalCode: string;
-  description: string;
-  quantity: number;
-  unit: string;
-  status: string;
-  supplier?: {
-    name: string;
-  };
-  currentLocation?: string;
-  createdAt: string;
-}
-
 const ProductList: React.FC = () => {
   const navigate = useNavigate();
   const { activeFilters, addFilter, removeFilter, clearAllFilters, getFilter } = useFilters();
-  
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
   
   const [searchTerm, setSearchTerm] = useState(getFilter('search'));
   const [statusFilter, setStatusFilter] = useState(getFilter('status'));
@@ -33,31 +16,15 @@ const ProductList: React.FC = () => {
   const [filterDateFrom, setFilterDateFrom] = useState(getFilter('dateFrom'));
   const [filterDateTo, setFilterDateTo] = useState(getFilter('dateTo'));
 
-  useEffect(() => {
-    loadProducts();
-  }, [activeFilters]);
-
-  const loadProducts = async () => {
-    try {
-      setLoading(true);
-      
-      const params = new URLSearchParams();
-      
-      activeFilters.forEach(filter => {
-        params.append(filter.key, filter.value);
-      });
-      
-      const queryString = params.toString();
-      const url = `/products${queryString ? `?${queryString}` : ''}`;
-      
-      const response = await api.get(url);
-      setProducts(response.data);
-    } catch (error) {
-      console.error('Erro ao carregar produtos:', error);
-    } finally {
-      setLoading(false);
-    }
+  const filters = {
+    search: searchTerm,
+    status: statusFilter,
+    location: filterLocation,
+    dateFrom: filterDateFrom,
+    dateTo: filterDateTo,
   };
+
+  const { data: products = [], isLoading: loading, error } = useProducts(filters);
 
   const handleProductClick = (productId: string) => {
     navigate(`/produtos/${productId}`);

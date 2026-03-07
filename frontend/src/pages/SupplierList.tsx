@@ -305,7 +305,7 @@ const SupplierList: React.FC = () => {
       <div className={`${theme.backgrounds.page} flex items-center justify-center min-h-screen`}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
-          <p className="text-[#cbd5e1] font-medium">Carregando...</p>
+          <p className="text-gray-600 dark:text-[#cbd5e1] font-medium">Loading...</p>
         </div>
       </div>
     );

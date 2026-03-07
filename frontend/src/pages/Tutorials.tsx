@@ -19,7 +19,7 @@ const Tutorials: React.FC = () => {
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto p-8">
-        <div className="text-gray-400">Carregando tutoriais...</div>
+        <div className="text-gray-400">Loading tutorials...</div>
       </div>
     );
   }
