@@ -1,10 +1,10 @@
-# Backend Express (legado)
+# Backend Express (legacy)
 
-Esta pasta contém o código original de um backend em Express que serviu como protótipo inicial.
+This folder contains the original code of a backend in Express that served as the initial prototype.
 
-🔴 **Importante:**
+🔴 **Important:**
 
-- O projeto **não é mantido** e não faz parte dos workspaces.
-- Toda a lógica actualizada está em `backend-nest`.
-- Não adicione nem modifique arquivos aqui; seu único propósito é manter referências históricas durante a migração.
-- A pasta pode ser removida completamente assim que todo o código útil for migrado ou quando o trabalho do frontend não necessitar dela.
+- The project **is not maintained** and is not part of the workspaces.
+- All updated logic is in `backend-nest`.
+- Do not add or modify files here; its only purpose is to keep historical references during migration.
+- The folder can be completely removed once all useful code is migrated or when frontend work no longer needs it.

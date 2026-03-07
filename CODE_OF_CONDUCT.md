@@ -1,11 +1,11 @@
-# Código de Conduta
+# Code of Conduct
 
-Este projeto adota o [Contributor Covenant](https://www.contributor-covenant.org/) como seu código de conduta. Ao participar deste projeto, você concorda em seguir seus termos.
+This project adopts the [Contributor Covenant](https://www.contributor-covenant.org/) as its code of conduct. By participating in this project, you agree to follow its terms.
 
-## Padrões esperados
+## Expected Standards
 
-* Seja respeitoso com os outros e com seu trabalho.
-* Evite linguagem ofensiva, assédio ou qualquer comportamento discriminatório.
-* Respeite as decisões dos mantenedores e colaboradores.
+* Be respectful to others and their work.
+* Avoid offensive language, harassment, or any discriminatory behavior.
+* Respect the decisions of maintainers and contributors.
 
-Para relatar um incidente, entre em contato com o mantenedor principal.
+To report an incident, contact the main maintainer.
