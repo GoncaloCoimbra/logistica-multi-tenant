@@ -1,0 +1,52 @@
+## Removed: CI workflow for backend-nest
+# File replaced with harmless placeholder to clear editor diagnostics.
+# If you want a new CI workflow, I can scaffold a clean one on request.
+# CI workflow for backend-nest (cleaned)
+name: CI Backend Nest
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: logistica
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d logistica" --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps
+        run: |
+          cd backend-nest
+          npm ci
+      - name: Wait for Postgres
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+          for i in {1..20}; do pg_isready -h 127.0.0.1 -p 5432 && break || sleep 1; done
+      - name: Set DATABASE_URL
+        run: echo "DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5432/logistica" >> backend-nest/.env
+      - name: Run migrations
+        run: |
+          cd backend-nest
+          npx prisma migrate deploy || npx prisma migrate dev --name ci-migrate --skip-seed
+      - name: Run tests
+        run: |
+          cd backend-nest
+          npm test --silent
+          npm run test:e2e --silent
