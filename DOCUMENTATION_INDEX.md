@@ -1,150 +1,152 @@
-# Índice de Documentação
+# Documentation Index
 
-Bem-vindo! Abaixo está um guia completo da documentação disponível no projeto.
+Welcome! Below is a complete guide to the documentation available in the project.
 
-## 📚 Documentação Geral
+## 📚 General Documentation
 
-| Documento | Objetivo |
-|-----------|----------|
-| [README.md](./README.md) | Visão geral do projeto, stack, features e quickstart |
-| [CONTRIBUTING.md](./CONTRIBUTING.md) | Guia para contribuidores - como fazer PR, padrões de código |
-| [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) | Código de conduta e políticas de convivência |
-| [CHANGELOG.md](./CHANGELOG.md) | Histórico de mudanças e versões |
-| [ROADMAP.md](./ROADMAP.md) | Plano de desenvolvimento por trimestres (Q1-Q4 2026) |
+| Document | Purpose |
+|----------|---------|
+| [README.md](./README.md) | Project overview, stack, features and quickstart |
+| [CONTRIBUTING.md](./CONTRIBUTING.md) | Contributor guide - how to make PR, code standards |
+| [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) | Code of conduct and coexistence policies |
+| [CHANGELOG.md](./CHANGELOG.md) | Change history and versions |
+| [ROADMAP.md](./ROADMAP.md) | Development plan by quarters (Q1-Q4 2026) |
 
-## 🏗️ Arquitetura e Decisões
+## 🏗️ Architecture and Decisions
 
-| Documento | Objetivo |
-|-----------|----------|
-| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Estrutura de monorepo, decisão backend vs backend-nest, tecnologias |
-| [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) | Deploy em Docker, Kubernetes, Helm, backup, rollback |
-| [docs/UX_UI.md](./docs/UX_UI.md) | Design system, padrões de componentes, acessibilidade, temas |
+| Document | Purpose |
+|----------|---------|
+| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Monorepo structure, backend vs backend-nest decision, technologies |
+| [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) | Deploy in Docker, Kubernetes, Helm, backup, rollback |
+| [docs/UX_UI.md](./docs/UX_UI.md) | Design system, component patterns, accessibility, themes |
 
-## 📖 Guias por Projeto
+## 📖 Project Guides
 
 ### Backend (NestJS)
-| Arquivo | Conteúdo |
-|---------|----------|
-| [backend-nest/README.md](./backend-nest/README.md) | Setup, estrutura de módulos, API docs, testes |
-| [backend-nest/.env.example](./backend-nest/.env.example) | Variáveis de ambiente obrigatórias |
-| [backend-nest/prisma/schema.prisma](./backend-nest/prisma/schema.prisma) | Modelo de dados (Prisma) |
+| File | Content |
+|------|---------|
+| [backend-nest/README.md](./backend-nest/README.md) | Setup, module structure, API docs, tests |
+| [backend-nest/.env.example](./backend-nest/.env.example) | Required environment variables |
+| [backend-nest/prisma/schema.prisma](./backend-nest/prisma/schema.prisma) | Data model (Prisma) |
 
 ### Frontend (React)
-| Arquivo | Conteúdo |
-|---------|----------|
-| [frontend/README.md](./frontend/README.md) | Setup, estrutura, testes React, integração API |
-| [frontend/.env.example](./frontend/.env.example) | Variáveis de ambiente |
-| [frontend/tailwind.config.js](./frontend/tailwind.config.js) | Customizações de tema Tailwind |
+| File | Content |
+|------|---------|
+| [frontend/README.md](./frontend/README.md) | Setup, structure, React tests, API integration |
+| [frontend/.env.example](./frontend/.env.example) | Environment variables |
+| [frontend/tailwind.config.js](./frontend/tailwind.config.js) | Tailwind theme customizations |
 
-### Backend Legado (Express)
-| Arquivo | Conteúdo |
-|---------|----------|
-| [backend/README.md](./backend/README.md) | ⚠️ Deprecado - apenas referência histórica |
+### Legacy Backend (Express)
+| File | Content |
+|------|---------|
+| [backend/README.md](./backend/README.md) | ⚠️ Deprecated - historical reference only |
 
 ## 🔧 Configuração e Ferramentas
 
-### Variaveis de Ambiente
-- Criar `.env` a partir de `.env.example` em cada subprojeto
-- Essenciais: `DATABASE_URL`, `JWT_SECRET`, `CORS_ORIGIN`
+## 🔧 Configuration and Tools
+
+### Environment Variables
+- Create `.env` from `.env.example` in each subproject
+- Essential: `DATABASE_URL`, `JWT_SECRET`, `CORS_ORIGIN`
 
 ### Monorepo (npm workspaces)
 ```bash
-npm install              # Instala todos os pacotes
-npm run lint-all         # Lint em backend-nest e frontend
-npm run test-all         # Testes em ambos
-npm run build-all        # Build em ambos
-npm run format-all       # Prettier em ambos
+npm install              # Install all packages
+npm run lint-all         # Lint in backend-nest and frontend
+npm run test-all         # Tests in both
+npm run build-all        # Build in both
+npm run format-all       # Prettier in both
 ```
 
 ### CI/CD
 - Pipeline: [.github/workflows/ci.yml](./.github/workflows/ci.yml)
-- Roda automaticamente: lint, tests, build
-- Suporta: Node.js 20+
+- Runs automatically: lint, tests, build
+- Supports: Node.js 20+
 
 ### Git Hooks
-- **Husky** + **lint-staged**: Pre-commit hooks automáticos
-- Configuração: [.husky/](./.husky/) e `lint-staged` em [package.json](./package.json)
+- **Husky** + **lint-staged**: Automatic pre-commit hooks
+- Configuration: [.husky/](./.husky/) and `lint-staged` in [package.json](./package.json)
 
-## 🚀 Inicialização Rápida
+## 🚀 Quick Start
 
-### Desenvolvimento Local
+### Local Development
 
 ```bash
-# 1. Clonar e instalar
+# 1. Clone and install
 git clone <repo>
 cd logistica-multi-tenant
 npm install
 
-# 2. Configurar ambiente
+# 2. Configure environment
 cp backend-nest/.env.example backend-nest/.env
 cp frontend/.env.example frontend/.env
 
-# 3. BD e seed
+# 3. DB and seed
 docker-compose up -d
 npm run --workspace=backend-nest prisma:migrate dev
 npm run --workspace=backend-nest seed
 
-# 4. Rodarda ambos
+# 4. Run both
 npm run start-all
-# ou em terminais separados:
+# or in separate terminals:
 npm run --workspace=backend-nest start:dev
 npm run --workspace=frontend dev
 ```
 
 ### Frontend
-- Acesso: http://localhost:5173 (Vite) ou http://localhost:3000 (Create React App)
+- Access: http://localhost:5173 (Vite) or http://localhost:3000 (Create React App)
 - API docs: http://localhost:3000/api/docs (Swagger)
 
-## 📋 Checklist para Novo Desenvolvedor
+## 📋 Checklist for New Developer
 
-- [ ] Clonar repo + `npm install`
-- [ ] Copiar `.env.example` para `.env` (backend-nest e frontend)
-- [ ] Rodar `docker-compose up -d`
-- [ ] Executar migrações Prisma: `npm run --workspace=backend-nest prisma:migrate dev`
-- [ ] Executar seed: `npm run --workspace=backend-nest seed`
-- [ ] Rodar backend: `npm run --workspace=backend-nest start:dev`
-- [ ] Rodar frontend: `npm run --workspace=frontend dev`
-- [ ] Verificar: http://localhost:5173 (frontend) e http://localhost:3000/api/docs (Swagger)
-- [ ] Ler [CONTRIBUTING.md](./CONTRIBUTING.md) para padrões de código
-- [ ] Ler [ARCHITECTURE.md](./docs/ARCHITECTURE.md) para decisões de design
+- [ ] Clone repo + `npm install`
+- [ ] Copy `.env.example` to `.env` (backend-nest and frontend)
+- [ ] Run `docker-compose up -d`
+- [ ] Run Prisma migrations: `npm run --workspace=backend-nest prisma:migrate dev`
+- [ ] Run seed: `npm run --workspace=backend-nest seed`
+- [ ] Run backend: `npm run --workspace=backend-nest start:dev`
+- [ ] Run frontend: `npm run --workspace=frontend dev`
+- [ ] Check: http://localhost:5173 (frontend) and http://localhost:3000/api/docs (Swagger)
+- [ ] Read [CONTRIBUTING.md](./CONTRIBUTING.md) for code standards
+- [ ] Read [ARCHITECTURE.md](./docs/ARCHITECTURE.md) for design decisions
 
 ## 🐛 Troubleshooting
 
 ### "DATABASE_URL not set"
-→ Copiar `.env.example` para `.env` em `backend-nest/` e preencher com dados válidos
+→ Copy `.env.example` to `.env` in `backend-nest/` and fill with valid data
 
-### Porta 3000 em uso
-→ Mudar `PORT` em `.env` ou parar outro processo: `lsof -i :3000`
+### Port 3000 in use
+→ Change `PORT` in `.env` or stop another process: `lsof -i :3000`
 
-### Build falha com TypeScript errors
-→ Rodar `npm run lint-all` para ver erros; remover `@ts-nocheck`
+### Build fails with TypeScript errors
+→ Run `npm run lint-all` to see errors; remove `@ts-nocheck`
 
-### Migrações Prisma falharam
-→ `npm run --workspace=backend-nest prisma:studio` para ver estado da BD
+### Prisma migrations failed
+→ `npm run --workspace=backend-nest prisma:studio` to see DB state
 
-## 📞 Suporte
+## 📞 Support
 
-- **Issues**: Abrir no GitHub com descrição clara
-- **Discussões**: Usar GitHub Discussions para perguntas
-- **Docs**: Sempre verificar este índice ou o README do subprojeto
+- **Issues**: Open on GitHub with clear description
+- **Discussions**: Use GitHub Discussions for questions
+- **Docs**: Always check this index or the subproject README
 
-## 📅 Datas Importantes
+## 📅 Important Dates
 
-| Data | Evento |
-|------|--------|
-| 31 Mar 2026 | DL Q1: Testes & Documentação |
-| 30 Jun 2026 | DL Q2: Observabilidade & Segurança |
-| 30 Set 2026 | DL Q3: Performance & Escala |
-| 31 Dez 2026 | DL Q4: Produção Ready |
+| Date | Event |
+|------|-------|
+| Mar 31 2026 | DL Q1: Tests & Documentation |
+| Jun 30 2026 | DL Q2: Observability & Security |
+| Sep 30 2026 | DL Q3: Performance & Scale |
+| Dec 31 2026 | DL Q4: Production Ready |
 
-## 🎯 Próximos Passos
+## 🎯 Next Steps
 
-1. Ler [README.md](./README.md) para visão geral
-2. Seguir [CONTRIBUTING.md](./CONTRIBUTING.md) para padrões
-3. Consultar [Roadmap](./ROADMAP.md) para contexto
-4. Explorar subprojetos: [backend-nest/README.md](./backend-nest/README.md) e [frontend/README.md](./frontend/README.md)
+1. Read [README.md](./README.md) for overview
+2. Follow [CONTRIBUTING.md](./CONTRIBUTING.md) for standards
+3. Check [Roadmap](./ROADMAP.md) for context
+4. Explore subprojects: [backend-nest/README.md](./backend-nest/README.md) and [frontend/README.md](./frontend/README.md)
 
 ---
 
-**Última atualização**: Fevereiro 2026  
-**Mantido por**: Equipe de Desenvolvimento
+**Last update**: February 2026  
+**Maintained by**: Development Team
