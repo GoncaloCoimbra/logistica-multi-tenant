@@ -20,8 +20,14 @@ import superAdminRoutes from './routes/superadmin.routes';
 
 dotenv.config();
 
+// validate environment
+if (!process.env.DATABASE_URL) {
+  console.error('✖ DATABASE_URL not defined. please create a .env file from .env.example and set the connection string.');
+  process.exit(1);
+}
+
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(helmet({
@@ -73,21 +79,27 @@ app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📡 Health check: http://localhost:${PORT}/health`);
-  console.log(`📁 Uploads: http://localhost:${PORT}/uploads`); 
-  console.log(`📋 Routes registered:`);
-  console.log(`   - /api/auth`);
-  console.log(`   - /api/registration`);
-  console.log(`   - /api/products`);
-  console.log(`   - /api/users`);
-  console.log(`   - /api/suppliers`);
-  console.log(`   - /api/transports`);
-  console.log(`   - /api/vehicles`);
-  console.log(`   - /api/dashboard`);
-  console.log(`   - /api/notifications`);
-  console.log(`   - /api/company`);
-  console.log(`   - /api/auditlog`); 
-  console.log(`   - /api/superadmin`);
-});
+// Only start listening when not in test environment. Tests import the `app`
+// directly and run requests against it without starting the HTTP server.
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📡 Health check: http://localhost:${PORT}/health`);
+    console.log(`📁 Uploads: http://localhost:${PORT}/uploads`); 
+    console.log(`📋 Routes registered:`);
+    console.log(`   - /api/auth`);
+    console.log(`   - /api/registration`);
+    console.log(`   - /api/products`);
+    console.log(`   - /api/users`);
+    console.log(`   - /api/suppliers`);
+    console.log(`   - /api/transports`);
+    console.log(`   - /api/vehicles`);
+    console.log(`   - /api/dashboard`);
+    console.log(`   - /api/notifications`);
+    console.log(`   - /api/company`);
+    console.log(`   - /api/auditlog`); 
+    console.log(`   - /api/superadmin`);
+  });
+}
+
+export default app;
