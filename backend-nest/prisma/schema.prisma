@@ -37,7 +37,7 @@ model User {
   role             Role              @default(OPERATOR)
   isActive         Boolean           @default(true)
   avatarUrl        String?           
-  companyId        String?
+  companyId        String
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
   auditLogs        AuditLog[]
@@ -45,7 +45,7 @@ model User {
   productMovements ProductMovement[]
   refreshTokens    RefreshToken[]
   createdTasks     Task[]
-  company          Company?          @relation(fields: [companyId], references: [id])
+  company          Company           @relation(fields: [companyId], references: [id])
 }
 
 model Supplier {
