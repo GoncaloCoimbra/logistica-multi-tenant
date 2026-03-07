@@ -2,50 +2,50 @@ export const theme = {
   colors: {
     // Cor primária (tons de azul navy)
     primary: {
-      50: 'bg-[#e8eef5]',
-      100: 'bg-[#c5d4e6]',
-      500: 'bg-[#3b82f6]',
-      600: 'bg-[#2563eb]',
-      700: 'bg-[#1d4ed8]',
-      text: 'text-[#3b82f6]',
-      textDark: 'text-[#1d4ed8]',
-      border: 'border-[#3b82f6]',
-      ring: 'ring-[#3b82f6]',
+      50: 'bg-blue-50 dark:bg-[#e8eef5]',
+      100: 'bg-blue-100 dark:bg-[#c5d4e6]',
+      500: 'bg-blue-500 dark:bg-[#3b82f6]',
+      600: 'bg-blue-600 dark:bg-[#2563eb]',
+      700: 'bg-blue-700 dark:bg-[#1d4ed8]',
+      text: 'text-blue-600 dark:text-[#3b82f6]',
+      textDark: 'text-blue-800 dark:text-[#1d4ed8]',
+      border: 'border-blue-500 dark:border-[#3b82f6]',
+      ring: 'ring-blue-500 dark:ring-[#3b82f6]',
     },
     
     // Cor secundária (tons escuros navy)
     secondary: {
-      50: 'bg-[#f1f5f9]',
-      100: 'bg-[#cbd5e1]',
-      500: 'bg-[#1e293b]',
-      600: 'bg-[#0f172a]',
-      700: 'bg-[#020617]',
-      text: 'text-[#cbd5e1]',
-      border: 'border-[#1e293b]',
+      50: 'bg-gray-50 dark:bg-[#f1f5f9]',
+      100: 'bg-gray-100 dark:bg-[#cbd5e1]',
+      500: 'bg-gray-500 dark:bg-[#1e293b]',
+      600: 'bg-gray-600 dark:bg-[#0f172a]',
+      700: 'bg-gray-700 dark:bg-[#020617]',
+      text: 'text-gray-600 dark:text-[#cbd5e1]',
+      border: 'border-gray-500 dark:border-[#1e293b]',
     },
     
     // Cores de estado
     success: {
-      bg: 'bg-emerald-900/30',
-      text: 'text-emerald-400',
-      border: 'border-emerald-500/50',
+      bg: 'bg-green-100 dark:bg-emerald-900/30',
+      text: 'text-green-600 dark:text-emerald-400',
+      border: 'border-green-500 dark:border-emerald-500/50',
     },
     
     warning: {
-      bg: 'bg-amber-900/30',
-      text: 'text-amber-400',
-      border: 'border-amber-500/50',
+      bg: 'bg-yellow-100 dark:bg-amber-900/30',
+      text: 'text-yellow-600 dark:text-amber-400',
+      border: 'border-yellow-500 dark:border-amber-500/50',
     },
     
     error: {
-      bg: 'bg-red-900/30',
-      text: 'text-red-400',
-      border: 'border-red-500/50',
+      bg: 'bg-red-100 dark:bg-red-900/30',
+      text: 'text-red-600 dark:text-red-400',
+      border: 'border-red-500 dark:border-red-500/50',
     },
     
     info: {
-      bg: 'bg-[#1e293b]/50',
-      text: 'text-[#cbd5e1]',
+      bg: 'bg-blue-100 dark:bg-[#1e293b]/50',
+      text: 'text-blue-600 dark:text-[#cbd5e1]',
     },
   },
 
@@ -53,21 +53,21 @@ export const theme = {
   //  BOTÕES
   
   buttons: {
-    primary: 'px-6 py-3 bg-gradient-to-r from-[#3b82f6] to-[#2563eb] text-white rounded-lg hover:from-[#2563eb] hover:to-[#1d4ed8] transition-all font-bold shadow-lg hover:shadow-xl',
-    secondary: 'px-6 py-3 bg-gradient-to-r from-[#1e293b] to-[#0f172a] text-white rounded-lg hover:from-[#0f172a] hover:to-[#020617] transition-all font-bold shadow-lg hover:shadow-xl border border-[#1e293b]',
-    success: 'px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-lg hover:from-emerald-700 hover:to-emerald-800 transition-all font-bold shadow-lg',
+    primary: 'px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-[#3b82f6] dark:to-[#2563eb] text-white dark:text-white rounded-lg hover:from-blue-600 hover:to-blue-700 dark:hover:from-[#2563eb] dark:hover:to-[#1d4ed8] transition-all font-bold shadow-lg hover:shadow-xl',
+    secondary: 'px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 dark:from-[#1e293b] dark:to-[#0f172a] text-white dark:text-white rounded-lg hover:from-gray-600 hover:to-gray-700 dark:hover:from-[#0f172a] dark:hover:to-[#020617] transition-all font-bold shadow-lg hover:shadow-xl border border-gray-500 dark:border-[#1e293b]',
+    success: 'px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 dark:from-emerald-600 dark:to-emerald-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 dark:hover:from-emerald-700 dark:hover:to-emerald-800 transition-all font-bold shadow-lg',
     danger: 'px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-bold shadow-lg',
-    outline: 'px-6 py-3 border-2 border-[#3b82f6]/50 text-[#3b82f6] rounded-lg hover:bg-[#3b82f6]/10 transition-all font-bold hover:border-[#3b82f6]',
-    icon: 'p-2 hover:bg-[#3b82f6]/20 rounded-lg transition-colors text-[#3b82f6] hover:text-[#2563eb]',
+    outline: 'px-6 py-3 border-2 border-blue-500/50 dark:border-[#3b82f6]/50 text-blue-600 dark:text-[#3b82f6] rounded-lg hover:bg-blue-50 dark:hover:bg-[#3b82f6]/10 transition-all font-bold hover:border-blue-500 dark:hover:border-[#3b82f6]',
+    icon: 'p-2 hover:bg-blue-100 dark:hover:bg-[#3b82f6]/20 rounded-lg transition-colors text-blue-600 dark:text-[#3b82f6] hover:text-blue-700 dark:hover:text-[#2563eb]',
   },
 
   
   //  INPUTS E FORMS
   
   inputs: {
-    base: 'w-full px-4 py-3 bg-[#0f172a] border-2 border-[#1e293b] text-white rounded-lg focus:ring-2 focus:ring-[#3b82f6]/50 focus:border-[#3b82f6] transition-all placeholder-[#475569] font-medium',
-    error: 'w-full px-4 py-3 bg-[#0f172a] border-2 border-red-500/70 text-white rounded-lg focus:ring-2 focus:ring-red-500/50 focus:border-red-400 transition-all placeholder-[#475569]',
-    disabled: 'w-full px-4 py-3 border-2 border-[#1e293b] rounded-lg bg-[#1e293b]/50 cursor-not-allowed text-[#475569] font-medium',
+    base: 'w-full px-4 py-3 bg-white dark:bg-[#0f172a] border-2 border-gray-300 dark:border-[#1e293b] text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-[#3b82f6]/50 focus:border-blue-500 dark:focus:border-[#3b82f6] transition-all placeholder-gray-500 dark:placeholder-[#475569] font-medium',
+    error: 'w-full px-4 py-3 bg-white dark:bg-[#0f172a] border-2 border-red-500/70 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-red-500/50 focus:border-red-400 transition-all placeholder-gray-500 dark:placeholder-[#475569]',
+    disabled: 'w-full px-4 py-3 border-2 border-gray-300 dark:border-[#1e293b] rounded-lg bg-gray-100 dark:bg-[#1e293b]/50 cursor-not-allowed text-gray-500 dark:text-[#475569] font-medium',
   },
 
   
@@ -113,11 +113,11 @@ export const theme = {
   //  CARDS E CONTAINERS
   
   cards: {
-    base: 'bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-xl shadow-lg border border-[#334155]/50 p-6 hover:border-[#3b82f6]/20 transition-all hover:shadow-xl',
-    stat: 'bg-gradient-to-br from-[#1e293b] via-[#1e293b] to-[#0f172a] rounded-xl shadow-lg border border-[#334155]/50 p-6 hover:shadow-xl hover:border-[#3b82f6]/20 transition-all',
-    form: 'bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-xl shadow-xl p-6 border-2 border-[#3b82f6]/30',
-    superAdminPrimary: 'bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] rounded-xl shadow-xl p-6 text-white border-2 border-[#3b82f6]/50',
-    superAdminSecondary: 'bg-gradient-to-br from-[#3b82f6] via-[#2563eb] to-[#1d4ed8] rounded-xl shadow-xl p-6 text-white border-2 border-[#3b82f6]',
+    base: 'bg-gradient-to-br from-white to-gray-50 dark:from-[#1e293b] dark:to-[#0f172a] rounded-xl shadow-lg border border-gray-200 dark:border-[#334155]/50 p-6 hover:border-blue-300 dark:hover:border-[#3b82f6]/20 transition-all hover:shadow-xl',
+    stat: 'bg-gradient-to-br from-white to-gray-50 dark:from-[#1e293b] dark:via-[#1e293b] dark:to-[#0f172a] rounded-xl shadow-lg border border-gray-200 dark:border-[#334155]/50 p-6 hover:shadow-xl hover:border-blue-300 dark:hover:border-[#3b82f6]/20 transition-all',
+    form: 'bg-gradient-to-br from-white to-gray-50 dark:from-[#1e293b] dark:to-[#0f172a] rounded-xl shadow-xl p-6 border-2 border-blue-200 dark:border-[#3b82f6]/30',
+    superAdminPrimary: 'bg-gradient-to-br from-gray-50 to-white dark:from-[#0f172a] dark:via-[#1e293b] dark:to-[#0f172a] rounded-xl shadow-xl p-6 text-gray-900 dark:text-white border-2 border-blue-300 dark:border-[#3b82f6]/50',
+    superAdminSecondary: 'bg-gradient-to-br from-blue-500 to-blue-600 dark:from-[#3b82f6] dark:via-[#2563eb] dark:to-[#1d4ed8] rounded-xl shadow-xl p-6 text-white border-2 border-blue-500 dark:border-[#3b82f6]',
   },
 
   
@@ -137,38 +137,38 @@ export const theme = {
   //  BACKGROUNDS
   
   backgrounds: {
-    page: 'min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-black',
-    pageAlt: 'min-h-screen bg-gradient-to-br from-black via-[#0f172a] to-[#1e293b]',
-    header: 'bg-gradient-to-r from-[#0f172a] to-[#1e293b] border-b-2 border-[#3b82f6]/30 shadow-xl backdrop-blur-sm',
-    table: 'bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-xl shadow-lg overflow-hidden border-2 border-[#334155]/50',
-    tableRow: 'hover:bg-[#334155]/30 transition-colors border-b border-[#334155]/50',
+    page: 'min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-[#0f172a] dark:via-[#1e293b] dark:to-black',
+    pageAlt: 'min-h-screen bg-gradient-to-br from-white to-gray-50 dark:from-black dark:via-[#0f172a] dark:to-[#1e293b]',
+    header: 'bg-gradient-to-r from-white to-gray-50 dark:from-[#0f172a] dark:to-[#1e293b] border-b-2 border-blue-200 dark:border-[#3b82f6]/30 shadow-xl backdrop-blur-sm',
+    table: 'bg-gradient-to-br from-white to-gray-50 dark:from-[#1e293b] dark:to-[#0f172a] rounded-xl shadow-lg overflow-hidden border-2 border-gray-200 dark:border-[#334155]/50',
+    tableRow: 'hover:bg-gray-50 dark:hover:bg-[#334155]/30 transition-colors border-b border-gray-200 dark:border-[#334155]/50',
   },
 
   
   // 📐 TABELAS
   
   table: {
-    header: 'bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-[#3b82f6] uppercase tracking-widest',
-    cell: 'px-8 py-4 whitespace-nowrap text-sm text-[#cbd5e1] font-medium border-b border-[#334155]/50',
-    cellSecondary: 'px-8 py-4 whitespace-nowrap text-sm text-[#64748b] font-medium border-b border-[#334155]/50',
+    header: 'bg-gradient-to-r from-gray-50 to-white dark:from-[#0f172a] dark:to-black px-8 py-4 text-left text-xs font-black text-blue-600 dark:text-[#3b82f6] uppercase tracking-widest',
+    cell: 'px-8 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-[#cbd5e1] font-medium border-b border-gray-200 dark:border-[#334155]/50',
+    cellSecondary: 'px-8 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-[#64748b] font-medium border-b border-gray-200 dark:border-[#334155]/50',
   },
 
   
   // 🔔 ALERTAS E MENSAGENS
   
   alerts: {
-    success: 'bg-emerald-900/30 border-l-4 border-emerald-500/70 text-emerald-400 px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm font-semibold',
-    error: 'bg-red-900/30 border-l-4 border-red-500/70 text-red-400 px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm font-semibold',
-    warning: 'bg-amber-900/30 border-l-4 border-amber-500/70 text-amber-400 px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm font-semibold',
-    info: 'bg-[#1e293b]/50 border-l-4 border-[#334155]/70 text-[#cbd5e1] px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm font-semibold',
+    success: 'bg-green-50 dark:bg-emerald-900/30 border-l-4 border-green-500 dark:border-emerald-500/70 text-green-700 dark:text-emerald-400 px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm font-semibold',
+    error: 'bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 dark:border-red-500/70 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm font-semibold',
+    warning: 'bg-yellow-50 dark:bg-amber-900/30 border-l-4 border-yellow-500 dark:border-amber-500/70 text-yellow-700 dark:text-amber-400 px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm font-semibold',
+    info: 'bg-blue-50 dark:bg-[#1e293b]/50 border-l-4 border-blue-500 dark:border-[#334155]/70 text-blue-700 dark:text-[#cbd5e1] px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm font-semibold',
   },
 
   
   // 📑 TABS
   
   tabs: {
-    active: 'py-4 px-6 border-b-4 border-[#3b82f6] text-[#3b82f6] font-black transition-colors uppercase tracking-wide',
-    inactive: 'py-4 px-6 border-b-4 border-transparent text-[#64748b] hover:text-[#cbd5e1] hover:border-[#334155] font-bold transition-colors uppercase tracking-wide',
+    active: 'py-4 px-6 border-b-4 border-blue-500 dark:border-[#3b82f6] text-blue-600 dark:text-[#3b82f6] font-black transition-colors uppercase tracking-wide',
+    inactive: 'py-4 px-6 border-b-4 border-transparent text-gray-500 dark:text-[#64748b] hover:text-gray-700 dark:hover:text-[#cbd5e1] hover:border-gray-300 dark:hover:border-[#334155] font-bold transition-colors uppercase tracking-wide',
   },
 };
 
@@ -200,34 +200,34 @@ export function getStatusBadgeClass(
 
 export const statusLabels = {
   product: {
-    'RECEIVED': 'Recebido',
-    'IN_ANALYSIS': 'Em Análise',
-    'REJECTED': 'Rejeitado',
-    'APPROVED': 'Aprovado',
-    'IN_STORAGE': 'Em Armazenamento',
-    'IN_PREPARATION': 'Em Preparação',
-    'IN_SHIPPING': 'Em Expedição',
-    'DELIVERED': 'Entregue',
-    'IN_RETURN': 'Em Devolução',
-    'ELIMINATED': 'Eliminado',
-    'CANCELLED': 'Cancelado',
-    'DISPATCHED': 'Despachado',
+    'RECEIVED': 'Received',
+    'IN_ANALYSIS': 'In Analysis',
+    'REJECTED': 'Rejected',
+    'APPROVED': 'Approved',
+    'IN_STORAGE': 'In Storage',
+    'IN_PREPARATION': 'In Preparation',
+    'IN_SHIPPING': 'In Shipping',
+    'DELIVERED': 'Delivered',
+    'IN_RETURN': 'In Return',
+    'ELIMINATED': 'Eliminated',
+    'CANCELLED': 'Cancelled',
+    'DISPATCHED': 'Dispatched',
   } as Record<string, string>,
   vehicle: {
-    'available': 'Disponível',
-    'in_use': 'Em Uso',
-    'maintenance': 'Manutenção',
+    'available': 'Available',
+    'in_use': 'In Use',
+    'maintenance': 'Maintenance',
   } as Record<string, string>,
   transport: {
-    'PENDING': 'Pendente',
-    'IN_TRANSIT': 'Em Trânsito',
-    'DELIVERED': 'Entregue',
-    'CANCELLED': 'Cancelado',
+    'PENDING': 'Pending',
+    'IN_TRANSIT': 'In Transit',
+    'DELIVERED': 'Delivered',
+    'CANCELLED': 'Cancelled',
   } as Record<string, string>,
   user: {
     'SUPER_ADMIN': 'Super Admin',
-    'ADMIN': 'Administrador',
-    'OPERATOR': 'Operador',
+    'ADMIN': 'Administrator',
+    'OPERATOR': 'Operator',
   } as Record<string, string>,
 };
 
