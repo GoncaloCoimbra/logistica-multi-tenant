@@ -3,6 +3,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { queryClient } from './lib/react-query';
 import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import './styles/leaflet.css';
 
 // Layout
@@ -68,8 +70,10 @@ import SystemStatus from './pages/SystemStatus';
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
+      <ThemeProvider>
+        <AuthProvider>
+          <ErrorBoundary>
+          <BrowserRouter>
           <Routes>
 
             {/* ===================
@@ -241,7 +245,9 @@ function App() {
         </BrowserRouter>
 
         <ReactQueryDevtools initialIsOpen={false} />
-      </AuthProvider>
+        </ErrorBoundary>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
