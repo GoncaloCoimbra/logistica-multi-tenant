@@ -160,6 +160,31 @@ export class CompaniesController {
   }
 
   /**
+   * ℹ️ GET /companies/info
+   * Obter informações da empresa do utilizador atual (ADMIN apenas)
+   */
+  @Get('info')
+  @Roles(Role.ADMIN)
+  @ApiOperation({ summary: 'Obter informações da empresa atual (ADMIN)' })
+  async getCompanyInfo(@Request() req) {
+    this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    this.logger.log(`ℹ️ GET /companies/info - User: ${req.user.email} (${req.user.role})`);
+
+    if (!req.user.companyId) {
+      this.logger.error(`❌ ADMIN sem companyId`);
+      this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+      throw new BadRequestException('Utilizador sem empresa associada');
+    }
+
+    const company = await this.companiesService.findOne(req.user.companyId);
+    
+    this.logger.log(`✅ Informações da empresa retornadas: ${company.name}`);
+    this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    
+    return company;
+  }
+
+  /**
    * 👥 GET /companies/:id/users
    * Obter utilizadores da empresa:
    * - SUPER_ADMIN: Utilizadores de qualquer empresa

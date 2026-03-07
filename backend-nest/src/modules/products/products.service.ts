@@ -106,7 +106,7 @@ export class ProductsService {
   }
 
   async findAll(companyId: string, filters?: FilterProductDto) {
-    const where: any = { companyId };
+    const where: any = {};
 
     // Filtro por ID do fornecedor
     if (filters?.supplierId) {
