@@ -1,0 +1,106 @@
+{
+  "name": "@kubb/react",
+  "version": "2.28.4",
+  "description": "Generator react",
+  "keywords": [
+    "typescript",
+    "plugins",
+    "kubb",
+    "codegen"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kubb-labs/kubb.git",
+    "directory": "packages/react"
+  },
+  "license": "MIT",
+  "author": "Stijn Van Hulle <stijn@stijnvanhulle.be",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json",
+    "./jsx-runtime": {
+      "import": "./dist/jsx-runtime.js",
+      "require": "./dist/jsx-runtime.cjs",
+      "default": "./dist/jsx-runtime.cjs"
+    },
+    "./jsx-dev-runtime": {
+      "import": "./dist/jsx-runtime.js",
+      "require": "./dist/jsx-runtime.cjs",
+      "default": "./dist/jsx-runtime.cjs"
+    },
+    "./client": {
+      "import": "./dist/client.js",
+      "require": "./dist/client.cjs",
+      "default": "./dist/client.cjs"
+    },
+    "./server": {
+      "import": "./dist/server.js",
+      "require": "./dist/server.cjs",
+      "default": "./dist/server.cjs"
+    },
+    "./*": "./*"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "client": [
+        "./dist/client.d.ts"
+      ],
+      "server": [
+        "./dist/server.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "src",
+    "dist",
+    "*.d.ts",
+    "*.d.cts",
+    "!/**/**.test.**",
+    "!/**/__tests__/**"
+  ],
+  "dependencies": {
+    "natural-orderby": "^3.0.2",
+    "@kubb/core": "2.28.4",
+    "@kubb/fs": "2.28.4",
+    "@kubb/parser-ts": "2.28.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.9",
+    "@types/react-reconciler": "^0.28.8",
+    "prettier": "^3.3.3",
+    "react": "^18.3.1",
+    "react-reconciler": "^0.29.2",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.2",
+    "@kubb/config-biome": "2.28.4",
+    "@kubb/config-ts": "2.28.4",
+    "@kubb/config-tsup": "2.28.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "npx rimraf ./dist",
+    "lint": "bun biome lint .",
+    "lint:fix": "bun biome lint --apply-unsafe .",
+    "release": "pnpm publish --no-git-check",
+    "release:canary": "bash ../../.github/canary.sh && node ../../scripts/build.js canary && pnpm publish --no-git-check -tag canary",
+    "start": "tsup --watch",
+    "test": "vitest --passWithNoTests",
+    "typecheck": "tsc -p ./tsconfig.json --noEmit --emitDeclarationOnly false"
+  }
+}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["/home/runner/work/kubb/kubb/packages/swagger/dist/components.cjs","../src/components.ts"],"names":[],"mappings":"AAAA;ACAA,yFAAc","file":"/home/runner/work/kubb/kubb/packages/swagger/dist/components.cjs","sourcesContent":[null,"export * from '@kubb/plugin-oas/components'\n"]}

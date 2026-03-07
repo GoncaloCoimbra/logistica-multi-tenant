@@ -1,0 +1,1 @@
+{"version":3,"sources":["/home/runner/work/kubb/kubb/packages/swagger/dist/hooks.cjs","../src/hooks.ts"],"names":[],"mappings":"AAAA;ACAA,0EAAc","file":"/home/runner/work/kubb/kubb/packages/swagger/dist/hooks.cjs","sourcesContent":[null,"export * from '@kubb/plugin-oas/hooks'\n"]}

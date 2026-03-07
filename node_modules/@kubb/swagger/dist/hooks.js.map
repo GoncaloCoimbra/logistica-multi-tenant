@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/hooks.ts"],"sourcesContent":["export * from '@kubb/plugin-oas/hooks'\n"],"mappings":";AAAA,cAAc;","names":[]}

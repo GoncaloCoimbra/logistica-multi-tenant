@@ -1,0 +1,126 @@
+{
+  "name": "@kubb/core",
+  "version": "2.28.4",
+  "description": "Generator core",
+  "keywords": [
+    "typescript",
+    "plugins",
+    "kubb",
+    "codegen"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kubb-labs/kubb.git",
+    "directory": "packages/core"
+  },
+  "license": "MIT",
+  "author": "Stijn Van Hulle <stijn@stijnvanhulle.be",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    },
+    "./utils": {
+      "import": "./dist/utils.js",
+      "require": "./dist/utils.cjs",
+      "default": "./dist/utils.cjs"
+    },
+    "./transformers": {
+      "import": "./dist/transformers.js",
+      "require": "./dist/transformers.cjs",
+      "default": "./dist/transformers.cjs"
+    },
+    "./logger": {
+      "import": "./dist/logger.js",
+      "require": "./dist/logger.cjs",
+      "default": "./dist/logger.cjs"
+    },
+    "./mocks": {
+      "import": "./dist/mocks.js",
+      "require": "./dist/mocks.cjs",
+      "default": "./dist/mocks.cjs"
+    },
+    "./package.json": "./package.json",
+    "./globals": {
+      "types": "./globals.d.ts"
+    },
+    "./*": "./*"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "utils": [
+        "./dist/utils.d.ts"
+      ],
+      "transformers": [
+        "./dist/transformers.d.ts"
+      ],
+      "logger": [
+        "./dist/logger.d.ts"
+      ],
+      "mocks": [
+        "./dist/mocks.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "src",
+    "dist",
+    "*.d.ts",
+    "*.d.cts",
+    "schema.json",
+    "!/**/**.test.**",
+    "!/**/__tests__/**"
+  ],
+  "dependencies": {
+    "change-case": "^5.4.4",
+    "directory-tree": "^3.5.2",
+    "find-up": "^7.0.0",
+    "natural-orderby": "^3.0.2",
+    "p-queue": "^8.0.1",
+    "remeda": "^2.14.0",
+    "seedrandom": "^3.0.5",
+    "semver": "^7.6.3",
+    "unraw": "^3.0.0",
+    "@kubb/fs": "2.28.4",
+    "@kubb/parser-ts": "2.28.4",
+    "@kubb/types": "2.28.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.9",
+    "@types/seedrandom": "^3.0.8",
+    "@types/semver": "^7.5.8",
+    "consola": "^3.2.3",
+    "ora": "^8.1.0",
+    "prettier": "^3.3.3",
+    "tinyrainbow": "^1.2.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.2",
+    "@kubb/config-biome": "2.28.4",
+    "@kubb/config-ts": "2.28.4",
+    "@kubb/config-tsup": "2.28.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "npx rimraf ./dist",
+    "lint": "bun biome lint .",
+    "lint:fix": "bun biome lint --apply-unsafe .",
+    "release": "pnpm publish --no-git-check",
+    "release:canary": "bash ../../.github/canary.sh && node ../../scripts/build.js canary && pnpm publish --no-git-check",
+    "start": "tsup --watch",
+    "test": "vitest --passWithNoTests",
+    "typecheck": "tsc -p ./tsconfig.json --noEmit --emitDeclarationOnly false"
+  }
+}

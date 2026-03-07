@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/components.ts"],"sourcesContent":["export * from '@kubb/plugin-oas/components'\n"],"mappings":";AAAA,cAAc;","names":[]}
