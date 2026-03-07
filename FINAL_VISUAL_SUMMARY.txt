@@ -239,7 +239,7 @@
 ║                                                                           ║
 ║             🎉 EVERYTHING READY! START READING: START_HERE.txt              ║
 ║                                                                           ║
-║                     E DEPOIS: npm run start:dev                           ║
+║                     AND THEN: npm run start:dev                           ║
 ║                                                                           ║
 ╚═══════════════════════════════════════════════════════════════════════════╝
 
