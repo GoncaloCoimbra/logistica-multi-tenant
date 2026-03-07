@@ -186,13 +186,13 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
                 required
                 className={theme.inputs.base}
               >
-                <option value="OPERATOR">Operador</option>
-                <option value="ADMIN">Administrador</option>
+                <option value="OPERATOR">Operator</option>
+                <option value="ADMIN">Administrator</option>
               </select>
               <p className="mt-1 text-xs text-slate-400">
                 {formData.role === 'ADMIN' 
-                  ? 'Tem acesso total ao sistema e pode gerir utilizadores' 
-                  : 'Pode gerir produtos, fornecedores e transportes'}
+                  ? 'Has full access to the system and can manage users' 
+                  : 'Can manage products, suppliers and transports'}
               </p>
             </div>
 

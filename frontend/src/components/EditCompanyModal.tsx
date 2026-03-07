@@ -189,7 +189,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({ company, onClose, o
               className={theme.buttons.primary + " disabled:opacity-50"}
               disabled={loading}
             >
-              {loading ? 'Salvando...' : 'Salvar Alterações'}
+              {loading ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </form>

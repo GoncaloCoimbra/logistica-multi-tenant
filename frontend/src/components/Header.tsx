@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import NotificationPanel from './NotificationPanel';
 import { theme } from '../theme.config';
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { theme: currentTheme, toggleTheme } = useTheme();
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
@@ -26,20 +28,20 @@ const Header: React.FC = () => {
   const getRoleLabel = (role: string) => {
     switch(role) {
       case 'SUPER_ADMIN':
-        return 'Super Administrador';
+        return 'Super Administrator';
       case 'ADMIN':
-        return 'Administrador';
+        return 'Administrator';
       case 'OPERATOR':
-        return 'Operador';
+        return 'Operator';
       default:
         return role;
     }
   };
 
   // Funções do calendário
-  const getMesesPortugues = () => [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  const getMonthsEnglish = () => [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
   const getDiasCalendario = (mes: Date) => {
@@ -74,7 +76,7 @@ const Header: React.FC = () => {
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
     setShowCalendar(false);
-    console.log('Data selecionada:', date.toLocaleDateString('pt-PT'));
+    console.log('Selected date:', date.toLocaleDateString('en-US'));
   };
 
   return (
@@ -101,7 +103,7 @@ const Header: React.FC = () => {
               <button 
                 onClick={() => setShowCalendar(!showCalendar)}
                 className={`${theme.buttons.icon} relative`}
-                title="Calendário"
+                title="Calendar"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -129,7 +131,7 @@ const Header: React.FC = () => {
                           </svg>
                         </button>
                         <h3 className="text-lg font-semibold">
-                          {getMesesPortugues()[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+                          {getMonthsEnglish()[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                         </h3>
                         <button
                           onClick={(e) => {
@@ -144,13 +146,13 @@ const Header: React.FC = () => {
                         </button>
                       </div>
                       <p className="text-sm text-blue-100">
-                        Data selecionada: {selectedDate.toLocaleDateString('pt-PT')}
+                        Selected date: {selectedDate.toLocaleDateString('en-US')}
                       </p>
                     </div>
                     
                     <div className="p-4">
                       <div className="grid grid-cols-7 gap-1 mb-2">
-                        {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(dia => (
+                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(dia => (
                           <div key={dia} className="h-8 flex items-center justify-center text-xs font-semibold text-[#64748b]">
                             {dia}
                           </div>
@@ -204,16 +206,33 @@ const Header: React.FC = () => {
                         }}
                         className="text-xs text-[#3b82f6] hover:text-[#2563eb] font-medium"
                       >
-                        Hoje
+                        Today
                       </button>
                       <p className="text-xs text-[#64748b]">
-                        Sistema de Gestão Logística
+                        Logistics Management System
                       </p>
                     </div>
                   </div>
                 </>
               )}
             </div>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className={`${theme.buttons.icon} relative`}
+              title={`Switch to ${currentTheme === 'light' ? 'dark' : 'light'} theme`}
+            >
+              {currentTheme === 'light' ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              )}
+            </button>
 
             {/* User Menu */}
             {user && (

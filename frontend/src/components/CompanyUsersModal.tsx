@@ -136,7 +136,7 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
           {error && <div className="error-message">{error}</div>}
 
           {loading ? (
-            <div className="loading">Carregando usuários...</div>
+            <div className="loading">Loading users...</div>
           ) : (
             <div className="users-table">
               <table>

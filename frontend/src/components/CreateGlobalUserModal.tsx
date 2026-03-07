@@ -165,9 +165,9 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               className={theme.inputs.base}
               required
             >
-              <option value="OPERATOR">Operador</option>
-              <option value="ADMIN">Administrador</option>
-              <option value="SUPER_ADMIN">Super Administrador</option>
+              <option value="OPERATOR">Operator</option>
+              <option value="ADMIN">Administrator</option>
+              <option value="SUPER_ADMIN">Super Administrator</option>
             </select>
           </div>
 

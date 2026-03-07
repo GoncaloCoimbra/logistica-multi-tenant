@@ -57,12 +57,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Acesso Negado</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
           <p className="text-slate-300 mb-2">
-            Você não tem permissão para aceder a esta página. É necessário ser Super Administrador.
+            You do not have permission to access this page. You must be a Super Administrator.
           </p>
           <p className="text-sm text-slate-400 mb-6">
-            Seu role atual: <span className="font-bold">{user.role}</span>
+            Your current role: <span className="font-bold">{user.role}</span>
           </p>
           <button
             onClick={() => window.history.back()}
@@ -86,15 +86,15 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Acesso Negado</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
           <p className="text-slate-300 mb-6">
-            Você não tem permissão para aceder a esta página. É necessário ser Administrador.
+            You do not have permission to access this page. You must be an Administrator.
           </p>
           <button
             onClick={() => window.history.back()}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
-            Voltar
+            Back
           </button>
         </div>
       </div>
@@ -112,15 +112,15 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">Acesso Negado</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
           <p className="text-slate-300 mb-6">
-            Você não tem permissão para aceder a esta página. É necessário ser Operador ou Administrador.
+            You do not have permission to access this page. You must be an Operator or Administrator.
           </p>
           <button
             onClick={() => window.history.back()}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
-            Voltar
+            Back
           </button>
         </div>
       </div>

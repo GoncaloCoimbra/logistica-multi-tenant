@@ -1,7 +1,8 @@
 import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';  // ← ADICIONE ESTA IMPORTAÇÃO
-import Footer from './Footer'; 
+import Footer from './Footer';
+import { theme } from '../theme.config';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,7 +10,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-900">
+    <div className={`${theme.backgrounds.page} flex flex-col`}>
       {/* Header */}
       <Header />
 
