@@ -112,8 +112,10 @@ describe('TransportsService', () => {
         id: '1',
         transportId: 'TRN-001',
         name: 'Transport with Unknown City',
-        originCity: 'UnknownCity123',
-        destinationCity: 'AnotherUnknownCity456',
+        origin: 'UnknownCity123',
+        destination: 'AnotherUnknownCity456',
+        departureDate: new Date(),
+        estimatedArrival: new Date(Date.now() + 3600000), // 1 hour later
         status: 'pending',
       };
 
@@ -139,8 +141,10 @@ describe('TransportsService', () => {
         id: '1',
         transportId: 'TRN-001',
         name: 'Transport 1',
-        originCity: 'Lisboa',
-        destinationCity: 'Porto',
+        origin: 'Lisboa',
+        destination: 'Porto',
+        departureDate: new Date(),
+        estimatedArrival: new Date(Date.now() + 3600000),
         status: 'completed',
         company: {
           id: 'comp-1',
