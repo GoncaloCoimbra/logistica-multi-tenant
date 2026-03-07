@@ -1,9 +1,9 @@
-﻿import {  
-  Injectable, 
-  CanActivate, 
-  ExecutionContext, 
-  ForbiddenException, 
-  Logger 
+﻿import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Logger
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
 
@@ -20,49 +20,49 @@ export class TenantGuard implements CanActivate {
     this.logger.log(` TenantGuard - ${method} ${url}`);
 
     if (!user) {
-      this.logger.error(' Usuário não autenticado');
-      throw new ForbiddenException('Usuário não autenticado');
+      this.logger.error(' User not authenticated');
+      throw new ForbiddenException('User not authenticated');
     }
 
-    // SUPER_ADMIN tem acesso total
+    // SUPER_ADMIN has full access
     if (user.role === Role.SUPER_ADMIN) {
-      this.logger.log('SUPER_ADMIN - acesso total');
+      this.logger.log('SUPER_ADMIN - full access');
       return true;
     }
 
-    // Valida se usuário tem companyId
+    // Validate if user has companyId
     if (!user.companyId) {
-      this.logger.error(` User ${user.email} sem empresa associada`);
-      throw new ForbiddenException('Utilizador sem empresa associada');
+      this.logger.error(` User ${user.email} without associated company`);
+      throw new ForbiddenException('User without associated company');
     }
 
-    // Injeta companyId no body (POST/PATCH/PUT)
+    // Inject companyId in body (POST/PATCH/PUT)
     if (['POST', 'PATCH', 'PUT'].includes(method) && request.body) {
-      // Valida se está a tentar manipular dados de outra empresa
+      // Validate if trying to manipulate data from another company
       if (request.body.companyId && request.body.companyId !== user.companyId) {
         this.logger.error(
-          ` User ${user.email} tentou manipular empresa ${request.body.companyId}`
+          ` User ${user.email} tried to manipulate company ${request.body.companyId}`
         );
-        throw new ForbiddenException('Não pode manipular dados de outra empresa');
+        throw new ForbiddenException('Cannot manipulate data from another company');
       }
-      
-      // Força companyId do utilizador
+
+      // Force user's companyId
       request.body.companyId = user.companyId;
-      this.logger.debug(`CompanyId injetado: ${user.companyId}`);
+      this.logger.debug(`CompanyId injected: ${user.companyId}`);
     }
 
-    // Valida companyId nos params (GET/DELETE com :companyId na rota)
+    // Validate companyId in params (GET/DELETE with :companyId in route)
     if (request.params?.companyId && request.params.companyId !== user.companyId) {
       this.logger.error(
-        ` User ${user.email} tentou aceder empresa ${request.params.companyId}`
+        ` User ${user.email} tried to access company ${request.params.companyId}`
       );
-      throw new ForbiddenException('Não pode aceder dados de outra empresa');
+      throw new ForbiddenException('Cannot access data from another company');
     }
 
-    // Disponibiliza companyId directamente no request
+    // Make companyId directly available in request
     request.companyId = user.companyId;
-    
-    this.logger.log(`Tenant OK - ${user.email} | Empresa: ${user.companyId}`);
+
+    this.logger.log(`Tenant OK - ${user.email} | Company: ${user.companyId}`);
     return true;
   }
 }

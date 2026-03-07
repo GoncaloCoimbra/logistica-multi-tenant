@@ -83,10 +83,10 @@ export class AuditLogInterceptor implements NestInterceptor {
           );
         } catch (error) {
           this.logger.error(
-            ` [AUDIT ERROR] Não foi possível registar auditoria: ${error.message}`,
+            ` [AUDIT ERROR] Could not register audit: ${error.message}`,
             error.stack,
           );
-          // NÃO falha a requisição se o audit log falhar
+          // DOES NOT fail the request if audit log fails
         }
       }),
       catchError((error) => {
@@ -97,7 +97,7 @@ export class AuditLogInterceptor implements NestInterceptor {
           console.log(' [INTERCEPTOR] Erro na requisição (detalhes):', errorDetail);
         }
 
-        // Se houver erro na requisição, também tenta registar
+        // If there is an error in the request, also tries to register
         try {
           if (user) {
             const { entity, action } = this.extractEntityAndAction(method, url);
@@ -109,7 +109,7 @@ export class AuditLogInterceptor implements NestInterceptor {
             }
           }
         } catch (auditError) {
-          // Silenciosamente ignora erros do audit durante erros
+          // Silently ignores audit errors during errors
         }
 
         // For diagnosis, also log the stack if present
@@ -117,7 +117,7 @@ export class AuditLogInterceptor implements NestInterceptor {
           this.logger.debug(` [INTERCEPTOR] Stack: ${error.stack}`);
         }
 
-        throw error; //  IMPORTANTE: Propaga o erro original
+        throw error; // IMPORTANT: Propagates the original error
       }),
     );
   }
