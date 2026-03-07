@@ -1,42 +1,42 @@
-# Melhorias do Histórico de Rastreamento GPS - v2.0
+# GPS Tracking History Improvements - v2.0
 
-## 📋 Resumo das Alterações
+## 📋 Summary of Changes
 
-Foram implementadas as seguintes melhorias no módulo de histórico de rastreamento de transportes:
+The following improvements were implemented in the transport tracking history module:
 
-### ✅ Novas Funcionalidades Implementadas
+### ✅ New Features Implemented
 
-#### 1. **Visualização de Rotas em Mapa Interativo**
-- Componente `TrackingMap.tsx` que exibe todas as rotas num mapa Leaflet
-- Código de cores para diferentes estados: ✅ Completo (verde), 🔵 Em progresso (azul), ⏳ Pendente (laranja)
-- Marcadores para origem (S) e destino (F)
-- Polylines para visualizar o trail da rota
-- Zoom automático para ajustar as rotas visíveis
-- Popup com informações ao clicar em marcadores
+#### 1. **Interactive Map Route Visualization**
+- `TrackingMap.tsx` component that displays all routes on a Leaflet map
+- Color coding for different states: ✅ Complete (green), 🔵 In progress (blue), ⏳ Pending (orange)
+- Markers for origin (S) and destination (F)
+- Polylines to visualize the route trail
+- Auto zoom to fit visible routes
+- Popup with information when clicking markers
 
-#### 2. **Simulador Visual de Trajetos**
-- Componente `RouteSimulator.tsx` para simular o movimento da rota
-- Controles de reprodução (play/pausa/reiniciar)
-- Ajuste de velocidade de simulação (0.5x, 1x, 2x, 4x, 8x)
-- Barra de progresso em tempo real
-- Exibição de localização atual (lat/lng/velocidade)
-- Contador de tempo decorrido vs tempo total
-- Salto para o fim da rota
+#### 2. **Visual Route Simulator**
+- `RouteSimulator.tsx` component to simulate route movement
+- Playback controls (play/pause/restart)
+- Adjustable simulation speed (0.5x, 1x, 2x, 4x, 8x)
+- Real-time progress bar
+- Display of current location (lat/lng/speed)
+- Elapsed time vs total time counter
+- Jump to end of route
 
-#### 3. **Botão para Apagar Rastreamento GPS**
-- Botão "Apagar Tudo" com confirmação
-- Modal de confirmação para evitar eliminações acidentais
-- Dois níveis de limpeza:
-  - **Apenas Rastreamentos**: Elimina dados GPS históricos
-  - **Transporte Completo**: Elimina rotas individuais com verificação de permissões
-- Feedback visual durante a operação
+#### 3. **Button to Delete GPS Tracking**
+- "Delete All" button with confirmation
+- Confirmation modal to prevent accidental deletions
+- Two levels of cleaning:
+  - **Tracking Only**: Eliminates historical GPS data
+  - **Complete Transport**: Eliminates individual routes with permission verification
+- Visual feedback during operation
 
-#### 4. **Endpoints REST do Backend**
-- `GET /transports/tracking-routes/all` - Obtém todas as rotas de rastreamento
-- `DELETE /transports/tracking-routes/clear-all` - Elimina todo o rastreamento (Admin/Super Admin)
-- `DELETE /transports/tracking-routes/:id` - Elimina rastreamento de uma rota específica
+#### 4. **Backend REST Endpoints**
+- `GET /transports/tracking-routes/all` - Gets all tracking routes
+- `DELETE /transports/tracking-routes/clear-all` - Deletes all tracking (Admin/Super Admin)
+- `DELETE /transports/tracking-routes/:id` - Deletes tracking for a specific route
 
-### 🎨 Novas Bibliotecas Instaladas
+### 🎨 New Libraries Installed
 
 ```json
 {
@@ -46,86 +46,86 @@ Foram implementadas as seguintes melhorias no módulo de histórico de rastreame
 }
 ```
 
-### 📁 Ficheiros Criados/Modificados
+### 📁 Created/Modified Files
 
 **Frontend:**
-- ✅ `src/components/TrackingMap.tsx` - Novo componente de mapa
-- ✅ `src/components/RouteSimulator.tsx` - Novo componente de simulador
-- ✅ `src/styles/leaflet.css` - Estilos customizados para Leaflet
-- ✅ `src/pages/LiveTrackingAndRouteOptimization.tsx` - Atualizado com novas funcionalidades
-- ✅ `src/App.tsx` - Adicionar import de CSS Leaflet
+- ✅ `src/components/TrackingMap.tsx` - New map component
+- ✅ `src/components/RouteSimulator.tsx` - New simulator component
+- ✅ `src/styles/leaflet.css` - Custom styles for Leaflet
+- ✅ `src/pages/LiveTrackingAndRouteOptimization.tsx` - Updated with new features
+- ✅ `src/App.tsx` - Add Leaflet CSS import
 
 **Backend:**
-- ✅ `src/modules/transports/controllers/transports.controller.ts` - 3 novos endpoints
-- ✅ `src/modules/transports/transports.service.ts` - 3 novos métodos
+- ✅ `src/modules/transports/controllers/transports.controller.ts` - 3 new endpoints
+- ✅ `src/modules/transports/transports.service.ts` - 3 new methods
 
-### 🔐 Permissões e Segurança
+### 🔐 Permissions and Security
 
-- **GET /transports/tracking-routes/all**: Requer ADMIN, OPERATOR ou SUPER_ADMIN
-- **DELETE /transports/tracking-routes/clear-all**: Requer apenas ADMIN ou SUPER_ADMIN
-- **DELETE /transports/tracking-routes/:id**: Requer ADMIN, OPERATOR ou SUPER_ADMIN
-- Validação automática de company_id para multi-tenancy
+- **GET /transports/tracking-routes/all**: Requires ADMIN, OPERATOR or SUPER_ADMIN
+- **DELETE /transports/tracking-routes/clear-all**: Requires only ADMIN or SUPER_ADMIN
+- **DELETE /transports/tracking-routes/:id**: Requires ADMIN, OPERATOR or SUPER_ADMIN
+- Automatic company_id validation for multi-tenancy
 
-### 🚀 Como Usar
+### 🚀 How to Use
 
-#### Na Página de Histórico (aba "Histórico"):
+#### On History Page (tab "Histórico"):
 
-1. **Ver Rotas no Mapa:**
-   - O mapa interativo mostra todas as rotas com cores diferentes
-   - Clique em uma rota para selecioná-la e ver detalhes
+1. **View Routes on Map:**
+   - The interactive map shows all routes with different colors
+   - Click on a route to select it and see details
 
-2. **Simular uma Rota:**
-   - Selecione uma rota no mapa
-   - O simulador aparecerá automaticamente
-   - Use os botões de controle para reproduzir a rota
-   - Ajuste a velocidade conforme necessário
+2. **Simulate a Route:**
+   - Select a route on the map
+   - The simulator will appear automatically
+   - Use control buttons to play the route
+   - Adjust speed as needed
 
-3. **Eliminar Rastreamento:**
-   - Clique no botão "Apagar Tudo" para eliminar todo o histórico
-   - Confirme na modal de confirmação
-   - Ou clique no ícone 🗑️ ao lado de uma rota individual para eliminar apenas essa
+3. **Delete Tracking:**
+   - Click the "Delete All" button to delete all history
+   - Confirm in the confirmation modal
+   - Or click the 🗑️ icon next to an individual route to delete only that one
 
-### 📊 Dados de Demonstração
+### 📊 Demo Data
 
-O sistema gera rotas de exemplo com:
-- Pontos GPS realistas (latitude/longitude)
-- Timestamps para cada ponto
-- Velocidade simulada
-- Estados: pendente, em progresso, completo
+The system generates example routes with:
+- Realistic GPS points (latitude/longitude)
+- Timestamps for each point
+- Simulated speed
+- States: pending, in progress, complete
 
-### 🛠️ Exemplos de API
+### 🛠️ API Examples
 
 ```bash
-# Obter rotas de rastreamento
+# Get tracking routes
 GET /api/transports/tracking-routes/all
 Authorization: Bearer {jwt_token}
 
-# Eliminar todo rastreamento
+# Delete all tracking
 DELETE /api/transports/tracking-routes/clear-all
 Authorization: Bearer {jwt_token}
 
-# Eliminar rastreamento específico
+# Delete specific tracking
 DELETE /api/transports/tracking-routes/{transportId}
 Authorization: Bearer {jwt_token}
 ```
 
-### 📝 Notas de Desenvolvimento
+### 📝 Development Notes
 
-1. **Mapas:** O mapa usa OpenStreetMap (OSM) como provedor de tiles
-2. **Coordenadas:** As coordenadas são pré-definidas nos dados de exemplo. Para usar dados reais, integre com um serviço GPS
-3. **Performance:** O mapa suporta até centenas de rotas sem degradação significativa
-4. **Responsividade:** Os componentes são totalmente responsivos e adaptam-se a diferentes tamanhos de tela
+1. **Maps:** The map uses OpenStreetMap (OSM) as tile provider
+2. **Coordinates:** Coordinates are predefined in example data. To use real data, integrate with a GPS service
+3. **Performance:** The map supports hundreds of routes without significant degradation
+4. **Responsiveness:** Components are fully responsive and adapt to different screen sizes
 
-### 🔄 Próximas Melhorias Sugeridas
+### 🔄 Suggested Next Improvements
 
-1. Integração com provedor de GPS real (Google Maps, Mapbox, etc.)
-2. Armazenamento de dados GPS no banco de dados
-3. Análise de rotas (tempo, distância, combustível)
-4. Alertas em tempo real quando veículos desviam da rota
-5. Exportação de relatórios de rastreamento em PDF
-6. Integração com sistema de notificações para chegadas/desvios
+1. Integration with real GPS provider (Google Maps, Mapbox, etc.)
+2. GPS data storage in database
+3. Route analysis (time, distance, fuel)
+4. Real-time alerts when vehicles deviate from route
+5. Tracking report export in PDF
+6. Integration with notification system for arrivals/deviations
 
-### ✨ Componentes Customizados
+### ✨ Custom Components
 
 #### TrackingMap Props
 ```typescript
