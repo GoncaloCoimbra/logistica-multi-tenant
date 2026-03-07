@@ -1,4 +1,4 @@
-# Logística Multi-Tenant
+# Multi-Tenant Logistics
 
 [![Tests](https://github.com/your-org/logistica-multi-tenant/workflows/Run%20Tests/badge.svg)](https://github.com/your-org/logistica-multi-tenant/actions)
 [![Lint & Format](https://github.com/your-org/logistica-multi-tenant/workflows/Lint%20%26%20Format/badge.svg)](https://github.com/your-org/logistica-multi-tenant/actions)
@@ -10,9 +10,9 @@
 
 ---
 
-Este repositório contém uma plataforma completa de gestão logística multi-tenant. O código está dividido em dois backends (Express clássico e NestJS) e um frontend React moderno. O objetivo deste documento é orientar novos desenvolvedores, testers e operadores a rodar, testar e evoluir o sistema.
+This repository contains a complete multi-tenant logistics management platform. The code is divided into two backends (classic Express and NestJS) and a modern React frontend. The goal of this document is to guide new developers, testers, and operators to run, test, and evolve the system.
 
-> **Nota:** para chegar a uma pontuação 10/10 em todas as categorias é necessário completar a lista de melhorias mais abaixo.
+> **Note:** to reach a score of 10/10 in all categories, it is necessary to complete the list of improvements below.
 
 ---
 
@@ -28,34 +28,34 @@ Este repositório contém uma plataforma completa de gestão logística multi-te
   └─ docs/              # documentação adicional (screenshots, guias)
 ```
 
-> **Decisão:** o subprojeto `backend` baseado em Express não recebe mais atualizações. Todas as novas features e correções devem ser implementadas em `backend-nest`. O diretório `backend` poderá ser removido assim que todo código relevante for migrado ou provado desnecessário; até lá trata-se apenas de um artefato legado.
+> **Decision:** the `backend` subproject based on Express no longer receives updates. All new features and fixes must be implemented in `backend-nest`. The `backend` directory can be removed once all relevant code is migrated or proven unnecessary; until then it is just a legacy artifact.
 
 ---
 
-## 🚀 Inicialização rápida (ambiente de desenvolvimento)
+## 🚀 Quick Start (development environment)
 
-1. **Clonar e instalar dependências:**
+1. **Clone and install dependencies:**
    ```bash
    git clone <repo> && cd logistica-multi-tenant
-   npm install --workspaces # ou instalar separadamente em cada subdiretório
+   npm install --workspaces # or install separately in each subdirectory
    ```
 
-2. **Copiar variáveis de ambiente:**
+2. **Copy environment variables:**
    ```bash
    cp backend/.env.example backend/.env
    cp backend-nest/.env.example backend-nest/.env
-   cp frontend/.env.example frontend/.env # caso exista
+   cp frontend/.env.example frontend/.env # if exists
    ```
-   Preencha `DATABASE_URL` apontando para o Postgres que será iniciado.
+   Fill `DATABASE_URL` pointing to the Postgres that will be started.
 
-3. **Rodar o banco de dados e a API via Docker Compose:**
+3. **Run database and API via Docker Compose:**
    ```bash
    docker-compose up -d
-   # espera até que o serviço "db" esteja saudável
+   # wait until the "db" service is healthy
    npm run --workspace=backend prisma migrate dev
    npm run --workspace=backend seed
    ```
-   ou, se preferir, use o backend-nest:
+   or, if you prefer, use backend-nest:
    ```bash
    npm run --workspace=backend-nest prisma migrate dev
    npm run --workspace=backend-nest seed
@@ -66,12 +66,12 @@ Este repositório contém uma plataforma completa de gestão logística multi-te
    cd frontend
    npm run dev
    ```
-   abra http://localhost:5173
+   open http://localhost:5173
 
-5. **Testes:**
+5. **Tests:**
    ```bash
-   npm run --workspace=backend test          # unitários
-   npm run --workspace=backend test:e2e     # integração
+   npm run --workspace=backend test          # unit
+   npm run --workspace=backend test:e2e     # integration
    npm run --workspace=frontend test        # jest/react-testing-library
    ```
 
