@@ -1,103 +1,103 @@
-# 🏢 Sistema de Gestão Logística Multi-Tenant
+# 🏢 Multi-Tenant Logistics Management System
 
-Sistema completo de gestão de inventário e logística para múltiplas empresas (multi-tenant), com controlo de estados, histórico de movimentações e dashboard de métricas.
-
----
-
- 📋 Funcionalidades Principais
-
-  Gestão de Empresas e Utilizadores
-- Registo de empresas independentes
-- Multi-tenant com isolamento total de dados
-- Perfis: **Administrador** e **Operador**
-- Autenticação JWT segura
-
- Gestão de Inventário
-- CRUD completo de produtos
-- Máquina de estados com 11 estados diferentes
-- Histórico completo de movimentações
-- Filtros por estado, fornecedor e localização
-- Validação de transições de estado
-
- Estados do Produto
-1. **Recebido** → Produto chegou ao armazém
-2. **Em análise** → A ser verificado
-3. **Rejeitado** → Não conforme
-4. **Aprovado** → Validado para armazenamento
-5. **Em armazenamento** → Guardado no armazém
-6. **Em preparação** → A ser embalado
-7. **Em expedição** → Em transporte
-8. **Entregue** → Chegou ao destino
-9. **Em devolução** → Devolvido ao fornecedor
-10. **Eliminado** → Descartado
-11. **Cancelado** → Envio cancelado
-
- Dashboard e Métricas
-- Total de produtos
-- Produtos em armazenamento
-- Entregas realizadas
-- Movimentações dos últimos 30 dias
-- Gráficos de distribuição por estado
-- Top 5 fornecedores
-
- Gestão de Fornecedores
-- CRUD de fornecedores (backend completo)
-- Associação produtos ↔ fornecedores
-- Histórico de produtos por fornecedor
+Complete inventory and logistics management system for multiple companies (multi-tenant), with state control, movement history, and metrics dashboard.
 
 ---
 
-  Como Executar o Projeto
+ 📋 Main Features
 
- Pré-requisitos
-- Docker Desktop instalado
-- Node.js 18+ (opcional, para desenvolvimento)
+  Company and User Management
+- Registration of independent companies
+- Multi-tenant with total data isolation
+- Profiles: **Administrator** and **Operator**
+- Secure JWT authentication
 
- 1. Clonar o repositório
+ Inventory Management
+- Complete CRUD of products
+- State machine with 11 different states
+- Complete movement history
+- Filters by state, supplier, and location
+- Validation of state transitions
+
+ Product States
+1. **Received** → Product arrived at warehouse
+2. **Under analysis** → Being verified
+3. **Rejected** → Non-conforming
+4. **Approved** → Validated for storage
+5. **In storage** → Stored in warehouse
+6. **In preparation** → Being packaged
+7. **In shipping** → In transport
+8. **Delivered** → Arrived at destination
+9. **In return** → Returned to supplier
+10. **Eliminated** → Discarded
+11. **Cancelled** → Shipment cancelled
+
+ Dashboard and Metrics
+- Total products
+- Products in storage
+- Deliveries made
+- Movements in the last 30 days
+- Distribution charts by state
+- Top 5 suppliers
+
+ Supplier Management
+- CRUD of suppliers (complete backend)
+- Association products ↔ suppliers
+- Product history by supplier
+
+---
+
+  How to Run the Project
+
+ Prerequisites
+- Docker Desktop installed
+- Node.js 18+ (optional, for development)
+
+ 1. Clone the repository
 ```bash
-git clone <url-do-repositorio>
+git clone <repository-url>
 cd LOGISTICA-MULTI-TENANT
 ```
 
- 2. Configurar variáveis de ambiente
+ 2. Configure environment variables
 
-**Backend (.env no backend):**
+**Backend (.env in backend):**
 ```env
 DATABASE_URL="postgresql://postgres:postgres@db:5432/logistica"
-JWT_SECRET="seu-secret-super-secreto-aqui"
+JWT_SECRET="your-super-secret-here"
 PORT=5000
 ```
 
-**Frontend (.env no frontend):**
+**Frontend (.env in frontend):**
 ```env
 VITE_API_URL=http://localhost:5000
 ```
 
- 3. Executar com Docker
+ 3. Run with Docker
 ```bash
-# Iniciar todos os serviços
+# Start all services
 docker-compose up --build
 
-# Aguardar até ver:
-# ✓ Backend rodando na porta 5000
-# ✓ Frontend rodando na porta 5173
-# ✓ PostgreSQL rodando na porta 5432
+# Wait until you see:
+# ✓ Backend running on port 5000
+# ✓ Frontend running on port 5173
+# ✓ PostgreSQL running on port 5432
 
- 4. Aceder à aplicação
+ 4. Access the application
 
 - **Frontend:** http://localhost:5173
 - **Backend API:** http://localhost:5000
 
 
 
- Credenciais de Teste
+ Test Credentials
 
- Conta Administrador
+ Administrator Account
 
 Email: admin@empresa.com
 Password: Admin123!
 
- Conta Operador
+ Operator Account
 
 Email: operador@empresa.com
 Password: Operador123!
@@ -105,33 +105,33 @@ Password: Operador123!
 
 
 
-  Fluxo Operacional Básico
+  Basic Operational Flow
 
- 1. Registar Empresa e Utilizador
-1. Acede a `/register`
-2. Preenche: Nome da Empresa, Nome, Email, Password
-3. Faz login com as credenciais criadas
+ 1. Register Company and User
+1. Access `/register`
+2. Fill: Company Name, Name, Email, Password
+3. Login with created credentials
 
- 2. Adicionar Produto
-1. Acede a **"Produtos"** no menu
-2. Clica em **"Novo Produto"**
-3. Preenche todos os campos obrigatórios
-4. O produto é criado no estado **"Recebido"**
+ 2. Add Product
+1. Access **"Products"** in the menu
+2. Click **"New Product"**
+3. Fill all required fields
+4. The product is created in **"Received"** state
 
- 3. Alterar Estado do Produto
-1. Na lista de produtos, clica em **"Ver Detalhes"**
-2. Na secção **"Transição de Estado"**, escolhe o próximo estado
-3. Preenche dados obrigatórios (se aplicável)
-4. Clica em **"Alterar Estado"**
-5. O histórico é automaticamente registado
+ 3. Change Product State
+1. In the product list, click **"View Details"**
+2. In the **"State Transition"** section, choose the next state
+3. Fill required data (if applicable)
+4. Click **"Change State"**
+5. The history is automatically recorded
 
- 4. Consultar Dashboard
-1. Acede ao **"Dashboard"**
-2. Visualiza métricas em tempo real
-3. Analisa gráficos de distribuição
+ 4. View Dashboard
+1. Access **"Dashboard"**
+2. View real-time metrics
+3. Analyze distribution charts
 
 
- Arquitetura Técnica
+ Technical Architecture
 
  Backend
 - **Node.js + Express**
@@ -139,23 +139,23 @@ Password: Operador123!
 - **Prisma ORM**
 - **PostgreSQL**
 - **JWT Authentication**
-- **Arquitetura MVC**
+- **MVC Architecture**
 
  Frontend
 - **React 18**
 - **TypeScript**
 - **Vite**
 - **Tailwind CSS**
-- **Recharts** (gráficos)
-- **Lucide React** (ícones)
+- **Recharts** (charts)
+- **Lucide React** (icons)
 
- Infraestrutura
+ Infrastructure
 - **Docker + Docker Compose**
 - **Multi-stage builds**
-- **Hot reload em desenvolvimento**
+- **Hot reload in development**
 
 
-Estrutura do Projeto
+Project Structure
 
 LOGISTICA-MULTI-TENANT/
 ├── backend/
@@ -186,33 +186,33 @@ LOGISTICA-MULTI-TENANT/
 
 ---
 
-  Segurança
+  Security
 
-- Autenticação JWT obrigatória
-- Filtragem automática por `company_id` em todas as queries
-- Validação de permissões por perfil (Admin/Operador)
-- Validação de input em todas as rotas
-- Isolamento total de dados entre empresas
+- Mandatory JWT authentication
+- Automatic filtering by `company_id` in all queries
+- Permission validation by profile (Admin/Operator)
+- Input validation in all routes
+- Total data isolation between companies
 
 ---
 
- Regras de Negócio
+ Business Rules
 
- Transições de Estado
-- **Apenas Administradores** podem aprovar produtos
-- **Operadores** podem receber, preparar e expedir
-- Certas transições exigem dados obrigatórios (ex: motivo de rejeição)
-- Todas as transições geram registo no histórico
+ State Transitions
+- **Only Administrators** can approve products
+- **Operators** can receive, prepare, and ship
+- Certain transitions require mandatory data (ex: rejection reason)
+- All transitions generate history record
 
  Multi-Tenancy
-- Cada empresa tem `company_id` único
-- Todas as queries são automaticamente filtradas
-- Utilizadores só vêem dados da sua empresa
+- Each company has unique `company_id`
+- All queries are automatically filtered
+- Users only see their company's data
 
 
 
- estes
-bash
+ Tests
+```bash
 # Backend
 cd backend
 npm test
@@ -220,29 +220,30 @@ npm test
 # Frontend
 cd frontend
 npm test
+```
 
 
-  Scripts Úteis
+  Useful Scripts
 
  Backend
 ```bash
-npm run dev          # Desenvolvimento
-npm run build        # Build para produção
-npm run migrate      # Executar migrações
-npm run seed         # Popular base de dados
+npm run dev          # Development
+npm run build        # Build for production
+npm run migrate      # Run migrations
+npm run seed         # Populate database
 ```
 
  Frontend
 ```bash
-npm run dev          # Desenvolvimento
-npm run build        # Build para produção
-npm run preview      # Preview da build
+npm run dev          # Development
+npm run build        # Build for production
+npm run preview      # Preview the build
 
 
 
  Troubleshooting
 
- Erro: "Port 5000 already in use"
+ Error: "Port 5000 already in use"
 ```bash
 # Windows
 netstat -ano | findstr :5000
@@ -252,17 +253,17 @@ taskkill /PID <PID> /F
 lsof -ti:5000 | xargs kill -9
 ```
 
- Erro: "Cannot connect to database"
+ Error: "Cannot connect to database"
 ```bash
-# Verificar se o PostgreSQL está a correr
+# Check if PostgreSQL is running
 docker ps
 
-# Reiniciar serviços
+# Restart services
 docker-compose down
 docker-compose up --build
 ```
 
- Limpar tudo e recomeçar
+ Clean everything and restart
 ```bash
 docker-compose down -v
 docker-compose up --build
@@ -270,31 +271,31 @@ docker-compose up --build
 
 ---
 
- Níveis de Implementação
+ Implementation Levels
 
-  Nível Básico (100%)
-- Autenticação funcional
+  Basic Level (100%)
+- Functional authentication
 - Multi-tenant
-- CRUD de produtos
-- Estados base
+- Product CRUD
+- Base states
 - Docker
-  Nível Intermédio (95%)
-- Máquina de estados com regras
-- Histórico de movimentações
-- Perfis de utilizador
-- Frontend consumindo API
-- Dashboard com métricas
+  Intermediate Level (95%)
+- State machine with rules
+- Movement history
+- User profiles
+- Frontend consuming API
+- Dashboard with metrics
 
-  Nível ACarrinhaçado (Parcial)
-- Logs e auditoria (backend completo)
-- Dashboard com gráficos
-- Gestão de fornecedores (backend)
-
-
-
- Autor
-Desenvolvido como projeto de avaliação de competências Full Stack.
+  Advanced Level (Partial)
+- Logs and audit (complete backend)
+- Dashboard with charts
+- Supplier management (backend)
 
 
-Licença
-Este projeto é propriedade académica.
+
+ Author
+Developed as a Full Stack skills assessment project.
+
+
+License
+This project is academic property.
