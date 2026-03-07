@@ -468,12 +468,12 @@ frontend/              # React + Vite
 └─ package.json
 ```
 
-## Documentação
+## Documentation
 
-- Documente DTOs, serviços e endpoints críticos.
-- Use Swagger annotations no backend (`@ApiOperation`, `@ApiParam`, etc.).
-- Atualize `README.md` se sua mudança afeta instalação/uso.
+- Document critical DTOs, services and endpoints.
+- Use Swagger annotations in backend (`@ApiOperation`, `@ApiParam`, etc.).
+- Update `README.md` if your change affects installation/usage.
 
-## Questões?
+## Questions?
 
-Abra uma issue ou entre em contato. Estamos aqui para ajudar!
+Open an issue or get in touch. We're here to help!
