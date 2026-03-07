@@ -126,10 +126,10 @@
       └─ Resumo executivo (5 min)
 
   ⭐ TESTING.md
-    └─ Como testar manualmente (essencial)
+    └─ How to test manually (essential)
 
 
- DADOS CRIADOS
+ CREATED DATA
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   Histórico (AuditLog):
@@ -165,7 +165,7 @@
 💡 DICAS IMPORTANTES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  1. Histórico já estava funcionando desde o início
+  1. History was already working from the beginning
   2. Notificações agora disparam automaticamente
   3. Todos os dados são persistidos no PostgreSQL
   4. Use Prisma Studio para visualizar: npx prisma studio
@@ -173,7 +173,7 @@
   6. Todos endpoints requerem token JWT
 
 
-🔮 PRÓXIMAS FEATURES (OPCIONAL)
+🔮 NEXT FEATURES (OPTIONAL)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   FASE 2 (2-3 semanas):
@@ -188,7 +188,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
    Código testado e validado
-   Documentação completa (11 ficheiros)
+   Complete documentation (11 files)
    Automated test scripts
    Ready for production
    Sem breaking changes
@@ -200,10 +200,10 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   logistica-multi-tenant/
-  ├── 00_COMECE_AQUI.md ⭐⭐⭐
+  ├── START_HERE.txt ⭐⭐⭐
   ├── START_HERE.txt ⭐⭐
   ├── README_HISTORICO_NOTIFICACOES.md ⭐
-  ├── GUIA_TESTE_MANUAL.md
+  ├── TESTING.md
   ├── DEPLOY_INSTRUCOES.md
   ├── VERIFICACAO_HISTORICO_NOTIFICACOES.md
   ├── ROADMAP_FUNCIONALIDADES.md
@@ -223,7 +223,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   Histórico vazio?
-  └─ GUIA_TESTE_MANUAL.md > Troubleshooting
+  └─ TESTING.md > Troubleshooting
 
   Notificações não aparecem?
   └─ DEPLOY_INSTRUCOES.md > Troubleshooting
@@ -231,13 +231,13 @@
   Erro na compilação?
   └─ DEPLOY_INSTRUCOES.md > Troubleshooting
 
-  Próximas features?
+  Next features?
   └─ ROADMAP_FUNCIONALIDADES.md
 
 
 ╔═══════════════════════════════════════════════════════════════════════════╗
 ║                                                                           ║
-║             🎉 TUDO PRONTO! COMECE A LER: 00_COMECE_AQUI.md              ║
+║             🎉 EVERYTHING READY! START READING: START_HERE.txt              ║
 ║                                                                           ║
 ║                     E DEPOIS: npm run start:dev                           ║
 ║                                                                           ║
@@ -245,7 +245,7 @@
 
 
 Data: 2 de Dezembro de 2025
-Status:  Concluído e Pronto para Produção
-Versão: 1.0
+Status:  Completed and Ready for Production
+Version: 1.0
 
 ═══════════════════════════════════════════════════════════════════════════════
