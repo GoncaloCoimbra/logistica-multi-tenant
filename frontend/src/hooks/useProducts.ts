@@ -12,6 +12,11 @@ interface Product {
   currentLocation?: string;
   status: string;
   supplierId?: string;
+  supplier?: {
+    id: string;
+    name: string;
+    nif: string;
+  };
   companyId: string;
   createdAt: string;
   updatedAt: string;

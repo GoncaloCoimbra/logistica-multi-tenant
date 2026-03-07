@@ -15,7 +15,7 @@ export function useDashboardProductStats() {
   return useQuery({
     queryKey: ['dashboard', 'products', 'stats'],
     queryFn: async () => {
-      const response = await apiClient.get('/dashboard/products/stats');
+      const response = await apiClient.get('/dashboard/stats');
       return response.data;
     },
   });
@@ -35,7 +35,7 @@ export function useDashboardActivity(limit: number = 10) {
   return useQuery({
     queryKey: ['dashboard', 'activity', limit],
     queryFn: async () => {
-      const response = await apiClient.get('/dashboard/activity', {
+      const response = await apiClient.get('/dashboard/recent-activity', {
         params: { limit },
       });
       return response.data;
