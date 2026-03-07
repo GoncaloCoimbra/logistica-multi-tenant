@@ -21,28 +21,28 @@ services:
       timeout: 5s
       retries: 5
 
-  # Backend API
+  # Backend API (NestJS)
   backend:
     build:
-      context: ./backend
+      context: ./backend-nest
       dockerfile: Dockerfile
     container_name: logistica-backend
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/logistica
       JWT_SECRET: seu-secret-super-secreto-aqui-change-in-production
-      PORT: 5000
+      PORT: 3000
       NODE_ENV: development
     ports:
-      - "5000:5000"
+      - "3000:3000"
     volumes:
-      - ./backend:/app
+      - ./backend-nest:/app
       - /app/node_modules
     depends_on:
       db:
         condition: service_healthy
     networks:
       - logistica-network
-    command: sh -c "npx prisma migrate deploy && npm run dev"
+    command: sh -c "npx prisma migrate deploy && npm run start:dev"
 
   # Frontend React
   frontend:
@@ -51,7 +51,7 @@ services:
       dockerfile: Dockerfile
     container_name: logistica-frontend
     environment:
-      VITE_API_URL: http://localhost:5000
+      VITE_API_URL: http://backend:3000
     ports:
       - "5173:5173"
     volumes:
