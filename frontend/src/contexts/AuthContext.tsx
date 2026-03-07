@@ -180,7 +180,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.error('❌ Error response status:', error.response?.status);
       console.error('❌ Error response data:', error.response?.data);
 
-      let message = 'Erro ao fazer login. Verifique suas credenciais.';
+      let message = 'Login error. Please check your credentials.';
 
       if (error.response?.data) {
         const data = error.response.data;
@@ -252,7 +252,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.error('❌ Error response status:', error.response?.status);
       console.error('❌ Error response data:', error.response?.data);
 
-      let message = 'Erro ao registar. Tente novamente.';
+      let message = 'Registration error. Please try again.';
 
       if (error.response?.data) {
         const data = error.response.data;
