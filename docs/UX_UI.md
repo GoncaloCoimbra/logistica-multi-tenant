@@ -1,34 +1,34 @@
-# Guia de UX/UI
+# UX/UI Guide
 
-Este documento descreve os padrões de design, usabilidade e acessibilidade da plataforma.
+This document describes the design patterns, usability, and accessibility of the platform.
 
-## Princípios de Design
+## Design Principles
 
-### 1. **Clareza**
-- Interfaces limpas e diretas
-- Labels descritivos em formulários
-- Mensagens de erro úteis (não técnicas)
+### 1. **Clarity**
+- Clean and direct interfaces
+- Descriptive labels in forms
+- Useful error messages (not technical)
 
-### 2. **Eficiência**
-- Menos cliques para ações comuns
-- Atalhos de teclado para operações críticas
-- Busca rápida em listas grandes
+### 2. **Efficiency**
+- Fewer clicks for common actions
+- Keyboard shortcuts for critical operations
+- Quick search in large lists
 
-### 3. **Consistência**
-- Padrão visual unificado em todas as páginas
-- Nomenclatura consistente (ex. sempre "Transportes", nunca "Envios")
-- Comportamentos semelhantes para ações similares
+### 3. **Consistency**
+- Unified visual standard across all pages
+- Consistent naming (ex. always "Transports", never "Shipments")
+- Similar behaviors for similar actions
 
-### 4. **Acessibilidade**
-- WCAG 2.1 AA mínimo
-- Suporte a leitores de tela
-- Contraste de cores ≥ 4.5:1
-- Navegação por teclado completa
+### 4. **Accessibility**
+- WCAG 2.1 AA minimum
+- Screen reader support
+- Color contrast ≥ 4.5:1
+- Complete keyboard navigation
 
-## Paleta de Cores
+## Color Palette
 
 ```javascript
-// tailwind.config.js (exemplo)
+// tailwind.config.js (example)
 {
   theme: {
     colors: {
@@ -61,41 +61,41 @@ Este documento descreve os padrões de design, usabilidade e acessibilidade da p
 }
 ```
 
-## Tipografia
+## Typography
 
 - **Headlines (H1-H3)**: Inter Bold, 24-32px
 - **Body**: Inter Regular, 14-16px
-- **Meta/Helper**: Inter Regular 12px, cor `neutral-500`
+- **Meta/Helper**: Inter Regular 12px, color `neutral-500`
 
-## Componentes Base
+## Base Components
 
-### Formulários
+### Forms
 
 ```typescript
-// Exemplo: Input validado com mensagem de erro
+// Example: Validated input with error message
 <Input
   label="E-mail"
   type="email"
   required
   error={errors.email?.message}
-  placeholder="usuario@empresa.com"
+  placeholder="user@company.com"
 />
 ```
 
-**Regras:**
-- Campo obrigatório = asterisco vermelho
-- Erro = mensagem vermelha abaixo do input
-- Sucesso = ícone/borda verde (opcional)
+**Rules:**
+- Required field = red asterisk
+- Error = red message below input
+- Success = green icon/border (optional)
 
-### Notificações/Toasts
+### Notifications/Toasts
 
 ```typescript
 <Toast
   type="success"  // success | warning | error | info
-  title="Produto criado"
-  message="O produto foi adicionado com sucesso à biblioteca."
+  title="Product created"
+  message="The product was successfully added to the library."
   action={{
-    label: "Ver",
+    label: "View",
     onClick: () => navigate('/products/123')
   }}
 />
