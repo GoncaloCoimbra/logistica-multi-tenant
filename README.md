@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# Multi-Tenant Logistics
+# Multi-Tenant Logistics Management System
 
 [![Tests](https://github.com/your-org/logistica-multi-tenant/workflows/Run%20Tests/badge.svg)](https://github.com/your-org/logistica-multi-tenant/actions)
 [![Lint & Format](https://github.com/your-org/logistica-multi-tenant/workflows/Lint%20%26%20Format/badge.svg)](https://github.com/your-org/logistica-multi-tenant/actions)
@@ -7,297 +6,149 @@
 [![codecov](https://codecov.io/gh/your-org/logistica-multi-tenant/branch/develop/graph/badge.svg)](https://codecov.io/gh/your-org/logistica-multi-tenant)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
 [![Node.js 18+](https://img.shields.io/badge/Node.js-18%2B-green)](#requirements)
-[![JavaScript](https://img.shields.io/badge/Built%20with-TypeScript-blue)](#)
+[![TypeScript](https://img.shields.io/badge/Built%20with-TypeScript-blue)](#)
+
+> A complete logistics management platform built to serve multiple companies with full data isolation, real-time inventory control, and a robust state machine.
 
 ---
 
-This repository contains a complete multi-tenant logistics management platform. The code is divided into two backends (classic Express and NestJS) and a modern React frontend. The goal of this document is to guide new developers, testers, and operators to run, test, and evolve the system.
+## 📋 Table of Contents
 
-> **Note:** to reach a score of 10/10 in all categories, it is necessary to complete the list of improvements below.
-
----
-
-## 📁 Estrutura do repositório
-
-```
-/ (root)
-  ├─ backend/           # **DEPRECATED** API Express + Prisma (mantido apenas por histórico)
-  ├─ backend-nest/      # API NestJS + Prisma (código ativo e recomendado)
-  ├─ frontend/          # SPA React + Vite
-  ├─ docker-compose.yml # orquestração de containers para desenvolvimento
-  ├─ k8s/               # recursos Kubernetes para produção
-  └─ docs/              # documentação adicional (screenshots, guias)
-```
-
-> **Decision:** the `backend` subproject based on Express no longer receives updates. All new features and fixes must be implemented in `backend-nest`. The `backend` directory can be removed once all relevant code is migrated or proven unnecessary; until then it is just a legacy artifact.
-
----
-
-## 🚀 Quick Start (development environment)
-
-1. **Clone and install dependencies:**
-   ```bash
-   git clone <repo> && cd logistica-multi-tenant
-   npm install --workspaces # or install separately in each subdirectory
-   ```
-
-2. **Copy environment variables:**
-   ```bash
-   cp backend/.env.example backend/.env
-   cp backend-nest/.env.example backend-nest/.env
-   cp frontend/.env.example frontend/.env # if exists
-   ```
-   Fill `DATABASE_URL` pointing to the Postgres that will be started.
-
-3. **Run database and API via Docker Compose:**
-   ```bash
-   docker-compose up -d
-   # wait until the "db" service is healthy
-   npm run --workspace=backend prisma migrate dev
-   npm run --workspace=backend seed
-   ```
-   or, if you prefer, use backend-nest:
-   ```bash
-   npm run --workspace=backend-nest prisma migrate dev
-   npm run --workspace=backend-nest seed
-   ```
-
-4. **Frontend:**
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-   open http://localhost:5173
-
-5. **Tests:**
-   ```bash
-   npm run --workspace=backend test          # unit
-   npm run --workspace=backend test:e2e     # integration
-   npm run --workspace=frontend test        # jest/react-testing-library
-   ```
-
----
-
-## ✅ Improvements needed to reach 10/10
-
-Below is a list of changes that elevate each category to perfection. Some of them are already partially implemented; others require additional work.
-
-### Code Structure (currently 8/10)
-1. **Deprecate and remove `backend`**. The active base is `backend-nest`; keep the Express directory only for compatibility until elimination. Clear documentation about the decision is above.
-2. Adopt a monorepo with workspaces (already started) and automation scripts.
-3. Eliminate unnecessary files and add `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.
-4. Ensure that all import paths use `tsconfig-paths` and there are no `@ts-nocheck`.
-
-### Backend (architecture, tests) – 8/10
-1. Complete test coverage for 100% (include error cases, validations and middlewares).
-2. Implement mocks in tests and separate unit tests from e2e.
-3. Create CI pipelines (GitHub Actions) that run lint, build, tests and prisma migrate.
-4. Add automatic API documentation (Swagger) with valid examples.
-5. Validate existence of `DATABASE_URL` and show friendly error if absent.
-6. Consolidate Docker build/service (including `backend-nest` in compose) and `k8s` Helm chart with readiness/liveness.
-
-### Frontend – 7/10
-1. Write component tests and flow tests with React Testing Library and end-to-end with Cypress or Playwright.
-2. Improve folder organization (separate "pages" and "components" with index.tsx that exports) and apply atomic design pattern.
-3. Configure Storybook to visualize isolated components.
-4. Ensure that all Axios calls handle errors and display loaders.
-5. Add lint/format (ESLint + Prettier) and pre-commit hooks (`husky`).
-
-### Documentation – 8/10
-1. Complete main README (done above) and add specific guides (`docs/UX`, `docs/DEPLOYMENT.md`).
-2. Include real screenshots, architecture diagrams and environment configuration instructions (cloud, k8s).
-3. Provide changelog and roadmap of future features.
-4. Write API design documentation (OpenAPI/Swagger) and frontend usage (explained pages).
-
-### UX/UI – 6/10 (estimated)
-1. Conduct usability tests with real users to identify friction points.
-2. Create a design system or use a library (Tailwind + custom components) with color, typography and spacing tokens.
-3. Ensure responsiveness on all screen sizes and implement dark mode.
-4. Audit and fix accessibility issues (ARIA roles, contrast, keyboard navigation).
-5. Document navigation flow and states (loading, error, empty).
-
-### Production State – 6/10
-1. Add monitoring (Prometheus + Grafana, or Sentry) and structured logging in the backend.
-2. Implement deployment strategy (Terraform/Helm scripts) and rollback instructions.
-3. Include backup policy, automated migrations and load tests.
-4. Enable HTTPS, strict CORS, CSRF protection and security review.
-5. Configure CI/CD that builds Docker images and publishes to registry.
-6. Automate artifact generation (bundle analysis, minimization, performance analyses).
-
----
-
-## 📚 Documentação
-
-Main references:
-
-- **Backend**: NestJS + Prisma ORM
-- **Frontend**: Modern React with Vite
-- **DevOps**: Docker Compose + Kubernetes-ready
-
----
-
-## 🤝 Contributing
-
-1. Open an issue before starting extensive work.
-2. Create feature branches with `feature/description` or `bugfix/description`.
-3. Run tests before submitting PR.
-4. Write tests for any new functionality or fixed bug.
-
----
-
-## 🎯 Next Steps
-
-- Complete test suite (unit, integration, e2e)
-- Add automatic Swagger docs
-- Implement GitHub Actions CI/CD
-- Deploy to staging (Kubernetes)
-- Security documentation and audits
-
-Good luck and good work! 😊
-=======
-#  Sistema de Gestão Logística Multi-Tenant
-
-> Plataforma completa de gestão logística desenvolvida para servir múltiplas empresas com isolamento total de dados, controlo de inventário em tempo real e máquina de estados robusta.
-
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
-![TypeScript](https://img.shields.io/badge/typescript-%5E5.0.0-blue.svg)
-
----
-
-## 📋 Índice
-
-- [Sobre o Projecto](#sobre-o-projecto)
-- [Funcionalidades](#funcionalidades)
-- [Stack Tecnológica](#stack-tecnológica)
-- [Arquitetura](#arquitetura)
-- [Começar](#começar)
-  - [Pré-requisitos](#pré-requisitos)
-  - [Instalação](#instalação)
-  - [Configuração](#configuração)
-- [Estrutura do Projecto](#estrutura-do-projecto)
-- [Utilização](#utilização)
+- [About the Project](#about-the-project)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+- [Project Structure](#project-structure)
+- [Usage](#usage)
 - [API Endpoints](#api-endpoints)
-- [Estados dos Produtos](#estados-dos-produtos)
-- [Permissões](#permissões)
-- [Guia de Desenvolvimento](#guia-de-desenvolvimento)
-- [Roteiro de Desenvolvimento](#roteiro-de-desenvolvimento)
-- [Contribuir](#contribuir)
-
+- [Product States](#product-states)
+- [Permissions](#permissions)
+- [Development Guide](#development-guide)
+- [Roadmap](#roadmap)
+- [Improvements Needed](#improvements-needed-to-reach-1010)
+- [Contributing](#contributing)
 
 ---
 
-## 🎯 Sobre o Projeto
+## 🎯 About the Project
 
-Esta plataforma permite gerir todo o ciclo de vida de produtos num armazém, desde a receção até à entrega final. O sistema foi desenvolvido com arquitetura **multi-tenant**, garantindo que cada empresa opera de forma totalmente isolada e segura.
+This platform manages the full lifecycle of warehouse products — from receipt to final delivery. The system is built with a **multi-tenant** architecture, ensuring each company operates in a fully isolated and secure environment.
 
-###  Capturas de Ecrã
+### Screenshots
 
 <details>
-<summary>Ver screenshots</summary>
+<summary>View screenshots</summary>
 
-**Dashboard com Métricas em Tempo Real**
-- Resumo do inventário por estado
-- Gráficos de distribuição
-- Top 5 fornecedores
+**Real-Time Metrics Dashboard**
+- Inventory summary by state
+- Distribution charts
+- Top 5 suppliers
 
-**Lista de Produtos com Filtros Avançados**
-- Pesquisa por código, descrição ou fornecedor
-- Filtro por estado, localização e data
-- Ordenação e paginação
+**Product List with Advanced Filters**
+- Search by code, description, or supplier
+- Filter by state, location, and date
+- Sorting and pagination
 
-**Gestão de Fornecedores e Veículos**
-- CRUD completo
-- Integração com produtos e transportes
+**Supplier & Vehicle Management**
+- Full CRUD
+- Integration with products and transports
 
-**Histórico de Operações**
-- Auditoria completa
-- Filtros por ação, entidade e utilizador
-- Registo de todas as alterações
+**Operations History**
+- Complete audit trail
+- Filters by action, entity, and user
+- Full change log
 
 </details>
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Features
 
-###  Autenticação e Segurança
-- Sistema multi-tenant com isolamento total de dados
-- Três perfis: **Super Admin**, **Administrador** e **Operador**
-- Autenticação JWT com refresh tokens
-- Proteção contra SQL injection via Prisma ORM
+### Authentication & Security
+- Multi-tenant system with full data isolation
+- Three roles: **Super Admin**, **Administrator**, and **Operator**
+- JWT authentication with refresh tokens
+- SQL injection protection via Prisma ORM
 
-###  Gestão de Inventário
-- **CRUD completo** de produtos
-- Máquina de estados para controlo do ciclo de vida
-- Histórico completo de movimentações
-- Rastreabilidade total de cada produto
-- Filtros avançados (estado, localização, fornecedor, data)
+### Inventory Management
+- **Full CRUD** for products
+- State machine for lifecycle control
+- Complete movement history
+- Full traceability per product
+- Advanced filters (state, location, supplier, date)
 
-###  Dashboard Analítico
-- Resumo do inventário por estado
-- Gráficos de distribuição (donut e barras)
-- Estatísticas de movimentações (últimos 30 dias)
-- Top 5 fornecedores
-- Métricas de desempenho em tempo real
+### Analytics Dashboard
+- Inventory summary by state
+- Distribution charts (donut and bar)
+- Movement statistics (last 30 days)
+- Top 5 suppliers
+- Real-time performance metrics
 
-### 🚚 Gestão de Transportes
-- Registo de veículos da frota
-- Criação e acompanhamento de transportes
-- Integração com produtos e estados
-- Status: Em Trânsito, Entregue, Cancelado
+### 🚚 Transport Management
+- Fleet vehicle registration
+- Transport creation and tracking
+- Integration with products and states
+- Statuses: In Transit, Delivered, Cancelled
 
-### 👥 Gestão de Fornecedores
-- CRUD completo de fornecedores
-- Vinculação com produtos
-- Histórico de fornecimentos
+### 👥 Supplier Management
+- Full supplier CRUD
+- Product linking
+- Supply history
 
-### 📜 Auditoria e Histórico
-- Registo automático de todas as operações
-- Filtros por: data, ação, entidade, utilizador
-- Rastreamento completo de alterações
-- Logs imutáveis com timestamps
+### 📜 Audit & History
+- Automatic logging of all operations
+- Filters by: date, action, entity, user
+- Complete change tracking
+- Immutable logs with timestamps
 
-### 🔔 Sistema de Notificações
-- Alertas de produtos parados em análise
-- Notificações em tempo real
-- Histórico de notificações
+### 🔔 Notification System
+- Alerts for products stuck in analysis
+- Real-time notifications
+- Notification history
 
 ---
 
-## 🛠️ Stack Tecnológica
+## 🛠️ Tech Stack
 
 ### Backend
-| Tecnologia | Versão | Descrição |
-|------------|--------|-----------|
-| **Node.js** | 18+ | Runtime JavaScript |
-| **TypeScript** | ^5.0 | Superset tipado de JavaScript |
-| **Express.js** | ^4.18 | Framework web minimalista |
-| **Prisma** | ^5.0 | ORM moderno para Node.js |
-| **PostgreSQL** | 15 | Base de dados relacional |
-| **JWT** | - | Autenticação stateless |
-| **Zod** | ^3.22 | Validação de schemas TypeScript |
+| Technology | Version | Description |
+|------------|---------|-------------|
+| **Node.js** | 18+ | JavaScript runtime |
+| **TypeScript** | ^5.0 | Typed JavaScript superset |
+| **NestJS** | latest | Active backend framework |
+| **Express.js** | ^4.18 | *(legacy — see note below)* |
+| **Prisma** | ^5.0 | Modern ORM for Node.js |
+| **PostgreSQL** | 15 | Relational database |
+| **JWT** | — | Stateless authentication |
+| **Zod** | ^3.22 | TypeScript schema validation |
+
+> **Note:** The `backend` directory (Express) is **deprecated** and kept only for historical reference. All new features and fixes must be implemented in `backend-nest`. The `backend` directory can be removed once all relevant code is migrated.
 
 ### Frontend
-| Tecnologia | Versão | Descrição |
-|------------|--------|-----------|
-| **React** | 18 | Biblioteca UI |
-| **TypeScript** | ^5.0 | Tipagem estática |
-| **React Router** | v6 | Roteamento SPA |
-| **Tailwind CSS** | ^3.4 | Framework CSS utility-first |
-| **Recharts** | ^2.5 | Gráficos para React |
-| **Axios** | ^1.6 | Cliente HTTP |
-| **React Hot Toast** | - | Notificações toast |
+| Technology | Version | Description |
+|------------|---------|-------------|
+| **React** | 18 | UI library |
+| **TypeScript** | ^5.0 | Static typing |
+| **React Router** | v6 | SPA routing |
+| **Tailwind CSS** | ^3.4 | Utility-first CSS framework |
+| **Recharts** | ^2.5 | Charts for React |
+| **Axios** | ^1.6 | HTTP client |
+| **React Hot Toast** | — | Toast notifications |
 
 ### DevOps
 - **Docker** & **Docker Compose**
-- **PostgreSQL 15** (containerizado)
+- **PostgreSQL 15** (containerised)
+- **Kubernetes** (production-ready manifests in `k8s/`)
 
 ---
 
-## 🏗️ Arquitetura
+## 🏗️ Architecture
 
-### Padrão Multi-Tenant
+### Multi-Tenant Pattern
 
 ```
 ┌─────────────────────────────────────────┐
@@ -305,7 +156,7 @@ Esta plataforma permite gerir todo o ciclo de vida de produtos num armazém, des
 └──────────────┬──────────────────────────┘
                │ HTTP/REST API
 ┌──────────────▼──────────────────────────┐
-│       Backend (Express + TypeScript)    │
+│       Backend (NestJS + TypeScript)     │
 │  ┌────────────────────────────────┐     │
 │  │  Auth Middleware (JWT)         │     │
 │  └────────────┬───────────────────┘     │
@@ -330,581 +181,502 @@ Esta plataforma permite gerir todo o ciclo de vida de produtos num armazém, des
 └─────────────────────────────────────────┘
 ```
 
-### Máquina de Estados
+### State Machine
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Recebido
-    Recebido --> EmAnalise
-    EmAnalise --> Aprovado
-    EmAnalise --> Rejeitado
-    Rejeitado --> EmDevolucao
-    Aprovado --> EmArmazenamento
-    EmArmazenamento --> EmPreparacao
-    EmArmazenamento --> EmExpedicao
-    EmPreparacao --> EmExpedicao
-    EmPreparacao --> Cancelado
-    EmExpedicao --> Entregue
-    EmDevolucao --> Recebido
-    EmDevolucao --> Eliminado
-    Cancelado --> EmArmazenamento
-    Entregue --> [*]
-    Eliminado --> [*]
+    [*] --> Received
+    Received --> UnderReview
+    UnderReview --> Approved
+    UnderReview --> Rejected
+    Rejected --> UnderReturn
+    Approved --> InStorage
+    InStorage --> InPreparation
+    InStorage --> InShipment
+    InPreparation --> InShipment
+    InPreparation --> Cancelled
+    InShipment --> Delivered
+    UnderReturn --> Received
+    UnderReturn --> Disposed
+    Cancelled --> InStorage
+    Delivered --> [*]
+    Disposed --> [*]
 ```
 
 ---
 
-## 🚀 Começar
+## 🚀 Getting Started
 
-### Pré-requisitos
+### Prerequisites
 
-Certifica-te de ter instalado:
-- **Node.js** 18 ou superior
-- **npm** ou **yarn**
-- **Docker** e **Docker Compose** (opcional, mas recomendado)
-- **PostgreSQL 15** (se não usar Docker)
+Make sure you have installed:
+- **Node.js** 18 or higher
+- **npm** or **yarn**
+- **Docker** & **Docker Compose** (optional, but recommended)
+- **PostgreSQL 15** (if not using Docker)
 
-### Instalação
+### Installation
 
-1. **Clona o repositório**
+1. **Clone the repository**
 ```bash
-git clone https://github.com/teu-usuario/logistica-multi-tenant.git
+git clone https://github.com/your-org/logistica-multi-tenant.git
 cd logistica-multi-tenant
 ```
 
-2. **Instala as dependências**
+2. **Install dependencies**
 
-Backend:
 ```bash
-cd backend
-npm install
+# Install all workspaces at once
+npm install --workspaces
+
+# Or individually
+cd backend-nest && npm install
+cd frontend && npm install
 ```
 
-Frontend:
+### Configuration
+
+1. **Environment Variables**
+
+Copy the example files and fill in the values:
 ```bash
-cd frontend
-npm install
+cp backend-nest/.env.example backend-nest/.env
+cp frontend/.env.example frontend/.env
 ```
 
-### Configuração
-
-1. **Variáveis de Ambiente**
-
-Cria um ficheiro `.env` na pasta `backend/`:
-
+Create `backend-nest/.env`:
 ```env
-# Ambiente
+# Environment
 NODE_ENV=development
 
-# Servidor
+# Server
 PORT=3000
 
-# Base de Dados
+# Database
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/logistica
 
 # JWT
-JWT_SECRET=sua-chave-secreta-super-segura-minimo-32-caracteres-aleatorios
+JWT_SECRET=your-super-secret-key-minimum-32-random-characters
 JWT_EXPIRES_IN=7d
 
-# CORS (opcional)
+# CORS (optional)
 CORS_ORIGIN=http://localhost:3000
 ```
 
-2. **Base de Dados com Docker (Recomendado)**
+2. **Database with Docker (Recommended)**
 
 ```bash
-# Inicia o PostgreSQL
+# Start PostgreSQL
 docker-compose up -d
 
-# Executa as migrações
-cd backend
+# Run migrations
+cd backend-nest
 npx prisma migrate dev
 npx prisma generate
 ```
 
-**Ou sem Docker:**
-
+**Without Docker:**
 ```bash
-# Cria a base de dados manualmente no PostgreSQL
 createdb logistica
-
-# Executa as migrações
-cd backend
+cd backend-nest
 npx prisma migrate dev
 npx prisma generate
 ```
 
-3. **Seed da Base de Dados (Opcional)**
+3. **Seed the Database (Optional)**
 
 ```bash
-cd backend
+cd backend-nest
 npm run seed
 ```
 
-Isto cria:
+This creates:
 - 1 Super Admin
-- 1 Empresa exemplo
-- 1 Administrador
-- 1 Operador
-- Alguns produtos de teste
+- 1 Example company
+- 1 Administrator
+- 1 Operator
+- Some test products
 
-### Executar a Aplicação
+### Running the Application
 
-**Modo Desenvolvimento:**
+**Development mode:**
 
-Terminal 1 - Backend:
 ```bash
-cd backend
+# Terminal 1 — Backend
+cd backend-nest
+npm run dev
+
+# Terminal 2 — Frontend
+cd frontend
 npm run dev
 ```
 
-Terminal 2 - Frontend:
-```bash
-cd frontend
-npm start
-```
-
-**Modo Produção:**
-
+**Production mode:**
 ```bash
 # Backend
-cd backend
-npm run build
-npm start
+cd backend-nest
+npm run build && npm start
 
 # Frontend
 cd frontend
 npm run build
-# Serve a pasta build/ com nginx ou outro servidor
+# Serve the build/ folder with nginx or similar
 ```
 
-### Acesso
+### Access
 
-- **Frontend**: http://localhost:3000
+- **Frontend**: http://localhost:5173
 - **Backend API**: http://localhost:3000
-- **Prisma Studio**: http://localhost:5555 (execute `npx prisma studio`)
+- **Prisma Studio**: http://localhost:5555 (run `npx prisma studio`)
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 logistica-multi-tenant/
-├── backend/
+├── backend/              # DEPRECATED — Express legacy (do not use for new features)
+├── backend-nest/         # Active NestJS API
 │   ├── prisma/
-│   │   ├── schema.prisma          # Schema da BD
-│   │   ├── migrations/            # Migrações
-│   │   └── seed.ts                # Dados iniciais
-│   ├── src/
-│   │   ├── config/
-│   │   │   ├── database.ts        # Configuração Prisma
-│   │   │   └── env.ts             # Variáveis de ambiente
-│   │   ├── controllers/           # Controladores de rotas
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── products.controller.ts
-│   │   │   ├── dashboard.controller.ts
-│   │   │   ├── suppliers.controller.ts
-│   │   │   ├── vehicles.controller.ts
-│   │   │   ├── transports.controller.ts
-│   │   │   ├── auditlog.controller.ts
-│   │   │   └── notifications.controller.ts
-│   │   ├── middlewares/
-│   │   │   ├── auth.middleware.ts
-│   │   │   ├── errorHandler.ts
-│   │   │   ├── roleCheck.middleware.ts
-│   │   │   └── superAdmin.middleware.ts
-│   │   ├── routes/               # Definição de rotas
-│   │   ├── services/             # Lógica de negócio
-│   │   │   └── product-state.service.ts
-│   │   ├── types/                # Tipos TypeScript
-│   │   │   ├── express.d.ts
-│   │   │   └── product-states.ts
-│   │   ├── utils/                # Utilitários
-│   │   └── server.ts             # Entry point
-│   ├── .env                      # Variáveis de ambiente
-│   ├── package.json
-│   └── tsconfig.json
-│
+│   │   ├── schema.prisma
+│   │   ├── migrations/
+│   │   └── seed.ts
+│   └── src/
+│       ├── config/
+│       ├── controllers/
+│       ├── middlewares/
+│       ├── routes/
+│       ├── services/
+│       ├── types/
+│       ├── utils/
+│       └── server.ts
 ├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── api/
-│   │   │   └── api.ts            # Cliente Axios
-│   │   ├── components/           # Componentes React
-│   │   │   ├── CompanyModal.tsx
-│   │   │   ├── EditGlobalUserModal.tsx
-│   │   │   ├── Header.tsx
-│   │   │   ├── NotificationPanel.tsx
-│   │   │   ├── PrivateRoute.tsx
-│   │   │   ├── ProductHistoryModal.tsx
-│   │   │   ├── StateTransition.tsx
-│   │   │   └── UserFormModal.tsx
-│   │   ├── contexts/
-│   │   │   └── AuthContext.tsx   # Contexto de autenticação
-│   │   ├── pages/                # Páginas/Rotas
-│   │   │   ├── AuditLog.tsx
-│   │   │   ├── CompanyManagement.tsx
-│   │   │   ├── Dashboard.tsx
-│   │   │   ├── DashboardAdvanced.tsx
-│   │   │   ├── GlobalUserManagement.tsx
-│   │   │   ├── Login.tsx
-│   │   │   ├── NewProduct.tsx
-│   │   │   ├── ProductDetails.tsx
-│   │   │   ├── ProductList.tsx
-│   │   │   ├── Register.tsx
-│   │   │   ├── Settings.tsx
-│   │   │   ├── SuperAdminDashboard.tsx
-│   │   │   ├── SupplierList.tsx
-│   │   │   ├── TransportList.tsx
-│   │   │   └── VehicleList.tsx
-│   │   ├── App.tsx               # Componente raiz
-│   │   ├── index.tsx             # Entry point
-│   │   └── index.css             # Estilos globais
-│   ├── tailwind.config.js
-│   ├── package.json
-│   └── tsconfig.json
-│
-├── docker/
-│   └── postgres/
+│   └── src/
+│       ├── api/
+│       ├── components/
+│       ├── contexts/
+│       ├── pages/
+│       ├── App.tsx
+│       └── index.tsx
+├── k8s/                  # Kubernetes manifests
 ├── docker-compose.yml
-├── .gitignore
 └── README.md
 ```
 
 ---
 
-## 📖 Utilização
+## 📖 Usage
 
-### 🎬 Fluxo Básico de Operação
+### Basic Operation Flow
 
-#### 1. Registo da Empresa
-
-1. Acede a **http://localhost:3000/register**
-2. Preenche:
-   - Nome da empresa
-   - NIF
-   - Email, telefone, morada
-   - Dados do utilizador administrador
-3. Após registo, faz login com as credenciais criadas
+#### 1. Register a Company
+1. Go to **http://localhost:5173/register**
+2. Fill in company name, tax ID, email, phone, address, and administrator credentials
+3. Log in with the newly created credentials
 
 #### 2. Login
+- **URL**: http://localhost:5173/login
+- Test credentials (after seed):
+  - **Admin**: `admin@example.com` / `admin123`
+  - **Operator**: `operator@example.com` / `operator123`
 
-- **URL**: http://localhost:3000/login
-- Credenciais de teste (após seed):
-  - **Admin**: `admin@exemplo.pt` / `admin123`
-  - **Operador**: `operador@exemplo.pt` / `operador123`
+#### 3. Add a Product
+1. Go to **Products** → **New Product**
+2. Fill in: unique code, description, quantity, unit, supplier, location (optional)
+3. Product is automatically created in the **Received** state
 
-#### 3. Adicionar Produto
+#### 4. Manage States
+1. Click a product in the list
+2. Click **Change State**
+3. Select the next permitted state (transitions are validated automatically)
+4. Add notes if required and confirm
 
-1. Vai a **Produtos** → **Novo Produto**
-2. Preenche os dados obrigatórios:
-   - Código único
-   - Descrição
-   - Quantidade e unidade
-   - Fornecedor
-   - Localização (opcional)
-   - Observações (opcional)
-3. O produto é criado automaticamente no estado **Recebido**
-
-#### 4. Gerir Estados
-
-1. Na lista de produtos, clica num produto
-2. Clica em **Alterar Estado**
-3. Seleciona o próximo estado permitido (transições validadas automaticamente)
-4. Adiciona observações se necessário
-5. Confirma a transição
-
-**Exemplo de Fluxo:**
+**Example flow:**
 ```
-Recebido → Em Análise → Aprovado → Em Armazenamento → 
-Em Preparação → Em Expedição → Entregue
+Received → Under Review → Approved → In Storage → In Preparation → In Shipment → Delivered
 ```
 
-#### 5. Consultar Histórico
-
-- Clica num produto para ver todas as movimentações
-- Ou vai a **Histórico** para ver todas as operações do sistema
-- Filtra por data, ação, entidade ou utilizador
+#### 5. View History
+- Click a product to see all its movements
+- Or go to **History** for a full system-wide operations log
+- Filter by date, action, entity, or user
 
 #### 6. Dashboard
-
-- Acede ao **Dashboard** para:
-  - Ver resumo do inventário por estado
-  - Analisar distribuição com gráficos
-  - Monitorizar movimentações recentes
-  - Identificar produtos parados há mais tempo
+- View inventory summary by state
+- Analyse distribution with charts
+- Monitor recent movements
+- Identify products idle the longest
 
 ---
 
 ## 🔌 API Endpoints
 
-### Autenticação
+### Authentication
 
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| POST | `/api/auth/register` | Registo de empresa e admin |  |
-| POST | `/api/auth/login` | Login |  |
-| GET | `/api/auth/me` | Dados do utilizador |  |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/api/auth/register` | Register company & admin | — |
+| POST | `/api/auth/login` | Login | — |
+| GET | `/api/auth/me` | Current user data | ✅ |
 
-### Produtos
+### Products
 
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| GET | `/api/products` | Lista produtos |  |
-| GET | `/api/products/:id` | Detalhes de um produto |  |
-| POST | `/api/products` | Criar produto |  |
-| PUT | `/api/products/:id` | Atualizar produto |  |
-| DELETE | `/api/products/:id` | Eliminar produto |  Admin |
-| POST | `/api/products/:id/transition` | Alterar estado |  |
-| GET | `/api/products/:id/history` | Histórico de movimentações |  |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/products` | List products | ✅ |
+| GET | `/api/products/:id` | Product details | ✅ |
+| POST | `/api/products` | Create product | ✅ |
+| PUT | `/api/products/:id` | Update product | ✅ |
+| DELETE | `/api/products/:id` | Delete product | ✅ Admin |
+| POST | `/api/products/:id/transition` | Change state | ✅ |
+| GET | `/api/products/:id/history` | Movement history | ✅ |
 
 ### Dashboard
 
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| GET | `/api/dashboard/stats` | Estatísticas gerais |  |
-| GET | `/api/dashboard/by-status` | Distribuição por estado |  |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/dashboard/stats` | General statistics | ✅ |
+| GET | `/api/dashboard/by-status` | Distribution by state | ✅ |
 
-### Fornecedores
+### Suppliers
 
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| GET | `/api/suppliers` | Lista fornecedores |  |
-| POST | `/api/suppliers` | Criar fornecedor |  |
-| PUT | `/api/suppliers/:id` | Atualizar fornecedor |  |
-| DELETE | `/api/suppliers/:id` | Eliminar fornecedor |  Admin |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/suppliers` | List suppliers | ✅ |
+| POST | `/api/suppliers` | Create supplier | ✅ |
+| PUT | `/api/suppliers/:id` | Update supplier | ✅ |
+| DELETE | `/api/suppliers/:id` | Delete supplier | ✅ Admin |
 
-### Veículos
+### Vehicles
 
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| GET | `/api/vehicles` | Lista veículos |  |
-| POST | `/api/vehicles` | Criar veículo |  |
-| PUT | `/api/vehicles/:id` | Atualizar veículo |  |
-| DELETE | `/api/vehicles/:id` | Eliminar veículo |  Admin |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/vehicles` | List vehicles | ✅ |
+| POST | `/api/vehicles` | Create vehicle | ✅ |
+| PUT | `/api/vehicles/:id` | Update vehicle | ✅ |
+| DELETE | `/api/vehicles/:id` | Delete vehicle | ✅ Admin |
 
-### Transportes
+### Transports
 
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| GET | `/api/transports` | Lista transportes |  |
-| POST | `/api/transports` | Criar transporte |  |
-| PUT | `/api/transports/:id` | Atualizar transporte |  |
-| DELETE | `/api/transports/:id` | Eliminar transporte |  Admin |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/transports` | List transports | ✅ |
+| POST | `/api/transports` | Create transport | ✅ |
+| PUT | `/api/transports/:id` | Update transport | ✅ |
+| DELETE | `/api/transports/:id` | Delete transport | ✅ Admin |
 
-### Auditoria
+### Audit Log
 
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| GET | `/api/auditlog` | Lista logs de auditoria |  |
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/auditlog` | List audit logs | ✅ |
 
-### Notificações
+### Notifications
 
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| GET | `/api/notifications` | Lista notificações |  |
-| PUT | `/api/notifications/:id/read` | Marcar como lida |  |
-| PUT | `/api/notifications/read-all` | Marcar todas como lidas |  |
-
----
-
-## 🔄 Estados dos Produtos
-
-### Estados Disponíveis
-
-| Estado | Descrição | Próximos Estados Permitidos |
-|--------|-----------|----------------------------|
-| **Recebido** | Produto acabado de chegar ao armazém | Em Análise |
-| **Em Análise** | Produto a ser inspecionado | Aprovado, Rejeitado |
-| **Aprovado** | Produto aprovado para armazenamento | Em Armazenamento |
-| **Rejeitado** | Produto não conforme | Em Devolução |
-| **Em Armazenamento** | Produto guardado no armazém | Em Preparação, Em Expedição |
-| **Em Preparação** | Produto a ser preparado para envio | Em Expedição, Cancelado |
-| **Em Expedição** | Produto em transporte | Entregue |
-| **Entregue** | Produto entregue ao cliente (final) | - |
-| **Em Devolução** | Produto em processo de devolução | Recebido, Eliminado |
-| **Cancelado** | Preparação cancelada | Em Armazenamento |
-| **Eliminado** | Produto descartado (final) | - |
-
-### Regras de Transição
-
-- **Apenas transições válidas** são permitidas (validadas no backend)
-- Alguns estados requerem **observações obrigatórias**
-- O histórico de transições é **imutável** e sempre registado
-- Permissões são verificadas antes de cada transição
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/notifications` | List notifications | ✅ |
+| PUT | `/api/notifications/:id/read` | Mark as read | ✅ |
+| PUT | `/api/notifications/read-all` | Mark all as read | ✅ |
 
 ---
 
-##  Permissões
+## 🔄 Product States
+
+| State | Description | Allowed Next States |
+|-------|-------------|---------------------|
+| **Received** | Product just arrived at the warehouse | Under Review |
+| **Under Review** | Product being inspected | Approved, Rejected |
+| **Approved** | Product cleared for storage | In Storage |
+| **Rejected** | Non-conforming product | Under Return |
+| **In Storage** | Product stored in the warehouse | In Preparation, In Shipment |
+| **In Preparation** | Product being prepared for dispatch | In Shipment, Cancelled |
+| **In Shipment** | Product in transit | Delivered |
+| **Delivered** | Product delivered to customer *(final)* | — |
+| **Under Return** | Product being returned | Received, Disposed |
+| **Cancelled** | Preparation cancelled | In Storage |
+| **Disposed** | Product discarded *(final)* | — |
+
+**Rules:**
+- Only valid transitions are permitted (validated on the backend)
+- Some states require mandatory notes
+- Transition history is **immutable** and always recorded
+- Permissions are checked before each transition
+
+---
+
+## 🔐 Permissions
 
 ### Super Admin
+- Manage all companies
+- Create global users
+- Access aggregated dashboards
+- System-wide configuration
 
-**Acesso total ao sistema:**
-- Gestão de todas as empresas
-- Criação de novos utilizadores globais
-- Acesso a dashboards agregados
-- Configurações do sistema
+### Administrator *(per company)*
+- Full access within their company
+- Approve or reject products
+- Change any state
+- Manage company users
+- Delete products, suppliers, vehicles
 
-### Administrador (por empresa)
-
-**Acesso total dentro da sua empresa:**
-- Aprovar ou rejeitar produtos
-- Alterar qualquer estado
-- Gerir utilizadores da empresa
-- Aceder a todos os módulos
-- Eliminar produtos, fornecedores, veículos
-
-### Operador (por empresa)
-
-**Acesso restrito:**
-- Gerir inventário e movimentações
-- **Não pode** aprovar ou rejeitar produtos
-- **Não pode** eliminar registos
-- Acesso limitado a determinadas transições de estado
+### Operator *(per company)*
+- Manage inventory and movements
+- **Cannot** approve or reject products
+- **Cannot** delete records
+- Limited access to certain state transitions
 
 ---
 
-## 💻 Guia de Desenvolvimento
+## 💻 Development Guide
 
-### Antes de Programar
+### Before You Code
 
-📖 **Lê o documento de requisitos 3 vezes:**
+1. **Read the requirements document three times** — scope, rules, then implementation notes.
+2. **Plan the database schema** — tables, fields, relationships, and always include `companyId` for multi-tenant tables.
+3. **Draw the state diagram** — all states, allowed transitions, and who can perform each.
+4. **Sketch the screens** — rough layout of filters, tables, and forms per page.
 
-1. **Primeira leitura**: Compreender o âmbito geral
-2. **Segunda leitura**: Destacar campos obrigatórios, transições, regras de negócio
-3. **Terceira leitura**: Fazer anotações sobre implementação
-
-### Planear Antes de Codificar
-
-Desenha no papel ou ferramenta visual:
-
-1. **Estrutura da Base de Dados**
-   - Tabelas e campos
-   - Relações (FK)
-   - Índices importantes
-   - ⚠️ Não esquecer `companyId` em tabelas multi-tenant
-
-2. **Fluxo de Estados**
-   - Diagrama com todos os estados
-   - Setas com transições permitidas
-   - Quem pode fazer cada transição
-
-3. **Estrutura de Pastas**
-   - Controllers, services, routes
-   - Componentes React
-   - Organização lógica
-
-4. **Ecrãs da Aplicação**
-   - Rascunho de cada página
-   - Posição de filtros, tabelas, formulários
-
-### Executar Testes
+### Useful Commands
 
 ```bash
-cd backend
-npm test
+# Run tests
+cd backend-nest && npm test
+cd backend-nest && npm run test:e2e
+cd frontend && npm test
+
+# Generate a Prisma migration
+cd backend-nest
+npx prisma migrate dev --name migration_name
+
+# Open Prisma Studio
+cd backend-nest && npx prisma studio
 ```
 
-### Gerar Migração Prisma
+### Best Practices
 
-```bash
-cd backend
-npx prisma migrate dev --name nome_da_migracao
-```
-
-### Visualizar Base de Dados
-
-```bash
-cd backend
-npx prisma studio
-```
-
-Acede a http://localhost:5555
-
-### Boas Práticas
-
--  Sempre validar input com Zod
--  Sempre filtrar por `companyId` em queries multi-tenant
--  Registar operações importantes no audit log
--  Usar transações Prisma para operações complexas
--  Escrever testes para lógica crítica
--  Documentar endpoints na API
--  Usar variáveis de ambiente para secrets
+- ✅ Always validate input with Zod
+- ✅ Always filter by `companyId` in multi-tenant queries
+- ✅ Log important operations to the audit log
+- ✅ Use Prisma transactions for complex operations
+- ✅ Write tests for critical business logic
+- ✅ Use environment variables for secrets — never hardcode them
 
 ---
 
 ## 🗺️ Roadmap
 
-### Fase 1 - Concluído 
-- [x] Sistema multi-tenant
-- [x] Autenticação JWT
-- [x] CRUD de produtos
-- [x] Máquina de estados
-- [x] Dashboard básico
-- [x] Histórico de operações
+### Phase 1 — Done ✅
+- [x] Multi-tenant system
+- [x] JWT authentication
+- [x] Product CRUD
+- [x] State machine
+- [x] Basic dashboard
+- [x] Operations history
 
-### Fase 2 - Concluído 
-- [x] Gestão de fornecedores
-- [x] Gestão de veículos
-- [x] Gestão de transportes
-- [x] Sistema de notificações
-- [x] Dashboard avançado
+### Phase 2 — Done ✅
+- [x] Supplier management
+- [x] Vehicle management
+- [x] Transport management
+- [x] Notification system
+- [x] Advanced dashboard
 - [x] Super Admin
 
-### Fase 3 - Em Desenvolvimento 🚧
-- [ ] Relatórios avançados em PDF
-- [ ] Exportação de dados (Excel, CSV)
-- [ ] Integração com APIs de transportadoras
-- [ ] Sistema de alertas configurável
+### Phase 3 — In Progress 🚧
+- [ ] Advanced PDF reports
+- [ ] Data export (Excel, CSV)
+- [ ] Carrier API integration
+- [ ] Configurable alert system
 - [ ] Mobile app (React Native)
 
-### Fase 4 - Planeado 📋
-- [ ] Integração entre empresas
-- [ ] Marketplace de transportes
-- [ ] BI e análise preditiva
-- [ ] Integração com ERP
-- [ ] API pública para terceiros
+### Phase 4 — Planned 📋
+- [ ] Cross-company integration
+- [ ] Transport marketplace
+- [ ] BI and predictive analytics
+- [ ] ERP integration
+- [ ] Public API for third parties
 
 ---
 
-## 🤝 Contribuir
+## ✅ Improvements Needed to Reach 10/10
 
-Contribuições são bem-vindas! Este projeto foi desenvolvido para a comunidade **Commit PT** no Discord.
+### Code Structure (currently 8/10)
+1. Remove the deprecated `backend` (Express) directory after full migration to `backend-nest`.
+2. Finalize monorepo workspace automation scripts.
+3. Remove unnecessary files; add `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.
+4. Ensure all import paths use `tsconfig-paths` with no `@ts-nocheck`.
 
-1. Faz fork do projeto
-2. Cria uma branch para a tua feature (`git checkout -b feature/MinhaFeature`)
-3. Commit as alterações (`git commit -m 'Adiciona MinhaFeature'`)
-4. Push para a branch (`git push origin feature/MinhaFeature`)
-5. Abre um Pull Request
+### Backend (currently 8/10)
+1. Achieve 100% test coverage — include error cases, validations, and middleware.
+2. Separate unit tests from e2e tests; implement proper mocking.
+3. Add GitHub Actions CI pipelines (lint → build → test → prisma migrate).
+4. Add auto-generated Swagger/OpenAPI docs with working examples.
+5. Validate `DATABASE_URL` on startup and show a friendly error if missing.
+6. Add `backend-nest` to Docker Compose and complete Helm chart with readiness/liveness probes.
 
-### Diretrizes
+### Frontend (currently 7/10)
+1. Write component tests with React Testing Library and e2e tests with Cypress or Playwright.
+2. Improve folder structure — separate `pages/` and `components/` with barrel `index.tsx` exports; apply atomic design.
+3. Set up Storybook for isolated component development.
+4. Ensure all Axios calls handle errors and display loading states.
+5. Add ESLint + Prettier and pre-commit hooks with Husky.
 
-- Segue o estilo de código existente
-- Adiciona testes para novas funcionalidades
-- Atualiza a documentação conforme necessário
-- Mantém commits pequenos e focados
+### Documentation (currently 8/10)
+1. Add `docs/DEPLOYMENT.md` and `docs/UX.md` guides.
+2. Include real screenshots, architecture diagrams, and cloud/k8s setup instructions.
+3. Provide a changelog and feature roadmap.
+4. Write full OpenAPI/Swagger docs and a frontend usage guide per page.
 
+### UX/UI (currently 6/10)
+1. Conduct usability testing with real users.
+2. Create a design system with color, typography, and spacing tokens (Tailwind + custom components).
+3. Ensure full responsiveness and implement dark mode.
+4. Audit and fix accessibility (ARIA roles, contrast ratios, keyboard navigation).
+5. Document navigation flows and UI states (loading, error, empty).
 
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Vê o ficheiro [LICENSE](LICENSE) para mais detalhes.
+### Production Readiness (currently 6/10)
+1. Add monitoring (Prometheus + Grafana or Sentry) and structured backend logging.
+2. Add Terraform/Helm deployment scripts and rollback instructions.
+3. Include backup policy, automated migrations, and load tests.
+4. Enable HTTPS, strict CORS, CSRF protection, and a security review.
+5. Set up CI/CD that builds and pushes Docker images to a registry.
+6. Automate artifact analysis (bundle size, minification, performance audits).
 
 ---
 
+## 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the project
+2. Create a branch (`git checkout -b feature/MyFeature`)
+3. Commit your changes (`git commit -m 'Add MyFeature'`)
+4. Push to the branch (`git push origin feature/MyFeature`)
+5. Open a Pull Request
+
+### Guidelines
+
+- Follow the existing code style
+- Add tests for new features
+- Update documentation as needed
+- Keep commits small and focused
+- Open an issue before starting extensive work
 
 ---
 
-## 📞 Suporte
+## 📄 License
 
-Se encontraste algum problema ou tens sugestões:
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-1. Verifica as [Issues](**vou adicionar quando acabar**) existentes
-2. Cria uma nova issue se necessário
-3. Contactar o criador
+---
 
+## 📞 Support
 
+If you found a bug or have a suggestion:
 
+1. Check existing [Issues](https://github.com/your-org/logistica-multi-tenant/issues)
+2. Create a new issue if needed
 
-**Desenvolvido com pelo gonçalo coimbra**
->>>>>>> 184ecd699527caa52863a9b7d8f940f05749b654
+---
+
+**Developed with ❤️ for the Commit PT community**
