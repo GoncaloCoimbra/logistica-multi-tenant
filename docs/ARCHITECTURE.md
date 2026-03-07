@@ -1,33 +1,33 @@
-# Arquitetura do Projeto
+# Project Architecture
 
-Este documento explica a organização dos componentes e a decisão sobre os backends.
+This document explains the organization of components and the decision about the backends.
 
 ## Backends
 
 - **`backend-nest`**
-  - Projeto NestJS atualizado com Prisma, Swagger, validação e arquitetura modular.
-  - Considerado peça principal para desenvolvimento futuro.
-  - Inclui pipelines de testes, scripts de migração e todos os novos recursos.
+  - Updated NestJS project with Prisma, Swagger, validation and modular architecture.
+  - Considered the main piece for future development.
+  - Includes test pipelines, migration scripts and all new features.
 
 - **`backend`** (Express)
-  - Código antigo que foi inicialmente usado para prototipação.
-  - Não possui `package.json` independente e usa `ts-nocheck` em muitos arquivos.
-  - **Depreciado:** não deve ser modificado. Ele existe apenas para referência histórica e possivelmente para copiar pequenas implementações durante migrações.
-  - A meta de longo prazo é remover completamente este diretório assim que a `backend-nest` estiver completa e estabilizada.
+  - Old code that was initially used for prototyping.
+  - Does not have an independent `package.json` and uses `ts-nocheck` in many files.
+  - **Deprecated:** should not be modified. It exists only for historical reference and possibly to copy small implementations during migrations.
+  - The long-term goal is to completely remove this directory once `backend-nest` is complete and stabilized.
 
 ## Monorepo
 
-O repositório foi reorganizado como monorepo usando `npm workspaces` (poderia ser facilmente adaptado para `yarn` ou `pnpm`).
-Pacotes incluídos:
+The repository has been reorganized as a monorepo using `npm workspaces` (could be easily adapted to `yarn` or `pnpm`).
+Included packages:
 
 - `backend-nest`
 - `frontend`
 
-Scripts globais (`npm run lint-all`, `test-all` etc.) facilitam operações em todo o monorepo.
+Global scripts (`npm run lint-all`, `test-all` etc.) facilitate operations across the entire monorepo.
 
-## Dependências e ferramentas
+## Dependencies and tools
 
-- `tsconfig-paths`/aliases configurados no `tsconfig.json` de cada subprojeto para imports padronizados.
-- Husky + lint-staged para garantir qualidade nos commits.
+- `tsconfig-paths`/aliases configured in the `tsconfig.json` of each subproject for standardized imports.
+- Husky + lint-staged to ensure quality in commits.
 
-> Consulte `README.md` na raiz para instruções de inicialização e lista de melhorias.
+> See `README.md` in the root for initialization instructions and list of improvements.
