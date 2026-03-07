@@ -43,6 +43,8 @@ import { RolesGuard } from '@common/guards/roles.guard';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { LoggingInterceptor } from '@common/interceptors/logging.interceptor';
 import { AuditLogInterceptor } from '@common/interceptors/audit-log.interceptor';
+import { TenantContextService } from '@common/tenant-context.service';
+import { TenantInterceptor } from '@common/interceptors/tenant.interceptor';
 
 @Module({
   imports: [
@@ -97,7 +99,7 @@ import { AuditLogInterceptor } from '@common/interceptors/audit-log.interceptor'
     // GLOBAL GUARDS
     
     { 
-      provide: APP_GUARD, 
+      provide: APP_GUARD,
       useClass: JwtAuthGuard 
     },
     { 
@@ -124,6 +126,14 @@ import { AuditLogInterceptor } from '@common/interceptors/audit-log.interceptor'
       provide: APP_INTERCEPTOR, 
       useClass: AuditLogInterceptor 
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TenantInterceptor
+    },
+
+    // GLOBAL SERVICES
+
+    TenantContextService,
   ],
 })
 export class AppModule {}
