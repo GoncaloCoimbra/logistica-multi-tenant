@@ -27,16 +27,16 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   📋 DOCUMENTATION (9):
-  ├─ 00_COMECE_AQUI.md ⭐⭐⭐ (Navigation guide)
-  ├─ START_HERE.txt ⭐⭐ (Visual overview)
-  ├─ README_HISTORICO_NOTIFICACOES.md ⭐ (Quick summary)
-  ├─ GUIA_TESTE_MANUAL.md (How to test)
-  ├─ DEPLOY_INSTRUCOES.md (How to compile)
-  ├─ VERIFICACAO_HISTORICO_NOTIFICACOES.md (Technical details)
-  ├─ ROADMAP_FUNCIONALIDADES.md (Next features)
-  ├─ RESUMO_FINAL.md (Final summary)
-  ├─ INDICE_DOCUMENTACAO.txt (Index)
-  ├─ CONCLUSAO.txt (Visual summary)
+  ├─ START_HERE.txt ⭐⭐⭐ (Navigation guide)
+  ├─ CONCLUSION.txt ⭐⭐ (Visual overview)
+  ├─ README.md ⭐ (Quick summary)
+  ├─ TESTING.md (How to test)
+  ├─ DEPLOYMENT.md (How to compile)
+  ├─ QUICKSTART.md (Technical details)
+  ├─ ROADMAP.md (Next features)
+  ├─ PROJECT_COMPLETION_REPORT.md (Final summary)
+  ├─ DOCUMENTATION_INDEX.md (Index)
+  ├─ CONCLUSION.txt (Visual summary)
   │
   🧪 SCRIPTS (2):
   ├─ test-audit-notifications.ps1 (PowerShell test)
@@ -58,7 +58,7 @@
 📚 RECOMMENDED READING ORDER
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  1️⃣  00_COMECE_AQUI.md (2 min)
+  1️⃣  START_HERE.txt (2 min)
       └─ Overview of what was done
 
   2️⃣  START_HERE.txt (5 min)
@@ -67,7 +67,7 @@
   3️⃣  README_HISTORICO_NOTIFICACOES.md (5 min)
       └─ Executive summary
 
-  4️⃣  GUIA_TESTE_MANUAL.md (15 min)
+  4️⃣  TESTING.md (15 min)
       └─ Step-by-step to test
 
   5️⃣  DEPLOY_INSTRUCOES.md (10 min)
@@ -90,7 +90,7 @@
       npm run start:dev
 
   2️⃣  Test (choose one option)
-      A) Open GUIA_TESTE_MANUAL.md + Postman
+      A) Open TESTING.md + Postman
       B) Run .\test-audit-notifications.ps1
       C) Check DB directly with SQL
 
@@ -116,16 +116,16 @@
 ⭐ FICHEIROS MAIS IMPORTANTES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  ⭐⭐⭐ 00_COMECE_AQUI.md
+  ⭐⭐⭐ START_HERE.txt
         └─ Leia isto PRIMEIRO (2 min)
 
   ⭐⭐⭐ START_HERE.txt
-        └─ Overview visual + teste rápido
+        └─ Overview visual + quick test
 
   ⭐⭐ README_HISTORICO_NOTIFICACOES.md
       └─ Resumo executivo (5 min)
 
-  ⭐ GUIA_TESTE_MANUAL.md
+  ⭐ TESTING.md
     └─ Como testar manualmente (essencial)
 
 
@@ -189,8 +189,8 @@
 
    Código testado e validado
    Documentação completa (11 ficheiros)
-   Scripts de teste automatizados
-   Pronto para produção
+   Automated test scripts
+   Ready for production
    Sem breaking changes
    Seguro e auditável
    LGPD/GDPR compliant

@@ -1,277 +1,277 @@
-📚 ÍNDICE COMPLETO DE DOCUMENTAÇÃO
+📚 COMPLETE DOCUMENTATION INDEX
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-🎯 COMECE AQUI
+🎯 START HERE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📄 CONCLUSAO.txt (Este arquivo de sumário visual)
-   ├─ Status geral 
-   ├─ Ficheiros modificados
-   ├─ Documentação criada
-   ├─ Scripts de teste
-   └─ Próximos passos
+📄 CONCLUSION.txt (This visual summary file)
+   ├─ General status
+   ├─ Modified files
+   ├─ Created documentation
+   ├─ Test scripts
+   └─ Next steps
 
-📄 README_HISTORICO_NOTIFICACOES.md ⭐ LEIA PRIMEIRO
-   ├─ Resumo executivo 1 página
-   ├─ Como usar
-   ├─ O que foi feito
-   ├─ Como testar
-   └─ Referência rápida
+📄 README_HISTORICO_NOTIFICACOES.md ⭐ READ FIRST
+   ├─ 1-page executive summary
+   ├─ How to use
+   ├─ What was done
+   ├─ How to test
+   └─ Quick reference
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-📖 DOCUMENTAÇÃO TÉCNICA
+📖 TECHNICAL DOCUMENTATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📄 VERIFICACAO_HISTORICO_NOTIFICACOES.md (COMPLETO)
-   ├─ Arquitetura do histórico
-   │  ├─ Como funciona
-   │  ├─ Dados capturados
+📄 VERIFICACAO_HISTORICO_NOTIFICACOES.md (COMPLETE)
+   ├─ Audit history architecture
+   │  ├─ How it works
+   │  ├─ Captured data
    │  └─ Endpoints
    │
-   ├─ Arquitetura das notificações
-   │  ├─ Como funciona
-   │  ├─ Fluxo de disparo
+   ├─ Notifications architecture
+   │  ├─ How it works
+   │  ├─ Trigger flow
    │  └─ Endpoints
    │
-   ├─ Verificação no BD (SQL queries)
-   ├─ Problemas e soluções
-   └─ Ficheiros modificados
+   ├─ DB verification (SQL queries)
+   ├─ Problems and solutions
+   └─ Modified files
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-🧪 GUIAS DE TESTE
+🧪 TEST GUIDES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📄 GUIA_TESTE_MANUAL.md ⭐ PARA TESTAR MANUALMENTE
-   ├─ Preparação (variáveis de ambiente)
+📄 TESTING.md ⭐ FOR MANUAL TESTING
+   ├─ Preparation (environment variables)
    │
-   ├─ TESTE 1: Histórico (AuditLog)
-   │  ├─ Listar histórico
-   │  ├─ Criar produto
-   │  └─ Verificar registro
+   ├─ TEST 1: History (AuditLog)
+   │  ├─ List history
+   │  ├─ Create product
+   │  └─ Verify record
    │
-   ├─ TESTE 2: Notificações
-   │  ├─ Contar notificações
-   │  ├─ Criar produto (dispara notificação)
-   │  └─ Verificar notificação
+   ├─ TEST 2: Notifications
+   │  ├─ Count notifications
+   │  ├─ Create product (triggers notification)
+   │  └─ Verify notification
    │
-   ├─ TESTE 3: Atualização de Status
-   │  ├─ Atualizar status
-   │  └─ Verificar nova notificação
+   ├─ TEST 3: Status Update
+   │  ├─ Update status
+   │  └─ Verify new notification
    │
-   ├─ TESTE 4: Marcar como Lida
-   │  ├─ Marcar uma como lida
-   │  └─ Verificar redução de não lidas
+   ├─ TEST 4: Mark as Read
+   │  ├─ Mark one as read
+   │  └─ Verify unread reduction
    │
-   ├─ Checklist de verificação
+   ├─ Verification checklist
    ├─ Troubleshooting
-   ├─ Métricas de sucesso
-   └─ Referência de endpoints
+   ├─ Success metrics
+   └─ Endpoint reference
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-🚀 INSTRUÇÕES DE DEPLOY
+🚀 DEPLOY INSTRUCTIONS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📄 DEPLOY_INSTRUCOES.md
-   ├─ O que foi alterado
+   ├─ What was changed
    │
-   ├─ Passos para Deploy (6 etapas)
-   │  ├─ 1. Limpar cache
-   │  ├─ 2. Verificar erros
-   │  ├─ 3. Executar migrações
-   │  ├─ 4. Parar servidor
-   │  ├─ 5. Iniciar servidor
-   │  └─ 6. Verificar OK
+   ├─ Deploy Steps (6 steps)
+   │  ├─ 1. Clear cache
+   │  ├─ 2. Check for errors
+   │  ├─ 3. Run migrations
+   │  ├─ 4. Stop server
+   │  ├─ 5. Start server
+   │  └─ 6. Verify OK
    │
-   ├─ Testes rápidos de validação
-   ├─ Verificação em produção
-   ├─ Logs para monitorar
-   ├─ Checklist pré-teste
-   ├─ Troubleshooting de compilação
-   └─ Próximas etapas
+   ├─ Quick validation tests
+   ├─ Production verification
+   ├─ Logs to monitor
+   ├─ Pre-test checklist
+   ├─ Compilation troubleshooting
+   └─ Next steps
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-🎯 ROADMAP E FUTURO
+🎯 ROADMAP AND FUTURE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📄 ROADMAP_FUNCIONALIDADES.md
-   ├─ Arquitetura atual (diagrama)
+   ├─ Current architecture (diagram)
    │
-   ├─ Roadmap de Desenvolvimento
-   │  ├─ FASE 1: Implementado 
-   │  ├─ FASE 2: Próximas (notificações transport, alertas)
-   │  ├─ FASE 3: Melhorias (email, websocket)
-   │  └─ FASE 4: Avançada (SMS, mobile, ML)
+   ├─ Development Roadmap
+   │  ├─ PHASE 1: Implemented
+   │  ├─ PHASE 2: Next (transport notifications, alerts)
+   │  ├─ PHASE 3: Improvements (email, websocket)
+   │  └─ PHASE 4: Advanced (SMS, mobile, ML)
    │
-   ├─ Próximas Implementações
-   │  ├─ 1. Notificações para Transports
-   │  ├─ 2. Alertas de Estoque Baixo
+   ├─ Next Implementations
+   │  ├─ 1. Transport Notifications
+   │  ├─ 2. Low Stock Alerts
    │  ├─ 3. Email Notifications
    │  └─ 4. WebSocket Real-time
    │
-   ├─ Sugestões de UX/UI
-   ├─ Análise de Impacto e ROI
-   ├─ Considerações de Segurança
-   ├─ Referências e Recursos
-   └─ Checklist de Implementação
+   ├─ UX/UI Suggestions
+   ├─ Impact Analysis and ROI
+   ├─ Security Considerations
+   ├─ References and Resources
+   └─ Implementation Checklist
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-🧪 SCRIPTS DE TESTE AUTOMATIZADOS
+🧪 AUTOMATED TEST SCRIPTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📄 test-audit-notifications.ps1 (PowerShell)
-   ├─ Teste completo automatizado
-   ├─ Cria produto
-   ├─ Verifica histórico
-   ├─ Verifica notificações
-   ├─ Atualiza status
-   └─ Valida disparo automático
+   ├─ Complete automated test
+   ├─ Creates product
+   ├─ Verifies history
+   ├─ Verifies notifications
+   ├─ Updates status
+   └─ Validates automatic trigger
 
 📄 test-audit-notifications.sh (Bash)
-   └─ Mesma funcionalidade para Linux/Mac
+   └─ Same functionality for Linux/Mac
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-💾 FICHEIROS CRIADOS NO PROJETO
+💾 FILES CREATED IN THE PROJECT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📝 backend-nest/
-   ├─ test-data.ts (Query ao BD - ainda não executado)
+   ├─ test-data.ts (DB query - not yet executed)
    └─ src/modules/products/
-      ├─ products.service.ts ✏️ (MODIFICADO)
-      └─ products.module.ts ✏️ (MODIFICADO)
+      ├─ products.service.ts ✏️ (MODIFIED)
+      └─ products.module.ts ✏️ (MODIFIED)
 
-📝 Raiz do Projeto
-   ├─ CONCLUSAO.txt ← Você está aqui
-   ├─ README_HISTORICO_NOTIFICACOES.md
-   ├─ VERIFICACAO_HISTORICO_NOTIFICACOES.md
-   ├─ GUIA_TESTE_MANUAL.md
-   ├─ DEPLOY_INSTRUCOES.md
-   ├─ ROADMAP_FUNCIONALIDADES.md
+📝 Project Root
+   ├─ CONCLUSION.txt ← You are here
+   ├─ README.md
+   ├─ QUICKSTART.md
+   ├─ TESTING.md
+   ├─ DEPLOYMENT.md
+   ├─ ROADMAP.md
    ├─ test-audit-notifications.ps1
    └─ test-audit-notifications.sh
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-🗺️ COMO NAVEGAR A DOCUMENTAÇÃO
+🗺️ HOW TO NAVIGATE THE DOCUMENTATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Pergunta: "Quero tudo de forma rápida"
-→ Leia: README_HISTORICO_NOTIFICACOES.md (5 min)
+Question: "I want everything quickly"
+→ Read: README_HISTORICO_NOTIFICACOES.md (5 min)
 
-Pergunta: "Como faço testes manualmente?"
-→ Leia: GUIA_TESTE_MANUAL.md (15 min)
+Question: "How do I test manually?"
+→ Read: TESTING.md (15 min)
 
-Pergunta: "Como faço deploy?"
-→ Leia: DEPLOY_INSTRUCOES.md (10 min)
+Question: "How do I deploy?"
+→ Read: DEPLOY_INSTRUCOES.md (10 min)
 
-Pergunta: "Qual é a arquitetura e próximas features?"
-→ Leia: ROADMAP_FUNCIONALIDADES.md (20 min)
+Question: "What is the architecture and next features?"
+→ Read: ROADMAP_FUNCIONALIDADES.md (20 min)
 
-Pergunta: "Preciso de todos os detalhes técnicos"
-→ Leia: VERIFICACAO_HISTORICO_NOTIFICACOES.md (30 min)
+Question: "I need all technical details"
+→ Read: VERIFICACAO_HISTORICO_NOTIFICACOES.md (30 min)
 
-Pergunta: "Quero automatizar o teste"
+Question: "I want to automate the test"
 → Execute: test-audit-notifications.ps1 (5 min)
 
 ═══════════════════════════════════════════════════════════════════════════════
 
- CHECKLIST ANTES DE COMEÇAR
+ CHECKLIST BEFORE STARTING
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[ ] 1. Li README_HISTORICO_NOTIFICACOES.md
-[ ] 2. Backend está parado (para recompilar)
-[ ] 3. Tenho um token JWT válido
-[ ] 4. Tenho um supplierId válido
-[ ] 5. PostgreSQL está rodando
-[ ] 6. Postman/Insomnia instalado
+[ ] 1. Read README_HISTORICO_NOTIFICACOES.md
+[ ] 2. Backend is stopped (to recompile)
+[ ] 3. I have a valid JWT token
+[ ] 4. I have a valid supplierId
+[ ] 5. PostgreSQL is running
+[ ] 6. Postman/Insomnia installed
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-🚀 COMEÇAR AGORA
+🚀 START NOW
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. Recompile o backend:
+1. Recompile the backend:
    cd backend-nest
    npm install
    npm run start:dev
 
-2. Depois de compilar, escolha uma opção:
+2. After compiling, choose an option:
 
-   OPÇÃO A (Manual):
-   - Abra GUIA_TESTE_MANUAL.md
-   - Siga os passos com Postman
+   OPTION A (Manual):
+   - Open TESTING.md
+   - Follow steps with Postman
 
-   OPÇÃO B (Automatizado):
+   OPTION B (Automated):
    - Execute: .\test-audit-notifications.ps1
 
-   OPÇÃO C (BD Direto):
-   - Use SQL queries em GUIA_TESTE_MANUAL.md
+   OPTION C (Direct DB):
+   - Use SQL queries in TESTING.md
 
-3. Valide o resultado:
-   - Histórico criado? 
-   - Notificação criada? 
+3. Validate the result:
+   - History created?
+   - Notification created? 
 
 ═══════════════════════════════════════════════════════════════════════════════
 
- SUMÁRIO TÉCNICO
+ TECHNICAL SUMMARY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-HISTÓRICO (AuditLog)
-├─ Status:  Funcionando
-├─ Arquivo: AuditLogInterceptor
-├─ Tabela: AuditLog
-├─ Dados: action, entity, entityId, userId, companyId, ip, timestamp
+HISTORY (AuditLog)
+├─ Status: Working
+├─ File: AuditLogInterceptor
+├─ Table: AuditLog
+├─ Data: action, entity, entityId, userId, companyId, ip, timestamp
 ├─ Triggers: POST, PUT, PATCH, DELETE
-└─ Acesso: GET /api/audit-logs
+└─ Access: GET /api/audit-logs
 
-NOTIFICAÇÕES
-├─ Status:  Funcionando
-├─ Arquivo: NotificationsService
-├─ Tabela: Notification
-├─ Triggers: Criar produto, Atualizar status
-├─ Com emojis: , 🔄, , 🔍, etc
-└─ Acesso: GET /api/notifications
+NOTIFICATIONS
+├─ Status: Working
+├─ File: NotificationsService
+├─ Table: Notification
+├─ Triggers: Create product, Update status
+├─ With emojis: , 🔄, , 🔍, etc
+└─ Access: GET /api/notifications
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-🎯 PRÓXIMAS AÇÕES
+🎯 NEXT ACTIONS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. ⏳ Recompilar servidor
-2. ⏳ Testar funcionalidades
-3. ⏳ Validar resultado
-4. ⏳ Fazer deploy em produção (opcional)
-5. ⏳ Implementar FASE 2 (notificações transports, alertas)
+1. ⏳ Recompile server
+2. ⏳ Test functionalities
+3. ⏳ Validate result
+4. ⏳ Deploy to production (optional)
+5. ⏳ Implement PHASE 2 (transport notifications, alerts)
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-📞 AJUDA RÁPIDA
+📞 QUICK HELP
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Histórico vazio?
-→ Ver seção "Problemas" em GUIA_TESTE_MANUAL.md
+History empty?
+→ See "Problems" section in TESTING.md
 
-Notificações não aparecem?
-→ Ver seção "Troubleshooting" em DEPLOY_INSTRUCOES.md
+Notifications not appearing?
+→ See "Troubleshooting" section in DEPLOY_INSTRUCOES.md
 
-Erro ao compilar?
-→ Ver seção "Troubleshooting de compilação" em DEPLOY_INSTRUCOES.md
+Compilation error?
+→ See "Compilation Troubleshooting" section in DEPLOY_INSTRUCOES.md
 
-Qual é próxima feature?
-→ Ver ROADMAP_FUNCIONALIDADES.md (FASE 2)
+What is next feature?
+→ See ROADMAP_FUNCIONALIDADES.md (PHASE 2)
 
 ═══════════════════════════════════════════════════════════════════════════════
 
-✨ SUCESSO! Tudo pronto. Divirta-se testando! 🚀
+✨ SUCCESS! Everything ready. Have fun testing! 🚀
 
-Data: 2 de Dezembro de 2025
-Versão: 1.0
-Status:  Pronto para Produção
+Date: December 2, 2025
+Version: 1.0
+Status: Ready for Production
 
 ═══════════════════════════════════════════════════════════════════════════════

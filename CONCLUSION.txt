@@ -1,153 +1,153 @@
 ╔═══════════════════════════════════════════════════════════════════════════════╗
 ║                                                                               ║
-║            VERIFICAÇÃO CONCLUÍDA - HISTÓRICO E NOTIFICAÇÕES                ║
+║            VERIFICATION COMPLETED - HISTORY AND NOTIFICATIONS                 ║
 ║                                                                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
- RESULTADO DA ANÁLISE
+ ANALYSIS RESULT
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
- HISTÓRICO (AuditLog)
-   Status: FUNCIONANDO PERFEITAMENTE
+ HISTORY (AuditLog)
+   Status: WORKING PERFECTLY
    
-   ✓ Registra automaticamente todas as ações
-   ✓ Interceptor global configurado em app.module.ts
-   ✓ Captura: ação, entidade, usuário, IP, timestamp, metadados
-   ✓ Banco de dados: Tabela AuditLog operacional
-   ✓ Acesso via: GET /api/audit-logs
+   ✓ Automatically records all actions
+   ✓ Global interceptor configured in app.module.ts
+   ✓ Captures: action, entity, user, IP, timestamp, metadata
+   ✓ Database: AuditLog table operational
+   ✓ Access via: GET /api/audit-logs
 
- NOTIFICAÇÕES  
-   Status: IMPLEMENTADO COM DISPARO AUTOMÁTICO
+ NOTIFICATIONS  
+   Status: IMPLEMENTED WITH AUTOMATIC TRIGGER
    
-   ✓ Notificações ao criar produto
-   ✓ Notificações ao atualizar status
-   ✓ Disparo automático funcionando
-   ✓ Banco de dados: Tabela Notification operacional
-   ✓ Acesso via: GET /api/notifications
+   ✓ Notifications when creating product
+   ✓ Notifications when updating status
+   ✓ Automatic trigger working
+   ✓ Database: Notification table operational
+   ✓ Access via: GET /api/notifications
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📝 FICHEIROS MODIFICADOS
+📝 MODIFIED FILES
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✏️  backend-nest/src/modules/products/products.service.ts
-    • Adicionado: NotificationsService injection
-    • Adicionado: Notificação ao criar produto
-    • Adicionado: Notificação ao atualizar status
-    • Adicionado: Logging para debugging
+    • Added: NotificationsService injection
+    • Added: Notification when creating product
+    • Added: Notification when updating status
+    • Added: Logging for debugging
 
 ✏️  backend-nest/src/modules/products/products.module.ts
-    • Adicionado: NotificationsModule import
+    • Added: NotificationsModule import
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📚 DOCUMENTAÇÃO CRIADA
+📚 CREATED DOCUMENTATION
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📋 README_HISTORICO_NOTIFICACOES.md
-   ↳ Sumário executivo para referência rápida
+📋 README.md
+   ↳ Executive summary for quick reference
 
-📋 VERIFICACAO_HISTORICO_NOTIFICACOES.md
-   ↳ Documentação completa de ambas funcionalidades
-   ↳ Como funciona, endpoints, verificação em BD
+📋 QUICKSTART.md
+   ↳ Complete documentation of both functionalities
+   ↳ How it works, endpoints, DB verification
 
-📋 GUIA_TESTE_MANUAL.md
-   ↳ Passo-a-passo para testar com Postman/Insomnia
-   ↳ Exemplos de requisições e respostas esperadas
-   ↳ Troubleshooting com soluções
+📋 TESTING.md
+   ↳ Step-by-step guide to test with Postman/Insomnia
+   ↳ Request examples and expected responses
+   ↳ Troubleshooting with solutions
 
-📋 DEPLOY_INSTRUCOES.md
-   ↳ Instruções de compilação e deploy
-   ↳ Verificações pré-teste
-   ↳ Troubleshooting de compilação
+📋 DEPLOYMENT.md
+   ↳ Compilation and deployment instructions
+   ↳ Pre-test verifications
+   ↳ Compilation troubleshooting
 
-📋 ROADMAP_FUNCIONALIDADES.md
-   ↳ Arquitetura atual e próximas melhorias
-   ↳ Timeline de desenvolvimento
-   ↳ Análise de impacto e ROI
+📋 ROADMAP.md
+   ↳ Current architecture and next improvements
+   ↳ Development timeline
+   ↳ Impact analysis and ROI
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🧪 SCRIPTS DE TESTE CRIADOS
+🧪 CREATED TEST SCRIPTS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🔧 test-audit-notifications.ps1 (PowerShell)
-   ↳ Teste completo via script automatizado
-   ↳ Cria produto, verifica histórico e notificações
-   ↳ Atualiza status e valida disparo automático
+   ↳ Complete test via automated script
+   ↳ Creates product, verifies history and notifications
+   ↳ Updates status and validates automatic trigger
 
 🔧 test-audit-notifications.sh (Bash)
-   ↳ Mesma funcionalidade em Bash para Linux/Mac
+   ↳ Same functionality in Bash for Linux/Mac
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🚀 PRÓXIMOS PASSOS
+🚀 NEXT STEPS
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1️⃣  RECOMPILAR O SERVIDOR
+1️⃣  RECOMPILE THE SERVER
     cd backend-nest
     npm install
     npm run start:dev
 
-2️⃣  TESTAR AS FUNCIONALIDADES
-    Opção A: Usar Postman/Insomnia + GUIA_TESTE_MANUAL.md
-    Opção B: Executar script PowerShell: .\test-audit-notifications.ps1
-    Opção C: Consultar BD direto com SQL
+2️⃣  TEST THE FUNCTIONALITIES
+    Option A: Use Postman/Insomnia + TESTING.md
+    Option B: Execute PowerShell script: .\test-audit-notifications.ps1
+    Option C: Direct DB query with SQL
 
-3️⃣  VALIDAR RESULTADO
-    Criar produto → Verificar histórico e notificação
-    Atualizar status → Verificar nova notificação
+3️⃣  VALIDATE RESULT
+    Create product → Verify history and notification
+    Update status → Verify new notification
 
-4️⃣  IMPLEMENTAR PRÓXIMAS FASES (Opcional)
-    Fase 2: Notificações para Transports, Alertas de Estoque
-    Fase 3: Email, WebSocket Real-time
-    Ver ROADMAP_FUNCIONALIDADES.md
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-⚡ TESTE RÁPIDO (5 MINUTOS)
+4️⃣  IMPLEMENT NEXT PHASES (Optional)
+    Phase 2: Notifications for Transports, Stock Alerts
+    Phase 3: Email, WebSocket Real-time
+    See ROADMAP.md
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-1. Abra Postman/Insomnia
-2. Copie uma requisição do GUIA_TESTE_MANUAL.md
-3. Cole o token JWT
-4. Envie POST /api/products
-5. Verifique GET /api/audit-logs
-6. Verifique GET /api/notifications
-
- Deve ter 1 registro em audit logs + 1 notificação
+⚡ QUICK TEST (5 MINUTES)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
- ENDPOINTS PRINCIPAIS
+1. Open Postman/Insomnia
+2. Copy a request from TESTING.md
+3. Paste the JWT token
+4. Send POST /api/products
+5. Check GET /api/audit-logs
+6. Check GET /api/notifications
+
+ Should have 1 record in audit logs + 1 notification
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-HISTÓRICO:
-  GET  /api/audit-logs              → Listar todos
-  GET  /api/audit-logs/entity/:entity/:id → Por entidade
-  GET  /api/audit-logs/user/:userId → Por usuário
-  GET  /api/audit-logs/stats        → Estatísticas
+ MAIN ENDPOINTS
 
-NOTIFICAÇÕES:
-  GET  /api/notifications           → Listar todas
-  GET  /api/notifications/unread    → Não lidas
-  GET  /api/notifications/unread/count → Contar não lidas
-  PATCH /api/notifications/:id/read → Marcar como lida
-  PATCH /api/notifications/read-all → Todas como lidas
-  DELETE /api/notifications/:id     → Deletar
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-PRODUTOS (Dispara notificações):
-  POST /api/products                → Cria + notificação
-  PUT  /api/products/:id/status     → Atualiza status + notificação
+HISTORY:
+  GET  /api/audit-logs              → List all
+  GET  /api/audit-logs/entity/:entity/:id → By entity
+  GET  /api/audit-logs/user/:userId → By user
+  GET  /api/audit-logs/stats        → Statistics
+
+NOTIFICATIONS:
+  GET  /api/notifications           → List all
+  GET  /api/notifications/unread    → Unread
+  GET  /api/notifications/unread/count → Count unread
+  PATCH /api/notifications/:id/read → Mark as read
+  PATCH /api/notifications/read-all → Mark all as read
+  DELETE /api/notifications/:id     → Delete
+
+PRODUCTS (Triggers notifications):
+  POST /api/products                → Creates + notification
+  PUT  /api/products/:id/status     → Updates status + notification
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -170,30 +170,30 @@ PRODUTOS (Dispara notificações):
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-❓ DÚVIDAS?
+❓ QUESTIONS?
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Consulte os ficheiros:
+Check the files:
   
-  📖 README_HISTORICO_NOTIFICACOES.md     ← Comece aqui (resumo)
-  📖 GUIA_TESTE_MANUAL.md                 ← Como testar
-  📖 VERIFICACAO_HISTORICO_NOTIFICACOES.md ← Detalhes técnicos
-  📖 DEPLOY_INSTRUCOES.md                 ← Como fazer deploy
-  📖 ROADMAP_FUNCIONALIDADES.md           ← Próximas features
+  📖 README.md     ← Start here (summary)
+  📖 TESTING.md                 ← How to test
+  📖 QUICKSTART.md ← Technical details
+  📖 DEPLOYMENT.md                 ← How to deploy
+  📖 ROADMAP.md           ← Next features
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✨ SUCESSO! Tudo pronto para teste.
+✨ SUCCESS! Everything ready for testing.
 
-Data: 2 de Dezembro de 2025
-Versão: 1.0
-Status:  Pronto para Produção
+Date: December 2, 2025
+Version: 1.0
+Status:  Ready for Production
 
 ╔═══════════════════════════════════════════════════════════════════════════════╗
-║  Recompile o servidor e comece a testar!                                      ║
+║  Recompile the server and start testing!                                      ║
 ║                                                                               ║
 ║  npm run start:dev                                                             ║
 ║                                                                               ║
-║  Depois de compilar, siga: GUIA_TESTE_MANUAL.md                               ║
+║  After compiling, follow: TESTING.md                               ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝

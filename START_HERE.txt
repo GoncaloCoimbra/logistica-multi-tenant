@@ -1,186 +1,186 @@
 
 ╔════════════════════════════════════════════════════════════════════════════╗
 ║                                                                            ║
-║   🎉 VERIFICAÇÃO DE HISTÓRICO E NOTIFICAÇÕES - COMPLETADA COM SUCESSO   ║
+║   🎉 AUDIT HISTORY AND NOTIFICATIONS VERIFICATION - COMPLETED SUCCESSFULLY   ║
 ║                                                                            ║
 ╚════════════════════════════════════════════════════════════════════════════╝
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│  RESULTADO FINAL                                                         │
+│  FINAL RESULT                                                            │
 └────────────────────────────────────────────────────────────────────────────┘
 
-     HISTÓRICO (AuditLog)
-    ├─ Status: OPERACIONAL
-    ├─ Registra: POST, PUT, PATCH, DELETE
-    ├─ Dados: ação, entidade, usuário, IP, timestamp
-    ├─ Armazenamento: Tabela AuditLog
-    └─ Acesso: GET /api/audit-logs
+     HISTORY (AuditLog)
+    ├─ Status: OPERATIONAL
+    ├─ Records: POST, PUT, PATCH, DELETE
+    ├─ Data: action, entity, user, IP, timestamp
+    ├─ Storage: AuditLog table
+    └─ Access: GET /api/audit-logs
 
-     NOTIFICAÇÕES
-    ├─ Status: IMPLEMENTADO + FUNCIONANDO
-    ├─ Disparo: Criar produto, Atualizar status
-    ├─ Formato: Com emojis e mensagens descritivas
-    ├─ Armazenamento: Tabela Notification
-    └─ Acesso: GET /api/notifications
+     NOTIFICATIONS
+    ├─ Status: IMPLEMENTED + WORKING
+    ├─ Trigger: Create product, Update status
+    ├─ Format: With emojis and descriptive messages
+    ├─ Storage: Notification table
+    └─ Access: GET /api/notifications
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 🔧 MUDANÇAS IMPLEMENTADAS                                                  │
+│ 🔧 IMPLEMENTED CHANGES                                                    │
 └────────────────────────────────────────────────────────────────────────────┘
 
-    ✏️  2 FICHEIROS MODIFICADOS
+    ✏️  2 MODIFIED FILES
     │
     ├─ src/modules/products/products.service.ts
     │  └─ + NotificationsService injection
-    │     + Notificação ao criar produto
-    │     + Notificação ao atualizar status
+    │     + Notification when creating product
+    │     + Notification when updating status
     │
     └─ src/modules/products/products.module.ts
        └─ + NotificationsModule import
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 📚 DOCUMENTAÇÃO CRIADA (8 FICHEIROS)                                       │
+│ 📚 CREATED DOCUMENTATION (8 FILES)                                         │
 └────────────────────────────────────────────────────────────────────────────┘
 
     ⭐ README_HISTORICO_NOTIFICACOES.md
-       └─ Resumo executivo (1 página) - COMECE AQUI
+       └─ Executive summary (1 page) - START HERE
 
-    📖 GUIA_TESTE_MANUAL.md
-       └─ Teste passo-a-passo com exemplos
+    📖 TESTING.md
+       └─ Step-by-step testing with examples
 
-    🚀 DEPLOY_INSTRUCOES.md
-       └─ Compilação e deploy
+    🚀 DEPLOYMENT.md
+       └─ Compilation and deployment
 
-    🗺️  ROADMAP_FUNCIONALIDADES.md
-       └─ Próximas features e arquitetura
+    🗺️  ROADMAP.md
+       └─ Next features and architecture
 
     📄 VERIFICACAO_HISTORICO_NOTIFICACOES.md
-       └─ Documentação técnica completa
+       └─ Complete technical documentation
 
-    ✨ CONCLUSAO.txt
-       └─ Sumário visual
+    ✨ CONCLUSION.txt
+       └─ Visual summary
 
-    📑 INDICE_DOCUMENTACAO.txt
-       └─ Índice de navegação
+    📑 DOCUMENTATION_INDEX.md
+       └─ Navigation index
 
-    📝 RESUMO_FINAL.md
-       └─ Resumo executivo final
+    📝 PROJECT_COMPLETION_REPORT.md
+       └─ Final executive summary
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 🧪 SCRIPTS DE TESTE CRIADOS                                               │
+│ 🧪 CREATED TEST SCRIPTS                                                   │
 └────────────────────────────────────────────────────────────────────────────┘
 
     🔧 test-audit-notifications.ps1
-       └─ Teste automatizado (PowerShell)
+       └─ Automated test (PowerShell)
 
     🔧 test-audit-notifications.sh
-       └─ Teste automatizado (Bash)
+       └─ Automated test (Bash)
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 🚀 COMO COMEÇAR (3 PASSOS)                                                 │
+│ 🚀 HOW TO START (3 STEPS)                                                  │
 └────────────────────────────────────────────────────────────────────────────┘
 
-    1️⃣  RECOMPILE O SERVIDOR
+    1️⃣  RECOMPILE THE SERVER
         cd backend-nest
         npm install
         npm run start:dev
 
-    2️⃣  ESCOLHA UMA OPÇÃO DE TESTE
+    2️⃣  CHOOSE A TEST OPTION
 
-        A) Teste Manual (Recomendado)
-           └─ Abra: GUIA_TESTE_MANUAL.md
+        A) Manual Test (Recommended)
+           └─ Open: TESTING.md
            └─ Use: Postman/Insomnia
 
-        B) Teste Automatizado
+        B) Automated Test
            └─ Execute: .\test-audit-notifications.ps1
 
-        C) Teste BD Direto
-           └─ Use SQL queries em GUIA_TESTE_MANUAL.md
+        C) Direct DB Test
+           └─ Use SQL queries in TESTING.md
 
-    3️⃣  VALIDE
-        └─ Criar produto → Ver histórico + notificação
-        └─ Atualizar status → Ver nova notificação
+    3️⃣  VALIDATE
+        └─ Create product → Check history + notification
+        └─ Update status → Check new notification
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 📋 ENDPOINTS PRINCIPAIS                                                    │
+│ 📋 MAIN ENDPOINTS                                                         │
 └────────────────────────────────────────────────────────────────────────────┘
 
-    HISTÓRICO:
-    ├─ GET  /api/audit-logs              → Listar todos
-    ├─ GET  /api/audit-logs/entity/:...  → Por entidade
-    ├─ GET  /api/audit-logs/user/:...    → Por usuário
-    └─ GET  /api/audit-logs/stats        → Estatísticas
+    HISTORY:
+    ├─ GET  /api/audit-logs              → List all
+    ├─ GET  /api/audit-logs/entity/:...  → By entity
+    ├─ GET  /api/audit-logs/user/:...    → By user
+    └─ GET  /api/audit-logs/stats        → Statistics
 
-    NOTIFICAÇÕES:
-    ├─ GET  /api/notifications           → Listar todas
-    ├─ GET  /api/notifications/unread    → Não lidas
+    NOTIFICATIONS:
+    ├─ GET  /api/notifications           → List all
+    ├─ GET  /api/notifications/unread    → Unread
     ├─ GET  /api/notifications/unread/count
-    ├─ PATCH /api/notifications/:id/read → Marcar como lida
-    ├─ PATCH /api/notifications/read-all → Todas como lidas
-    └─ DELETE /api/notifications/:id     → Deletar
+    ├─ PATCH /api/notifications/:id/read → Mark as read
+    ├─ PATCH /api/notifications/read-all → Mark all as read
+    └─ DELETE /api/notifications/:id     → Delete
 
-    PRODUTOS (Dispara notificações):
-    ├─ POST /api/products                → Cria + notificação
-    └─ PUT  /api/products/:id/status     → Atualiza + notificação
+    PRODUCTS (Triggers notifications):
+    ├─ POST /api/products                → Creates + notification
+    └─ PUT  /api/products/:id/status     → Updates + notification
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
 │  CHECKLIST                                                               │
 └────────────────────────────────────────────────────────────────────────────┘
 
-    [ ] Li README_HISTORICO_NOTIFICACOES.md
-    [ ] Backend foi recompilado
-    [ ] Token JWT válido
-    [ ] supplierId válido
-    [ ] Postman/Insomnia instalado
-    [ ] PostgreSQL rodando
-    [ ] Criei um produto
-    [ ] Verificei histórico
-    [ ] Verificei notificação
-    [ ] Atualizei status
-    [ ] Verificou segunda notificação
+    [ ] Read README_HISTORICO_NOTIFICACOES.md
+    [ ] Backend was recompiled
+    [ ] Valid JWT token
+    [ ] Valid supplierId
+    [ ] Postman/Insomnia installed
+    [ ] PostgreSQL running
+    [ ] Created a product
+    [ ] Checked history
+    [ ] Checked notification
+    [ ] Updated status
+    [ ] Checked second notification
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 🎯 TESTE RÁPIDO (5 MINUTOS)                                                │
+│ 🎯 QUICK TEST (5 MINUTES)                                                  │
 └────────────────────────────────────────────────────────────────────────────┘
 
-    1. Abra Postman/Insomnia
+    1. Open Postman/Insomnia
     2. POST http://localhost:3000/api/products
        {
          "internalCode": "TEST-001",
-         "description": "Teste",
+         "description": "Test",
          "quantity": 100,
          "unit": "kg",
-         "supplierId": "seu-id"
+         "supplierId": "your-id"
        }
     3. GET http://localhost:3000/api/audit-logs
-       └─ Deve ter novo registro
+       └─ Should have new record
     4. GET http://localhost:3000/api/notifications
-       └─ Deve ter notificação " Novo Produto Registado"
+       └─ Should have notification " New Product Registered"
 
-     PRONTO!
+     READY!
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 🗂️  ESTRUTURA DE FICHEIROS                                                │
+│ 🗂️  FILE STRUCTURE                                                         │
 └────────────────────────────────────────────────────────────────────────────┘
 
     logistica-multi-tenant/
     │
     ├── 📄 README_HISTORICO_NOTIFICACOES.md ⭐
-    ├── 📄 GUIA_TESTE_MANUAL.md
-    ├── 📄 DEPLOY_INSTRUCOES.md
+    ├── 📄 TESTING.md
+    ├── 📄 DEPLOYMENT.md
     ├── 📄 VERIFICACAO_HISTORICO_NOTIFICACOES.md
-    ├── 📄 ROADMAP_FUNCIONALIDADES.md
-    ├── 📄 CONCLUSAO.txt
-    ├── 📄 INDICE_DOCUMENTACAO.txt
-    ├── 📄 RESUMO_FINAL.md
+    ├── 📄 ROADMAP.md
+    ├── 📄 CONCLUSION.txt
+    ├── 📄 DOCUMENTATION_INDEX.md
+    ├── 📄 PROJECT_COMPLETION_REPORT.md
     ├── 🔧 test-audit-notifications.ps1
     ├── 🔧 test-audit-notifications.sh
     │
@@ -191,67 +191,67 @@
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 💡 DICAS                                                                   │
+│ 💡 TIPS                                                                   │
 └────────────────────────────────────────────────────────────────────────────┘
 
-    • Histórico já estava funcionando desde o início
-    • Notificações agora disparam automaticamente
-    • Todos os dados são persistidos no PostgreSQL
-    • Use Prisma Studio para visualizar dados:
+    • History was already working from the beginning
+    • Notifications now trigger automatically
+    • All data is persisted in PostgreSQL
+    • Use Prisma Studio to visualize data:
       └─ npx prisma studio
-    • Verifique logs do servidor para debugging
-    • Todos os endpoints requerem token JWT
+    • Check server logs for debugging
+    • All endpoints require JWT token
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 🔮 PRÓXIMAS FEATURES (ROADMAP)                                             │
+│ 🔮 NEXT FEATURES (ROADMAP)                                                 │
 └────────────────────────────────────────────────────────────────────────────┘
 
-    FASE 2 (2-3 semanas):
-    ├─ Notificações para Transports
-    ├─ Alertas de Estoque Baixo
-    └─ Notificações de Usuários
+    PHASE 2 (2-3 weeks):
+    ├─ Notifications for Transports
+    ├─ Low Stock Alerts
+    └─ User Notifications
 
-    FASE 3 (1-2 meses):
+    PHASE 3 (1-2 months):
     ├─ Email Notifications
     ├─ WebSocket Real-time
-    └─ Dashboard de Atividades
+    └─ Activity Dashboard
 
-    Ver: ROADMAP_FUNCIONALIDADES.md
+    See: ROADMAP_FUNCIONALIDADES.md
 
 
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 📞 SUPORTE RÁPIDO                                                          │
+│ 📞 QUICK SUPPORT                                                          │
 └────────────────────────────────────────────────────────────────────────────┘
 
-    Histórico vazio?
-    └─ Ver: GUIA_TESTE_MANUAL.md > Troubleshooting
+    History empty?
+    └─ See: TESTING.md > Troubleshooting
 
-    Notificações não aparecem?
-    └─ Ver: DEPLOY_INSTRUCOES.md > Troubleshooting
+    Notifications not appearing?
+    └─ See: DEPLOYMENT.md > Troubleshooting
 
-    Erro na compilação?
-    └─ Ver: DEPLOY_INSTRUCOES.md > Troubleshooting de compilação
+    Compilation error?
+    └─ See: DEPLOYMENT.md > Compilation Troubleshooting
 
-    Próximas features?
-    └─ Ver: ROADMAP_FUNCIONALIDADES.md
+    Next features?
+    └─ See: ROADMAP.md
 
 
 ╔════════════════════════════════════════════════════════════════════════════╗
 ║                                                                            ║
-║                     TUDO PRONTO PARA PRODUÇÃO!                          ║
+║                     READY FOR PRODUCTION!                                  ║
 ║                                                                            ║
-║              Recompile o servidor e comece a testar agora.                 ║
+║              Recompile the server and start testing now.                   ║
 ║                                                                            ║
 ║                          npm run start:dev                                 ║
 ║                                                                            ║
-║                   Depois leia: README_HISTORICO_NOTIFICACOES.md           ║
+║                   Then read: README_HISTORICO_NOTIFICACOES.md              ║
 ║                                                                            ║
 ╚════════════════════════════════════════════════════════════════════════════╝
 
 
 Data: 2 de Dezembro de 2025
-Status:  Pronto para Uso
-Versão: 1.0
+Status:  Ready for Use
+Version: 1.0
 
 ═════════════════════════════════════════════════════════════════════════════
