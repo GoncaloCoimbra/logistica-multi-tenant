@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../api/api';
+import { getStatusBadgeClass, statusLabels } from '../theme.config';
 
 interface Product {
   id: string;
@@ -38,63 +39,64 @@ interface Movement {
   };
 }
 
-interface NextState {
-  currentStatus: string;
-  nextPossibleStates: string[];
-  isFinalState: boolean;
+interface ActiveFilter {
+  type: 'supplier' | 'vehicle' | 'status' | 'location';
+  label: string;
+  value: string;
 }
-
-const STATUS_TRANSLATIONS: { [key: string]: string } = {
-  'RECEIVED': 'Recebido',
-  'IN_ANALYSIS': 'Em Análise',
-  'REJECTED': 'Rejeitado',
-  'APPROVED': 'Aprovado',
-  'IN_STORAGE': 'Em Armazenamento',
-  'IN_PREPARATION': 'Em Preparação',
-  'IN_SHIPPING': 'Em Expedição',
-  'DELIVERED': 'Entregue',
-  'IN_RETURN': 'Em Devolução',
-  'ELIMINATED': 'Eliminado',
-  'CANCELLED': 'Cancelado'
-};
-
-const STATUS_COLORS: { [key: string]: string } = {
-  'RECEIVED': 'bg-blue-100 text-blue-800',
-  'IN_ANALYSIS': 'bg-yellow-100 text-yellow-800',
-  'REJECTED': 'bg-red-100 text-red-800',
-  'APPROVED': 'bg-green-100 text-green-800',
-  'IN_STORAGE': 'bg-purple-100 text-purple-800',
-  'IN_PREPARATION': 'bg-orange-100 text-orange-800',
-  'IN_SHIPPING': 'bg-indigo-100 text-indigo-800',
-  'DELIVERED': 'bg-green-200 text-green-900',
-  'IN_RETURN': 'bg-gray-100 text-gray-800',
-  'ELIMINATED': 'bg-black text-white',
-  'CANCELLED': 'bg-red-200 text-red-900'
-};
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  
   const [product, setProduct] = useState<Product | null>(null);
-  const [nextStates, setNextStates] = useState<NextState | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const [showChangeStatus, setShowChangeStatus] = useState(false);
-  const [selectedNewStatus, setSelectedNewStatus] = useState('');
-  const [reason, setReason] = useState('');
-  const [location, setLocation] = useState('');
-  const [changingStatus, setChangingStatus] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
+  const [showAddFilter, setShowAddFilter] = useState(false);
+  const [newFilterType, setNewFilterType] = useState<'supplier' | 'vehicle' | 'status' | 'location'>('supplier');
+  const [newFilterValue, setNewFilterValue] = useState('');
+  
+  // 🆕 Estados para deletar produto
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     loadProduct();
-    loadNextStates();
+    loadFiltersFromURL();
   }, [id]);
+
+  const loadFiltersFromURL = () => {
+    const filters: ActiveFilter[] = [];
+    
+    const supplier = searchParams.get('supplier');
+    if (supplier) {
+      filters.push({ type: 'supplier', label: 'Fornecedor', value: supplier });
+    }
+    
+    const vehicle = searchParams.get('vehicle');
+    if (vehicle) {
+      filters.push({ type: 'vehicle', label: 'Veículo', value: vehicle });
+    }
+    
+    const status = searchParams.get('status');
+    if (status) {
+      filters.push({ type: 'status', label: 'Estado', value: statusLabels.product[status] || status });
+    }
+    
+    const location = searchParams.get('location');
+    if (location) {
+      filters.push({ type: 'location', label: 'Localização', value: location });
+    }
+    
+    setActiveFilters(filters);
+  };
 
   const loadProduct = async () => {
     try {
-      const response = await api.get(`/products/${id}`);
+      const response = await api.get(`/products/${id}/movements`);
       setProduct(response.data);
-      setLocation(response.data.currentLocation || '');
     } catch (error) {
       console.error('Erro ao carregar produto:', error);
     } finally {
@@ -102,240 +104,433 @@ const ProductDetails: React.FC = () => {
     }
   };
 
-  const loadNextStates = async () => {
+  // 🗑️ Função para deletar produto
+  const handleDeleteProduct = async () => {
+    if (!product) return;
+
+    setDeleting(true);
+    setDeleteError(null);
+
     try {
-      const response = await api.get(`/products/${id}/next-states`);
-      setNextStates(response.data);
-    } catch (error) {
-      console.error('Erro ao carregar próximos estados:', error);
+      await api.delete(`/products/${product.id}`);
+      
+      // Sucesso - redirecionar para lista
+      navigate('/produtos', { 
+        state: { 
+          message: `Produto "${product.description}" foi eliminado com sucesso!`,
+          type: 'success'
+        }
+      });
+    } catch (error: any) {
+      console.error('Erro ao deletar produto:', error);
+      console.error('Response completo:', error.response);
+      
+      // Capturar mensagem de erro da API - garantir que seja sempre string
+      let errorMessage = 'Erro ao eliminar produto. Tente novamente.';
+      
+      if (error.response) {
+        const { status, data } = error.response;
+        
+        // Tratar erro 403 (Forbidden) especificamente
+        if (status === 403) {
+          errorMessage = '🔒 Sem permissão para eliminar este produto. Verifique suas permissões de acesso.';
+        }
+        // Tratar erro 400 (Bad Request) - validação do backend
+        else if (status === 400 && data) {
+          if (typeof data.message === 'string') {
+            errorMessage = data.message;
+          } else if (typeof data.message === 'object' && data.message.message) {
+            errorMessage = data.message.message;
+          } else if (typeof data.error === 'string') {
+            errorMessage = data.error;
+          }
+        }
+        // Outros erros
+        else if (data) {
+          if (typeof data.message === 'string') {
+            errorMessage = data.message;
+          } else if (typeof data.message === 'object' && data.message.message) {
+            errorMessage = data.message.message;
+          } else if (typeof data.error === 'string') {
+            errorMessage = data.error;
+          } else if (typeof data === 'string') {
+            errorMessage = data;
+          }
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setDeleteError(errorMessage);
+      setDeleting(false);
     }
   };
 
-  const handleChangeStatus = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!selectedNewStatus) {
-      alert('Selecione um novo estado');
+  const handleAddFilter = () => {
+    if (!newFilterValue.trim()) {
+      alert('Digite um valor para o filtro');
       return;
     }
 
-    setChangingStatus(true);
+    const filterLabels = {
+      supplier: 'Fornecedor',
+      vehicle: 'Veículo',
+      status: 'Estado',
+      location: 'Localização'
+    };
 
-    try {
-      await api.post(`/products/${id}/change-status`, {
-        newStatus: selectedNewStatus,
-        reason: reason.trim() || undefined,
-        location: location.trim() || undefined
-      });
+    const newFilter: ActiveFilter = {
+      type: newFilterType,
+      label: filterLabels[newFilterType],
+      value: newFilterValue.trim()
+    };
 
-      alert('Estado alterado com sucesso!');
-      setShowChangeStatus(false);
-      setSelectedNewStatus('');
-      setReason('');
-      
-      
-      await loadProduct();
-      await loadNextStates();
-    } catch (error: any) {
-      const errorMsg = error.response?.data?.error || 'Erro ao alterar estado';
-      alert(errorMsg);
-    } finally {
-      setChangingStatus(false);
-    }
+    setActiveFilters([...activeFilters, newFilter]);
+    setShowAddFilter(false);
+    setNewFilterValue('');
   };
 
+  const handleRemoveFilter = (index: number) => {
+    setActiveFilters(activeFilters.filter((_, i) => i !== index));
+  };
+
+  const handleBackToList = () => {
+    const params = new URLSearchParams();
+    
+    activeFilters.forEach(filter => {
+      params.append(filter.type, filter.value);
+    });
+    
+    const queryString = params.toString();
+    navigate(`/produtos${queryString ? `?${queryString}` : ''}`);
+  };
+
+  // 🆕 Verificar se pode deletar
+  const canDelete = product?.status === 'RECEIVED';
+
   if (loading) {
-    return <div className="p-8 text-gray-600">A carregar detalhes...</div>;
+    return (
+      <div className="p-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b] min-h-screen">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
+          <span className="ml-3 text-amber-300">A carregar detalhes...</span>
+        </div>
+      </div>
+    );
   }
 
   if (!product) {
-    return <div className="p-8 text-red-600">Produto não encontrado.</div>;
+    return (
+      <div className="p-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b] min-h-screen">
+        <div className="flex flex-col items-center justify-center h-64">
+          <svg className="w-16 h-16 text-red-400/50 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-red-400 font-medium text-lg">Produto não encontrado.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="p-8">
-      <button
-        onClick={() => navigate(-1)}
-        className="text-blue-600 hover:text-blue-800 mb-6 flex items-center gap-2"
-      >
-        ← Voltar
-      </button>
+    <div className="p-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b] min-h-screen text-amber-100">
+      {/* Botão Voltar */}
+      <div className="flex justify-between items-center mb-6">
+        <button
+          onClick={handleBackToList}
+          className="text-amber-400 hover:text-amber-300 flex items-center gap-2 font-medium hover:bg-amber-900/30 px-4 py-2 rounded-lg transition-all border border-amber-500/30"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Voltar para Lista
+        </button>
 
-      
-      <div className="bg-white shadow rounded-lg p-6 mb-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <h2 className="text-2xl font-bold mb-2">{product.description}</h2>
-            <p className="text-gray-600">Código: {product.internalCode}</p>
-          </div>
-          <span className={`px-4 py-2 rounded-full font-semibold ${STATUS_COLORS[product.status]}`}>
-            {STATUS_TRANSLATIONS[product.status] || product.status}
-          </span>
-        </div>
+        {/* 🆕 Botão Deletar */}
+        <button
+          onClick={() => setShowDeleteModal(true)}
+          disabled={!canDelete}
+          className={`flex items-center gap-2 px-6 py-2 rounded-lg font-medium transition-all border ${
+            canDelete
+              ? 'bg-red-600/20 border-red-500/50 text-red-400 hover:bg-red-600/30 hover:border-red-500'
+              : 'bg-gray-700/20 border-gray-600/30 text-gray-500 cursor-not-allowed'
+          }`}
+          title={!canDelete ? 'Apenas produtos no estado "Recebido" podem ser eliminados' : 'Eliminar produto'}
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+          Eliminar Produto
+        </button>
       </div>
 
-      
-      <div className="bg-white shadow rounded-lg p-6 mb-6">
-        <h3 className="text-lg font-semibold mb-4">Informações do Produto</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* 🆕 Aviso se não pode deletar */}
+      {!canDelete && (
+        <div className="bg-amber-900/20 border-2 border-amber-500/50 rounded-lg p-4 mb-6 flex items-start gap-3">
+          <svg className="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
           <div>
-            <p className="text-sm text-gray-600">Quantidade</p>
-            <p className="font-medium">{product.quantity} {product.unit}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Fornecedor</p>
-            <p className="font-medium">{product.supplier?.name || '—'}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Localização Atual</p>
-            <p className="font-medium">{product.currentLocation || '—'}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Peso Total</p>
-            <p className="font-medium">{product.totalWeight ? `${product.totalWeight} kg` : '—'}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Volume Total</p>
-            <p className="font-medium">{product.totalVolume ? `${product.totalVolume} m³` : '—'}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">Data de Receção</p>
-            <p className="font-medium">{new Date(product.receivedAt).toLocaleDateString('pt-PT')}</p>
-          </div>
-          <div className="col-span-2">
-            <p className="text-sm text-gray-600">Observações</p>
-            <p className="font-medium">{product.observations || '—'}</p>
+            <p className="text-amber-300 font-semibold">Produto não pode ser eliminado</p>
+            <p className="text-amber-200/80 text-sm mt-1">
+              Apenas produtos no estado <strong>"Recebido"</strong> podem ser eliminados. Estado atual: <strong>{statusLabels.product[product.status] || product.status}</strong>
+            </p>
           </div>
         </div>
-      </div>
+      )}
 
-      
-      {nextStates && !nextStates.isFinalState && nextStates.nextPossibleStates.length > 0 && (
-        <div className="bg-white shadow rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-semibold mb-4">Alterar Estado</h3>
-          
-          {!showChangeStatus ? (
+      {/* Filtros Ativos */}
+      {(activeFilters.length > 0 || showAddFilter) && (
+        <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6 mb-6">
+          <div className="flex justify-between items-start mb-6">
+            <h3 className="text-lg font-semibold text-white">🔍 Filtros Ativos</h3>
             <button
-              onClick={() => setShowChangeStatus(true)}
-              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+              onClick={() => setShowAddFilter(!showAddFilter)}
+              className="text-sm bg-gradient-to-r from-amber-500 to-amber-600 text-white px-4 py-2 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all border border-amber-500/30 shadow-lg font-medium"
             >
-              Mudar Estado do Produto
+              {showAddFilter ? '✕ Cancelar' : '+ Adicionar Filtro'}
             </button>
-          ) : (
-            <form onSubmit={handleChangeStatus}>
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  Novo Estado <span className="text-red-500">*</span>
-                </label>
-                <select
-                  value={selectedNewStatus}
-                  onChange={(e) => setSelectedNewStatus(e.target.value)}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                  required
-                >
-                  <option value="">Selecione...</option>
-                  {nextStates.nextPossibleStates.map(state => (
-                    <option key={state} value={state}>
-                      {STATUS_TRANSLATIONS[state] || state}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  Localização
-                </label>
-                <input
-                  type="text"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                  placeholder="Ex: Corredor A, Prateleira 3"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  Motivo/Comentário
-                </label>
-                <textarea
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                  rows={3}
-                  placeholder="Descreva o motivo da mudança (obrigatório para rejeições)..."
-                />
-              </div>
-
-              <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3 mb-6">
+            {activeFilters.map((filter, index) => (
+              <div
+                key={index}
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-900/40 to-amber-800/30 text-amber-300 px-4 py-2 rounded-full border border-amber-500/30"
+              >
+                <span className="font-medium">{filter.label}:</span>
+                <span>"{filter.value}"</span>
                 <button
-                  type="submit"
-                  disabled={changingStatus || !selectedNewStatus}
-                  className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+                  onClick={() => handleRemoveFilter(index)}
+                  className="ml-2 hover:bg-amber-500/30 rounded-full w-6 h-6 flex items-center justify-center transition-colors"
+                  title="Remover filtro"
                 >
-                  {changingStatus ? 'Alterando...' : 'Confirmar Mudança'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowChangeStatus(false);
-                    setSelectedNewStatus('');
-                    setReason('');
-                  }}
-                  className="bg-gray-200 text-gray-700 px-6 py-2 rounded hover:bg-gray-300"
-                >
-                  Cancelar
+                  ✕
                 </button>
               </div>
-            </form>
+            ))}
+          </div>
+
+          {showAddFilter && (
+            <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-6 rounded-lg border border-amber-500/20">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-amber-300 mb-2">
+                    Tipo de Filtro
+                  </label>
+                  <select
+                    value={newFilterType}
+                    onChange={(e) => setNewFilterType(e.target.value as any)}
+                    className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white"
+                  >
+                    <option value="supplier" className="bg-[#1e293b]">Fornecedor</option>
+                    <option value="vehicle" className="bg-[#1e293b]">Veículo</option>
+                    <option value="status" className="bg-[#1e293b]">Estado</option>
+                    <option value="location" className="bg-[#1e293b]">Localização</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-amber-300 mb-2">
+                    Valor
+                  </label>
+                  <input
+                    type="text"
+                    value={newFilterValue}
+                    onChange={(e) => setNewFilterValue(e.target.value)}
+                    placeholder="Digite o valor..."
+                    className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white placeholder-amber-300/50"
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddFilter()}
+                  />
+                </div>
+
+                <div className="flex items-end">
+                  <button
+                    onClick={handleAddFilter}
+                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-6 py-2.5 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all border border-amber-500/30 shadow-lg font-medium"
+                  >
+                    Adicionar
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       )}
 
-      
-      <div className="bg-white shadow rounded-lg p-6">
-        <h3 className="text-lg font-semibold mb-4">Histórico de Movimentações</h3>
+      {/* Informações do Produto */}
+      <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-8 mb-6">
+        <div className="flex justify-between items-start">
+          <div>
+            <h2 className="text-3xl font-bold text-white mb-3">{product.description}</h2>
+            <p className="text-amber-300">Código: {product.internalCode}</p>
+          </div>
+          <span className={`px-5 py-2.5 rounded-full font-semibold text-sm ${getStatusBadgeClass('product', product.status)}`}>
+            {statusLabels.product[product.status] || product.status}
+          </span>
+        </div>
+      </div>
+
+      {/* Detalhes do Produto */}
+      <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-8 mb-8">
+        <h3 className="text-xl font-semibold text-white mb-6">📋 Informações do Produto</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
+            <p className="text-sm text-amber-300 mb-1">Quantidade</p>
+            <p className="text-xl font-medium text-white">{product.quantity} {product.unit}</p>
+          </div>
+          <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
+            <p className="text-sm text-amber-300 mb-1">Fornecedor</p>
+            <p className="text-xl font-medium text-white">{product.supplier?.name || '—'}</p>
+          </div>
+          <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
+            <p className="text-sm text-amber-300 mb-1">Localização Atual</p>
+            <p className="text-xl font-medium text-white">{product.currentLocation || '—'}</p>
+          </div>
+          <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
+            <p className="text-sm text-amber-300 mb-1">Peso Total</p>
+            <p className="text-xl font-medium text-white">{product.totalWeight ? `${product.totalWeight} kg` : '—'}</p>
+          </div>
+          <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
+            <p className="text-sm text-amber-300 mb-1">Volume Total</p>
+            <p className="text-xl font-medium text-white">{product.totalVolume ? `${product.totalVolume} m³` : '—'}</p>
+          </div>
+          <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
+            <p className="text-sm text-amber-300 mb-1">Data de Receção</p>
+            <p className="text-xl font-medium text-white">
+              {product.receivedAt ? new Date(product.receivedAt).toLocaleDateString('pt-PT') : '—'}
+            </p>
+          </div>
+          <div className="col-span-2 bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
+            <p className="text-sm text-amber-300 mb-1">Observações</p>
+            <p className="text-lg text-white">{product.observations || '—'}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Histórico de Movimentações */}
+      <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-8">
+        <h3 className="text-xl font-semibold text-white mb-6">📜 Histórico de Movimentações</h3>
         
         {!product.movements || product.movements.length === 0 ? (
-          <p className="text-gray-500">Nenhuma movimentação registrada</p>
+          <div className="text-center py-8">
+            <svg className="w-16 h-16 text-amber-500/30 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <p className="text-amber-300/70">Nenhuma movimentação registrada</p>
+          </div>
         ) : (
           <div className="space-y-4">
             {product.movements.map((movement) => (
-              <div key={movement.id} className="border-l-4 border-blue-500 pl-4 py-2">
+              <div 
+                key={movement.id} 
+                className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 rounded-lg p-4 border border-amber-500/20 hover:border-amber-500/40 transition-all"
+              >
                 <div className="flex justify-between items-start">
-                  <div>
-                    <p className="font-medium">
-                      {movement.previousStatus 
-                        ? `${STATUS_TRANSLATIONS[movement.previousStatus]} → ` 
-                        : ''}
-                      <span className="text-blue-600">
-                        {STATUS_TRANSLATIONS[movement.newStatus]}
+                  <div className="flex-1">
+                    <div className="mb-3">
+                      <span className="font-medium text-white">
+                        {movement.previousStatus 
+                          ? `${statusLabels.product[movement.previousStatus]} → ` 
+                          : ''}
+                        <span className="text-amber-400">
+                          {statusLabels.product[movement.newStatus]}
+                        </span>
                       </span>
-                    </p>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Por: {movement.user.name} ({movement.user.email})
-                    </p>
-                    {movement.location && (
-                      <p className="text-sm text-gray-600">
-                        Localização: {movement.location}
-                      </p>
-                    )}
+                      <div className="text-sm text-amber-300 mt-2">
+                        <span className="font-medium">Por:</span> {movement.user.name} ({movement.user.email})
+                      </div>
+                      {movement.location && (
+                        <div className="text-sm text-amber-300 mt-1">
+                          <span className="font-medium">Localização:</span> {movement.location}
+                        </div>
+                      )}
+                    </div>
                     {movement.reason && (
-                      <p className="text-sm text-gray-700 mt-1 italic">
+                      <div className="mt-3 text-sm text-amber-200 bg-amber-900/30 p-3 rounded border border-amber-500/20 italic">
                         "{movement.reason}"
-                      </p>
+                      </div>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500">
+                  <div className="text-sm text-amber-400/70 ml-4 whitespace-nowrap">
                     {new Date(movement.createdAt).toLocaleString('pt-PT')}
-                  </p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* 🆕 Modal de Confirmação de Exclusão */}
+      {showDeleteModal && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 z-40"
+            onClick={() => !deleting && setShowDeleteModal(false)}
+          />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-red-500/50 rounded-xl shadow-2xl w-full max-w-md">
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-red-500/20 p-3 rounded-full">
+                    <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Confirmar Exclusão</h3>
+                </div>
+
+                <p className="text-amber-200 mb-4">
+                  Tem certeza que deseja eliminar o produto <strong className="text-white">"{product.description}"</strong>?
+                </p>
+
+                <div className="bg-amber-900/20 border border-amber-500/30 rounded-lg p-3 mb-6">
+                  <p className="text-sm text-amber-300">
+                    <strong>Código:</strong> {product.internalCode}<br />
+                    <strong>Estado:</strong> {statusLabels.product[product.status]}
+                  </p>
+                </div>
+
+                {deleteError && (
+                  <div className="bg-red-900/30 border-2 border-red-500/50 rounded-lg p-4 mb-4">
+                    <p className="text-red-300 text-sm">{deleteError}</p>
+                  </div>
+                )}
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowDeleteModal(false)}
+                    disabled={deleting}
+                    className="flex-1 px-4 py-3 border-2 border-amber-500/50 text-amber-400 rounded-lg hover:bg-amber-900/20 transition-all font-bold disabled:opacity-50"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleDeleteProduct}
+                    disabled={deleting}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-bold shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {deleting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                        A eliminar...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Sim, Eliminar
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

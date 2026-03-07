@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../api/api';
+import { theme, getStatusBadgeClass, statusLabels, statusColors } from '../theme.config';
 
 const Profile: React.FC = () => {
   const { user, updateUserData } = useAuth();
@@ -152,29 +153,24 @@ const Profile: React.FC = () => {
   };
 
   const getRoleLabel = (role?: string) => {
-    const roles = {
-      SUPER_ADMIN: 'Super Administrador',
-      ADMIN: 'Administrador',
-      OPERATOR: 'Operador'
-    };
-    return roles[role as keyof typeof roles] || role;
+    return statusLabels.user[role as keyof typeof statusLabels.user] || role;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+    <div className={theme.backgrounds.page}>
+      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Meu Perfil</h1>
-          <p className="text-gray-600 mt-2">Gerir as suas informações pessoais</p>
+          <h1 className="text-3xl font-bold text-white">Meu Perfil</h1>
+          <p className={theme.colors.secondary.text}>Gerir as suas informações pessoais</p>
         </div>
 
         {/* Avatar Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-6">
+        <div className={theme.cards.base}>
           <div className="flex flex-col md:flex-row items-center gap-6">
             {/* Avatar */}
             <div className="relative">
-              <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center border-4 border-white shadow-lg">
+              <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-[#3b82f6] via-[#2563eb] to-[#1d4ed8] flex items-center justify-center border-4 border-[#3b82f6] shadow-2xl">
                 {getAvatarUrl() ? (
                   <img 
                     src={getAvatarUrl()!} 
@@ -188,7 +184,7 @@ const Profile: React.FC = () => {
                 )}
               </div>
               {avatarLoading && (
-                <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
                 </div>
               )}
@@ -196,14 +192,14 @@ const Profile: React.FC = () => {
 
             {/* User Info */}
             <div className="flex-1 text-center md:text-left">
-              <h2 className="text-2xl font-bold text-gray-900">{user?.name}</h2>
-              <p className="text-gray-600 mt-1">{user?.email}</p>
+              <h2 className="text-2xl font-bold text-white">{user?.name}</h2>
+              <p className={theme.colors.secondary.text}>{user?.email}</p>
               <div className="flex items-center justify-center md:justify-start gap-2 mt-3">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                <span className={getStatusBadgeClass('user', user?.role || 'OPERATOR')}>
                   {getRoleLabel(user?.role)}
                 </span>
                 {user?.companyName && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  <span className="inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium bg-[#1e293b]/70 text-[#cbd5e1] border border-[#334155]">
                     {user.companyName}
                   </span>
                 )}
@@ -222,7 +218,7 @@ const Profile: React.FC = () => {
               <button
                 onClick={handleAvatarClick}
                 disabled={avatarLoading}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium disabled:opacity-50"
+                className={theme.buttons.primary}
               >
                 Alterar Foto
               </button>
@@ -230,7 +226,7 @@ const Profile: React.FC = () => {
                 <button
                   onClick={handleRemoveAvatar}
                   disabled={avatarLoading}
-                  className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-sm font-medium disabled:opacity-50"
+                  className={theme.buttons.danger}
                 >
                   Remover Foto
                 </button>
@@ -240,26 +236,18 @@ const Profile: React.FC = () => {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="border-b border-gray-200">
+        <div className="bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-xl shadow-lg border border-[#334155]/50 overflow-hidden mt-6">
+          <div className="border-b border-[#334155]/50">
             <nav className="flex">
               <button
                 onClick={() => setActiveTab('profile')}
-                className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
-                  activeTab === 'profile'
-                    ? 'border-b-2 border-blue-600 text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
+                className={activeTab === 'profile' ? theme.tabs.active : theme.tabs.inactive}
               >
                 Informações Pessoais
               </button>
               <button
                 onClick={() => setActiveTab('password')}
-                className={`flex-1 py-4 px-6 text-center font-medium transition-colors ${
-                  activeTab === 'password'
-                    ? 'border-b-2 border-blue-600 text-blue-600'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
+                className={activeTab === 'password' ? theme.tabs.active : theme.tabs.inactive}
               >
                 Alterar Password
               </button>
@@ -271,39 +259,39 @@ const Profile: React.FC = () => {
             {activeTab === 'profile' && (
               <form onSubmit={handleUpdateProfile}>
                 {profileError && (
-                  <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+                  <div className={theme.alerts.error}>
                     {profileError}
                   </div>
                 )}
                 {profileSuccess && (
-                  <div className="mb-4 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded">
+                  <div className={theme.alerts.success}>
                     {profileSuccess}
                   </div>
                 )}
 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
                       Nome Completo
                     </label>
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={theme.inputs.base}
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
                       Email
                     </label>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={theme.inputs.base}
                       required
                     />
                   </div>
@@ -312,7 +300,7 @@ const Profile: React.FC = () => {
                     <button
                       type="submit"
                       disabled={profileLoading}
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 flex items-center gap-2"
+                      className={`${theme.buttons.primary} flex items-center gap-2`}
                     >
                       {profileLoading ? (
                         <>
@@ -332,54 +320,54 @@ const Profile: React.FC = () => {
             {activeTab === 'password' && (
               <form onSubmit={handleChangePassword}>
                 {passwordError && (
-                  <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+                  <div className={theme.alerts.error}>
                     {passwordError}
                   </div>
                 )}
                 {passwordSuccess && (
-                  <div className="mb-4 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded">
+                  <div className={theme.alerts.success}>
                     {passwordSuccess}
                   </div>
                 )}
 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
                       Password Atual
                     </label>
                     <input
                       type="password"
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={theme.inputs.base}
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
                       Nova Password
                     </label>
                     <input
                       type="password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={theme.inputs.base}
                       required
                       minLength={6}
                     />
-                    <p className="text-xs text-gray-500 mt-1">Mínimo 6 caracteres</p>
+                    <p className="text-xs text-[#64748b] mt-1">Mínimo 6 caracteres</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
                       Confirmar Nova Password
                     </label>
                     <input
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={theme.inputs.base}
                       required
                     />
                   </div>
@@ -388,7 +376,7 @@ const Profile: React.FC = () => {
                     <button
                       type="submit"
                       disabled={passwordLoading}
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 flex items-center gap-2"
+                      className={`${theme.buttons.primary} flex items-center gap-2`}
                     >
                       {passwordLoading ? (
                         <>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/api';
+import { theme } from '../theme.config';
 
 interface Company {
   id: string;
@@ -83,19 +84,35 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">Editar Utilizador</h2>
-        
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className={`${theme.cards.form} w-full max-w-md max-h-[90vh] overflow-y-auto`}>        
+        {/* Header */}
+        <div className={`sticky top-0 ${theme.backgrounds.header} px-6 py-4 flex items-center justify-between border-b border-slate-700`}>          
+          <h2 className="text-2xl font-bold text-white">Editar Utilizador</h2>
+          <button
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-300 transition-colors"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+          <div className={theme.alerts.error + " mb-4"}>
+            <div className="flex items-center">
+              <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <span className="font-medium">{error}</span>
+            </div>
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-white mb-2" htmlFor="name">
               Nome Completo *
             </label>
             <input
@@ -104,13 +121,13 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          <div>
+            <label className="block text-sm font-medium text-white mb-2" htmlFor="email">
               Email *
             </label>
             <input
@@ -119,13 +136,13 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="companyId">
+          <div>
+            <label className="block text-sm font-medium text-white mb-2" htmlFor="companyId">
               Empresa *
             </label>
             <select
@@ -133,7 +150,7 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
               name="companyId"
               value={formData.companyId}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
             >
               <option value="">Selecionar Empresa</option>
@@ -143,8 +160,8 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
             </select>
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">
+          <div>
+            <label className="block text-sm font-medium text-white mb-2" htmlFor="role">
               Função *
             </label>
             <select
@@ -152,7 +169,7 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
               disabled={user.role === 'SUPER_ADMIN'}
             >
@@ -168,14 +185,14 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+              className="px-4 py-2 text-slate-300 hover:text-white font-medium disabled:opacity-50"
               disabled={loading}
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium disabled:opacity-50"
+              className={theme.buttons.primary + " disabled:opacity-50"}
               disabled={loading}
             >
               {loading ? 'Guardando...' : 'Guardar Alterações'}

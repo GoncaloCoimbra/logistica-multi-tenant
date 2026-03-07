@@ -1,203 +1,248 @@
-import React from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { queryClient } from './lib/react-query';
 import { AuthProvider } from './contexts/AuthContext';
+import './styles/leaflet.css';
+
+// Layout
+import MainLayout from './layouts/MainLayout';
 import PrivateRoute from './components/PrivateRoute';
-import Layout from './components/Layout';
+
+// Auth Pages
 import Login from './pages/Login';
-import { Register } from './pages/Register';
+import Register from './pages/Register';
+
+// Dashboard Pages
 import Dashboard from './pages/Dashboard';
-import SuperAdminDashboard from './pages/SuperAdminDashboard';
-import CompanyManagement from './pages/CompanyManagement';
-import GlobalUserManagement from './pages/GlobalUserManagement';
+import DashboardAdvanced from './pages/DashboardAdvanced';
+
+// Product Pages
 import ProductList from './pages/ProductList';
 import ProductDetails from './pages/ProductDetails';
 import NewProduct from './pages/NewProduct';
+
+// Management Pages
+import CompanyManagement from './pages/CompanyManagement';
+import GlobalUserManagement from './pages/GlobalUserManagement';
 import SupplierList from './pages/SupplierList';
+
+// Vehicle & Transport Pages
 import VehicleList from './pages/VehicleList';
 import TransportList from './pages/TransportList';
-import Settings from './pages/Settings';
-import AuditLog from './pages/AuditLog';
+
+// SuperAdmin (SEM MainLayout)
+import SuperAdminDashboard from './pages/SuperAdminDashboard';
+import SuperAdminHome from './pages/SuperAdminHome';
+import SuperAdminProfile from './pages/SuperAdminProfile';
+
+// New role‑specific homepage components
+import AdminHome from './pages/AdminHome';
+import OperatorHome from './pages/OperatorHome';
+import RoleRedirect from './components/RoleRedirect';
+
+// Profile & Settings
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+
+// Tasks
+import Tasks from './pages/Tasks';
+
+// Referrals
+import Referrals from './pages/Referrals';
+
+// AUDIT LOG - Histórico de Auditoria
+import AuditLog from './pages/AuditLog';
+
+// Live Tracking & Route Optimization
+import LiveTrackingRouteOptimization from './pages/LiveTrackingAndRouteOptimization';
+
+// Informational pages
+import ApiDocumentation from './pages/ApiDocumentation';
+import HelpCenter from './pages/HelpCenter';
+import Tutorials from './pages/Tutorials';
+import TutorialDetail from './pages/TutorialDetail';
+import Updates from './pages/Updates';
+import SystemStatus from './pages/SystemStatus';
 
 function App() {
   return (
-    <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Routes>
-          {/* Rotas Públicas */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <BrowserRouter>
+          <Routes>
 
-          {/* Dashboard Normal */}
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <Dashboard />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
-          
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <Dashboard />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+            {/* ===================
+                PUBLIC ROUTES
+            =================== */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
-          {/*  SUPER ADMIN DASHBOARD */}
-          <Route
-            path="/superadmin"
-            element={
-              <PrivateRoute requireSuperAdmin>
-                <Layout>
-                  <SuperAdminDashboard />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+            {/* ===================
+                SUPER ADMIN ROUTES (SEM MainLayout)
+                Página inicial: /superadmin-home
+            =================== */}
+            <Route 
+              path="/superadmin-home" 
+              element={
+                <PrivateRoute requireSuperAdmin>
+                  <SuperAdminHome />
+                </PrivateRoute>
+              } 
+            />
 
-          {/*  Gestão de Empresas (Super Admin) */}
-          <Route
-            path="/super-admin/companies"
-            element={
-              <PrivateRoute requireSuperAdmin>
-                <Layout>
-                  <CompanyManagement />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+            <Route 
+              path="/superadmin/profile" 
+              element={
+                <PrivateRoute requireSuperAdmin>
+                  <SuperAdminProfile />
+                </PrivateRoute>
+              } 
+            />
 
-          {/*  Gestão Global de Utilizadores (Super Admin) */}
-          <Route
-            path="/super-admin/users"
-            element={
-              <PrivateRoute requireSuperAdmin>
-                <Layout>
-                  <GlobalUserManagement />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+            {/* ===================
+                PRIVATE ROUTES (COM MainLayout)
+            =================== */}
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <MainLayout />
+                </PrivateRoute>
+              }
+            >
 
-          {/* Perfil do Utilizador */}
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <Profile />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+              {/* Redirect root para a página adequada de acordo com o papel do usuário */}
+              <Route index element={<RoleRedirect />} />
+              
+              {/* Dashboard */}
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="dashboard/advanced" element={<DashboardAdvanced />} />
 
-          {/* Produtos */}
-          <Route
-            path="/produtos"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <ProductList />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+              {/* Produtos */}
+              <Route path="produtos" element={<ProductList />} />
+              <Route path="produtos/novo" element={<NewProduct />} />
+              <Route path="produtos/:id" element={<ProductDetails />} />
 
-          <Route
-            path="/produtos/novo"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <NewProduct />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+              {/* Fornecedores */}
+              <Route path="fornecedores" element={<SupplierList />} />
 
-          <Route
-            path="/produtos/:id"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <ProductDetails />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+              {/* Empresas (SuperAdmin dentro do MainLayout) */}
+              <Route 
+                path="empresas" 
+                element={
+                  <PrivateRoute requireSuperAdmin>
+                    <CompanyManagement />
+                  </PrivateRoute>
+                } 
+              />
 
-          {/* Fornecedores */}
-          <Route
-            path="/fornecedores"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <SupplierList />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+              {/* Veículos */}
+              <Route path="veiculos" element={<VehicleList />} />
 
-          {/* Veículos */}
-          <Route
-            path="/veiculos"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <VehicleList />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+              {/* Transportes */}
+              <Route path="transportes" element={<TransportList />} />
 
-          {/* Transportes */}
-          <Route
-            path="/transportes"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <TransportList />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+              {/* Páginas de documentação/ajuda */}
+              <Route path="api-docs" element={<ApiDocumentation />} />
+              <Route path="help" element={<HelpCenter />} />
+              <Route path="tutorials" element={<Tutorials />} />
+              <Route path="tutorials/:id" element={<TutorialDetail />} />
+              <Route path="updates" element={<Updates />} />
+              <Route path="status" element={<SystemStatus />} />
 
-          {/* Configurações */}
-          <Route
-            path="/configuracoes"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <Settings />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+              {/* Rastreamento GPS e Otimização de Rotas */}
+              <Route path="rastreamento" element={<LiveTrackingRouteOptimization />} />
 
-          {/* Histórico de Operações (apenas Admin) */}
-          <Route
-            path="/historico"
-            element={
-              <PrivateRoute requireAdmin>
-                <Layout>
-                  <AuditLog />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
+              {/* Tarefas - apenas Operador e Admin */}
+              <Route
+                path="tarefas"
+                element={
+                  <PrivateRoute requireOperator>
+                    <Tasks />
+                  </PrivateRoute>
+                }
+              />
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+              {/* Referrals - Referências/Indicações */}
+              <Route
+                path="referrals"
+                element={
+                  <PrivateRoute requireOperator>
+                    <Referrals />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* Histórico - Acessível para todos os usuários autenticados */}
+              <Route path="historico" element={<AuditLog />} />
+
+              {/* Perfil */}
+              <Route path="profile" element={<Profile />} />
+
+              {/* Configurações */}
+              <Route path="configuracoes" element={<Settings />} />
+
+              {/* SuperAdmin Dashboard (dentro do MainLayout) */}
+              <Route 
+                path="superadmin" 
+                element={
+                  <PrivateRoute requireSuperAdmin>
+                    <SuperAdminDashboard />
+                  </PrivateRoute>
+                } 
+              />
+
+              {/* rotas de home específicas por papel (podem ser ampliadas no futuro) */}
+              <Route
+                path="admin-home"
+                element={
+                  <PrivateRoute requireAdmin>
+                    <AdminHome />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="operator-home"
+                element={
+                  <PrivateRoute requireOperator>
+                    <OperatorHome />
+                  </PrivateRoute>
+                }
+              />
+
+              {/* Users (Admin) */}
+              <Route 
+                path="users" 
+                element={
+                  <PrivateRoute requireAdmin>
+                    <GlobalUserManagement />
+                  </PrivateRoute>
+                } 
+              />
+
+              {/* Redirect rotas antigas (inglês) para português */}
+              <Route path="products" element={<Navigate to="/produtos" replace />} />
+              <Route path="products/new" element={<Navigate to="/produtos/novo" replace />} />
+              <Route path="products/:id" element={<Navigate to="/produtos/:id" replace />} />
+              <Route path="suppliers" element={<Navigate to="/fornecedores" replace />} />
+              <Route path="companies" element={<Navigate to="/empresas" replace />} />
+              <Route path="vehicles" element={<Navigate to="/veiculos" replace />} />
+              <Route path="transports" element={<Navigate to="/transportes" replace />} />
+              <Route path="tasks" element={<Navigate to="/tarefas" replace />} />
+            </Route>
+
+            {/* ===================
+                404 - Redirect para dashboard
+            =================== */}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+          </Routes>
+        </BrowserRouter>
+
+        <ReactQueryDevtools initialIsOpen={false} />
       </AuthProvider>
-    </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 

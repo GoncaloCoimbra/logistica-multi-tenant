@@ -1,4 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
+// ─── Design Tokens (same as Login / Register / DashboardAdvanced) ──────────────
+const ds = {
+  bg:       '#07090f',
+  bgCard:   '#0d1117',
+  bgInput:  '#0a0e17',
+  border:   '#1a2234',
+  accent:   '#4f85f6',
+  textPrimary:   '#f0f4ff',
+  textSecondary: '#7a8fa8',
+  textMuted:     '#3a4d63',
+  success: '#34d399',
+  danger:  '#f87171',
+};
 
 interface Supplier {
   id: string;
@@ -8,7 +22,7 @@ interface Supplier {
 
 interface DashboardFiltersProps {
   availableSuppliers: Supplier[];
-  onFilterChange: (filters: FilterState) => void;
+  onFilterChange: (_filters: FilterState) => void;
   loading?: boolean;
 }
 
@@ -20,10 +34,22 @@ export interface FilterState {
   useCustomDate: boolean;
 }
 
+const PERIODS = [
+  { value: '7d',  label: '7 dias'  },
+  { value: '30d', label: '30 dias' },
+  { value: '90d', label: '90 dias' },
+  { value: '1y',  label: '1 ano'   },
+];
+
+const inputClass = `w-full rounded-xl px-3 py-2.5 text-sm transition-all duration-200 outline-none
+  bg-[#0a0e17] border border-[#1a2234] text-[#f0f4ff] placeholder-[#3a4d63]
+  focus:border-[#4f85f6] focus:ring-2 focus:ring-[#4f85f6]/10
+  disabled:opacity-40 disabled:cursor-not-allowed`;
+
 const DashboardFilters: React.FC<DashboardFiltersProps> = ({
   availableSuppliers,
   onFilterChange,
-  loading = false
+  loading = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
@@ -31,202 +57,206 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
     supplierId: null,
     startDate: null,
     endDate: null,
-    useCustomDate: false
+    useCustomDate: false,
   });
 
-  const periods = [
-    { value: '7d', label: '7 dias', icon: '📅' },
-    { value: '30d', label: '30 dias', icon: '📆' },
-    { value: '90d', label: '90 dias', icon: '🗓️' },
-    { value: '1y', label: '1 ano', icon: '📊' }
-  ];
-
-  // Contador de filtros ativos
-  const activeFiltersCount = [
+  const activeCount = [
     filters.supplierId,
-    filters.useCustomDate && filters.startDate && filters.endDate
+    filters.useCustomDate && filters.startDate && filters.endDate,
   ].filter(Boolean).length;
 
   const handlePeriodChange = (period: string) => {
-    const newFilters = { 
-      ...filters, 
-      period, 
-      useCustomDate: false,
-      startDate: null,
-      endDate: null
-    };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
+    const next = { ...filters, period, useCustomDate: false, startDate: null, endDate: null };
+    setFilters(next);
+    onFilterChange(next);
   };
 
   const handleSupplierChange = (supplierId: string) => {
-    const newFilters = { 
-      ...filters, 
-      supplierId: supplierId === 'all' ? null : supplierId 
-    };
-    setFilters(newFilters);
-    onFilterChange(newFilters);
+    const next = { ...filters, supplierId: supplierId === 'all' ? null : supplierId };
+    setFilters(next);
+    onFilterChange(next);
   };
 
   const handleCustomDateToggle = () => {
     const useCustomDate = !filters.useCustomDate;
-    const newFilters = { ...filters, useCustomDate };
-    
-    if (!useCustomDate) {
-      newFilters.startDate = null;
-      newFilters.endDate = null;
-    }
-    
-    setFilters(newFilters);
-    if (!useCustomDate) {
-      onFilterChange(newFilters);
-    }
+    const next = useCustomDate
+      ? { ...filters, useCustomDate }
+      : { ...filters, useCustomDate, startDate: null, endDate: null };
+    setFilters(next);
+    if (!useCustomDate) onFilterChange(next);
   };
 
   const handleDateChange = (field: 'startDate' | 'endDate', value: string) => {
-    const newFilters = { ...filters, [field]: value };
-    setFilters(newFilters);
-    
-    // Aplicar apenas se ambas as datas estiverem preenchidas
-    if (newFilters.startDate && newFilters.endDate) {
-      onFilterChange(newFilters);
-    }
+    const next = { ...filters, [field]: value };
+    setFilters(next);
+    if (next.startDate && next.endDate) onFilterChange(next);
   };
 
-  const handleClearFilters = () => {
-    const defaultFilters: FilterState = {
-      period: '30d',
-      supplierId: null,
-      startDate: null,
-      endDate: null,
-      useCustomDate: false
-    };
-    setFilters(defaultFilters);
-    onFilterChange(defaultFilters);
+  const handleClear = () => {
+    const def: FilterState = { period: '30d', supplierId: null, startDate: null, endDate: null, useCustomDate: false };
+    setFilters(def);
+    onFilterChange(def);
     setIsExpanded(false);
   };
 
-  const handleApplyFilters = () => {
-    onFilterChange(filters);
-  };
-
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      {/* Header do Filtro */}
-      <div 
-        className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
-        onClick={() => setIsExpanded(!isExpanded)}
+    <div
+      className="rounded-2xl overflow-hidden"
+      style={{ background: ds.bgCard, border: `1px solid ${ds.border}` }}
+    >
+      {/* ── Collapsed header ── */}
+      <button
+        type="button"
+        onClick={() => setIsExpanded(v => !v)}
+        className="w-full flex items-center justify-between px-5 py-4 transition-colors text-left"
+        style={{ background: 'transparent' }}
+        onMouseEnter={e => (e.currentTarget.style.background = `${ds.accent}06`)}
+        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
       >
         <div className="flex items-center gap-3">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-2">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          <div
+            className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+            style={{ background: `${ds.accent}18`, border: `1px solid ${ds.accent}30` }}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: ds.accent }}>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
             </svg>
           </div>
           <div>
-            <h3 className="text-lg font-bold text-gray-900">Filtros Avançados</h3>
-            <p className="text-xs text-gray-500">
-              {activeFiltersCount > 0 
-                ? `${activeFiltersCount} filtro${activeFiltersCount > 1 ? 's' : ''} ativo${activeFiltersCount > 1 ? 's' : ''}`
-                : 'Clique para expandir'}
+            <p className="text-sm font-semibold" style={{ color: ds.textPrimary }}>
+              Filtros
+              {activeCount > 0 && (
+                <span
+                  className="ml-2 text-xs font-bold px-2 py-0.5 rounded-full"
+                  style={{ background: `${ds.accent}20`, color: ds.accent }}
+                >
+                  {activeCount} activo{activeCount > 1 ? 's' : ''}
+                </span>
+              )}
+            </p>
+            <p className="text-xs mt-0.5" style={{ color: ds.textMuted }}>
+              {isExpanded ? 'Clique para colapsar' : 'Clique para expandir'}
             </p>
           </div>
         </div>
-        
-        <div className="flex items-center gap-3">
-          {activeFiltersCount > 0 && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
-              {activeFiltersCount}
-            </span>
+
+        {/* Active filter chips (visible when collapsed) */}
+        <div className="flex items-center gap-2">
+          {!isExpanded && activeCount > 0 && (
+            <div className="hidden md:flex items-center gap-2">
+              {filters.supplierId && (
+                <span
+                  className="text-xs px-2.5 py-1 rounded-full"
+                  style={{ background: `${ds.accent}15`, color: ds.accent, border: `1px solid ${ds.accent}30` }}
+                >
+                  {availableSuppliers.find(s => s.id === filters.supplierId)?.name}
+                </span>
+              )}
+              {filters.useCustomDate && filters.startDate && filters.endDate && (
+                <span
+                  className="text-xs px-2.5 py-1 rounded-full"
+                  style={{ background: `${ds.accent}15`, color: ds.accent, border: `1px solid ${ds.accent}30` }}
+                >
+                  {new Date(filters.startDate).toLocaleDateString('pt-PT')} – {new Date(filters.endDate).toLocaleDateString('pt-PT')}
+                </span>
+              )}
+            </div>
           )}
-          
-          <svg 
-            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
+          <svg
+            className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            style={{ color: ds.textMuted }}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
           </svg>
         </div>
-      </div>
+      </button>
 
-      {/* Corpo do Filtro (Expansível) */}
-      <div 
-        className={`transition-all duration-300 ease-in-out ${
-          isExpanded ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
-        } overflow-hidden`}
+      {/* ── Expanded body ── */}
+      <div
+        style={{
+          maxHeight: isExpanded ? '600px' : '0',
+          overflow: 'hidden',
+          transition: 'max-height 0.3s ease',
+          borderTop: isExpanded ? `1px solid ${ds.border}` : 'none',
+        }}
       >
-        <div className="p-6 bg-gradient-to-br from-gray-50 to-blue-50 border-t border-gray-200 space-y-6">
-          
-          {/* Filtro de Período */}
+        <div className="p-5 space-y-6">
+
+          {/* Period */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              📅 Período
-            </label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {periods.map((p) => (
-                <button
-                  key={p.value}
-                  onClick={() => handlePeriodChange(p.value)}
-                  disabled={filters.useCustomDate || loading}
-                  className={`relative flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all ${
-                    filters.period === p.value && !filters.useCustomDate
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg scale-105'
-                      : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-                  } ${(filters.useCustomDate || loading) ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}`}
-                >
-                  <span className="text-lg">{p.icon}</span>
-                  {p.label}
-                </button>
-              ))}
+            <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: ds.textMuted }}>
+              Período
+            </p>
+            <div className="grid grid-cols-4 gap-2">
+              {PERIODS.map(p => {
+                const active = filters.period === p.value && !filters.useCustomDate;
+                return (
+                  <button
+                    key={p.value}
+                    type="button"
+                    onClick={() => handlePeriodChange(p.value)}
+                    disabled={filters.useCustomDate || loading}
+                    className="py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
+                    style={{
+                      background: active ? ds.accent : ds.bg,
+                      color: active ? '#fff' : ds.textSecondary,
+                      border: `1px solid ${active ? ds.accent : ds.border}`,
+                      opacity: (filters.useCustomDate || loading) ? 0.4 : 1,
+                      cursor: (filters.useCustomDate || loading) ? 'not-allowed' : 'pointer',
+                    }}
+                  >
+                    {p.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Filtro de Data Customizada */}
+          {/* Custom date range */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <label className="text-sm font-semibold text-gray-700">
-                🗓️ Data Customizada
-              </label>
+              <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: ds.textMuted }}>
+                Intervalo personalizado
+              </p>
+              {/* Toggle */}
               <button
+                type="button"
                 onClick={handleCustomDateToggle}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  filters.useCustomDate ? 'bg-blue-600' : 'bg-gray-300'
-                }`}
+                className="relative inline-flex h-5 w-9 items-center rounded-full transition-colors duration-200 flex-shrink-0"
+                style={{ background: filters.useCustomDate ? ds.accent : ds.border }}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    filters.useCustomDate ? 'translate-x-6' : 'translate-x-1'
-                  }`}
+                  className="inline-block h-3.5 w-3.5 rounded-full bg-slate-300 transition-transform duration-200"
+                  style={{ transform: filters.useCustomDate ? 'translateX(18px)' : 'translateX(2px)' }}
                 />
               </button>
             </div>
-            
+
             {filters.useCustomDate && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white rounded-lg border border-gray-300">
+              <div
+                className="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 rounded-xl"
+                style={{ background: ds.bg, border: `1px solid ${ds.border}` }}
+              >
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-2">
-                    Data Inicial
-                  </label>
+                  <label className="block text-xs mb-1.5" style={{ color: ds.textMuted }}>Data inicial</label>
                   <input
                     type="date"
                     value={filters.startDate || ''}
-                    onChange={(e) => handleDateChange('startDate', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onChange={e => handleDateChange('startDate', e.target.value)}
+                    className={inputClass}
                     disabled={loading}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-2">
-                    Data Final
-                  </label>
+                  <label className="block text-xs mb-1.5" style={{ color: ds.textMuted }}>Data final</label>
                   <input
                     type="date"
                     value={filters.endDate || ''}
-                    onChange={(e) => handleDateChange('endDate', e.target.value)}
+                    onChange={e => handleDateChange('endDate', e.target.value)}
                     min={filters.startDate || undefined}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={inputClass}
                     disabled={loading}
                   />
                 </div>
@@ -234,106 +264,58 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
             )}
           </div>
 
-          {/* Filtro de Fornecedor */}
+          {/* Supplier */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">
-              🏢 Fornecedor
-            </label>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: ds.textMuted }}>
+              Fornecedor
+            </p>
             <select
               value={filters.supplierId || 'all'}
-              onChange={(e) => handleSupplierChange(e.target.value)}
+              onChange={e => handleSupplierChange(e.target.value)}
               disabled={loading}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 font-medium disabled:opacity-50"
+              className={inputClass}
+              style={{ background: ds.bgInput }}
             >
-              <option value="all">🌐 Todos os Fornecedores</option>
-              {availableSuppliers.map((supplier) => (
-                <option key={supplier.id} value={supplier.id}>
-                  {supplier.name} ({supplier.productCount} produto{supplier.productCount !== 1 ? 's' : ''})
+              <option value="all" style={{ background: ds.bgCard }}>Todos os fornecedores</option>
+              {availableSuppliers.map(s => (
+                <option key={s.id} value={s.id} style={{ background: ds.bgCard }}>
+                  {s.name} — {s.productCount} produto{s.productCount !== 1 ? 's' : ''}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Resumo de Filtros Ativos */}
-          {activeFiltersCount > 0 && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-blue-900 mb-2">Filtros Aplicados:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {filters.supplierId && (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-white rounded-full text-xs font-medium text-blue-700 border border-blue-300">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                        {availableSuppliers.find(s => s.id === filters.supplierId)?.name}
-                      </span>
-                    )}
-                    {filters.useCustomDate && filters.startDate && filters.endDate && (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 bg-white rounded-full text-xs font-medium text-blue-700 border border-blue-300">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        {new Date(filters.startDate).toLocaleDateString('pt-PT')} - {new Date(filters.endDate).toLocaleDateString('pt-PT')}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Footer actions */}
+          <div
+            className="flex items-center justify-between pt-2"
+            style={{ borderTop: `1px solid ${ds.border}` }}
+          >
+            <button
+              type="button"
+              onClick={handleClear}
+              disabled={loading || activeCount === 0}
+              className="text-sm font-medium transition-colors"
+              style={{
+                color: activeCount > 0 ? ds.danger : ds.textMuted,
+                opacity: activeCount === 0 ? 0.4 : 1,
+                cursor: activeCount === 0 ? 'not-allowed' : 'pointer',
+              }}
+            >
+              Limpar filtros
+            </button>
 
-          {/* Botões de Ação */}
-          <div className="flex gap-3 pt-2">
-            <button
-              onClick={handleClearFilters}
-              disabled={loading || activeFiltersCount === 0}
-              className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              Limpar Filtros
-            </button>
-            
-            <button
-              onClick={handleApplyFilters}
-              disabled={loading}
-              className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Carregando...
-                </>
-              ) : (
-                <>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Aplicar Filtros
-                </>
-              )}
-            </button>
+            {loading && (
+              <div className="flex items-center gap-2 text-xs" style={{ color: ds.textMuted }}>
+                <svg className="animate-spin w-3.5 h-3.5" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                A aplicar...
+              </div>
+            )}
           </div>
         </div>
       </div>
-
-      {/* Loading Overlay */}
-      {loading && (
-        <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600 mx-auto mb-3"></div>
-            <p className="text-sm font-medium text-gray-700">Aplicando filtros...</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

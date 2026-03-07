@@ -30,7 +30,12 @@ const AuditLog: React.FC = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Filtros
+  // Modal para confirmação de limpeza
+  const [showClearModal, setShowClearModal] = useState(false);
+  const [clearingLogs, setClearingLogs] = useState(false);
+  const [clearError, setClearError] = useState<string | null>(null);
+  const [clearSuccess, setClearSuccess] = useState(false);
+
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
@@ -47,7 +52,6 @@ const AuditLog: React.FC = () => {
     try {
       setLoading(true);
 
-      // Construir query params
       const params = new URLSearchParams({
         page: page.toString(),
         limit: '50',
@@ -57,23 +61,75 @@ const AuditLog: React.FC = () => {
       });
 
       const [logsRes, statsRes] = await Promise.all([
-        api.get(`/auditlog?${params}`),
-        api.get('/auditlog/stats'),
+        api.get(`/audit-log?${params}`),
+        api.get('/audit-log/stats'),
       ]);
 
-      setLogs(logsRes.data.logs);
-      setTotalPages(logsRes.data.pagination.totalPages);
-      setStats(statsRes.data);
+      setLogs(logsRes.data.logs || []);
+      setTotalPages(logsRes.data.pagination?.totalPages || 1);
+      setStats(statsRes.data || null);
     } catch (error) {
       console.error('Erro ao carregar dados:', error);
+      // Define valores padrão em caso de erro
+      setLogs([]);
+      setStats(null);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleDeleteLog = async (id: string) => {
+    if (!window.confirm('Tem certeza que deseja eliminar este registo do histórico?')) return;
+    try {
+      await api.delete(`/audit-log/${id}`);
+      setLogs(prev => prev.filter(l => l.id !== id));
+    } catch (error) {
+      console.error('Erro ao eliminar registo:', error);
+      alert('Erro ao eliminar registo do histórico');
+    }
+  };
+
+  const handleClearAllLogs = async () => {
+    setClearingLogs(true);
+    setClearError(null);
+
+    try {
+      await api.post('/audit-log/clear-all');
+      setLogs([]);
+      setStats(prev => prev ? { ...prev, totalActions: 0 } : null);
+      setClearSuccess(true);
+      setShowClearModal(false);
+      
+      // Limpar mensagem de sucesso após 4 segundos
+      setTimeout(() => setClearSuccess(false), 4000);
+    } catch (error: any) {
+      console.error('Erro ao limpar histórico:', error);
+      
+      // Garantir que errorMsg é sempre uma string
+      let errorMsg = 'Erro ao limpar histórico. Tente novamente mais tarde.';
+      
+      if (error.response?.data) {
+        const data = error.response.data;
+        if (typeof data.message === 'string') {
+          errorMsg = data.message;
+        } else if (typeof data.error === 'string') {
+          errorMsg = data.error;
+        } else if (typeof data === 'string') {
+          errorMsg = data;
+        }
+      } else if (typeof error.message === 'string') {
+        errorMsg = error.message;
+      }
+      
+      setClearError(errorMsg);
+    } finally {
+      setClearingLogs(false);
+    }
+  };
+
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-    setPage(1); // Reset para primeira página
+    setPage(1);
   };
 
   const clearFilters = () => {
@@ -88,100 +144,186 @@ const AuditLog: React.FC = () => {
   };
 
   const getActionBadge = (action: string) => {
-    const colors: Record<string, string> = {
-      CREATE: 'bg-green-100 text-green-800',
-      UPDATE: 'bg-blue-100 text-blue-800',
-      DELETE: 'bg-red-100 text-red-800',
-      LOGIN: 'bg-purple-100 text-purple-800',
-      LOGOUT: 'bg-gray-100 text-gray-800',
+    const actionConfig: Record<string, { color: string; label: string }> = {
+      CREATE: { 
+        color: 'bg-gradient-to-r from-emerald-900/40 to-emerald-800/30 text-emerald-300 border-emerald-500/30',
+        label: 'Criar'
+      },
+      UPDATE: { 
+        color: 'bg-gradient-to-r from-amber-900/40 to-amber-800/30 text-amber-300 border-amber-500/30',
+        label: 'Atualizar'
+      },
+      DELETE: { 
+        color: 'bg-gradient-to-r from-red-900/40 to-red-800/30 text-red-300 border-red-500/30',
+        label: 'Eliminar'
+      },
+      LOGIN: { 
+        color: 'bg-gradient-to-r from-blue-900/40 to-blue-800/30 text-blue-300 border-blue-500/30',
+        label: 'Login'
+      },
+      LOGOUT: { 
+        color: 'bg-gradient-to-r from-gray-900/40 to-gray-800/30 text-gray-300 border-gray-500/30',
+        label: 'Logout'
+      },
+      RECEIVE: { 
+        color: 'bg-gradient-to-r from-purple-900/40 to-purple-800/30 text-purple-300 border-purple-500/30',
+        label: 'Receber'
+      },
+      DISPATCH: { 
+        color: 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/30 text-indigo-300 border-indigo-500/30',
+        label: 'Enviar'
+      },
+      APPROVE: { 
+        color: 'bg-gradient-to-r from-green-900/40 to-green-800/30 text-green-300 border-green-500/30',
+        label: 'Aprovar'
+      },
+      REJECT: { 
+        color: 'bg-gradient-to-r from-orange-900/40 to-orange-800/30 text-orange-300 border-orange-500/30',
+        label: 'Rejeitar'
+      },
+      CANCEL: { 
+        color: 'bg-gradient-to-r from-slate-900/40 to-slate-800/30 text-slate-300 border-slate-500/30',
+        label: 'Cancelar'
+      },
+    };
+
+    const config = actionConfig[action] || { 
+      color: 'bg-gradient-to-r from-gray-900/40 to-gray-800/30 text-gray-300 border-gray-500/30',
+      label: action
     };
 
     return (
-      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${colors[action] || 'bg-gray-100 text-gray-800'}`}>
-        {action}
+      <span className={`px-3 py-1.5 text-xs font-semibold rounded-full border ${config.color}`}>
+        {config.label}
       </span>
     );
   };
 
   const getActionIcon = (action: string) => {
-    switch (action) {
-      case 'CREATE':
-        return (
-          <div className="p-2 bg-green-100 rounded-lg">
-            <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-          </div>
-        );
-      case 'UPDATE':
-        return (
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-          </div>
-        );
-      case 'DELETE':
-        return (
-          <div className="p-2 bg-red-100 rounded-lg">
-            <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </div>
-        );
-      default:
-        return (
-          <div className="p-2 bg-gray-100 rounded-lg">
-            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-        );
-    }
+    const iconConfig: Record<string, { gradient: string; borderColor: string; textColor: string; path: JSX.Element }> = {
+      CREATE: {
+        gradient: 'from-emerald-900/30 to-emerald-900/20',
+        borderColor: 'border-emerald-500/30',
+        textColor: 'text-emerald-400',
+        path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+      },
+      UPDATE: {
+        gradient: 'from-amber-900/30 to-amber-900/20',
+        borderColor: 'border-amber-500/30',
+        textColor: 'text-amber-400',
+        path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+      },
+      DELETE: {
+        gradient: 'from-red-900/30 to-red-900/20',
+        borderColor: 'border-red-500/30',
+        textColor: 'text-red-400',
+        path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+      },
+      RECEIVE: {
+        gradient: 'from-purple-900/30 to-purple-900/20',
+        borderColor: 'border-purple-500/30',
+        textColor: 'text-purple-400',
+        path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+      },
+      DISPATCH: {
+        gradient: 'from-indigo-900/30 to-indigo-900/20',
+        borderColor: 'border-indigo-500/30',
+        textColor: 'text-indigo-400',
+        path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+      },
+      APPROVE: {
+        gradient: 'from-green-900/30 to-green-900/20',
+        borderColor: 'border-green-500/30',
+        textColor: 'text-green-400',
+        path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      },
+      REJECT: {
+        gradient: 'from-orange-900/30 to-orange-900/20',
+        borderColor: 'border-orange-500/30',
+        textColor: 'text-orange-400',
+        path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      },
+      CANCEL: {
+        gradient: 'from-slate-900/30 to-slate-900/20',
+        borderColor: 'border-slate-500/30',
+        textColor: 'text-slate-400',
+        path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+      },
+    };
+
+    const config = iconConfig[action] || {
+      gradient: 'from-[#1e293b]/50 to-[#0f172a]/50',
+      borderColor: 'border-[#3b82f6]/30',
+      textColor: 'text-[#3b82f6]',
+      path: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    };
+
+    return (
+      <div className={`bg-gradient-to-br ${config.gradient} border ${config.borderColor} rounded-lg p-3`}>
+        <svg className={`w-5 h-5 ${config.textColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {config.path}
+        </svg>
+      </div>
+    );
   };
 
   if (loading && page === 1) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">A carregar histórico...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
+          <p className="mt-4 text-amber-300">A carregar histórico...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b] min-h-screen">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Histórico de Operações</h1>
-        <p className="mt-2 text-gray-600">Registo completo de todas as ações realizadas no sistema</p>
+        <h1 className="text-3xl font-bold text-white">Histórico de Operações</h1>
+        <p className="mt-2 text-amber-300/70">Registo completo de todas as ações realizadas no sistema</p>
+
+      {/* Clear All Button */}
+      {logs.length > 0 && (
+        <div className="mb-6 flex justify-end">
+          <button
+            onClick={() => setShowClearModal(true)}
+            className="px-6 py-2.5 bg-gradient-to-r from-red-900/40 to-red-800/30 text-red-300 border border-red-500/30 rounded-lg hover:from-red-900/60 hover:to-red-800/50 hover:text-red-200 transition-all font-medium text-sm flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            Limpar Todo o Histórico
+          </button>
+        </div>
+      )}
       </div>
 
       {/* Estatísticas */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total de Ações</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalActions}</p>
+                <p className="text-sm text-amber-300">Total de Ações</p>
+                <p className="text-2xl font-bold text-white">{stats.totalActions}</p>
               </div>
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-gradient-to-br from-amber-900/30 to-amber-900/20 border border-amber-500/30 rounded-lg p-3">
+                <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
               </div>
             </div>
           </div>
 
-          {stats.actionsByType.slice(0, 3).map((item, index) => (
-            <div key={index} className="bg-white rounded-lg shadow p-6">
+          {stats.actionsByType?.slice(0, 3).map((item, index) => (
+            <div key={index} className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">{item.action}</p>
-                  <p className="text-2xl font-bold text-gray-900">{item.count}</p>
+                  <p className="text-sm text-amber-300">{getActionBadge(item.action)}</p>
+                  <p className="text-2xl font-bold text-white mt-2">{item.count}</p>
                 </div>
                 {getActionIcon(item.action)}
               </div>
@@ -191,12 +333,12 @@ const AuditLog: React.FC = () => {
       )}
 
       {/* Filtros */}
-      <div className="bg-white rounded-lg shadow p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Filtros</h2>
+      <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6 mb-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-semibold text-white">Filtros</h2>
           <button
             onClick={clearFilters}
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="text-sm text-amber-400 hover:text-amber-300 font-medium hover:bg-amber-900/30 px-4 py-2 rounded-lg transition-all border border-amber-500/30"
           >
             Limpar filtros
           </button>
@@ -204,110 +346,140 @@ const AuditLog: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Data Início</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">Data Início</label>
             <input
               type="date"
               value={filters.startDate}
               onChange={(e) => handleFilterChange('startDate', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Data Fim</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">Data Fim</label>
             <input
               type="date"
               value={filters.endDate}
               onChange={(e) => handleFilterChange('endDate', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Ação</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">Ação</label>
             <select
               value={filters.action}
               onChange={(e) => handleFilterChange('action', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white"
             >
-              <option value="">Todas</option>
-              <option value="CREATE">Criar</option>
-              <option value="UPDATE">Atualizar</option>
-              <option value="DELETE">Eliminar</option>
-              <option value="LOGIN">Login</option>
-              <option value="LOGOUT">Logout</option>
+              <option value="" className="bg-[#1e293b]">Todas</option>
+              <option value="CREATE" className="bg-[#1e293b]">Criar</option>
+              <option value="UPDATE" className="bg-[#1e293b]">Atualizar</option>
+              <option value="DELETE" className="bg-[#1e293b]">Eliminar</option>
+              <option value="LOGIN" className="bg-[#1e293b]">Login</option>
+              <option value="LOGOUT" className="bg-[#1e293b]">Logout</option>
+              <option value="RECEIVE" className="bg-[#1e293b]">Receber</option>
+              <option value="DISPATCH" className="bg-[#1e293b]">Enviar</option>
+              <option value="APPROVE" className="bg-[#1e293b]">Aprovar</option>
+              <option value="REJECT" className="bg-[#1e293b]">Rejeitar</option>
+              <option value="CANCEL" className="bg-[#1e293b]">Cancelar</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Entidade</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">Entidade</label>
             <select
               value={filters.entity}
               onChange={(e) => handleFilterChange('entity', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white"
             >
-              <option value="">Todas</option>
-              <option value="User">Utilizadores</option>
-              <option value="Product">Produtos</option>
-              <option value="Supplier">Fornecedores</option>
-              <option value="Vehicle">Veículos</option>
-              <option value="Transport">Transportes</option>
-              <option value="Company">Empresa</option>
+              <option value="" className="bg-[#1e293b]">Todas</option>
+              <option value="User" className="bg-[#1e293b]">Utilizadores</option>
+              <option value="Product" className="bg-[#1e293b]">Produtos</option>
+              <option value="Supplier" className="bg-[#1e293b]">Fornecedores</option>
+              <option value="Vehicle" className="bg-[#1e293b]">Veículos</option>
+              <option value="Transport" className="bg-[#1e293b]">Transportes</option>
+              <option value="Company" className="bg-[#1e293b]">Empresa</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Utilizador</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">Utilizador</label>
             <input
               type="text"
               placeholder="ID do utilizador"
               value={filters.userId}
               onChange={(e) => handleFilterChange('userId', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white placeholder-amber-300/50"
             />
           </div>
         </div>
       </div>
 
       {/* Tabela de Logs */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-amber-500/10">
+            <thead className="bg-gradient-to-r from-amber-900/30 to-amber-900/20">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ação</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Entidade</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Utilizador</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">IP</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data/Hora</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Ação</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Entidade</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Utilizador</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">IP</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Data/Hora</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-amber-500/10">
               {logs.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
-                    Nenhum registo encontrado
+                  <td colSpan={5} className="px-6 py-8 text-center">
+                    <div className="flex flex-col items-center">
+                      <svg className="w-12 h-12 text-amber-500/30 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <p className="text-amber-300/70">Nenhum registo encontrado</p>
+                    </div>
                   </td>
                 </tr>
               ) : (
                 logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-gray-50">
+                  <tr key={log.id} className="hover:bg-amber-900/10 transition-all">
                     <td className="px-6 py-4 whitespace-nowrap">
                       {getActionBadge(log.action)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{log.entity}</div>
-                      <div className="text-xs text-gray-500">{log.entityId.substring(0, 8)}...</div>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-white">{log.entity}</div>
+                      <div className="text-xs text-amber-300/70 mt-1 bg-amber-900/30 px-2 py-1 rounded inline-block border border-amber-500/20">
+                        {log.entityId ? `${log.entityId.substring(0, 8)}...` : 'N/A'}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm text-gray-900">{log.user.name}</div>
-                      <div className="text-xs text-gray-500">{log.user.email}</div>
+                      <div className="text-sm text-white">{log.user.name}</div>
+                      <div className="text-xs text-amber-300/70">{log.user.email}</div>
+                      <div className="text-xs text-amber-400/70 mt-1 bg-amber-900/30 px-2 py-1 rounded inline-block border border-amber-500/20">
+                        {log.user.role}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {log.ipAddress || 'N/A'}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-amber-300 bg-amber-900/30 px-3 py-1.5 rounded border border-amber-500/20 inline-block">
+                        {log.ipAddress || 'N/A'}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(log.createdAt).toLocaleString('pt-PT')}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-300">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>{new Date(log.createdAt).toLocaleString('pt-PT')}</div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleDeleteLog(log.id)}
+                            title="Eliminar registo"
+                            className="text-red-400 hover:text-red-300 transition-colors p-1 hover:bg-red-900/20 rounded"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -318,22 +490,22 @@ const AuditLog: React.FC = () => {
 
         {/* Paginação */}
         {totalPages > 1 && (
-          <div className="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200">
-            <div className="text-sm text-gray-700">
+          <div className="bg-gradient-to-r from-amber-900/30 to-amber-900/20 px-6 py-4 flex items-center justify-between border-t border-amber-500/30">
+            <div className="text-sm text-amber-300">
               Página {page} de {totalPages}
             </div>
             <div className="flex gap-2">
               <button
                 onClick={() => setPage(p => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-900/20 hover:text-amber-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Anterior
               </button>
               <button
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-900/20 hover:text-amber-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Próxima
               </button>
@@ -341,6 +513,121 @@ const AuditLog: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Estatísticas Adicionais */}
+      {stats && ((stats.actionsByEntity && stats.actionsByEntity.length > 0) || (stats.topUsers && stats.topUsers.length > 0)) && (
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {stats.actionsByEntity && stats.actionsByEntity.length > 0 && (
+            <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">Ações por Entidade</h3>
+              <div className="space-y-3">
+                {stats.actionsByEntity.slice(0, 5).map((item, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <span className="text-amber-300">{item.entity}</span>
+                    <span className="px-3 py-1 bg-gradient-to-r from-amber-900/40 to-amber-800/30 text-amber-300 rounded-full text-sm font-medium border border-amber-500/30">
+                      {item.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {stats.topUsers && stats.topUsers.length > 0 && (
+            <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">Top Utilizadores</h3>
+              <div className="space-y-3">
+                {stats.topUsers.slice(0, 5).map((user, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <div>
+                      <div className="text-white">{user.userName}</div>
+                      <div className="text-xs text-amber-300/70">{user.userEmail}</div>
+                    </div>
+                    <span className="px-3 py-1 bg-gradient-to-r from-amber-900/40 to-amber-800/30 text-amber-300 rounded-full text-sm font-medium border border-amber-500/30">
+                      {user.count} ações
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Modal de Confirmação para Limpar Histórico */}
+      {showClearModal && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/60 z-40"
+            onClick={() => !clearingLogs && setShowClearModal(false)}
+          />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-red-500/50 rounded-xl shadow-2xl w-full max-w-md">
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-red-500/20 p-3 rounded-full">
+                    <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Eliminar Todo o Histórico</h3>
+                </div>
+
+                <p className="text-amber-200 mb-4">
+                  Tem certeza que deseja ELIMINAR <strong>TODO O HISTÓRICO</strong>?<br />
+                  <br />
+                  <span className="text-red-300">Esta ação é irreversível</span> e vai remover <strong className="text-white">{logs.length} registos</strong>.
+                </p>
+
+                {clearError && (
+                  <div className="bg-red-900/30 border-2 border-red-500/50 rounded-lg p-3 mb-4">
+                    <p className="text-red-300 text-sm">{clearError}</p>
+                  </div>
+                )}
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowClearModal(false)}
+                    disabled={clearingLogs}
+                    className="flex-1 px-4 py-3 border-2 border-amber-500/50 text-amber-400 rounded-lg hover:bg-amber-900/20 transition-all font-bold disabled:opacity-50"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleClearAllLogs}
+                    disabled={clearingLogs}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all font-bold shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {clearingLogs ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                        A eliminar...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Eliminar Tudo
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Mensagem de Sucesso */}
+      {clearSuccess && (
+        <div className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg shadow-2xl flex items-center gap-3 border border-green-400/50">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          </svg>
+          <span>Histórico eliminado com sucesso!</span>
+        </div>
+      )}
     </div>
   );
 };

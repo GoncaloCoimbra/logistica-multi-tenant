@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/api';
+import { theme, getStatusBadgeClass, statusLabels, statusColors } from '../theme.config';
+import { useFilters } from '../hooks/useFilters';
+import FilterChips from '../components/FilterChips';
+import FilterSelector from '../components/FilterSelector';
 
 interface Vehicle {
   id: string;
@@ -11,14 +15,104 @@ interface Vehicle {
   type: string;
   status: 'available' | 'in_use' | 'maintenance';
   createdAt: string;
+  companyId: string;
 }
 
+interface User {
+  id: string;
+  companyId: string;
+  role: string;
+}
+
+interface Company {
+  id: string;
+  name: string;
+}
+
+// 🔧 FUNÇÃO MELHORADA para extrair mensagens de erro do backend
+const extractErrorMessage = (error: any, defaultMessage: string): string => {
+  console.log('🔍 [ERROR DEBUG] Estrutura completa do erro:', error);
+  console.log('🔍 [ERROR DEBUG] error.response:', error?.response);
+  console.log('🔍 [ERROR DEBUG] error.response.data:', error?.response?.data);
+  
+  if (!error) return defaultMessage;
+  
+  // 1️⃣ Tentar extrair de error.response.data
+  if (error.response?.data) {
+    const data = error.response.data;
+    console.log('📦 [ERROR DEBUG] data type:', typeof data);
+    console.log('📦 [ERROR DEBUG] data.message:', data.message);
+    
+    // Se data é string diretamente
+    if (typeof data === 'string') {
+      console.log(' [ERROR DEBUG] Retornando data como string');
+      return data;
+    }
+    
+    // Se data.message existe
+    if (data.message) {
+      // Se é array (validação do NestJS)
+      if (Array.isArray(data.message)) {
+        console.log(' [ERROR DEBUG] Retornando primeiro item do array');
+        return data.message[0] || defaultMessage;
+      }
+      // Se é string
+      if (typeof data.message === 'string') {
+        console.log(' [ERROR DEBUG] Retornando data.message');
+        return data.message;
+      }
+      // Se é objeto (pode ter nested message)
+      if (typeof data.message === 'object' && data.message.message) {
+        console.log(' [ERROR DEBUG] Retornando data.message.message');
+        return data.message.message;
+      }
+    }
+    
+    // Se data.error existe e é string
+    if (data.error && typeof data.error === 'string') {
+      console.log(' [ERROR DEBUG] Retornando data.error');
+      return data.error;
+    }
+
+    // 🆕 Tentar statusText do response
+    if (error.response.statusText) {
+      console.log(' [ERROR DEBUG] Retornando statusText');
+      return error.response.statusText;
+    }
+  }
+  
+  // 2️⃣ Tentar error.message
+  if (error.message && typeof error.message === 'string') {
+    console.log(' [ERROR DEBUG] Retornando error.message');
+    return error.message;
+  }
+  
+  // 3️⃣ Se nada funcionar, retornar mensagem padrão
+  console.log('⚠️ [ERROR DEBUG] Retornando mensagem padrão');
+  return defaultMessage;
+};
+
 const VehicleList: React.FC = () => {
+  const {
+    activeFilters,
+    hasFilters,
+    addFilter,
+    removeFilter,
+    clearAllFilters,
+    getFilter,
+  } = useFilters();
+
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState<string>('');
+  const [user, setUser] = useState<User | null>(null);
+  const [companies, setCompanies] = useState<Array<{id: string, name: string}>>([]);
+  const [selectedCompanyId, setSelectedCompanyId] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentFilterType, setCurrentFilterType] = useState<'status' | 'transport' | null>(null);
   const [formData, setFormData] = useState({
     licensePlate: '',
     model: '',
@@ -30,29 +124,83 @@ const VehicleList: React.FC = () => {
   });
 
   useEffect(() => {
+    loadUser();
     loadVehicles();
   }, []);
+
+  useEffect(() => {
+    if (user?.role === 'SUPER_ADMIN') {
+      loadCompanies();
+    }
+  }, [user]);
+
+  const loadUser = async () => {
+    try {
+      const response = await api.get('/auth/me');
+      setUser(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar usuário:', error);
+    }
+  };
+
+  const loadCompanies = async () => {
+    try {
+      const response = await api.get('/companies');
+      setCompanies(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar empresas:', error);
+    }
+  };
 
   const loadVehicles = async () => {
     try {
       setError('');
-      const response = await api.get('/vehicles');
+      
+      const params = new URLSearchParams();
+      if (searchTerm) params.set('search', searchTerm);
+      if (getFilter('status')) params.set('status', getFilter('status')!);
+      if (getFilter('transport')) params.set('transportId', getFilter('transport')!);
+      
+      const response = await api.get(`/vehicles?${params.toString()}`);
       setVehicles(response.data);
     } catch (error: any) {
-      console.error('Erro ao carregar veículos:', error);
-      setError(error.response?.data?.error || 'Erro ao carregar veículos');
+      console.error(' Erro ao carregar veículos:', error);
+      setError(extractErrorMessage(error, 'Erro ao carregar veículos'));
     } finally {
       setLoading(false);
     }
   };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    loadVehicles();
+  };
+
+  const openFilterModal = (type: 'status' | 'transport') => {
+    setCurrentFilterType(type);
+    setIsModalOpen(true);
+  };
+
+  const handleFilterSelect = (id: string, label: string) => {
+    if (currentFilterType) {
+      addFilter(currentFilterType, id);
+    }
+  };
+
+  const getNextFilter = () => {
+    if (!getFilter('status')) return { type: 'status' as const, label: 'Estado' };
+    if (!getFilter('transport')) return { type: 'transport' as const, label: 'Transporte' };
+    return null;
+  };
+
+  const nextFilter = getNextFilter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     
     try {
-      // Validação básica
-      if (!formData.licensePlate || !formData.model || !formData.brand || !formData.capacity) {
+      if (!formData.licensePlate || !formData.model || !formData.brand) {
         setError('Por favor, preencha todos os campos obrigatórios');
         return;
       }
@@ -67,20 +215,43 @@ const VehicleList: React.FC = () => {
         return;
       }
 
-      // Preparar dados para enviar
+      const companyIdToUse = user?.role === 'SUPER_ADMIN' 
+        ? (editingId ? user?.companyId : selectedCompanyId)
+        : user?.companyId;
+
+      if (user?.role === 'SUPER_ADMIN' && !editingId && !selectedCompanyId) {
+        setError('Por favor, selecione uma empresa');
+        return;
+      }
+
+      const capacity = Number(formData.capacity);
+      const year = Number(formData.year);
+      
+      if (isNaN(capacity) || capacity <= 0) {
+        setError('Capacidade inválida. Digite um número maior que zero.');
+        return;
+      }
+      
+      if (isNaN(year) || year < 1900 || year > new Date().getFullYear() + 1) {
+        setError('Ano inválido. Digite um ano válido.');
+        return;
+      }
+
       const dataToSend = {
-        ...formData,
         licensePlate: formData.licensePlate.trim().toUpperCase(),
         model: formData.model.trim(),
         brand: formData.brand.trim(),
-        capacity: parseFloat(formData.capacity.toString()),
-        year: parseInt(formData.year.toString()),
+        type: formData.type,
+        status: formData.status,
+        capacity: capacity,
+        year: year,
+        companyId: companyIdToUse
       };
 
-      console.log('Enviando dados do veículo:', dataToSend);
+      console.log('📤 Enviando dados do veículo:', dataToSend);
 
       if (editingId) {
-        await api.put(`/vehicles/${editingId}`, dataToSend);
+        await api.patch(`/vehicles/${editingId}`, dataToSend);
       } else {
         await api.post('/vehicles', dataToSend);
       }
@@ -88,8 +259,9 @@ const VehicleList: React.FC = () => {
       await loadVehicles();
       resetForm();
     } catch (error: any) {
-      console.error('Erro ao guardar veículo:', error);
-      setError(error.response?.data?.error || 'Erro ao guardar veículo');
+      console.error(' Erro ao guardar veículo:', error);
+      const errorMsg = extractErrorMessage(error, 'Erro ao guardar veículo');
+      setError(errorMsg);
     }
   };
 
@@ -112,11 +284,21 @@ const VehicleList: React.FC = () => {
     if (window.confirm('Deseja realmente excluir este veículo?')) {
       try {
         setError('');
+        console.log('🗑️ Tentando eliminar veículo:', id);
         await api.delete(`/vehicles/${id}`);
+        console.log(' Veículo eliminado com sucesso');
         await loadVehicles();
       } catch (error: any) {
-        console.error('Erro ao excluir veículo:', error);
-        setError(error.response?.data?.error || 'Erro ao excluir veículo');
+        console.error(' Erro ao excluir veículo:', error);
+        console.error(' Status do erro:', error?.response?.status);
+        console.error(' Data do erro:', error?.response?.data);
+        
+        const errorMsg = extractErrorMessage(error, 'Erro ao excluir veículo');
+        console.log('📝 Mensagem de erro extraída:', errorMsg);
+        setError(errorMsg);
+        
+        // 🔔 Scroll suave para o topo para mostrar o erro
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
   };
@@ -134,24 +316,7 @@ const VehicleList: React.FC = () => {
     setEditingId(null);
     setShowForm(false);
     setError('');
-  };
-
-  const getStatusLabel = (status: string) => {
-    const labels: Record<string, string> = {
-      available: 'Disponível',
-      in_use: 'Em Uso',
-      maintenance: 'Manutenção',
-    };
-    return labels[status] || status;
-  };
-
-  const getStatusColor = (status: string) => {
-    const colors: Record<string, string> = {
-      available: 'bg-green-100 text-green-800',
-      in_use: 'bg-blue-100 text-blue-800',
-      maintenance: 'bg-yellow-100 text-yellow-800',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
+    setSelectedCompanyId('');
   };
 
   const getTypeLabel = (type: string) => {
@@ -165,28 +330,32 @@ const VehicleList: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className={`${theme.backgrounds.page} flex items-center justify-center min-h-screen`}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Carregando...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <p className="text-[#cbd5e1]">Carregando...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
+    <div className={`${theme.backgrounds.page} p-6 min-h-screen`}>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Veículos</h1>
-          <p className="text-sm text-gray-500 mt-1">Gestão da frota de veículos</p>
+          <h1 className="text-3xl font-bold text-white">Veículos</h1>
+          <p className="text-sm text-[#cbd5e1] mt-1">Gestão da frota de veículos</p>
         </div>
         <button
           onClick={() => {
             setShowForm(!showForm);
             if (showForm) resetForm();
           }}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+          className={`${
+            showForm
+              ? 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800'
+              : 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:via-amber-700 hover:to-amber-800'
+          } text-white px-6 py-3 rounded-lg transition-all font-bold shadow-lg hover:shadow-xl flex items-center gap-2`}
         >
           {showForm ? (
             <>
@@ -206,40 +375,122 @@ const VehicleList: React.FC = () => {
         </button>
       </div>
 
+      {/* 🔔 ALERTA DE ERRO MELHORADO */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-start gap-3">
-          <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-          </svg>
-          <div>
-            <p className="font-semibold">Erro</p>
-            <p className="text-sm">{error}</p>
+        <div className="bg-gradient-to-r from-red-900/40 to-red-900/30 border-2 border-red-500/80 text-red-300 px-6 py-4 rounded-lg mb-6 shadow-2xl backdrop-blur-sm animate-pulse">
+          <div className="flex items-start">
+            <svg className="w-6 h-6 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <div className="flex-1">
+              <p className="font-bold text-lg text-red-200">⚠️ Erro</p>
+              <p className="text-base mt-2 leading-relaxed">{String(error)}</p>
+            </div>
+            <button
+              onClick={() => setError('')}
+              className="ml-4 text-red-400 hover:text-red-200 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
       )}
 
+      {/* Search Bar */}
+      <form onSubmit={handleSearch} className="flex gap-3 mb-4">
+        <div className="flex-1 relative">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Pesquisar veículos..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-[#1e293b] text-white"
+          />
+        </div>
+        <button
+          type="submit"
+          className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
+        >
+          Pesquisar
+        </button>
+      </form>
+
+      {/* Filter Chips */}
+      <FilterChips
+        filters={activeFilters}
+        onRemove={removeFilter}
+        onClearAll={clearAllFilters}
+      />
+
+      {/* Filter Buttons */}
+      {!loading && nextFilter && (
+        <button
+          onClick={() => openFilterModal(nextFilter.type)}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-[#1e293b]/50 border-2 border-dashed border-slate-600 text-slate-300 rounded-lg hover:border-amber-500 mb-4 transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          {nextFilter.label}
+        </button>
+      )}
+
       {showForm && (
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6 border border-gray-200">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+        <div className={`${theme.cards.form} border-2 border-amber-500/50 mb-6`}>
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-white">
             {editingId ? (
               <>
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
                 Editar Veículo
               </>
             ) : (
               <>
-                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
                 Novo Veículo
               </>
             )}
           </h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
+            {user?.role === 'SUPER_ADMIN' && !editingId && (
+              <div className="col-span-2 bg-gradient-to-r from-[#3b82f6]/20 to-[#1d4ed8]/20 border-2 border-[#3b82f6] rounded-lg p-4 mb-2">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className={`${getStatusBadgeClass('user', 'SUPER_ADMIN')} text-xs`}>
+                    SUPER ADMIN
+                  </span>
+                  <span className="text-sm text-[#cbd5e1] font-medium">
+                    Selecione a empresa para criar o veículo
+                  </span>
+                </div>
+                <label className="block text-sm font-medium mb-2 text-amber-200">
+                  Empresa *
+                </label>
+                <select
+                  required
+                  value={selectedCompanyId}
+                  onChange={(e) => setSelectedCompanyId(e.target.value)}
+                  className={theme.inputs.base}
+                >
+                  <option value="">Selecione uma empresa...</option>
+                  {companies.map(company => (
+                    <option key={company.id} value={company.id}>
+                      {company.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
+              <label className="block text-sm font-medium mb-1 text-amber-200">
                 Placa/Matrícula *
               </label>
               <input
@@ -247,12 +498,12 @@ const VehicleList: React.FC = () => {
                 required
                 value={formData.licensePlate}
                 onChange={(e) => setFormData({ ...formData, licensePlate: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase"
+                className={theme.inputs.base}
                 placeholder="ABC-1234 ou 00-AB-00"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
+              <label className="block text-sm font-medium mb-1 text-amber-200">
                 Modelo *
               </label>
               <input
@@ -260,12 +511,12 @@ const VehicleList: React.FC = () => {
                 required
                 value={formData.model}
                 onChange={(e) => setFormData({ ...formData, model: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={theme.inputs.base}
                 placeholder="Ex: Sprinter 415"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
+              <label className="block text-sm font-medium mb-1 text-amber-200">
                 Marca *
               </label>
               <input
@@ -273,12 +524,12 @@ const VehicleList: React.FC = () => {
                 required
                 value={formData.brand}
                 onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={theme.inputs.base}
                 placeholder="Ex: Mercedes-Benz"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
+              <label className="block text-sm font-medium mb-1 text-amber-200">
                 Ano *
               </label>
               <input
@@ -287,33 +538,33 @@ const VehicleList: React.FC = () => {
                 min="1900"
                 max={new Date().getFullYear() + 1}
                 value={formData.year}
-                onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) || new Date().getFullYear() })}
+                className={theme.inputs.base}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
+              <label className="block text-sm font-medium mb-1 text-amber-200">
                 Capacidade (kg) *
               </label>
               <input
                 type="number"
                 required
-                min="0"
-                step="0.01"
-                value={formData.capacity}
-                onChange={(e) => setFormData({ ...formData, capacity: parseFloat(e.target.value) || 0 })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                min="1"
+                step="1"
+                value={formData.capacity || ''}
+                onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) || 0 })}
+                className={theme.inputs.base}
                 placeholder="Ex: 3500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1 text-gray-700">
+              <label className="block text-sm font-medium mb-1 text-amber-200">
                 Tipo *
               </label>
               <select
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={theme.inputs.base}
               >
                 <option value="truck">Caminhão</option>
                 <option value="Carrinha">Carrinha</option>
@@ -321,7 +572,7 @@ const VehicleList: React.FC = () => {
               </select>
             </div>
             <div className="col-span-2">
-              <label className="block text-sm font-medium mb-1 text-gray-700">
+              <label className="block text-sm font-medium mb-1 text-amber-200">
                 Status *
               </label>
               <div className="grid grid-cols-3 gap-3">
@@ -330,8 +581,8 @@ const VehicleList: React.FC = () => {
                   onClick={() => setFormData({ ...formData, status: 'available' })}
                   className={`px-4 py-2 rounded-lg border-2 transition-all ${
                     formData.status === 'available'
-                      ? 'border-green-500 bg-green-50 text-green-700'
-                      : 'border-gray-300 hover:border-green-300'
+                      ? 'border-emerald-500 bg-emerald-900/30 text-emerald-400'
+                      : 'border-[#334155] hover:border-emerald-500/50 text-[#cbd5e1]'
                   }`}
                 >
                   ✓ Disponível
@@ -341,8 +592,8 @@ const VehicleList: React.FC = () => {
                   onClick={() => setFormData({ ...formData, status: 'in_use' })}
                   className={`px-4 py-2 rounded-lg border-2 transition-all ${
                     formData.status === 'in_use'
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
-                      : 'border-gray-300 hover:border-blue-300'
+                      ? 'border-[#3b82f6] bg-[#1e293b]/50 text-[#3b82f6]'
+                      : 'border-[#334155] hover:border-[#3b82f6]/50 text-[#cbd5e1]'
                   }`}
                 >
                   🚛 Em Uso
@@ -352,25 +603,26 @@ const VehicleList: React.FC = () => {
                   onClick={() => setFormData({ ...formData, status: 'maintenance' })}
                   className={`px-4 py-2 rounded-lg border-2 transition-all ${
                     formData.status === 'maintenance'
-                      ? 'border-yellow-500 bg-yellow-50 text-yellow-700'
-                      : 'border-gray-300 hover:border-yellow-300'
+                      ? 'border-amber-500 bg-amber-900/30 text-amber-400'
+                      : 'border-[#334155] hover:border-amber-500/50 text-[#cbd5e1]'
                   }`}
                 >
                   🔧 Manutenção
                 </button>
               </div>
             </div>
-            <div className="col-span-2 flex gap-2 justify-end pt-4 border-t">
+            <div className="col-span-2 flex gap-2 justify-end pt-4 border-t border-amber-500/30">
               <button
                 type="button"
                 onClick={resetForm}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-6 py-2 border-2 border-amber-500/50 text-amber-400 rounded-lg hover:bg-amber-900/20 transition-all font-bold hover:border-amber-400"
               >
                 Cancelar
               </button>
               <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                type="button"
+                onClick={handleSubmit}
+                className="px-6 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all font-bold shadow-lg hover:shadow-xl flex items-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -378,71 +630,71 @@ const VehicleList: React.FC = () => {
                 {editingId ? 'Atualizar' : 'Criar'}
               </button>
             </div>
-          </form>
+          </div>
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+      <div className="bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-xl shadow-lg overflow-hidden border-2 border-amber-500/30 hover:border-amber-500/50 transition-all">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-gradient-to-r from-[#0f172a] to-black">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Veículo
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Marca/Modelo
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Ano
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Capacidade
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Status
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-right text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Ações
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white">
+            <tbody className="divide-y divide-amber-500/20">
               {vehicles.map((vehicle) => (
-                <tr key={vehicle.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                <tr key={vehicle.id} className="hover:bg-amber-900/10 transition-colors border-b border-amber-500/10">
+                  <td className="px-8 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex-shrink-0 h-10 w-10 bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg flex items-center justify-center shadow-md">
+                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                         </svg>
                       </div>
                       <div className="ml-3">
-                        <div className="text-sm font-medium text-gray-900">{vehicle.licensePlate}</div>
-                        <div className="text-xs text-gray-500">{getTypeLabel(vehicle.type)}</div>
+                        <div className="text-sm font-bold text-white">{vehicle.licensePlate}</div>
+                        <div className="text-xs text-amber-300">{getTypeLabel(vehicle.type)}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{vehicle.brand}</div>
-                    <div className="text-xs text-gray-500">{vehicle.model}</div>
+                  <td className="px-8 py-4 whitespace-nowrap">
+                    <div className="text-sm font-bold text-white">{vehicle.brand}</div>
+                    <div className="text-xs text-amber-300">{vehicle.model}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-8 py-4 whitespace-nowrap text-sm text-amber-300">
                     {vehicle.year}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                    {vehicle.capacity.toLocaleString()} kg
+                  <td className="px-8 py-4 whitespace-nowrap text-sm font-bold text-white">
+                    {vehicle.capacity != null ? vehicle.capacity.toLocaleString() : 'N/A'} kg
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(vehicle.status)}`}>
-                      {getStatusLabel(vehicle.status)}
+                  <td className="px-8 py-4 whitespace-nowrap">
+                    <span className={getStatusBadgeClass('vehicle', vehicle.status)}>
+                      {statusLabels.vehicle[vehicle.status]}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                  <td className="px-8 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
                       onClick={() => handleEdit(vehicle)}
-                      className="text-blue-600 hover:text-blue-900 mr-3 inline-flex items-center gap-1"
+                      className="text-amber-400 hover:text-amber-300 font-bold mr-3 inline-flex items-center gap-1 transition-colors hover:bg-amber-900/30 p-2 rounded-lg"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -451,7 +703,7 @@ const VehicleList: React.FC = () => {
                     </button>
                     <button
                       onClick={() => handleDelete(vehicle.id)}
-                      className="text-red-600 hover:text-red-900 inline-flex items-center gap-1"
+                      className="text-red-400 hover:text-red-300 font-bold inline-flex items-center gap-1 transition-colors hover:bg-red-900/30 p-2 rounded-lg"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -465,37 +717,55 @@ const VehicleList: React.FC = () => {
           </table>
         </div>
         {vehicles.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
-            <svg className="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="text-center py-12 text-amber-500/70">
+            <svg className="w-16 h-16 mx-auto mb-4 text-amber-500/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
             </svg>
-            <p className="text-lg font-medium">Nenhum veículo cadastrado</p>
+            <p className="text-lg font-bold text-amber-400">Nenhum veículo cadastrado</p>
             <p className="text-sm mt-1">Clique em "Novo Veículo" para começar</p>
           </div>
         )}
       </div>
 
       {vehicles.length > 0 && (
-        <div className="mt-4 flex justify-between items-center text-sm text-gray-500">
+        <div className="mt-4 flex justify-between items-center text-sm text-amber-400/80">
           <div>
-            Total: <span className="font-semibold text-gray-700">{vehicles.length}</span> veículo{vehicles.length !== 1 ? 's' : ''}
+            Total: <span className="font-bold text-amber-400">{vehicles.length}</span> veículo{vehicles.length !== 1 ? 's' : ''}
           </div>
           <div className="flex gap-4">
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+              <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
               {vehicles.filter(v => v.status === 'available').length} disponível{vehicles.filter(v => v.status === 'available').length !== 1 ? 'eis' : ''}
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+              <span className="w-2 h-2 bg-[#3b82f6] rounded-full"></span>
               {vehicles.filter(v => v.status === 'in_use').length} em uso
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-2 h-2 bg-yellow-500 rounded-full"></span>
+              <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
               {vehicles.filter(v => v.status === 'maintenance').length} em manutenção
             </span>
           </div>
         </div>
+      )}
+
+      {/* Modal de Filtros */}
+      {isModalOpen && currentFilterType && (
+        <FilterSelector
+          open={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setCurrentFilterType(null);
+          }}
+          type={currentFilterType}
+          onSelect={handleFilterSelect}
+          currentFilters={{
+            status: getFilter('status') || '',
+            transportId: getFilter('transport') || '',
+          }}
+          placeholder={`Pesquisar ${currentFilterType === 'status' ? 'estados' : 'transportes'}...`}
+        />
       )}
     </div>
   );

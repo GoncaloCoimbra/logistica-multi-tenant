@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { theme } from '../theme.config';
+import api from '../api/api';
 
 interface Company {
   id: string;
@@ -55,50 +57,53 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
     }
 
     try {
-      // Note: Ajuste a URL e o método conforme sua API
-      const response = await fetch('/api/superadmin/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role: formData.role,
-          companyId: formData.companyId
-        })
+      await api.post('/superadmin/users', {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        companyId: formData.companyId
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Erro ao criar usuário');
-      }
 
       onSuccess();
       onClose();
     } catch (err: any) {
-      setError(err.message || 'Erro ao criar usuário');
+      setError(err.response?.data?.message || err.message || 'Erro ao criar utilizador');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4">Criar Novo Utilizador</h2>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className={`${theme.cards.form} w-full max-w-md max-h-[90vh] overflow-y-auto`}>
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-700/50">
+          <h2 className="text-xl font-bold text-white">Criar Novo Utilizador</h2>
+          <button
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-300 transition-colors"
+            disabled={loading}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
         
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+          <div className={theme.alerts.error + " mb-4"}>
+            <div className="flex items-center">
+              <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <span className="font-medium">{error}</span>
+            </div>
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="name">
               Nome Completo *
             </label>
             <input
@@ -107,13 +112,14 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
+              placeholder="Nome do utilizador"
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="email">
               Email *
             </label>
             <input
@@ -122,13 +128,14 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
+              placeholder="utilizador@empresa.com"
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="companyId">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="companyId">
               Empresa *
             </label>
             <select
@@ -136,7 +143,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               name="companyId"
               value={formData.companyId}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
             >
               <option value="">Selecionar Empresa</option>
@@ -146,8 +153,8 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
             </select>
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="role">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="role">
               Função *
             </label>
             <select
@@ -155,7 +162,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
             >
               <option value="OPERATOR">Operador</option>
@@ -164,8 +171,8 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
             </select>
           </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="password">
               Senha *
             </label>
             <input
@@ -174,15 +181,16 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
               minLength={6}
+              placeholder="••••••"
             />
-            <p className="text-gray-600 text-xs mt-1">Mínimo de 6 caracteres</p>
+            <p className="text-xs text-slate-500 mt-1">Mínimo de 6 caracteres</p>
           </div>
 
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
+          <div>
+            <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="confirmPassword">
               Confirmar Senha *
             </label>
             <input
@@ -191,26 +199,39 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className={theme.inputs.base}
               required
+              placeholder="••••••"
             />
           </div>
 
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800"
+              className="px-4 py-2 text-slate-400 hover:text-slate-300 transition-colors font-medium disabled:opacity-50"
               disabled={loading}
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
+              className={`${theme.buttons.primary} bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 flex items-center gap-2 disabled:opacity-50`}
               disabled={loading}
             >
-              {loading ? 'Criando...' : 'Criar Utilizador'}
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  Criando...
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Criar Utilizador
+                </>
+              )}
             </button>
           </div>
         </form>

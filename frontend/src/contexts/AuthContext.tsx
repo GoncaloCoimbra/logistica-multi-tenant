@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useContext, useEffect, useRef, ReactNode } from 'react';
 import api from '../api/api';
 
 interface User {
@@ -6,15 +6,25 @@ interface User {
   name: string;
   email: string;
   role: 'SUPER_ADMIN' | 'ADMIN' | 'OPERATOR';
-  companyId?: string;
+  companyId?: string | null;
   companyName?: string;
-  avatarUrl?: string; 
+  avatarUrl?: string;
+  isActive?: boolean;
+}
+
+interface RegisterData {
+  name: string;
+  email: string;
+  password: string;
+  role?: 'ADMIN' | 'OPERATOR';
+  companyId?: string;
 }
 
 interface AuthContextData {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
   logout: () => void;
   updateUserData: (userData: Partial<User>) => void;
   isAuthenticated: boolean;
@@ -28,48 +38,74 @@ const AuthContext = createContext<AuthContextData | null>(null);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const hasLoadedRef = useRef(false);
+
+  // normalize user object (strip wrappers)
+  const normalizeUser = (maybeUser: any): User | null => {
+    if (!maybeUser) return null;
+    // if payload is { user: {...} }
+    if (maybeUser.user && typeof maybeUser.user === 'object') return maybeUser.user as User;
+    // if payload is { data: { user: {...} } }
+    if (maybeUser.data && maybeUser.data.user) return maybeUser.data.user as User;
+    // otherwise assume it's the user object
+    return maybeUser as User;
+  };
 
   useEffect(() => {
+    if (hasLoadedRef.current) return;
+    hasLoadedRef.current = true;
+
     const loadUser = async () => {
       const token = localStorage.getItem('token');
       const storedUser = localStorage.getItem('user');
 
-      console.log('🔄 AuthContext - Loading user...', { 
-        hasToken: !!token, 
-        hasStoredUser: !!storedUser 
+      console.log('🔄 AuthContext - Loading user...', {
+        hasToken: !!token,
+        hasStoredUser: !!storedUser,
       });
 
       if (token && storedUser) {
         try {
           const parsedUser = JSON.parse(storedUser);
-          console.log('📦 AuthContext - Stored user:', {
-            email: parsedUser.email,
-            role: parsedUser.role,
-            roleType: typeof parsedUser.role
-          });
-          
           setUser(parsedUser);
           api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          
-          //  Revalidar com backend
-          console.log('🔍 AuthContext - Revalidating with /auth/me...');
+
+          console.log('✅ AuthContext - Stored user:', parsedUser);
+          console.log('🏢 AuthContext - Stored companyId:', parsedUser?.companyId);
+
           const response = await api.get('/auth/me');
-          const userData = response.data;
-          
-          console.log(' AuthContext - User from backend:', {
-            email: userData.email,
-            role: userData.role,
-            roleType: typeof userData.role,
-            isSuperAdmin: userData.role === 'SUPER_ADMIN'
+
+          console.log('🔎 AuthContext - /auth/me response.data:', response.data);
+
+          const userFromServer = normalizeUser(response.data);
+
+          if (!userFromServer) {
+            throw new Error('Formato inválido retornado por /auth/me');
+          }
+
+          console.log('✅ AuthContext - User normalized:', userFromServer);
+          console.log('🏢 AuthContext - CompanyId from server:', userFromServer?.companyId);
+          console.log('👤 AuthContext - User role:', userFromServer?.role);
+
+          if (!userFromServer.companyId && userFromServer.role !== 'SUPER_ADMIN') {
+            console.error('⚠️⚠️⚠️ ATENÇÃO: Usuário não possui companyId!');
+            console.error('⚠️ Isso vai impedir que os fornecedores apareçam!');
+            console.error('⚠️ User completo:', JSON.stringify(userFromServer, null, 2));
+          } else if (userFromServer.companyId) {
+            console.log(`✅ CompanyId encontrado: ${userFromServer.companyId}`);
+          } else {
+            console.log('ℹ️ Usuário é SUPER_ADMIN, não precisa de companyId');
+          }
+
+          setUser(userFromServer);
+          localStorage.setItem('user', JSON.stringify(userFromServer));
+          console.log('✅ AuthContext - User validated:', {
+            email: userFromServer.email,
+            role: userFromServer.role,
+            companyId: userFromServer.companyId,
           });
-          
-          setUser(userData);
-          localStorage.setItem('user', JSON.stringify(userData));
         } catch (error: any) {
-          console.error('❌ AuthContext - Error loading user:', {
-            message: error.message,
-            response: error.response?.data
-          });
+          console.error('❌ AuthContext - Error loading user:', error);
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           setUser(null);
@@ -78,6 +114,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       } else {
         console.log('⚠️ AuthContext - No token or user found');
       }
+
       setLoading(false);
     };
 
@@ -87,25 +124,154 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = async (email: string, password: string) => {
     try {
       console.log('🔐 AuthContext - Login attempt:', email);
-      
-      const response = await api.post('/auth/login', { email, password });
-      const { token, user: userData } = response.data;
+      console.log('🔗 API Base URL:', api.defaults.baseURL);
+      console.log('📍 Calling endpoint:', api.defaults.baseURL + '/auth/login');
 
-      console.log(' AuthContext - Login success:', {
-        userId: userData.id,
-        email: userData.email,
-        role: userData.role,
-        roleType: typeof userData.role,
-        isSuperAdmin: userData.role === 'SUPER_ADMIN'
-      });
+      const response = await api.post('/auth/login', { email, password });
+      console.log('🔎 AuthContext - /auth/login response status:', response.status);
+      console.log('🔎 AuthContext - /auth/login response.data:', response.data);
+
+      const token =
+        response.data?.token ||
+        response.data?.accessToken ||
+        response.data?.access_token ||
+        response.data?.data?.token ||
+        null;
+
+      const userData =
+        response.data?.user ||
+        response.data?.data?.user ||
+        response.data?.userData ||
+        (typeof response.data === 'object' ? response.data : null);
+
+      const normalizedUser = normalizeUser(userData);
+
+      if (!token || !normalizedUser) {
+        console.error('❌ AuthContext - Formato inesperado do backend:', response.data);
+        throw new Error('Resposta do servidor inválida: token ou user ausentes');
+      }
+
+      console.log('✅ AuthContext - User normalized from login:', normalizedUser);
+      console.log('🔑 Usuário logado:', normalizedUser);
+      console.log('🏢 CompanyId do usuário:', normalizedUser?.companyId);
+      console.log('👤 Role do usuário:', normalizedUser?.role);
+
+      if (!normalizedUser.companyId && normalizedUser.role !== 'SUPER_ADMIN') {
+        console.error('⚠️⚠️⚠️ PROBLEMA DETECTADO!');
+        console.error('⚠️ Usuário não possui companyId!');
+        console.error('⚠️ Role:', normalizedUser.role);
+        console.error('⚠️ Isso vai causar erro 500 ao buscar fornecedores!');
+      } else if (normalizedUser.companyId) {
+        console.log(`✅ CompanyId encontrado: ${normalizedUser.companyId}`);
+      }
 
       localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      setUser(userData);
+      setUser(normalizedUser);
+
+      console.log('✅ AuthContext - Login success:', {
+        email: normalizedUser.email,
+        role: normalizedUser.role,
+        companyId: normalizedUser.companyId,
+      });
     } catch (error: any) {
       console.error('❌ AuthContext - Login error:', error);
-      throw new Error(error.response?.data?.error || 'Erro ao fazer login');
+      console.error('❌ Error response status:', error.response?.status);
+      console.error('❌ Error response data:', error.response?.data);
+
+      let message = 'Erro ao fazer login. Verifique suas credenciais.';
+
+      if (error.response?.data) {
+        const data = error.response.data;
+        if (typeof data === 'string') {
+          message = data;
+        } else if (data.message) {
+          message = data.message;
+        } else if (data.error) {
+          message = data.error;
+        } else if (Array.isArray(data) && data[0]?.message) {
+          message = data[0].message;
+        }
+      } else if (error.request) {
+        message = 'Sem resposta do servidor. Verifique sua conexão.';
+      } else if (error.message) {
+        message = error.message;
+      }
+
+      throw new Error(message);
+    }
+  };
+
+  const register = async (data: RegisterData) => {
+    try {
+      console.log('📝 AuthContext - Register attempt:', data.email);
+      console.log('🔗 API Base URL:', api.defaults.baseURL);
+      console.log('📍 Calling endpoint:', api.defaults.baseURL + '/auth/register');
+
+      const response = await api.post('/auth/register', data);
+      console.log('🔎 AuthContext - /auth/register response status:', response.status);
+      console.log('🔎 AuthContext - /auth/register response.data:', response.data);
+
+      const token =
+        response.data?.token ||
+        response.data?.accessToken ||
+        response.data?.access_token ||
+        response.data?.data?.token ||
+        null;
+
+      const userData =
+        response.data?.user ||
+        response.data?.data?.user ||
+        response.data?.userData ||
+        (typeof response.data === 'object' ? response.data : null);
+
+      const normalizedUser = normalizeUser(userData);
+
+      if (!token || !normalizedUser) {
+        console.error('❌ AuthContext - Formato inesperado do backend:', response.data);
+        throw new Error('Resposta do servidor inválida: token ou user ausentes');
+      }
+
+      console.log('✅ AuthContext - User registered:', normalizedUser);
+      console.log('🏢 CompanyId do usuário:', normalizedUser?.companyId);
+      console.log('👤 Role do usuário:', normalizedUser?.role);
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setUser(normalizedUser);
+
+      console.log('✅ AuthContext - Register success:', {
+        email: normalizedUser.email,
+        role: normalizedUser.role,
+        companyId: normalizedUser.companyId,
+      });
+    } catch (error: any) {
+      console.error('❌ AuthContext - Register error:', error);
+      console.error('❌ Error response status:', error.response?.status);
+      console.error('❌ Error response data:', error.response?.data);
+
+      let message = 'Erro ao registar. Tente novamente.';
+
+      if (error.response?.data) {
+        const data = error.response.data;
+        if (typeof data === 'string') {
+          message = data;
+        } else if (data.message) {
+          message = data.message;
+        } else if (data.error) {
+          message = data.error;
+        } else if (Array.isArray(data) && data[0]?.message) {
+          message = data[0].message;
+        }
+      } else if (error.request) {
+        message = 'Sem resposta do servidor. Verifique sua conexão.';
+      } else if (error.message) {
+        message = error.message;
+      }
+
+      throw new Error(message);
     }
   };
 
@@ -121,10 +287,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const updateUserData = (userData: Partial<User>) => {
     if (user) {
       const updatedUser = { ...user, ...userData };
-      console.log('🔄 AuthContext - Updating user data:', {
-        email: updatedUser.email,
-        role: updatedUser.role
-      });
       setUser(updatedUser);
       localStorage.setItem('user', JSON.stringify(updatedUser));
     }
@@ -134,27 +296,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN';
   const isOperator = user?.role === 'OPERATOR';
 
-  //  Log detalhado sempre que user mudar
-  useEffect(() => {
-    if (user) {
-      console.log('👤 AuthContext - Current user state:', { 
-        userEmail: user.email,
-        userRole: user.role,
-        userRoleType: typeof user.role,
-        isSuperAdmin, 
-        isAdmin, 
-        isOperator,
-        companyId: user.companyId
-      });
-    }
-  }, [user, isSuperAdmin, isAdmin, isOperator]);
-
   return (
     <AuthContext.Provider
       value={{
         user,
         loading,
         login,
+        register,
         logout,
         updateUserData,
         isAuthenticated: !!user,

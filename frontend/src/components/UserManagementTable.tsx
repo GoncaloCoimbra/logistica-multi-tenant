@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../api/api';
 import UserFormModal from './UserFormModal';
+import { theme } from '../theme.config';
 
 interface User {
   id: string;
@@ -129,7 +130,7 @@ const UserManagementTable: React.FC = () => {
     }
     return (
       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-        <span className="w-2 h-2 mr-1.5 bg-gray-500 rounded-full"></span>
+        <span className="w-2 h-2 mr-1.5 bg-slate-500 rounded-full"></span>
         Inativo
       </span>
     );
@@ -181,34 +182,34 @@ const UserManagementTable: React.FC = () => {
 
       {/*  Estatísticas */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <div className="text-sm text-gray-600">Total</div>
-          <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+        <div className="bg-[#1e293b]/80 rounded-lg border border-slate-700 p-4">
+          <div className="text-sm text-slate-300">Total</div>
+          <div className="text-2xl font-bold text-white">{stats.total}</div>
         </div>
-        <div className="bg-green-50 rounded-lg border border-green-200 p-4">
-          <div className="text-sm text-green-600">Ativos</div>
-          <div className="text-2xl font-bold text-green-700">{stats.active}</div>
+        <div className="bg-green-900/30 rounded-lg border border-green-700 p-4">
+          <div className="text-sm text-green-300">Ativos</div>
+          <div className="text-2xl font-bold text-green-400">{stats.active}</div>
         </div>
-        <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
-          <div className="text-sm text-gray-600">Inativos</div>
-          <div className="text-2xl font-bold text-gray-700">{stats.inactive}</div>
+        <div className="bg-gray-700/30 rounded-lg border border-slate-600 p-4">
+          <div className="text-sm text-slate-300">Inativos</div>
+          <div className="text-2xl font-bold text-slate-200">{stats.inactive}</div>
         </div>
-        <div className="bg-purple-50 rounded-lg border border-purple-200 p-4">
-          <div className="text-sm text-purple-600">Admins</div>
-          <div className="text-2xl font-bold text-purple-700">{stats.admins}</div>
+        <div className="bg-purple-900/30 rounded-lg border border-purple-700 p-4">
+          <div className="text-sm text-purple-300">Admins</div>
+          <div className="text-2xl font-bold text-purple-400">{stats.admins}</div>
         </div>
-        <div className="bg-blue-50 rounded-lg border border-blue-200 p-4">
-          <div className="text-sm text-blue-600">Operadores</div>
-          <div className="text-2xl font-bold text-blue-700">{stats.operators}</div>
+        <div className="bg-blue-900/30 rounded-lg border border-blue-700 p-4">
+          <div className="text-sm text-blue-300">Operadores</div>
+          <div className="text-2xl font-bold text-blue-400">{stats.operators}</div>
         </div>
       </div>
 
       {/* Tabela */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-[#1e293b]/80 rounded-lg shadow-sm border border-slate-700">
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Utilizadores da Empresa</h3>
-            <p className="text-sm text-gray-600 mt-1">
+            <h3 className="text-lg font-semibold text-white">Utilizadores da Empresa</h3>
+            <p className="text-sm text-slate-300 mt-1">
               Gerir utilizadores e permissões
             </p>
           </div>
@@ -218,7 +219,7 @@ const UserManagementTable: React.FC = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className={theme.inputs.base + " text-sm"}
             >
               <option value="all">Todos ({users.length})</option>
               <option value="active">Ativos ({stats.active})</option>
@@ -238,8 +239,8 @@ const UserManagementTable: React.FC = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-slate-700">
+            <thead className="bg-[#0f172a]/70">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Utilizador
@@ -261,7 +262,7 @@ const UserManagementTable: React.FC = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-[#1e293b]/80 divide-y divide-slate-700">
               {filteredUsers.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
@@ -278,7 +279,7 @@ const UserManagementTable: React.FC = () => {
                   return (
                     <tr 
                       key={user.id} 
-                      className={`hover:bg-gray-50 transition-colors ${!user.isActive ? 'opacity-60' : ''}`}
+                      className={`hover:bg-slate-700/20 transition-colors ${!user.isActive ? 'opacity-60' : ''}`}
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">

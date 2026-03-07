@@ -1,4 +1,155 @@
-# 📦 Sistema de Gestão Logística Multi-Tenant
+# Frontend - React + Vite + Tailwind
+
+Interface moderna para a plataforma de gestão logística multi-tenant.
+
+## Inicialização Rápida
+
+```bash
+# Na raiz, instalar dependências
+npm install
+
+# Criar .env.local ou .env
+cp .env.example .env.local
+
+# Rodar em desenvolvimento
+npm run --workspace=frontend dev
+
+# Build para produção
+npm run --workspace=frontend build
+
+# Testes com cobertura
+npm run --workspace=frontend test
+
+# Testes com watch mode
+npm run --workspace=frontend test:watch
+
+# Lint
+npm run --workspace=frontend lint
+
+# Format
+npm run --workspace=frontend format
+```
+
+## Estrutura
+
+```
+src/
+├─ main.tsx / index.tsx   # Entry point
+├─ App.tsx                # Root component
+├─ api/
+│  └─ client.ts          # Axios instance + interceptors
+├─ components/            # Componentes reutilizáveis
+│  ├─ common/
+│  ├─ layout/
+│  └─ ...
+├─ pages/                 # Páginas (rotas)
+│  ├─ Dashboard.tsx
+│  ├─ Products/
+│  ├─ Vehicles/
+│  └─ ...
+├─ hooks/                 # Custom hooks
+│  └─ useAuth.ts
+├─ contexts/              # Context API
+├─ services/              # Lógica de dados (não-API)
+├─ types/                 # TypeScript types
+├─ utils/                 # Funções utilitárias
+└─ styles/                # CSS global
+
+public/
+├─ index.html
+├─ favicon.ico
+└─ manifest.json
+```
+
+## Variáveis de Ambiente
+
+```bash
+# .env.local
+REACT_APP_API_URL=http://localhost:3000/api
+REACT_APP_ENV=development
+```
+
+## Testes
+
+```bash
+# Rodar testes com coverage
+npm run --workspace=frontend test
+
+# Watch mode (útil durante desenvolvimento)
+npm run --workspace=frontend test:watch
+```
+
+### Exemplo de Teste com React Testing Library
+
+```typescript
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MyComponent } from './MyComponent';
+
+describe('MyComponent', () => {
+  it('deve renderizar botão', () => {
+    render(<MyComponent />);
+    const button = screen.getByRole('button', { name: /click/i });
+    expect(button).toBeInTheDocument();
+  });
+
+  it('deve chamar callback ao clicar', async () => {
+    const onClick = jest.fn();
+    const user = userEvent.setup();
+    render(<MyComponent onClick={onClick} />);
+    
+    const button = screen.getByRole('button');
+    await user.click(button);
+    
+    expect(onClick).toHaveBeenCalled();
+  });
+});
+```
+
+## API e Integração
+
+Todos os requests HTTP devem passar por `src/api/client.ts`:
+
+```typescript
+import { apiClient } from '@api/client';
+
+// GET
+const users = await apiClient.get('/users');
+
+// POST
+const newProduct = await apiClient.post('/products', {
+  name: 'Produto',
+  price: 100
+});
+
+// Interceptor de erro centralizado
+apiClient.interceptors.response.use(
+  response => response,
+  error => {
+    // Handle auth errors, redirects, etc.
+  }
+);
+```
+
+## Design System e Tailwind
+
+- Cores: definidas em `tailwind.config.js`
+- Componentes: reutilizáveis em `components/`
+- Tema: suporte a dark mode via `ThemeProvider`
+
+## Documentação Adicional
+
+- [UX_UI.md](../docs/UX_UI.md) - Padrões de design e UX
+- [CONTRIBUTING.md](../CONTRIBUTING.md) - Como contribuir
+- [DEPLOYMENT.md](../docs/DEPLOYMENT.md) - Deploy em produção
+
+---
+
+**Última atualização:** Fevereiro 2026
+
+---
+
+##  Sistema de Gestão Logística Multi-Tenant
 
 > Plataforma completa de gestão logística desenvolvida para servir múltiplas empresas com isolamento total de dados, controlo de inventário em tempo real e máquina de estados robusta.
 
@@ -34,7 +185,7 @@
 
 Esta plataforma permite gerir todo o ciclo de vida de produtos num armazém, desde a receção até à entrega final. O sistema foi desenvolvido com arquitetura **multi-tenant**, garantindo que cada empresa opera de forma totalmente isolada e segura.
 
-### 🎨 Capturas de Ecrã
+###  Capturas de Ecrã
 
 <details>
 <summary>Ver screenshots</summary>
@@ -64,20 +215,20 @@ Esta plataforma permite gerir todo o ciclo de vida de produtos num armazém, des
 
 ## ✨ Funcionalidades
 
-### 🔐 Autenticação e Segurança
+###  Autenticação e Segurança
 - Sistema multi-tenant com isolamento total de dados
 - Três perfis: **Super Admin**, **Administrador** e **Operador**
 - Autenticação JWT com refresh tokens
 - Proteção contra SQL injection via Prisma ORM
 
-### 📦 Gestão de Inventário
+###  Gestão de Inventário
 - **CRUD completo** de produtos
 - Máquina de estados para controlo do ciclo de vida
 - Histórico completo de movimentações
 - Rastreabilidade total de cada produto
 - Filtros avançados (estado, localização, fornecedor, data)
 
-### 📊 Dashboard Analítico
+###  Dashboard Analítico
 - Resumo do inventário por estado
 - Gráficos de distribuição (donut e barras)
 - Estatísticas de movimentações (últimos 30 dias)
@@ -240,7 +391,7 @@ Cria um ficheiro `.env` na pasta `backend/`:
 NODE_ENV=development
 
 # Servidor
-PORT=3001
+PORT=3000
 
 # Base de Dados
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/logistica
@@ -324,7 +475,7 @@ npm run build
 ### Acesso
 
 - **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:3001
+- **Backend API**: http://localhost:3000
 - **Prisma Studio**: http://localhost:5555 (execute `npx prisma studio`)
 
 ---
@@ -485,69 +636,69 @@ Em Preparação → Em Expedição → Entregue
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| POST | `/api/auth/register` | Registo de empresa e admin | ❌ |
-| POST | `/api/auth/login` | Login | ❌ |
-| GET | `/api/auth/me` | Dados do utilizador | ✅ |
+| POST | `/api/auth/register` | Registo de empresa e admin |  |
+| POST | `/api/auth/login` | Login |  |
+| GET | `/api/auth/me` | Dados do utilizador |  |
 
 ### Produtos
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/products` | Lista produtos | ✅ |
-| GET | `/api/products/:id` | Detalhes de um produto | ✅ |
-| POST | `/api/products` | Criar produto | ✅ |
-| PUT | `/api/products/:id` | Atualizar produto | ✅ |
-| DELETE | `/api/products/:id` | Eliminar produto | ✅ Admin |
-| POST | `/api/products/:id/transition` | Alterar estado | ✅ |
-| GET | `/api/products/:id/history` | Histórico de movimentações | ✅ |
+| GET | `/api/products` | Lista produtos |  |
+| GET | `/api/products/:id` | Detalhes de um produto |  |
+| POST | `/api/products` | Criar produto |  |
+| PUT | `/api/products/:id` | Atualizar produto |  |
+| DELETE | `/api/products/:id` | Eliminar produto |  Admin |
+| POST | `/api/products/:id/transition` | Alterar estado |  |
+| GET | `/api/products/:id/history` | Histórico de movimentações |  |
 
 ### Dashboard
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/dashboard/stats` | Estatísticas gerais | ✅ |
-| GET | `/api/dashboard/by-status` | Distribuição por estado | ✅ |
+| GET | `/api/dashboard/stats` | Estatísticas gerais |  |
+| GET | `/api/dashboard/by-status` | Distribuição por estado |  |
 
 ### Fornecedores
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/suppliers` | Lista fornecedores | ✅ |
-| POST | `/api/suppliers` | Criar fornecedor | ✅ |
-| PUT | `/api/suppliers/:id` | Atualizar fornecedor | ✅ |
-| DELETE | `/api/suppliers/:id` | Eliminar fornecedor | ✅ Admin |
+| GET | `/api/suppliers` | Lista fornecedores |  |
+| POST | `/api/suppliers` | Criar fornecedor |  |
+| PUT | `/api/suppliers/:id` | Atualizar fornecedor |  |
+| DELETE | `/api/suppliers/:id` | Eliminar fornecedor |  Admin |
 
 ### Veículos
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/vehicles` | Lista veículos | ✅ |
-| POST | `/api/vehicles` | Criar veículo | ✅ |
-| PUT | `/api/vehicles/:id` | Atualizar veículo | ✅ |
-| DELETE | `/api/vehicles/:id` | Eliminar veículo | ✅ Admin |
+| GET | `/api/vehicles` | Lista veículos |  |
+| POST | `/api/vehicles` | Criar veículo |  |
+| PUT | `/api/vehicles/:id` | Atualizar veículo |  |
+| DELETE | `/api/vehicles/:id` | Eliminar veículo |  Admin |
 
 ### Transportes
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/transports` | Lista transportes | ✅ |
-| POST | `/api/transports` | Criar transporte | ✅ |
-| PUT | `/api/transports/:id` | Atualizar transporte | ✅ |
-| DELETE | `/api/transports/:id` | Eliminar transporte | ✅ Admin |
+| GET | `/api/transports` | Lista transportes |  |
+| POST | `/api/transports` | Criar transporte |  |
+| PUT | `/api/transports/:id` | Atualizar transporte |  |
+| DELETE | `/api/transports/:id` | Eliminar transporte |  Admin |
 
 ### Auditoria
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/auditlog` | Lista logs de auditoria | ✅ |
+| GET | `/api/auditlog` | Lista logs de auditoria |  |
 
 ### Notificações
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/notifications` | Lista notificações | ✅ |
-| PUT | `/api/notifications/:id/read` | Marcar como lida | ✅ |
-| PUT | `/api/notifications/read-all` | Marcar todas como lidas | ✅ |
+| GET | `/api/notifications` | Lista notificações |  |
+| PUT | `/api/notifications/:id/read` | Marcar como lida |  |
+| PUT | `/api/notifications/read-all` | Marcar todas como lidas |  |
 
 ---
 
@@ -578,7 +729,7 @@ Em Preparação → Em Expedição → Entregue
 
 ---
 
-## 🔐 Permissões
+##  Permissões
 
 ### Super Admin
 
@@ -666,19 +817,19 @@ Acede a http://localhost:5555
 
 ### Boas Práticas
 
-- ✅ Sempre validar input com Zod
-- ✅ Sempre filtrar por `companyId` em queries multi-tenant
-- ✅ Registar operações importantes no audit log
-- ✅ Usar transações Prisma para operações complexas
-- ✅ Escrever testes para lógica crítica
-- ✅ Documentar endpoints na API
-- ✅ Usar variáveis de ambiente para secrets
+-  Sempre validar input com Zod
+-  Sempre filtrar por `companyId` em queries multi-tenant
+-  Registar operações importantes no audit log
+-  Usar transações Prisma para operações complexas
+-  Escrever testes para lógica crítica
+-  Documentar endpoints na API
+-  Usar variáveis de ambiente para secrets
 
 ---
 
 ## 🗺️ Roadmap
 
-### Fase 1 - Concluído ✅
+### Fase 1 - Concluído 
 - [x] Sistema multi-tenant
 - [x] Autenticação JWT
 - [x] CRUD de produtos
@@ -686,7 +837,7 @@ Acede a http://localhost:5555
 - [x] Dashboard básico
 - [x] Histórico de operações
 
-### Fase 2 - Concluído ✅
+### Fase 2 - Concluído 
 - [x] Gestão de fornecedores
 - [x] Gestão de veículos
 - [x] Gestão de transportes
@@ -752,16 +903,9 @@ Se encontraste algum problema ou tens sugestões:
 
 1. Verifica as [Issues](**vou adicionar quando acabar**) existentes
 2. Cria uma nova issue se necessário
-3. Junta-te à comunidade Commit PT no Discord
+3. Contactar o criador
 
----
 
-## 🙏 Agradecimentos
 
-- Comunidade **Commit PT** pela colaboração
-- Todos os contributors que ajudaram a melhorar o projeto
-- Stack tecnológica open-source utilizada
-
----
 
 **Desenvolvido com pelo gonçalo coimbra**

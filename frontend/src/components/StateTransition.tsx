@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { theme } from '../theme.config';
 
 interface StateTransitionProps {
   currentState: string;
@@ -66,24 +67,24 @@ export const StateTransition: React.FC<StateTransitionProps> = ({
 
   if (availableStates.length === 0) {
     return (
-      <div className="bg-gray-100 p-4 rounded">
-        <p className="text-gray-600">Estado final - sem transições disponíveis</p>
+      <div className="bg-[#1e293b]/80 p-4 rounded">
+        <p className="text-slate-300">Estado final - sem transições disponíveis</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow">
-      <h3 className="text-lg font-semibold mb-4">Alterar Estado</h3>
+    <div className={`${theme.cards.form} p-6 rounded-lg shadow`}> 
+      <h3 className="text-lg font-semibold mb-4 text-white">Alterar Estado</h3>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
+          <label className="block text-sm font-medium mb-2 text-white">
             Novo Estado
           </label>
           <select
             value={newState}
             onChange={(e) => setNewState(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className={theme.inputs.base}
             required
           >
             <option value="">Selecione...</option>
@@ -94,13 +95,13 @@ export const StateTransition: React.FC<StateTransitionProps> = ({
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
+          <label className="block text-sm font-medium mb-2 text-white">
             Comentários/Motivo
           </label>
           <textarea
             value={comments}
             onChange={(e) => setComments(e.target.value)}
-            className="w-full border rounded px-3 py-2"
+            className={theme.inputs.base}
             rows={3}
             placeholder="Descreva o motivo da mudança..."
           />
@@ -109,7 +110,7 @@ export const StateTransition: React.FC<StateTransitionProps> = ({
         <button
           type="submit"
           disabled={loading || !newState}
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+          className={theme.buttons.primary + " disabled:opacity-50"}
         >
           {loading ? 'Alterando...' : 'Confirmar Mudança'}
         </button>
