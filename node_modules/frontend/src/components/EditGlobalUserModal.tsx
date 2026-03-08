@@ -113,7 +113,7 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
             <label className="block text-sm font-medium text-white mb-2" htmlFor="name">
-              Nome Completo *
+              Full Name *
             </label>
             <input
               type="text"
@@ -143,7 +143,7 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-white mb-2" htmlFor="companyId">
-              Empresa *
+              Company *
             </label>
             <select
               id="companyId"
@@ -153,7 +153,7 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
               className={theme.inputs.base}
               required
             >
-              <option value="">Selecionar Empresa</option>
+              <option value="">Select Company</option>
               {companies.map(company => (
                 <option key={company.id} value={company.id}>{company.name}</option>
               ))}
@@ -162,7 +162,7 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
 
           <div>
             <label className="block text-sm font-medium text-white mb-2" htmlFor="role">
-              Função *
+              Role *
             </label>
             <select
               id="role"
@@ -173,11 +173,11 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
               required
               disabled={user.role === 'SUPER_ADMIN'}
             >
-              <option value="OPERATOR">Operador</option>
-              <option value="ADMIN">Administrador</option>
+              <option value="OPERATOR">Operator</option>
+              <option value="ADMIN">Administrator</option>
             </select>
             {user.role === 'SUPER_ADMIN' && (
-              <p className="text-gray-600 text-xs mt-1">Super Administradores não podem ter sua função alterada</p>
+              <p className="text-gray-600 text-xs mt-1">Super Administrators cannot have their role changed</p>
             )}
           </div>
 
@@ -188,14 +188,14 @@ const EditGlobalUserModal: React.FC<EditGlobalUserModalProps> = ({
               className="px-4 py-2 text-slate-300 hover:text-white font-medium disabled:opacity-50"
               disabled={loading}
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
               className={theme.buttons.primary + " disabled:opacity-50"}
               disabled={loading}
             >
-              {loading ? 'Guardando...' : 'Guardar Alterações'}
+              {loading ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </form>

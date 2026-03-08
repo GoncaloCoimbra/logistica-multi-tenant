@@ -42,7 +42,7 @@ export const ProductHistory: React.FC<ProductHistoryProps> = ({ productId }) => 
       const data = await response.json();
       setHistory(data);
     } catch (error) {
-      console.error('Erro ao carregar histórico:', error);
+      console.error('Error loading history:', error);
       setHistory([]);
     } finally {
       setLoading(false);
@@ -53,7 +53,7 @@ export const ProductHistory: React.FC<ProductHistoryProps> = ({ productId }) => 
     return (
       <div className="flex justify-center items-center p-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
-        <span className="ml-3 text-amber-300">Carregando histórico...</span>
+        <span className="ml-3 text-amber-300">Loading history...</span>
       </div>
     );
   }
@@ -62,7 +62,7 @@ export const ProductHistory: React.FC<ProductHistoryProps> = ({ productId }) => 
     <div className="p-4">
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-white">
-          Histórico de Movimentações
+          Movement History
         </h2>
       </div>
 
@@ -71,7 +71,7 @@ export const ProductHistory: React.FC<ProductHistoryProps> = ({ productId }) => 
           <svg className="w-12 h-12 text-amber-500/30 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <p className="text-amber-300/70">Nenhuma movimentação registrada</p>
+          <p className="text-amber-300/70">No movements recorded</p>
         </div>
       ) : (
         <div className="space-y-4">

@@ -45,7 +45,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
     e.preventDefault();
     setError('');
 
-    // Validações
+    // Validation
     if (!user && !formData.password) {
       setError('Password is required for new users');
       return;
@@ -256,7 +256,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
               disabled={loading}
               className="px-4 py-2 text-slate-300 hover:text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
@@ -266,14 +266,14 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
               {loading ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  <span>A guardar...</span>
+                  <span>Saving...</span>
                 </>
               ) : (
                 <>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>{user ? 'Atualizar' : 'Criar'} Utilizador</span>
+                  <span>{user ? 'Update' : 'Create'} User</span>
                 </>
               )}
             </button>

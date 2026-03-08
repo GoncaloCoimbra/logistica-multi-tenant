@@ -212,7 +212,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               className="px-4 py-2 text-slate-400 hover:text-slate-300 transition-colors font-medium disabled:opacity-50"
               disabled={loading}
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
@@ -222,7 +222,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               {loading ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  Criando...
+                  Creating...
                 </>
               ) : (
                 <>

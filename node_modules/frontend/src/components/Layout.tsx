@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './Header';
-import Sidebar from './Sidebar';  // ← ADICIONE ESTA IMPORTAÇÃO
+import Sidebar from './Sidebar';  // ← ADD THIS IMPORT IF NEEDED
 import Footer from './Footer';
 import { theme } from '../theme.config';
 
@@ -14,7 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Header */}
       <Header />
 
-      {/* Container principal com Sidebar + Conteúdo */}
+      {/* Main container with Sidebar + Content */}
       <div className="flex flex-1">
         {/* Sidebar */}
         <Sidebar />

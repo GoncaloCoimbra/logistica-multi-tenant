@@ -288,7 +288,7 @@ const Dashboard: React.FC = () => {
               onClick={() => refetchStats()}
               className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700 transition-all"
             >
-              Tentar novamente
+              Try Again
             </button>
             <button
               onClick={() => navigate('/')}
@@ -393,7 +393,7 @@ const Dashboard: React.FC = () => {
             {/* Refresh */}
             <button
               onClick={() => refetchStats()}
-              title="Atualizar"
+              title="Refresh"
               className="p-2 rounded-xl bg-slate-800 border-2 border-amber-500/20 hover:border-amber-500/50 transition-all"
             >
               <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -37,15 +37,15 @@ export class AuditLogInterceptor implements NestInterceptor {
     console.log('🔍 [INTERCEPTOR] Has user?', !!user);
 
     if (!shouldLog || !user) {
-      console.log('⚠️ [INTERCEPTOR] Pulando log - shouldLog:', shouldLog, 'user:', !!user);
+      console.log('⚠️ [INTERCEPTOR] Skipping log - shouldLog:', shouldLog, 'user:', !!user);
       return next.handle();
     }
 
-    console.log(' [INTERCEPTOR] Vai processar o log!');
+    console.log(' [INTERCEPTOR] Will process the log!');
 
     return next.handle().pipe(
       tap(async (response) => {
-        console.log('🔍 [INTERCEPTOR TAP] Response recebida:', JSON.stringify(response));
+        console.log('🔍 [INTERCEPTOR TAP] Response received:', JSON.stringify(response));
         
         try {
           const { entity, action } = this.extractEntityAndAction(method, url);

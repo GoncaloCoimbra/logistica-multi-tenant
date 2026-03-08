@@ -114,7 +114,7 @@ const UserManagementTable: React.FC = () => {
         <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
           <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
         </svg>
-        Operador
+        Operator
       </span>
     );
   };
@@ -124,19 +124,19 @@ const UserManagementTable: React.FC = () => {
       return (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
           <span className="w-2 h-2 mr-1.5 bg-green-500 rounded-full"></span>
-          Ativo
+          Active
         </span>
       );
     }
     return (
       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
         <span className="w-2 h-2 mr-1.5 bg-slate-500 rounded-full"></span>
-        Inativo
+        Inactive
       </span>
     );
   };
 
-  //  Filtrar utilizadores por status
+  // Filter users by status
   const filteredUsers = users.filter(user => {
     if (filterStatus === 'active') return user.isActive;
     if (filterStatus === 'inactive') return !user.isActive;
@@ -161,7 +161,7 @@ const UserManagementTable: React.FC = () => {
 
   return (
     <div>
-      {/* Mensagens */}
+      {/* Messages */}
       {success && (
         <div className="mb-6 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-center">
           <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -180,7 +180,7 @@ const UserManagementTable: React.FC = () => {
         </div>
       )}
 
-      {/*  Estatísticas */}
+      {/* Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
         <div className="bg-[#1e293b]/80 rounded-lg border border-slate-700 p-4">
           <div className="text-sm text-slate-300">Total</div>
@@ -215,15 +215,15 @@ const UserManagementTable: React.FC = () => {
           </div>
           
           <div className="flex items-center space-x-3">
-            {/*  Filtro por Status */}
+            {/* Status Filter */}
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as any)}
               className={theme.inputs.base + " text-sm"}
             >
-              <option value="all">Todos ({users.length})</option>
-              <option value="active">Ativos ({stats.active})</option>
-              <option value="inactive">Inativos ({stats.inactive})</option>
+              <option value="all">All ({users.length})</option>
+              <option value="active">Active ({stats.active})</option>
+              <option value="inactive">Inactive ({stats.inactive})</option>
             </select>
 
             <button
@@ -243,22 +243,22 @@ const UserManagementTable: React.FC = () => {
             <thead className="bg-[#0f172a]/70">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Utilizador
+                  User
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Email
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Função
+                  Role
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Estado
+                  Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Criado em
+                  Created
                 </th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Ações
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -269,7 +269,7 @@ const UserManagementTable: React.FC = () => {
                     <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
-                    <p className="text-sm">Nenhum utilizador encontrado</p>
+                    <p className="text-sm">No users found</p>
                   </td>
                 </tr>
               ) : (
@@ -294,12 +294,12 @@ const UserManagementTable: React.FC = () => {
                           </div>
                           <div className="ml-4">
                             <div className="flex items-center">
-                              <div className="text-sm font-medium text-gray-900">
+                              <div className="text-sm font-medium text-white">
                                 {user.name}
                               </div>
                               {isCurrentUser && (
                                 <span className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">
-                                  Você
+                                  You
                                 </span>
                               )}
                             </div>
@@ -307,7 +307,7 @@ const UserManagementTable: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{user.email}</div>
+                        <div className="text-sm text-white">{user.email}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {getRoleBadge(user.role)}
@@ -315,8 +315,8 @@ const UserManagementTable: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {getStatusBadge(user.isActive)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(user.createdAt).toLocaleDateString('pt-PT')}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                        {new Date(user.createdAt).toLocaleDateString('en-GB')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex justify-end space-x-2">
@@ -338,7 +338,7 @@ const UserManagementTable: React.FC = () => {
                                 ? 'text-red-600 hover:text-red-900' 
                                 : 'text-green-600 hover:text-green-900'
                             } transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
-                            title={isCurrentUser ? 'Não pode desativar-se a si próprio' : (user.isActive ? 'Desativar' : 'Reativar')}
+                            title={isCurrentUser ? 'Cannot deactivate your own account' : (user.isActive ? 'Deactivate' : 'Reactivate')}
                           >
                             {actionLoading === user.id ? (
                               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-current"></div>

@@ -30,7 +30,7 @@ const AuditLog: React.FC = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Modal para confirmação de limpeza
+  // Confirmation dialog for clearing logs
   const [showClearModal, setShowClearModal] = useState(false);
   const [clearingLogs, setClearingLogs] = useState(false);
   const [clearError, setClearError] = useState<string | null>(null);
@@ -69,8 +69,8 @@ const AuditLog: React.FC = () => {
       setTotalPages(logsRes.data.pagination?.totalPages || 1);
       setStats(statsRes.data || null);
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-      // Define valores padrão em caso de erro
+      console.error('Error loading data:', error);
+      // Set default values on error
       setLogs([]);
       setStats(null);
     } finally {
@@ -79,13 +79,13 @@ const AuditLog: React.FC = () => {
   };
 
   const handleDeleteLog = async (id: string) => {
-    if (!window.confirm('Tem certeza que deseja eliminar este registo do histórico?')) return;
+    if (!window.confirm('Are you sure you want to delete this record from history?')) return;
     try {
       await api.delete(`/audit-log/${id}`);
       setLogs(prev => prev.filter(l => l.id !== id));
     } catch (error) {
-      console.error('Erro ao eliminar registo:', error);
-      alert('Erro ao eliminar registo do histórico');
+      console.error('Error deleting record:', error);
+      alert('Error deleting record from history');
     }
   };
 
@@ -100,10 +100,10 @@ const AuditLog: React.FC = () => {
       setClearSuccess(true);
       setShowClearModal(false);
       
-      // Limpar mensagem de sucesso após 4 segundos
+      // Clear success message after 4 seconds
       setTimeout(() => setClearSuccess(false), 4000);
     } catch (error: any) {
-      console.error('Erro ao limpar histórico:', error);
+      console.error('Error clearing history:', error);
       
       // Garantir que errorMsg é sempre uma string
       let errorMsg = 'Error clearing history. Please try again later.';
@@ -147,15 +147,15 @@ const AuditLog: React.FC = () => {
     const actionConfig: Record<string, { color: string; label: string }> = {
       CREATE: { 
         color: 'bg-gradient-to-r from-emerald-900/40 to-emerald-800/30 text-emerald-300 border-emerald-500/30',
-        label: 'Criar'
+        label: 'Create'
       },
       UPDATE: { 
         color: 'bg-gradient-to-r from-amber-900/40 to-amber-800/30 text-amber-300 border-amber-500/30',
-        label: 'Atualizar'
+        label: 'Update'
       },
       DELETE: { 
         color: 'bg-gradient-to-r from-red-900/40 to-red-800/30 text-red-300 border-red-500/30',
-        label: 'Eliminar'
+        label: 'Delete
       },
       LOGIN: { 
         color: 'bg-gradient-to-r from-blue-900/40 to-blue-800/30 text-blue-300 border-blue-500/30',

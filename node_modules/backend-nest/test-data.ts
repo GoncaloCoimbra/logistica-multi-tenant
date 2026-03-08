@@ -43,7 +43,7 @@ async function main() {
         company: { select: { name: true } },
       },
     });
-    console.log(' Últimas 5 notificações:');
+    console.log(' Last 5 notifications:');
     notifications.forEach((notif, idx) => {
       console.log(
         `  ${idx + 1}. [${notif.isRead ? '📖' : '📬'}] ${notif.title} to ${notif.user.email} at ${notif.createdAt}`
@@ -68,7 +68,7 @@ async function main() {
         user: { select: { email: true } },
       },
     });
-    console.log(' Últimas 5 movimentações:');
+    console.log(' Last 5 movements:');
     movements.forEach((mov, idx) => {
       console.log(
         `  ${idx + 1}. Produto ${mov.product.internalCode}: ${mov.previousStatus} → ${mov.newStatus} at ${mov.createdAt}`
@@ -80,8 +80,8 @@ async function main() {
 
   console.log('\n=== RESUMO ===');
   console.log(`✓ AuditLogs: ${auditLogCount}`);
-  console.log(`✓ Notificações: ${notificationCount}`);
-  console.log(`✓ Movimentações: ${movementCount}`);
+  console.log(`✓ Notifications: ${notificationCount}`);
+  console.log(`✓ Movements: ${movementCount}`);
 }
 
 main()
