@@ -258,10 +258,10 @@ const Settings: React.FC = () => {
                   />
                 </div>
 
-                {/* Telefone */}
+                {/* Phone */}
                 <div>
                   <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
-                    Telefone
+                    Phone
                   </label>
                   <input
                     type="tel"

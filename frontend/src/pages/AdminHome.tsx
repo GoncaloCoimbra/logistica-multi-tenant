@@ -10,7 +10,7 @@ const AdminHome: React.FC = () => {
       <header className={`${theme.backgrounds.header} px-6 py-4 flex items-center justify-between border-b border-slate-700`}>
         <div className="flex items-center space-x-3">
           <img src="/logo.png" alt="LogiSphere" className="h-12 w-auto" />
-          <h2 className="text-white font-bold text-lg">Área do Administrador</h2>
+          <h2 className="text-white font-bold text-lg">Administrator Area</h2>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm text-slate-300">{user?.name || 'Administrador'}</span>

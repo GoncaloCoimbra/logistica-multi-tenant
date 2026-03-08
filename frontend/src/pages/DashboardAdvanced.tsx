@@ -182,33 +182,33 @@ const DashboardAdvanced: React.FC = () => {
       filterInfo.push(['Fornecedor Filtrado', s?.name || 'N/A']);
     }
     if (stats.customDateRange) {
-      filterInfo.push(['Período Customizado',
-        `${new Date(stats.customDateRange.startDate).toLocaleDateString('pt-PT')} - ${new Date(stats.customDateRange.endDate).toLocaleDateString('pt-PT')}`]);
+      filterInfo.push(['Custom Period',
+        `${new Date(stats.customDateRange.startDate).toLocaleDateString('en-GB')} - ${new Date(stats.customDateRange.endDate).toLocaleDateString('en-GB')}`]);
     } else {
-      filterInfo.push(['Período', stats.period]);
+      filterInfo.push(['Period', stats.period]);
     }
     const csvContent = [
-      ['Relatório de Performance – LogiSphere'],
-      ['Data de Exportação', new Date().toLocaleDateString('pt-PT')],
+      ['Performance Report – LogiSphere'],
+      ['Export Date', new Date().toLocaleDateString('en-GB')],
       [''], ['FILTROS APLICADOS'], ...filterInfo,
       [''], ['RESUMO GERAL'],
-      ['Total de Produtos', stats.totalProducts],
-      ['Recebidos', stats.summary.received],
+      ['Total Products', stats.totalProducts],
+      ['Received', stats.summary.received],
       ['Em Análise', stats.summary.inAnalysis],
       ['Em Armazenamento', stats.summary.inStorage],
       ['Entregues', stats.summary.delivered],
       ['Rejeitados', stats.summary.rejected],
       [''], ['TENDÊNCIAS'],
-      ['Produtos vs Período Anterior', `${stats.trends.products}%`],
-      ['Entregas vs Período Anterior', `${stats.trends.deliveries}%`],
+      ['Products vs Previous Period', `${stats.trends.products}%`],
+      ['Deliveries vs Previous Period', `${stats.trends.deliveries}%`],
       [''], ['TOP FORNECEDORES'],
-      ['Posição', 'Nome', 'Produtos', 'Percentagem'],
+      ['Position', 'Name', 'Products', 'Percentage'],
       ...stats.topSuppliers.map((s, i) => {
         const pct = stats.totalProducts > 0 ? ((s.productCount / stats.totalProducts) * 100).toFixed(1) : '0';
         return [`#${i + 1}`, s.name, s.productCount, `${pct}%`];
       }),
       [''], ['TAXA DE REJEIÇÃO POR FORNECEDOR'],
-      ['Fornecedor', 'Total Produtos', 'Rejeitados', 'Taxa (%)'],
+      ['Supplier', 'Total Products', 'Rejected', 'Rate (%)'],
       ...stats.rejectionRateBySupplier.map(r => [r.supplierName, r.totalProducts, r.rejectedProducts, r.rejectionRate]),
     ].map(row => row.join(',')).join('\n');
     const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -224,7 +224,7 @@ const DashboardAdvanced: React.FC = () => {
   const getPeriodLabel = () => {
     if (!stats) return '';
     if (stats.customDateRange) {
-      return `${new Date(stats.customDateRange.startDate).toLocaleDateString('pt-PT')} – ${new Date(stats.customDateRange.endDate).toLocaleDateString('pt-PT')}`;
+      return `${new Date(stats.customDateRange.startDate).toLocaleDateString('en-GB')} – ${new Date(stats.customDateRange.endDate).toLocaleDateString('en-GB')}`;
     }
     const labels: Record<string, string> = { '7d': 'Últimos 7 dias', '30d': 'Últimos 30 dias', '90d': 'Últimos 90 dias', '1y': 'Último ano' };
     return labels[stats.period] || stats.period;
@@ -262,7 +262,7 @@ const DashboardAdvanced: React.FC = () => {
     color: statusColors.product[item.status] || '#6B7280',
   }));
 
-  const formatDate = (d: string) => new Date(d).toLocaleDateString('pt-PT', { day: '2-digit', month: 'short' });
+  const formatDate = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 
   const timelineData = stats.movementsByDay.map(m => ({
     date: formatDate(m.date),
@@ -333,10 +333,10 @@ const DashboardAdvanced: React.FC = () => {
         {/* ── Metric Cards ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: iconBox,      label: 'Total de Produtos',  value: stats.totalProducts,       trend: stats.trends.products,    color: ds.accent },
+            { icon: iconBox,      label: 'Total Products',  value: stats.totalProducts,       trend: stats.trends.products,    color: ds.accent },
             { icon: iconStorage,  label: 'Em Armazenamento',   value: stats.summary.inStorage,   pct: stats.percentages.inStorage, color: ds.purple },
             { icon: iconCheck,    label: 'Entregues',          value: stats.summary.delivered,   trend: stats.trends.deliveries,  color: ds.success },
-            { icon: iconActivity, label: 'Movimentações',      value: stats.recentMovements,     period: true,                    color: ds.orange },
+            { icon: iconActivity, label: 'Movements',      value: stats.recentMovements,     period: true,                    color: ds.orange },
           ].map((m, i) => (
             <Card key={i} className="p-5 group" style={{ cursor: 'default' }}>
               <div className="flex items-start justify-between mb-4">
@@ -354,13 +354,13 @@ const DashboardAdvanced: React.FC = () => {
                 {m.period && (
                   <span className="text-xs px-2 py-0.5 rounded-full"
                     style={{ background: `${ds.border}`, color: ds.textMuted }}>
-                    período
+                    period
                   </span>
                 )}
               </div>
               <p className="text-3xl font-bold mb-1"
                 style={{ color: ds.textPrimary, fontFamily: "'DM Mono', monospace" }}>
-                {m.value.toLocaleString('pt-PT')}
+                {m.value.toLocaleString('en-GB')}
               </p>
               <p className="text-xs" style={{ color: ds.textMuted }}>{m.label}</p>
             </Card>
@@ -446,7 +446,7 @@ const DashboardAdvanced: React.FC = () => {
             <CardHeader
               icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>}
               title="Distribuição por Estado"
-              subtitle="Percentagem de produtos por status"
+              subtitle="Product percentage by status"
             />
             <ResponsiveContainer width="100%" height={260}>
               <PieChart>

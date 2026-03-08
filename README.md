@@ -64,6 +64,14 @@ This platform manages the full lifecycle of warehouse products — from receipt 
 
 </details>
 
+## 🎥 Demo
+
+A short demo video showcasing the application in action:
+
+[![Demo Video](https://img.youtube.com/vi/YOUR_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+
+*Replace `YOUR_VIDEO_ID` with the actual YouTube video ID. If no video is available, you can link to a live demo or remove this section.*
+
 ---
 
 ## ✨ Features

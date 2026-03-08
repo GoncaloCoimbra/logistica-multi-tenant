@@ -14,15 +14,9 @@
     "format-all": "npm run --workspace=backend-nest format && npm run --workspace=frontend format"
   },
   "lint-staged": {
-    "*.ts": [
+    "*.{ts,tsx}": [
       "npm run lint-all",
-      "npm run format-all",
-      "git add"
-    ],
-    "*.tsx": [
-      "npm run lint-all",
-      "npm run format-all",
-      "git add"
+      "npm run format-all"
     ]
   },
   "husky": {},

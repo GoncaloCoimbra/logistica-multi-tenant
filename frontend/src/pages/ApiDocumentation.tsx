@@ -4,23 +4,23 @@ const ApiDocumentation: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto p-8">
       <header className="mb-8">
-        <h1 className="text-3xl font-extrabold text-white">Documentação da API</h1>
-        <p className="text-gray-400 mt-2">Endpoints principais, exemplos de uso e padrões de autenticação.</p>
+        <h1 className="text-3xl font-extrabold text-white">API Documentation</h1>
+        <p className="text-gray-400 mt-2">Main endpoints, usage examples and authentication patterns.</p>
       </header>
 
       <section className="grid gap-6 md:grid-cols-2">
         <div className="bg-gray-800 p-6 rounded-lg shadow-sm">
-          <h2 className="text-xl font-semibold text-white mb-3">Autenticação</h2>
-          <p className="text-gray-300">Utilize o header <span className="font-mono">Authorization: Bearer &lt;token&gt;</span>. Tokens expiram em 24 horas por padrão.</p>
+          <h2 className="text-xl font-semibold text-white mb-3">Authentication</h2>
+          <p className="text-gray-300">Use the <span className="font-mono">Authorization: Bearer &lt;token&gt;</span> header. Tokens expire in 24 hours by default.</p>
           <ul className="mt-4 text-sm text-gray-400 space-y-2">
-            <li><strong>POST</strong> /auth/login — obtém token JWT.</li>
-            <li><strong>POST</strong> /auth/refresh — renova token.</li>
+            <li><strong>POST</strong> /auth/login — Get JWT token.</li>
+            <li><strong>POST</strong> /auth/refresh — Refresh token.</li>
           </ul>
         </div>
 
         <div className="bg-gray-800 p-6 rounded-lg shadow-sm">
           <h2 className="text-xl font-semibold text-white mb-3">Rate Limit & Headers</h2>
-          <p className="text-gray-300">Respeite as headers de limite e utilize compressão gzip nas requisições grandes.</p>
+          <p className="text-gray-300">Respect rate limit headers and use gzip compression for large requests.</p>
           <ul className="mt-4 text-sm text-gray-400 space-y-2">
             <li><span className="font-mono">X-RateLimit-Limit</span>, <span className="font-mono">X-RateLimit-Remaining</span></li>
             <li>Content-Type: application/json</li>

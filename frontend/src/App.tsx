@@ -139,13 +139,13 @@ function App() {
                 } 
               />
 
-              {/* Veículos */}
+              {/* Vehicles */}
               <Route path="veiculos" element={<VehicleList />} />
 
-              {/* Transportes */}
+              {/* Transports */}
               <Route path="transportes" element={<TransportList />} />
 
-              {/* Páginas de documentação/ajuda */}
+              {/* Documentation/Help Pages */}
               <Route path="api-docs" element={<ApiDocumentation />} />
               <Route path="help" element={<HelpCenter />} />
               <Route path="tutorials" element={<Tutorials />} />
@@ -153,7 +153,7 @@ function App() {
               <Route path="updates" element={<Updates />} />
               <Route path="status" element={<SystemStatus />} />
 
-              {/* Rastreamento GPS e Otimização de Rotas */}
+              {/* GPS Tracking and Route Optimization */}
               <Route path="rastreamento" element={<LiveTrackingRouteOptimization />} />
 
               {/* Tasks - only Operator and Admin */}}
@@ -166,7 +166,7 @@ function App() {
                 }
               />
 
-              {/* Referrals - Referências/Indicações */}
+              {/* Referrals - References/Recommendations */}
               <Route
                 path="referrals"
                 element={
@@ -176,13 +176,13 @@ function App() {
                 }
               />
 
-              {/* Histórico - Acessível para todos os usuários autenticados */}
+              {/* History - Accessible to all authenticated users */}
               <Route path="historico" element={<AuditLog />} />
 
-              {/* Perfil */}
+              {/* Profile */}
               <Route path="profile" element={<Profile />} />
 
-              {/* Configurações */}
+              {/* Settings */}
               <Route path="configuracoes" element={<Settings />} />
 
               {/* SuperAdmin Dashboard (dentro do MainLayout) */}
@@ -195,7 +195,7 @@ function App() {
                 } 
               />
 
-              {/* rotas de home específicas por papel (podem ser ampliadas no futuro) */}
+              {/* Role-specific home routes (can be expanded in the future) */}
               <Route
                 path="admin-home"
                 element={

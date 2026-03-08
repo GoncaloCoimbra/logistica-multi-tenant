@@ -15,13 +15,13 @@ const MainLayout: React.FC = () => {
       <div className="flex flex-1">
         {!isSuperAdmin && <Sidebar />}
         
-        {/* Conteúdo principal com margem dinâmica e padding bottom para o footer mobile */}
+        {/* Main content with dynamic margin and bottom padding for mobile footer */}
         <div className="flex-1 flex flex-col transition-all duration-300">
           <main className="flex-1 container mx-auto px-4 py-8 pb-20 md:pb-8">
             <Outlet />
           </main>
           
-          {/* Footer dentro do container do conteúdo */}
+          {/* Footer within the content container */}
           <Footer />
         </div>
       </div>

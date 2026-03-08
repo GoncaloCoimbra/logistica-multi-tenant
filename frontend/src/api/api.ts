@@ -67,7 +67,7 @@ api.interceptors.response.use(
     console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
     if (status === 401) {
-      console.log('🚪 Token inválido - Limpando localStorage');
+      console.log('🚪 Invalid token - Clearing localStorage');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login';
