@@ -49,7 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and the 
 
 ## Versioning Guide
 
-**Bumping de versão:**
+**Version bumping:**
 
 ```bash
 # Patch (bug fixes)
@@ -67,9 +67,9 @@ git push origin --tags
 
 ## Próximas Versões Planejadas
 
-### v0.2.0 (Testes e Documentação)
+### v0.2.0 (Testing and Documentation)
 - [ ] Cobertura de testes ≥ 80% (unitários e e2e)
-- [ ] Documentação completamente atualizada
+- [ ] Documentation completely updated
 - [ ] Storybook para componentes React
 - [ ] Testes de acessibilidade
 
@@ -79,12 +79,12 @@ git push origin --tags
 - [ ] Sentry para error tracking
 - [ ] Rate-limiting e proteção CSRF
 
-### v1.0.0 (Produção)
+### v1.0.0 (Production)
 - [ ] 100% de cobertura crítica
 - [ ] Deploy em Kubernetes com Helm
 - [ ] Monitoramento completo
-- [ ] Documentação de operações
+- [ ] Documentation of operations
 
 ---
 
-**Mantém este arquivo atualizado com cada PR/release!**
+**Keep this file updated with each PR/release!**

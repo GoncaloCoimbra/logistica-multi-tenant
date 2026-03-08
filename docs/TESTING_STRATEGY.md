@@ -1,6 +1,6 @@
 # Estratégia de Testes
 
-Este documento descreve a estratégia de testes para toda a plataform, com metas de cobertura e padrões.
+This document describes the testing strategy for the entire platform, with coverage targets and patterns.
 
 ## Visão Geral
 
@@ -8,7 +8,7 @@ Este documento descreve a estratégia de testes para toda a plataform, com metas
 ┌─────────────────────────────────────┐
 │          Testes E2E (5%)             │  Cypress/Playwright - fluxos reais
 ├─────────────────────────────────────┤
-│      Testes de Integração (10%)      │  Múltiplos modelos, BD
+│      Integration Tests (10%)      │  Multiple models, DB
 ├─────────────────────────────────────┤
 │      Testes Unitários (85%)          │  Serviços, controllers, utils
 └─────────────────────────────────────┘
@@ -39,9 +39,9 @@ backend-nest/
    └─ transports.e2e-spec.ts
 ```
 
-### Configuração Jest
+### Jest Configuration
 
-Arquivo: `jest.config.js` (já existe)
+File: `jest.config.js` (already exists)
 
 ```javascript
 module.exports = {
@@ -97,7 +97,7 @@ describe('UsersService', () => {
   });
 
   describe('findById', () => {
-    it('deve retornar um usuário por ID', async () => {
+    it('should return a user by ID', async () => {
       const userId = 'user-123';
       const mockUser = {
         id: userId,
@@ -115,17 +115,17 @@ describe('UsersService', () => {
       });
     });
 
-    it('deve lançar erro se usuário não encontrado', async () => {
+    it('should throw error if user not found', async () => {
       jest.spyOn(prisma.user, 'findUnique').mockResolvedValue(null);
 
       await expect(service.findById('invalid-id')).rejects.toThrow(
-        'Usuário não encontrado'
+        'User not found'
       );
     });
   });
 
   describe('create', () => {
-    it('deve criar um novo usuário', async () => {
+    it('should create a new user', async () => {
       const createDto = {
         email: 'novo@example.com',
         name: 'New User',
@@ -214,13 +214,13 @@ describe('Users E2E', () => {
   });
 
   afterAll(async () => {
-    // Limpar dados de teste
+    // Clean test data
     await prisma.user.deleteMany({});
     await app.close();
   });
 
   describe('POST /api/users', () => {
-    it('deve criar um usuário', () => {
+    it('should create a user', () => {
       return request(app.getHttpServer())
         .post('/api/users')
         .set('Authorization', `Bearer ${token}`)
@@ -256,7 +256,7 @@ describe('Users E2E', () => {
         });
     });
 
-    it('deve retornar 404 se usuário não existe', () => {
+    it('should return 404 if user does not exist', () => {
       return request(app.getHttpServer())
         .get('/api/users/invalid-id')
         .set('Authorization', `Bearer ${token}`)
@@ -281,7 +281,7 @@ npm run --workspace=backend-nest test:e2e
 # Watch mode
 npm run test:watch
 
-# Um arquivo específico
+# A specific file
 npm test -- users.service
 ```
 
@@ -426,7 +426,7 @@ describe('Login Flow', () => {
     cy.get('[data-testid="submit-btn"]').click();
 
     cy.url().should('include', '/dashboard');
-    cy.get('[data-testid="welcome-text"]').should('contain', 'Bem-vindo');
+    cy.get('[data-testid="welcome-text"]').should('contain', 'Welcome');
   });
 
   it('deve mostrar erro com credenciais inválidas', () => {
@@ -474,4 +474,4 @@ Ver [.github/workflows/ci.yml](./.github/workflows/ci.yml):
 
 ---
 
-**Última atualização:** Fevereiro 2026
+**Last update:** February 2026

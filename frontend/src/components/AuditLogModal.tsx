@@ -51,7 +51,7 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
       const response = await api.get(`/audit-log?${params.toString()}`);
       setLogs(response.data || []);
     } catch (error) {
-      console.error('Erro ao carregar audit logs:', error);
+      console.error('Error loading audit logs:', error);
     } finally {
       setLoading(false);
     }
@@ -99,9 +99,9 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
           {/* Header */}
           <div className={`px-6 py-4 flex justify-between items-center rounded-t-lg ${theme.backgrounds.header} border-b border-slate-700`}>            
             <div>
-              <h2 className="text-xl font-bold text-white">Histórico de Atividades</h2>
+              <h2 className="text-xl font-bold text-white">Activity History</h2>
               <p className="text-slate-300 text-sm mt-1">
-                Auditoria completa de todas as operações do sistema
+                Complete audit of all system operations
               </p>
             </div>
             <button
@@ -132,10 +132,10 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
                 onChange={(e) => handleFilterChange('action', e.target.value)}
                 className={theme.inputs.base + " text-sm"}
               >
-                <option value="">Todas as ações</option>
-                <option value="CREATE">Criar</option>
-                <option value="UPDATE">Atualizar</option>
-                <option value="DELETE">Eliminar</option>
+                <option value="">All actions</option>
+                <option value="CREATE">Create</option>
+                <option value="UPDATE">Update</option>
+                <option value="DELETE">Delete</option>
               </select>
 
               <select
@@ -143,11 +143,11 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
                 onChange={(e) => handleFilterChange('entity', e.target.value)}
                 className={theme.inputs.base + " text-sm"}
               >
-                <option value="">Todas as entidades</option>
-                <option value="product">Produto</option>
-                <option value="user">Utilizador</option>
-                <option value="supplier">Fornecedor</option>
-                <option value="vehicle">Veículo</option>
+                <option value="">All entities</option>
+                <option value="product">Product</option>
+                <option value="user">User</option>
+                <option value="supplier">Supplier</option>
+                <option value="vehicle">Vehicle</option>
                 <option value="transport">Transporte</option>
               </select>
 
@@ -177,7 +177,7 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
                 onClick={handleClearFilters}
                 className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 text-sm font-medium transition-colors"
               >
-                Limpar Filtros
+                Clear Filters
               </button>
             </div>
           </div>
@@ -195,7 +195,7 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
               </div>
             ) : logs.length === 0 ? (
               <div className="flex items-center justify-center h-64">
-                <p className="text-slate-400">Nenhum registro encontrado</p>
+                <p className="text-slate-400">No records found</p>
               </div>
             ) : (
               <div className="divide-y divide-gray-200">

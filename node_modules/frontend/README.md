@@ -491,7 +491,7 @@ logistica-multi-tenant/
 │   │   └── seed.ts                # Dados iniciais
 │   ├── src/
 │   │   ├── config/
-│   │   │   ├── database.ts        # Configuração Prisma
+│   │   │   ├── database.ts        # Prisma Configuration
 │   │   │   └── env.ts             # Variáveis de ambiente
 │   │   ├── controllers/           # Controladores de rotas
 │   │   │   ├── auth.controller.ts
@@ -534,7 +534,7 @@ logistica-multi-tenant/
 │   │   │   ├── StateTransition.tsx
 │   │   │   └── UserFormModal.tsx
 │   │   ├── contexts/
-│   │   │   └── AuthContext.tsx   # Contexto de autenticação
+│   │   │   └── AuthContext.tsx   # Authentication Context
 │   │   ├── pages/                # Páginas/Rotas
 │   │   │   ├── AuditLog.tsx
 │   │   │   ├── CompanyManagement.tsx
@@ -618,7 +618,7 @@ In Preparation → In Expedition → Delivered
 
 - Click on a product to see all movements
 - Or go to **History** to see all system operations
-- Filtra por data, ação, entidade ou utilizador
+- Filters by date, action, entity or user
 
 #### 6. Dashboard
 
@@ -626,21 +626,21 @@ In Preparation → In Expedition → Delivered
   - Ver resumo do inventário por estado
   - Analisar distribuição com gráficos
   - Monitorizar movimentações recentes
-  - Identificar produtos parados há mais tempo
+  - Identify products stopped for longer time
 
 ---
 
 ## 🔌 API Endpoints
 
-### Autenticação
+### Authentication
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| POST | `/api/auth/register` | Registo de empresa e admin |  |
+| POST | `/api/auth/register` | Company registration and admin |  |
 | POST | `/api/auth/login` | Login |  |
 | GET | `/api/auth/me` | Dados do utilizador |  |
 
-### Produtos
+### Products
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
@@ -659,32 +659,32 @@ In Preparation → In Expedition → Delivered
 | GET | `/api/dashboard/stats` | Estatísticas gerais |  |
 | GET | `/api/dashboard/by-status` | Distribuição por estado |  |
 
-### Fornecedores
+### Suppliers
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/suppliers` | Lista fornecedores |  |
-| POST | `/api/suppliers` | Criar fornecedor |  |
-| PUT | `/api/suppliers/:id` | Atualizar fornecedor |  |
-| DELETE | `/api/suppliers/:id` | Eliminar fornecedor |  Admin |
+| GET | `/api/suppliers` | List suppliers |  |
+| POST | `/api/suppliers` | Create supplier |  |
+| PUT | `/api/suppliers/:id` | Update supplier |  |
+| DELETE | `/api/suppliers/:id` | Delete supplier |  Admin |
 
-### Veículos
-
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| GET | `/api/vehicles` | Lista veículos |  |
-| POST | `/api/vehicles` | Criar veículo |  |
-| PUT | `/api/vehicles/:id` | Atualizar veículo |  |
-| DELETE | `/api/vehicles/:id` | Eliminar veículo |  Admin |
-
-### Transportes
+### Vehicles
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/transports` | Lista transportes |  |
-| POST | `/api/transports` | Criar transporte |  |
-| PUT | `/api/transports/:id` | Atualizar transporte |  |
-| DELETE | `/api/transports/:id` | Eliminar transporte |  Admin |
+| GET | `/api/vehicles` | List vehicles |  |
+| POST | `/api/vehicles` | Create vehicle |  |
+| PUT | `/api/vehicles/:id` | Update vehicle |  |
+| DELETE | `/api/vehicles/:id` | Delete vehicle |  Admin |
+
+### Transports
+
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| GET | `/api/transports` | List transports |  |
+| POST | `/api/transports` | Create transport |  |
+| PUT | `/api/transports/:id` | Update transport |  |
+| DELETE | `/api/transports/:id` | Delete transport |  Admin |
 
 ### Auditoria
 
@@ -748,11 +748,11 @@ In Preparation → In Expedition → Delivered
 - Access all modules
 - Delete products, suppliers, vehicles
 
-### Operador (por empresa)
+### Operator (per company)
 
 **Acesso restrito:**
 - Gerir inventário e movimentações
-- **Não pode** aprovar ou rejeitar produtos
+- **Cannot** approve or reject products
 - **Não pode** eliminar registos
 - Acesso limitado a determinadas transições de estado
 
@@ -786,9 +786,9 @@ Draw on paper or visual tool:
 3. **Estrutura de Pastas**
    - Controllers, services, routes
    - Componentes React
-   - Organização lógica
+   - Logical organization
 
-4. **Ecrãs da Aplicação**
+4. **Application Screens**
    - Rascunho de cada página
    - Posição de filtros, tabelas, formulários
 
@@ -799,7 +799,7 @@ cd backend
 npm test
 ```
 
-### Gerar Migração Prisma
+### Generate Prisma Migration
 
 ```bash
 cd backend
@@ -831,32 +831,32 @@ Acede a http://localhost:5555
 
 ### Fase 1 - Concluído 
 - [x] Sistema multi-tenant
-- [x] Autenticação JWT
-- [x] CRUD de produtos
+- [x] JWT Authentication
+- [x] Product CRUD
 - [x] Máquina de estados
 - [x] Dashboard básico
-- [x] Histórico de operações
+- [x] Operation history
 
 ### Fase 2 - Concluído 
-- [x] Gestão de fornecedores
-- [x] Gestão de veículos
-- [x] Gestão de transportes
+- [x] Supplier management
+- [x] Vehicle management
+- [x] Transport management
 - [x] Sistema de notificações
 - [x] Dashboard avançado
 - [x] Super Admin
 
 ### Fase 3 - Em Desenvolvimento 🚧
 - [ ] Relatórios avançados em PDF
-- [ ] Exportação de dados (Excel, CSV)
-- [ ] Integração com APIs de transportadoras
+- [ ] Data export (Excel, CSV)
+- [ ] Carrier API integration
 - [ ] Sistema de alertas configurável
 - [ ] Mobile app (React Native)
 
 ### Fase 4 - Planeado 📋
-- [ ] Integração entre empresas
-- [ ] Marketplace de transportes
+- [ ] Cross-company integration
+- [ ] Transport marketplace
 - [ ] BI e análise preditiva
-- [ ] Integração com ERP
+- [ ] ERP integration
 - [ ] API pública para terceiros
 
 ---

@@ -104,7 +104,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="name">
-              Nome Completo *
+              Full Name *
             </label>
             <input
               type="text"
@@ -114,7 +114,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               onChange={handleChange}
               className={theme.inputs.base}
               required
-              placeholder="Nome do utilizador"
+              placeholder="User name"
             />
           </div>
 
@@ -130,13 +130,13 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               onChange={handleChange}
               className={theme.inputs.base}
               required
-              placeholder="utilizador@empresa.com"
+              placeholder="user@company.com"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="companyId">
-              Empresa *
+              Company *
             </label>
             <select
               id="companyId"
@@ -146,7 +146,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               className={theme.inputs.base}
               required
             >
-              <option value="">Selecionar Empresa</option>
+              <option value="">Select Company</option>
               {companies.map(company => (
                 <option key={company.id} value={company.id}>{company.name}</option>
               ))}
@@ -155,7 +155,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="role">
-              Função *
+              Role *
             </label>
             <select
               id="role"
@@ -173,7 +173,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="password">
-              Senha *
+              Password *
             </label>
             <input
               type="password"
@@ -186,12 +186,12 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
               minLength={6}
               placeholder="••••••"
             />
-            <p className="text-xs text-slate-500 mt-1">Mínimo de 6 caracteres</p>
+            <p className="text-xs text-slate-500 mt-1">Minimum 6 characters</p>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2" htmlFor="confirmPassword">
-              Confirmar Senha *
+              Confirm Password *
             </label>
             <input
               type="password"
@@ -229,7 +229,7 @@ const CreateGlobalUserModal: React.FC<CreateGlobalUserModalProps> = ({ companies
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
-                  Criar Utilizador
+                  Create User
                 </>
               )}
             </button>

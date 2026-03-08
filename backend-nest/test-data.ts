@@ -3,11 +3,11 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('=== VERIFICAÇÃO DE DADOS ===\n');
+  console.log('=== DATA VERIFICATION ===\n');
 
-  // 1. Contar AuditLogs
+  // 1. Count AuditLogs
   const auditLogCount = await prisma.auditLog.count();
-  console.log(`📋 Total de registros de Histórico (AuditLog): ${auditLogCount}`);
+  console.log(`Total History Records (AuditLog): ${auditLogCount}`);
 
   if (auditLogCount > 0) {
     const auditLogs = await prisma.auditLog.findMany({
@@ -18,21 +18,21 @@ async function main() {
         company: { select: { name: true } },
       },
     });
-    console.log(' Últimos 5 registros de histórico:');
+    console.log('Last 5 history records:');
     auditLogs.forEach((log, idx) => {
       console.log(
         `  ${idx + 1}. [${log.action}] ${log.entity} by ${log.user.email} at ${log.createdAt}`
       );
     });
   } else {
-    console.log('⚠️  Nenhum registro de histórico encontrado!');
+    console.log('No history records found!');
   }
 
   console.log('\n---\n');
 
-  // 2. Contar Notificações
+  // 2. Count Notifications
   const notificationCount = await prisma.notification.count();
-  console.log(`🔔 Total de Notificações: ${notificationCount}`);
+  console.log(`Total Notifications: ${notificationCount}`);
 
   if (notificationCount > 0) {
     const notifications = await prisma.notification.findMany({
@@ -50,14 +50,14 @@ async function main() {
       );
     });
   } else {
-    console.log('⚠️  Nenhuma notificação encontrada!');
+    console.log('No notification found!');
   }
 
   console.log('\n---\n');
 
   // 3. Contar ProductMovements
   const movementCount = await prisma.productMovement.count();
-  console.log(` Total de Movimentações de Produtos: ${movementCount}`);
+  console.log(` Total Product Movements: ${movementCount}`);
 
   if (movementCount > 0) {
     const movements = await prisma.productMovement.findMany({
@@ -75,7 +75,7 @@ async function main() {
       );
     });
   } else {
-    console.log('⚠️  Nenhuma movimentação encontrada!');
+    console.log('No movement found!');
   }
 
   console.log('\n=== RESUMO ===');

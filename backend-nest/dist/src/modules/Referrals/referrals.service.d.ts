@@ -1,0 +1,93 @@
+import { PrismaService } from '../../database/prisma.service';
+import { CreateReferralDto } from './dto/create-referral.dto';
+import { UpdateReferralDto, UpdateReferralStatusDto } from './dto/update-referral.dto';
+import { FilterReferralDto } from './dto/filter-referral.dto';
+import { ReferralStatsDto } from './dto/referrals.dto';
+export declare class ReferralsService {
+    private readonly prisma;
+    constructor(prisma: PrismaService);
+    create(createReferralDto: CreateReferralDto, userId: string, userRole: string, userCompanyId: string): Promise<{
+        id: string;
+        companyId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import(".prisma/client").$Enums.ReferralStatus;
+        notes: string | null;
+        clientName: string;
+        contactInfo: string;
+        referralSource: string;
+        projectType: string;
+        estimatedValue: number;
+        referralDate: Date;
+        referredBy: string;
+        commission: number | null;
+    }>;
+    findAll(filterDto: FilterReferralDto, userId: string, userRole: string, userCompanyId: string): Promise<{
+        id: string;
+        companyId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import(".prisma/client").$Enums.ReferralStatus;
+        notes: string | null;
+        clientName: string;
+        contactInfo: string;
+        referralSource: string;
+        projectType: string;
+        estimatedValue: number;
+        referralDate: Date;
+        referredBy: string;
+        commission: number | null;
+    }[]>;
+    findOne(id: string, userId: string, userRole: string, userCompanyId: string): Promise<{
+        id: string;
+        companyId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import(".prisma/client").$Enums.ReferralStatus;
+        notes: string | null;
+        clientName: string;
+        contactInfo: string;
+        referralSource: string;
+        projectType: string;
+        estimatedValue: number;
+        referralDate: Date;
+        referredBy: string;
+        commission: number | null;
+    }>;
+    update(id: string, updateReferralDto: UpdateReferralDto, userId: string, userRole: string, userCompanyId: string): Promise<{
+        id: string;
+        companyId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import(".prisma/client").$Enums.ReferralStatus;
+        notes: string | null;
+        clientName: string;
+        contactInfo: string;
+        referralSource: string;
+        projectType: string;
+        estimatedValue: number;
+        referralDate: Date;
+        referredBy: string;
+        commission: number | null;
+    }>;
+    updateStatus(id: string, updateStatusDto: UpdateReferralStatusDto, userId: string, userRole: string, userCompanyId: string): Promise<{
+        id: string;
+        companyId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import(".prisma/client").$Enums.ReferralStatus;
+        notes: string | null;
+        clientName: string;
+        contactInfo: string;
+        referralSource: string;
+        projectType: string;
+        estimatedValue: number;
+        referralDate: Date;
+        referredBy: string;
+        commission: number | null;
+    }>;
+    remove(id: string, userId: string, userRole: string, userCompanyId: string): Promise<{
+        message: string;
+    }>;
+    getStats(userId: string, userRole: string, userCompanyId: string, companyId?: string): Promise<ReferralStatsDto>;
+}

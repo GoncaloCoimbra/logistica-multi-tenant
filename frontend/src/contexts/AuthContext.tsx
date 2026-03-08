@@ -88,13 +88,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           console.log('👤 AuthContext - User role:', userFromServer?.role);
 
           if (!userFromServer.companyId && userFromServer.role !== 'SUPER_ADMIN') {
-            console.error('⚠️⚠️⚠️ ATENÇÃO: Usuário não possui companyId!');
-            console.error('⚠️ Isso vai impedir que os fornecedores apareçam!');
-            console.error('⚠️ User completo:', JSON.stringify(userFromServer, null, 2));
+            console.error('⚠️⚠️⚠️ WARNING: User does not have companyId!');
+            console.error('⚠️ This will prevent suppliers from appearing!');
+            console.error('⚠️ Complete user:', JSON.stringify(userFromServer, null, 2));
           } else if (userFromServer.companyId) {
-            console.log(`✅ CompanyId encontrado: ${userFromServer.companyId}`);
+            console.log(`✅ CompanyId found: ${userFromServer.companyId}`);
           } else {
-            console.log('ℹ️ Usuário é SUPER_ADMIN, não precisa de companyId');
+            console.log('ℹ️ User is SUPER_ADMIN, does not need companyId');
           }
 
           setUser(userFromServer);
@@ -152,17 +152,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       console.log('✅ AuthContext - User normalized from login:', normalizedUser);
-      console.log('🔑 Usuário logado:', normalizedUser);
-      console.log('🏢 CompanyId do usuário:', normalizedUser?.companyId);
-      console.log('👤 Role do usuário:', normalizedUser?.role);
+      console.log('🔑 User logged in:', normalizedUser);
+      console.log('🏢 User CompanyId:', normalizedUser?.companyId);
+      console.log('👤 User role:', normalizedUser?.role);
 
       if (!normalizedUser.companyId && normalizedUser.role !== 'SUPER_ADMIN') {
-        console.error('⚠️⚠️⚠️ PROBLEMA DETECTADO!');
-        console.error('⚠️ Usuário não possui companyId!');
+        console.error('⚠️⚠️⚠️ PROBLEM DETECTED!');
+        console.error('⚠️ User does not have companyId!');
         console.error('⚠️ Role:', normalizedUser.role);
-        console.error('⚠️ Isso vai causar erro 500 ao buscar fornecedores!');
+        console.error('⚠️ This will cause 500 error when fetching suppliers!');
       } else if (normalizedUser.companyId) {
-        console.log(`✅ CompanyId encontrado: ${normalizedUser.companyId}`);
+        console.log(`✅ CompanyId found: ${normalizedUser.companyId}`);
       }
 
       localStorage.setItem('token', token);

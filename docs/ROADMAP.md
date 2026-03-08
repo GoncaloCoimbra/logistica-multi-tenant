@@ -1,6 +1,6 @@
 # Roadmap - Logística Multi-Tenant
 
-Este documento descreve o roteiro de desenvolvimento planejado para os próximos meses.
+This document describes the development roadmap planned for the coming months.
 
 ## Visão Geral
 
@@ -8,7 +8,7 @@ Este documento descreve o roteiro de desenvolvimento planejado para os próximos
 Q1 2026:  Estabilidade & Testes
 Q2 2026:  Observabilidade & Segurança  
 Q3 2026:  Performance & Escala
-Q4 2026:  Produção & Operações
+Q4 2026:  Production & Operations
 ```
 
 ---
@@ -17,7 +17,7 @@ Q4 2026:  Produção & Operações
 
 ### Objetivos
 - ✅ Estabelecer confiança no código via testes
-- ✅ Documentação completa
+- ✅ Complete documentation
 - ✅ Simplificar estrutura (depreciar express backend)
 - ✅ Setup monorepo e CI/CD
 
@@ -31,27 +31,27 @@ Q4 2026:  Produção & Operações
   - [ ] Testes unitários para services
   - [ ] Mocks para BD (Prisma)
   - [ ] Testes e2e para fluxos críticos (auth, CRUD)
-  - [ ] Casos de erro e validação
+  - [ ] Error cases and validation
 - [x] Swagger/OpenAPI
-- [ ] **Validação de env vars** melhorada
+- [ ] **Improved env vars validation**
 - [ ] Logging estruturado (Pino)
 
 #### **Frontend**
 
 - [ ] **Testes React Testing Library** ≥ 60% components
-- [ ] **E2E tests** Cypress (login, CRUD, navegação)
+- [ ] **E2E tests** Cypress (login, CRUD, navigation)
 - [ ] **Storybook** para componentes isolados
-- [ ] Organização de pastas melhorada
+- [ ] Improved folder organization
 - [ ] ESLint + Prettier CI
 
-#### **Documentação**
+#### **Documentation**
 
-- [x] CONTRIBUTING.md atualizado
+- [x] CONTRIBUTING.md updated
 - [x] ARCHITECTURE.md
 - [x] DEPLOYMENT.md
 - [x] UX_UI.md
 - [x] CHANGELOG.md
-- [x] Roadmap (este arquivo)
+- [x] Roadmap (this file)
 - [ ] Adicionar screenshots reais
 - [ ] README específicos por pasta
 
@@ -77,7 +77,7 @@ Q4 2026:  Produção & Operações
 - [ ] **CSRF protection** (csurf ou nest-js-csrf)
 - [ ] **Security headers** (helmet, HSTS, CSP)
 - [ ] **Dependency scanning** (Dependabot or Snyk)
-- [ ] **Request/Response logging** (pino + transporte para ELK)
+- [ ] **Request/Response logging** (pino + transport to ELK)
 
 #### Frontend
 
@@ -102,8 +102,8 @@ Q4 2026:  Produção & Operações
 ## Q3 2026 (Jul-Set) - Performance & Escala
 
 ### Objetivos
-- Sistema otimizado para produção
-- Suporte a crescimento de dados
+- System optimized for production
+- Support for data growth
 - Experiência fluida em redes lentas
 
 ### Tarefas
@@ -111,7 +111,7 @@ Q4 2026:  Produção & Operações
 #### Backend
 
 - [ ] **Database indexing** e query optimization
-- [ ] **Caching** (Redis para sessões, dados frequentes)
+- [ ] **Caching** (Redis for sessions, frequent data)
 - [ ] **Pagination** robusto em endpoints grandes
 - [ ] **Lazy-loading** de Prisma relations
 - [ ] **Background jobs** (Bull, RabbitMQ) para tasks longos
@@ -138,11 +138,11 @@ Q4 2026:  Produção & Operações
 
 ---
 
-## Q4 2026 (Out-Dez) - Produção & Operações
+## Q4 2026 (Oct-Dec) - Production & Operations
 
 ### Objetivos
-- Sistema pronto para produção
-- Documentação de runbooks
+- System ready for production
+- Runbook documentation
 - Equipe preparada para operações
 
 ### Tarefas
@@ -201,7 +201,7 @@ Q4 2026:  Produção & Operações
 Q1: Testes ─┬─→ Q2: Observabilidade
            └─→ Q2: Segurança
            
-Q2: Performance ─→ Q3: Otimização
+Q2: Performance ──> Q3: Optimization
                 → Q3: Escala
                 
 Q3: Backup ─────→ Q4: DR Plan
@@ -228,7 +228,7 @@ Este roadmap será revisado:
 - **Mensalmente**: Status check nas tarefas
 - **Trimestral**: Ajustes baseado em feedback e blockers
 
-Última revisão: **27 Fev 2026**  
+Last review: **Feb 27, 2026**  
 Próxima revisão: **31 Mar 2026**
 
 ---

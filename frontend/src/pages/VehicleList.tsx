@@ -448,14 +448,14 @@ const VehicleList: React.FC = () => {
                 <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                Editar Veículo
+                Edit Vehicle
               </>
             ) : (
               <>
                 <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
-                Novo Veículo
+                New Vehicle
               </>
             )}
           </h2>
@@ -617,7 +617,7 @@ const VehicleList: React.FC = () => {
                 onClick={resetForm}
                 className="px-6 py-2 border-2 border-amber-500/50 text-amber-400 rounded-lg hover:bg-amber-900/20 transition-all font-bold hover:border-amber-400"
               >
-                Cancelar
+                Cancel
               </button>
               <button
                 type="button"
@@ -699,7 +699,7 @@ const VehicleList: React.FC = () => {
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
-                      Editar
+                      Edit
                     </button>
                     <button
                       onClick={() => handleDelete(vehicle.id)}
@@ -723,7 +723,7 @@ const VehicleList: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
             </svg>
             <p className="text-lg font-bold text-amber-400">Nenhum veículo cadastrado</p>
-            <p className="text-sm mt-1">Clique em "Novo Veículo" para começar</p>
+            <p className="text-sm mt-1">Click "New Vehicle" to get started</p>
           </div>
         )}
       </div>

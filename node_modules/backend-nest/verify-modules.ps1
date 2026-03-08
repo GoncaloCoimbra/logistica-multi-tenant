@@ -34,7 +34,7 @@ Write-Host "
 " -ForegroundColor Cyan
 
 if ($allGood) {
-    Write-Host " TODOS OS MÓDULOS CRIADOS COM SUCESSO!" -ForegroundColor Green
+    Write-Host " ALL MODULES CREATED SUCCESSFULLY!" -ForegroundColor Green
     Write-Host "
  Próximos passos:" -ForegroundColor Yellow
     Write-Host "  1. npm install (se necessário)" -ForegroundColor White

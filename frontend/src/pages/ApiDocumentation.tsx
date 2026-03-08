@@ -46,7 +46,7 @@ const ApiDocumentation: React.FC = () => {
               <span className="text-xs text-blue-400 font-semibold">POST</span>
               <span className="font-mono">/transports</span>
             </div>
-            <p className="mt-2 text-gray-400">Cria um novo transporte; corpo JSON com origem/destino e carga.</p>
+            <p className="mt-2 text-gray-400">Creates a new transport; JSON body with origin/destination and load.</p>
             <pre className="mt-3 bg-gray-700 p-3 rounded text-xs overflow-auto"><code>{`curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer <token>" -d '{"origin":"...","destination":"..."}' https://api.example.com/transports`}</code></pre>
           </div>
         </div>

@@ -156,7 +156,7 @@ function App() {
               {/* Rastreamento GPS e Otimização de Rotas */}
               <Route path="rastreamento" element={<LiveTrackingRouteOptimization />} />
 
-              {/* Tarefas - apenas Operador e Admin */}
+              {/* Tasks - only Operator and Admin */}}
               <Route
                 path="tarefas"
                 element={
@@ -223,7 +223,7 @@ function App() {
                 } 
               />
 
-              {/* Redirect rotas antigas (inglês) para português */}
+              {/* Redirect old English routes to Portuguese URL paths */}
               <Route path="products" element={<Navigate to="/produtos" replace />} />
               <Route path="products/new" element={<Navigate to="/produtos/novo" replace />} />
               <Route path="products/:id" element={<Navigate to="/produtos/:id" replace />} />

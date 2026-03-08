@@ -169,8 +169,8 @@ const NewProduct: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <h2 className="text-3xl font-bold text-white">Novo Produto</h2>
-                <p className="text-amber-100/80 mt-1">Preencha os dados do novo produto</p>
+                <h2 className="text-3xl font-bold text-white">New Product</h2>
+                <p className="text-amber-100/80 mt-1">Fill in the details of the new product</p>
               </div>
             </div>
           </div>
@@ -497,7 +497,7 @@ const NewProduct: React.FC = () => {
 
                   {/* Info sobre Status */}
                   <div className="mt-2 p-4 bg-gradient-to-r from-amber-900/20 to-amber-900/10 border border-amber-500/20 rounded-lg">
-                    <p className="text-xs text-amber-300 font-medium mb-3">ℹ️ Sobre os Status:</p>
+                    <p className="text-xs text-amber-300 font-medium mb-3">ℹ️ About the Status:</p>
                     <ul className="text-xs text-amber-200/80 space-y-2 ml-4">
                       <li className="flex items-start gap-2">
                         <span className="text-green-400 mt-0.5">📦</span>
@@ -542,7 +542,7 @@ const NewProduct: React.FC = () => {
                   className="px-6 py-3 bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-900/20 hover:text-amber-200 transition-all font-medium"
                   disabled={isSubmitting}
                 >
-                  Cancelar
+                  Cancel
                 </button>
                 <button
                   type="submit"

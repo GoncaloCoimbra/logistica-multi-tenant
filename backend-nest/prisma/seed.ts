@@ -45,7 +45,7 @@ async function main() {
 
   console.log(' Company created:', company1.name);
 
-  // Admin da Empresa 1
+  // Admin of Company 1
   const admin1Password = await bcrypt.hash('admin123', 10);
 
   const admin1 = await prisma.user.upsert({
@@ -62,15 +62,15 @@ async function main() {
 
   console.log(' Admin user created:', admin1.email);
 
-  // Operador da Empresa 1
+  // Operator of Company 1
   const operator1Password = await bcrypt.hash('operator123', 10);
 
   const operator1 = await prisma.user.upsert({
-    where: { email: 'operador@logistica.com' },
+    where: { email: 'operator@logistica.com' },
     update: {},
     create: {
-      name: 'Operador Demo',
-      email: 'operador@logistica.com',
+      name: 'Operator Demo',
+      email: 'operator@logistica.com',
       password: operator1Password,
       role: Role.OPERATOR,
       companyId: company1.id,
@@ -79,14 +79,14 @@ async function main() {
 
   console.log(' Operator user created:', operator1.email);
 
-  // Fornecedor da Empresa 1
+  // Supplier of Company 1
   const supplier1 = await prisma.supplier.create({
     data: {
-      name: 'Fornecedor Teste Lda',
+      name: 'Supplier Test Ltd',
       nif: '501000000',
-      email: 'fornecedor@teste.com',
+      email: 'supplier@test.com',
       phone: '+351 220 100 000',
-      address: 'Rua Fornecedor, 456, Lisboa',
+      address: 'Supplier Street, 456, Lisbon',
       city: 'Lisboa',
       state: 'Lisboa',
       companyId: company1.id,
@@ -95,11 +95,11 @@ async function main() {
 
   console.log(' Supplier created:', supplier1.name);
 
-  // Veículo da Empresa 1
+  // Vehicle of Company 1
   const vehicle1 = await prisma.vehicle.create({
     data: {
       licensePlate: 'AB-12-CD',
-      type: 'Camião',
+      type: 'Truck',
       model: 'Mercedes Actros',
       brand: 'Mercedes',
       capacity: 10000,
@@ -111,17 +111,17 @@ async function main() {
 
   console.log(' Vehicle created:', vehicle1.licensePlate);
 
-  // Produtos da Empresa 1
+  // Products of Company 1
   const products1 = await Promise.all([
     prisma.product.create({
       data: {
         internalCode: 'PROD-001',
-        description: 'Produto Teste A - Eletrónica',
+        description: 'Test Product A - Electronics',
         quantity: 100,
         unit: 'UN',
         totalWeight: 50.5,
         totalVolume: 2.5,
-        currentLocation: 'Armazém A - Prateleira 1',
+        currentLocation: 'Warehouse A - Shelf 1',
         status: ProductStatus.IN_STORAGE,
         supplierId: supplier1.id,
         companyId: company1.id,
@@ -130,12 +130,12 @@ async function main() {
     prisma.product.create({
       data: {
         internalCode: 'PROD-002',
-        description: 'Produto Teste B - Têxtil',
+        description: 'Test Product B - Textile',
         quantity: 250,
         unit: 'UN',
         totalWeight: 125.0,
         totalVolume: 5.0,
-        currentLocation: 'Armazém B - Zona 2',
+        currentLocation: 'Warehouse B - Zone 2',
         status: ProductStatus.RECEIVED,
         supplierId: supplier1.id,
         companyId: company1.id,
@@ -144,12 +144,12 @@ async function main() {
     prisma.product.create({
       data: {
         internalCode: 'PROD-003',
-        description: 'Produto Teste C - Alimentar',
+        description: 'Test Product C - Food',
         quantity: 500,
         unit: 'KG',
         totalWeight: 500.0,
         totalVolume: 10.0,
-        currentLocation: 'Armazém C - Câmara Fria',
+        currentLocation: 'Warehouse C - Cold Room',
         status: ProductStatus.IN_ANALYSIS,
         supplierId: supplier1.id,
         companyId: company1.id,
@@ -159,15 +159,15 @@ async function main() {
 
   console.log(` ${products1.length} products created for Company 1`);
 
-  // Movimento de produto
+  // Product movement
   await prisma.productMovement.create({
     data: {
       productId: products1[0].id,
       previousStatus: ProductStatus.RECEIVED,
       newStatus: ProductStatus.IN_STORAGE,
       quantity: 100,
-      location: 'Armazém A - Prateleira 1',
-      reason: 'Produto aprovado e armazenado',
+      location: 'Warehouse A - Shelf 1',
+      reason: 'Product approved and stored',
       userId: operator1.id,
     },
   });
@@ -175,7 +175,7 @@ async function main() {
   console.log(' Product movement created');
 
   
-  // 3 EMPRESA 2 - TransPorto Express
+  // 3 COMPANY 2 - TransPorto Express
   
   console.log('\n🏢 Creating Company 2...');
 
@@ -193,7 +193,7 @@ async function main() {
 
   console.log(' Company created:', company2.name);
 
-  // Admin da Empresa 2
+  // Admin from Company 2
   const admin2Password = await bcrypt.hash('admin456', 10);
 
   const admin2 = await prisma.user.create({
@@ -208,7 +208,7 @@ async function main() {
 
   console.log(' Admin user created:', admin2.email);
 
-  // Operador da Empresa 2
+  // Operator from Company 2
   const operator2Password = await bcrypt.hash('operator456', 10);
 
   const operator2 = await prisma.user.create({
@@ -223,14 +223,14 @@ async function main() {
 
   console.log(' Operator user created:', operator2.email);
 
-  // Fornecedor da Empresa 2
+  // Supplier from Company 2
   const supplier2 = await prisma.supplier.create({
     data: {
-      name: 'Fornecedor Norte Lda',
+      name: 'North Supplier Lda',
       nif: '502000000',
       email: 'norte@fornecedor.com',
       phone: '+351 220 200 000',
-      address: 'Rua do Norte, 321, Porto',
+      address: 'North Street, 321, Porto',
       city: 'Porto',
       state: 'Porto',
       companyId: company2.id,
@@ -239,11 +239,11 @@ async function main() {
 
   console.log(' Supplier created:', supplier2.name);
 
-  // Veículo da Empresa 2
+  // Vehicle from Company 2
   const vehicle2 = await prisma.vehicle.create({
     data: {
       licensePlate: 'XY-34-ZW',
-      type: 'Carrinha',
+      type: 'Van',
       model: 'Sprinter',
       brand: 'Mercedes',
       capacity: 3500,
@@ -255,17 +255,17 @@ async function main() {
 
   console.log(' Vehicle created:', vehicle2.licensePlate);
 
-  // Produtos da Empresa 2
+  // Products from Company 2
   const products2 = await Promise.all([
     prisma.product.create({
       data: {
         internalCode: 'TRANS-001',
-        description: 'Material de Embalagem',
+        description: 'Packaging Material',
         quantity: 1000,
         unit: 'UN',
         totalWeight: 200.0,
         totalVolume: 15.0,
-        currentLocation: 'Armazém Principal',
+        currentLocation: 'Main Warehouse',
         status: ProductStatus.IN_STORAGE,
         supplierId: supplier2.id,
         companyId: company2.id,
@@ -274,7 +274,7 @@ async function main() {
     prisma.product.create({
       data: {
         internalCode: 'TRANS-002',
-        description: 'Paletes de Madeira',
+        description: 'Wooden Pallets',
         quantity: 50,
         unit: 'UN',
         totalWeight: 1000.0,

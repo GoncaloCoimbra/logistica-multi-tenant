@@ -70,18 +70,18 @@ export const useFilters = () => {
 // Helper functions
 function getFilterLabel(key: string): string {
   const labels: Record<string, string> = {
-    supplier: 'Fornecedor',
-    supplierId: 'Fornecedor',
-    product: 'Produto',
-    productId: 'Produto',
-    vehicle: 'Veículo',
-    vehicleId: 'Veículo',
-    transport: 'Transporte',
-    status: 'Estado',
-    location: 'Localização',
-    dateFrom: 'Data Início',
-    dateTo: 'Data Fim',
-    search: 'Pesquisa',
+    supplier: 'Supplier',
+    supplierId: 'Supplier',
+    product: 'Product',
+    productId: 'Product',
+    vehicle: 'Vehicle',
+    vehicleId: 'Vehicle',
+    transport: 'Transport',
+    status: 'Status',
+    location: 'Location',
+    dateFrom: 'Start Date',
+    dateTo: 'End Date',
+    search: 'Search',
   };
   return labels[key] || key;
 }

@@ -1,6 +1,6 @@
 # Variáveis de Ambiente
 
-Este documento descreve todas as variáveis de ambiente necessárias para os diferentes ambientes (desenvolvimento, staging, produção).
+This document describes all environment variables needed for different environments (development, staging, production).
 
 ## Backend (backend-nest)
 
@@ -22,7 +22,7 @@ Este documento descreve todas as variáveis de ambiente necessárias para os dif
 | `SENTRY_DSN` | string | - | URL Sentry para error tracking |
 | `REDIS_URL` | string | - | URL Redis para cache/sessionss (optional) |
 | `MAX_FILE_SIZE` | string | 10mb | Tamanho máximo de uploads |
-| `JWT_EXPIRY` | string | 24h | Tempo de expiração do token JWT |
+| `JWT_EXPIRY` | string | 24h | JWT token expiration time |
 
 ### Exemplo de `.env` (Desenvolvimento)
 
@@ -36,7 +36,7 @@ LOG_LEVEL=debug
 JWT_EXPIRY=24h
 ```
 
-### Exemplo de `.env` (Produção)
+### Example `.env` (Production)
 
 ```bash
 NODE_ENV=production
@@ -73,7 +73,7 @@ REACT_APP_ENV=development
 REACT_APP_LOG_LEVEL=debug
 ```
 
-### Exemplo de `.env.production` (Produção)
+### Example `.env.production` (Production)
 
 ```bash
 REACT_APP_API_URL=https://api.seu-dominio.com/api
@@ -130,7 +130,7 @@ stringData:
   JWT_SECRET: base64-encoded-secret
 ```
 
-## Verificação de Variáveis
+## Variable Verification
 
 ### Backend
 
@@ -156,10 +156,10 @@ grep -q "REACT_APP_API_URL" .env.local && echo "✓ API_URL ok" || echo "✗ API
 1. **Nunca commitar `.env`**: adicionar ao `.gitignore`
 2. **Secrets em Vault/K8s**: nunca hardcoded
 3. **JWT_SECRET**: mínimo 32 caracteres, usar `openssl rand -base64 32` para gerar
-4. **DATABASE_URL**: usar passwords fortes em produção
-5. **SENTRY_DSN**: manter privado, usar secrets do CI/CD
+4. **DATABASE_URL**: use strong passwords in production
+5. **SENTRY_DSN**: keep private, use CI/CD secrets
 
-### Geração de Secrets Seguros
+### Secure Secret Generation
 
 ```bash
 # JWT_SECRET
@@ -169,7 +169,7 @@ openssl rand -base64 32
 openssl rand -base64 16
 
 # AWS/GCP credentials
-# → Usar Vault ou Secret Manager nativo da plataforma
+# → Use Vault or native Secret Manager of the platform
 ```
 
 ## CI/CD (GitHub Actions)
@@ -193,7 +193,7 @@ Uso no workflow:
   run: ./deploy.sh
 ```
 
-## Checklist de Configuração
+## Configuration Checklist
 
 Local:
 - [ ] `.env` copiado de `.env.example`
@@ -202,14 +202,14 @@ Local:
 - [ ] `CORS_ORIGIN` configurado para frontend
 - [ ] `.env` adicionado a `.gitignore`
 
-Produção:
+Production:
 - [ ] Todas as variáveis definidas via Vault/Secrets Manager
 - [ ] `NODE_ENV=production`
 - [ ] `LOG_LEVEL=warn` ou superior
 - [ ] `SENTRY_DSN` configurado para error tracking
 - [ ] Database usa managed service (RDS, Cloud SQL, etc.)
-- [ ] JWT_SECRET é rotacionado regularmente (política)
+- [ ] JWT_SECRET is rotated regularly (policy)
 
 ---
 
-**Última atualização:** Fevereiro 2026
+**Last update:** February 2026

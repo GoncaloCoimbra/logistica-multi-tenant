@@ -42,7 +42,7 @@ const CompanyManagement: React.FC = () => {
       const response = await api.get('/superadmin/companies');
       setCompanies(response.data);
     } catch (error) {
-      console.error('Erro ao carregar empresas:', error);
+      console.error('Error loading companies:', error);
     } finally {
       setLoading(false);
     }
@@ -55,16 +55,16 @@ const CompanyManagement: React.FC = () => {
 
   const handleDelete = async (company: Company) => {
     if (company._count.users > 0 || company._count.products > 0) {
-      alert(`Não é possível eliminar. A empresa tem ${company._count.users} utilizador(es) e ${company._count.products} produto(s) associados.`);
+      alert(`Cannot delete. The company has ${company._count.users} user(s) and ${company._count.products} product(s) associated.`);
       return;
     }
 
-    if (window.confirm(`Tem certeza que deseja eliminar a empresa "${company.name}"?`)) {
+    if (window.confirm(`Are you sure you want to delete the company "${company.name}"?`)) {
       try {
         await api.delete(`/superadmin/companies/${company.id}`);
         await loadCompanies();
       } catch (error: any) {
-        alert(error.response?.data?.message || 'Erro ao eliminar empresa');
+        alert(error.response?.data?.message || 'Error deleting company');
       }
     }
   };
@@ -99,8 +99,8 @@ const CompanyManagement: React.FC = () => {
                 </svg>
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-white">Gestão de Empresas</h1>
-                <p className="text-sm text-slate-400 mt-1">{companies.length} empresas registadas</p>
+                <h1 className="text-2xl font-bold text-white">Company Management</h1>
+                <p className="text-sm text-slate-400 mt-1">{companies.length} companies registered</p>
               </div>
             </div>
             <button
@@ -110,7 +110,7 @@ const CompanyManagement: React.FC = () => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Nova Empresa
+              New Company
             </button>
           </div>
         </div>
@@ -127,7 +127,7 @@ const CompanyManagement: React.FC = () => {
             </div>
             <input
               type="text"
-              placeholder="Pesquisar por nome, NIF ou email..."
+              placeholder="Search by name, NIF or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={`${theme.inputs.base} pl-10 w-full`}
@@ -142,22 +142,22 @@ const CompanyManagement: React.FC = () => {
               <thead className="bg-slate-800/50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Empresa
+                    Company
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                     NIF
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Contacto
+                    Contact
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Estatísticas
+                    Statistics
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Data Criação
+                    Creation Date
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Ações
+                    Actions
                   </th>
                 </tr>
               </thead>
@@ -169,8 +169,8 @@ const CompanyManagement: React.FC = () => {
                         <svg className="w-16 h-16 mb-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>
-                        <p className="text-lg font-medium text-slate-400">Nenhuma empresa encontrada</p>
-                        <p className="text-sm text-slate-500">Crie uma nova empresa para começar</p>
+                        <p className="text-lg font-medium text-slate-400">No companies found</p>
+                        <p className="text-sm text-slate-500">Create a new company to get started</p>
                       </div>
                     </td>
                   </tr>
@@ -205,10 +205,10 @@ const CompanyManagement: React.FC = () => {
                             👥 {company._count.users} users
                           </span>
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-900/30 text-emerald-400 border border-emerald-700/30">
-                            📦 {company._count.products} produtos
+                            📦 {company._count.products} products
                           </span>
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-900/30 text-purple-400 border border-purple-700/30">
-                            🏢 {company._count.suppliers} fornecedores
+                            🏢 {company._count.suppliers} suppliers
                           </span>
                         </div>
                       </td>
@@ -220,7 +220,7 @@ const CompanyManagement: React.FC = () => {
                           <button
                             onClick={() => handleEdit(company)}
                             className="text-blue-400 hover:text-blue-300 transition-colors p-1 hover:bg-blue-900/20 rounded"
-                            title="Editar"
+                            title="Edit"
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

@@ -64,7 +64,7 @@ const ProductDetails: React.FC = () => {
   const [newFilterType, setNewFilterType] = useState<'supplier' | 'vehicle' | 'status' | 'location'>('supplier');
   const [newFilterValue, setNewFilterValue] = useState('');
   
-  // 🆕 Estados para deletar produto
+  // 🆕 States to delete product
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -123,7 +123,7 @@ const ProductDetails: React.FC = () => {
         }
       });
     } catch (error: any) {
-      console.error('Erro ao deletar produto:', error);
+      console.error('Error deleting product:', error);
       console.error('Response completo:', error.response);
       
       // Capturar mensagem de erro da API - garantir que seja sempre string
@@ -206,7 +206,7 @@ const ProductDetails: React.FC = () => {
     navigate(`/produtos${queryString ? `?${queryString}` : ''}`);
   };
 
-  // 🆕 Verificar se pode deletar
+  // 🆕 Check if can delete
   const canDelete = product?.status === 'RECEIVED';
 
   if (loading) {
@@ -235,7 +235,7 @@ const ProductDetails: React.FC = () => {
 
   return (
     <div className="p-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b] min-h-screen text-amber-100">
-      {/* Botão Voltar */}
+      {/* Back Button */}}
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={handleBackToList}
@@ -244,7 +244,7 @@ const ProductDetails: React.FC = () => {
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Voltar para Lista
+          Back to List
         </button>
 
         {/* 🆕 Botão Deletar */}
@@ -265,7 +265,7 @@ const ProductDetails: React.FC = () => {
         </button>
       </div>
 
-      {/* 🆕 Aviso se não pode deletar */}
+      {/* 🆕 Warning if cannot delete */}
       {!canDelete && (
         <div className="bg-amber-900/20 border-2 border-amber-500/50 rounded-lg p-4 mb-6 flex items-start gap-3">
           <svg className="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -289,7 +289,7 @@ const ProductDetails: React.FC = () => {
               onClick={() => setShowAddFilter(!showAddFilter)}
               className="text-sm bg-gradient-to-r from-amber-500 to-amber-600 text-white px-4 py-2 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all border border-amber-500/30 shadow-lg font-medium"
             >
-              {showAddFilter ? '✕ Cancelar' : '+ Adicionar Filtro'}
+              {showAddFilter ? '✕ Cancel' : '+ Add Filter'}
             </button>
           </div>
 
@@ -304,7 +304,7 @@ const ProductDetails: React.FC = () => {
                 <button
                   onClick={() => handleRemoveFilter(index)}
                   className="ml-2 hover:bg-amber-500/30 rounded-full w-6 h-6 flex items-center justify-center transition-colors"
-                  title="Remover filtro"
+                  title="Remove filter"
                 >
                   ✕
                 </button>
@@ -479,7 +479,7 @@ const ProductDetails: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold text-white">Confirmar Exclusão</h3>
+                  <h3 className="text-xl font-bold text-white">Confirm Deletion</h3>
                 </div>
 
                 <p className="text-amber-200 mb-4">
@@ -505,7 +505,7 @@ const ProductDetails: React.FC = () => {
                     disabled={deleting}
                     className="flex-1 px-4 py-3 border-2 border-amber-500/50 text-amber-400 rounded-lg hover:bg-amber-900/20 transition-all font-bold disabled:opacity-50"
                   >
-                    Cancelar
+                    Cancel
                   </button>
                   <button
                     onClick={handleDeleteProduct}

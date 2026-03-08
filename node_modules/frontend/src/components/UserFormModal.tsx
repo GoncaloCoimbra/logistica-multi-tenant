@@ -47,17 +47,17 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
 
     // Validações
     if (!user && !formData.password) {
-      setError('Password é obrigatória para novos utilizadores');
+      setError('Password is required for new users');
       return;
     }
 
     if (formData.password && formData.password !== formData.confirmPassword) {
-      setError('As passwords não coincidem');
+      setError('Passwords do not match');
       return;
     }
 
     if (formData.password && formData.password.length < 6) {
-      setError('A password deve ter pelo menos 6 caracteres');
+      setError('Password must be at least 6 characters');
       return;
     }
 
@@ -71,23 +71,23 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
         isActive: formData.isActive,
       };
 
-      // Só envia password se foi preenchida
+      // Only send password if it was filled
       if (formData.password) {
         payload.password = formData.password;
       }
 
       if (user) {
-        // Editar utilizador existente
+        // Edit existing user
         await api.put(`/users/${user.id}`, payload);
       } else {
-        // Criar novo utilizador
+        // Create new user
         await api.post('/users', payload);
       }
 
       onSuccess();
     } catch (err: any) {
-      // CORRIGIDO: Usar err.message que já vem tratado do api.ts
-      setError(err.message || 'Erro ao guardar utilizador');
+      // FIXED: Use err.message which already comes processed from api.ts
+      setError(err.message || 'Error saving user');
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
         {/* Header */}
         <div className={`px-6 py-4 flex justify-between items-center sticky top-0 ${theme.backgrounds.header} border-b border-slate-700`}>          
           <h3 className="text-lg font-semibold text-white">
-            {user ? 'Editar Utilizador' : 'Novo Utilizador'}
+            {user ? 'Edit User' : 'New User'}
           </h3>
           <button
             onClick={onClose}

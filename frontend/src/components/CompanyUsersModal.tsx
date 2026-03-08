@@ -45,13 +45,13 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao carregar usuários');
+        throw new Error('Error loading users');
       }
 
       const data = await response.json();
       setUsers(data);
     } catch (err: any) {
-      setError(err.message || 'Erro ao carregar usuários');
+      setError(err.message || 'Error loading users');
     } finally {
       setLoading(false);
     }
@@ -69,20 +69,20 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao atualizar status do usuário');
+        throw new Error('Error updating user status');
       }
 
-      // Atualizar lista local
+      // Update local list
       setUsers(users.map(user => 
         user.id === userId ? { ...user, isActive: !currentStatus } : user
       ));
     } catch (err: any) {
-      setError(err.message || 'Erro ao atualizar usuário');
+      setError(err.message || 'Error updating user');
     }
   };
 
   const handleRemoveUser = async (userId: string) => {
-    if (!window.confirm('Tem certeza que deseja remover este usuário da empresa?')) {
+    if (!window.confirm('Are you sure you want to remove this user from the company?')) {
       return;
     }
 
@@ -95,12 +95,12 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao remover usuário');
+        throw new Error('Error removing user');
       }
 
       setUsers(users.filter(user => user.id !== userId));
     } catch (err: any) {
-      setError(err.message || 'Erro ao remover usuário');
+      setError(err.message || 'Error removing user');
     }
   };
 
@@ -115,19 +115,19 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-container" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Usuários da Empresa</h2>
+          <h2>Company Users</h2>
           <button className="close-button" onClick={onClose}>×</button>
         </div>
 
         <div className="modal-body">
           <div className="company-info">
-            <strong>Empresa:</strong> {companyName}
+            <strong>Company:</strong> {companyName}
           </div>
 
           <div className="search-box">
             <input
               type="text"
-              placeholder="Buscar usuário..."
+              placeholder="Search user..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -142,19 +142,19 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
               <table>
                 <thead>
                   <tr>
-                    <th>Nome</th>
+                    <th>Name</th>
                     <th>Email</th>
-                    <th>Papel</th>
+                    <th>Role</th>
                     <th>Status</th>
-                    <th>Cadastrado em</th>
-                    <th>Ações</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredUsers.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="no-data">
-                        Nenhum usuário encontrado
+                        No users found
                       </td>
                     </tr>
                   ) : (
@@ -185,7 +185,7 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
                             <button
                               className="btn-remove"
                               onClick={() => handleRemoveUser(user.id)}
-                              title="Remover da empresa"
+                              title="Remove from company"
                             >
                               🗑️
                             </button>

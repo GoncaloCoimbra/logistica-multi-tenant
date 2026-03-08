@@ -171,7 +171,7 @@ const AuditLog: React.FC = () => {
       },
       DISPATCH: { 
         color: 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/30 text-indigo-300 border-indigo-500/30',
-        label: 'Enviar'
+        label: 'Send'
       },
       APPROVE: { 
         color: 'bg-gradient-to-r from-green-900/40 to-green-800/30 text-green-300 border-green-500/30',
@@ -183,7 +183,7 @@ const AuditLog: React.FC = () => {
       },
       CANCEL: { 
         color: 'bg-gradient-to-r from-slate-900/40 to-slate-800/30 text-slate-300 border-slate-500/30',
-        label: 'Cancelar'
+        label: 'Cancel'
       },
     };
 
@@ -379,35 +379,35 @@ const AuditLog: React.FC = () => {
               <option value="LOGIN" className="bg-[#1e293b]">Login</option>
               <option value="LOGOUT" className="bg-[#1e293b]">Logout</option>
               <option value="RECEIVE" className="bg-[#1e293b]">Receber</option>
-              <option value="DISPATCH" className="bg-[#1e293b]">Enviar</option>
+              <option value="DISPATCH" className="bg-[#1e293b]">Send</option>
               <option value="APPROVE" className="bg-[#1e293b]">Aprovar</option>
               <option value="REJECT" className="bg-[#1e293b]">Rejeitar</option>
-              <option value="CANCEL" className="bg-[#1e293b]">Cancelar</option>
+              <option value="CANCEL" className="bg-[#1e293b]">Cancel</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-amber-300 mb-2">Entidade</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">Entity</label>
             <select
               value={filters.entity}
               onChange={(e) => handleFilterChange('entity', e.target.value)}
               className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white"
             >
-              <option value="" className="bg-[#1e293b]">Todas</option>
-              <option value="User" className="bg-[#1e293b]">Utilizadores</option>
-              <option value="Product" className="bg-[#1e293b]">Produtos</option>
-              <option value="Supplier" className="bg-[#1e293b]">Fornecedores</option>
-              <option value="Vehicle" className="bg-[#1e293b]">Veículos</option>
-              <option value="Transport" className="bg-[#1e293b]">Transportes</option>
-              <option value="Company" className="bg-[#1e293b]">Empresa</option>
+              <option value="" className="bg-[#1e293b]">All</option>
+              <option value="User" className="bg-[#1e293b]">Users</option>
+              <option value="Product" className="bg-[#1e293b]">Products</option>
+              <option value="Supplier" className="bg-[#1e293b]">Suppliers</option>
+              <option value="Vehicle" className="bg-[#1e293b]">Vehicles</option>
+              <option value="Transport" className="bg-[#1e293b]">Transports</option>
+              <option value="Company" className="bg-[#1e293b]">Company</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-amber-300 mb-2">Utilizador</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">User</label>
             <input
               type="text"
-              placeholder="ID do utilizador"
+              placeholder="User ID"
               value={filters.userId}
               onChange={(e) => handleFilterChange('userId', e.target.value)}
               className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white placeholder-amber-300/50"
@@ -576,7 +576,7 @@ const AuditLog: React.FC = () => {
                 <p className="text-amber-200 mb-4">
                   Tem certeza que deseja ELIMINAR <strong>TODO O HISTÓRICO</strong>?<br />
                   <br />
-                  <span className="text-red-300">Esta ação é irreversível</span> e vai remover <strong className="text-white">{logs.length} registos</strong>.
+                  <span className="text-red-300">This action is irreversible</span> and will remove <strong className="text-white">{logs.length} records</strong>.
                 </p>
 
                 {clearError && (
@@ -591,7 +591,7 @@ const AuditLog: React.FC = () => {
                     disabled={clearingLogs}
                     className="flex-1 px-4 py-3 border-2 border-amber-500/50 text-amber-400 rounded-lg hover:bg-amber-900/20 transition-all font-bold disabled:opacity-50"
                   >
-                    Cancelar
+                    Cancel
                   </button>
                   <button
                     onClick={handleClearAllLogs}

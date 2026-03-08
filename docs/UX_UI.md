@@ -101,159 +101,159 @@ This document describes the design patterns, usability, and accessibility of the
 />
 ```
 
-### Modais/Diálogos
+### Modals/Dialogs
 
-- Teclado: `Escape` para fechar
-- Foco: presa dentro do modal
-- Sobrescrita: backdrop clicável para fechar (confirmação se houver mudanças)
+- Keyboard: `Escape` to close
+- Focus: trapped within modal
+- Override: clickable backdrop to close (confirmation if changes exist)
 
 ### Loading
 
 ```typescript
-// Skeleton em listas
+// Skeleton in lists
 <SkeletonLoader count={5} height={48} />
 
-// Spinner em ações
+// Spinner in actions
 <Button disabled={isLoading}>
-  {isLoading ? <Spinner /> : 'Salvar'}
+  {isLoading ? <Spinner /> : 'Save'}
 </Button>
 ```
 
-## Padrões de Página
+## Page Patterns
 
-### Listagem de Dados
+### Data Listing
 
 ```
 ┌─────────────────────────────────────────┐
 │  Título + Descrição                     │
-│  [Buscar...] | [Filtros] | [+ Novo]    │
+│  [Search...] | [Filters] | [+ New]    │
 ├─────────────────────────────────────────┤
 │                                         │
-│  Tabela com colunas (sortáveis)         │
-│  - Linha destacada no hover             │
-│  - Checkbox para ações em batch         │
-│  - Ação principal: clique na linha      │
+│  Table with columns (sortable)         │
+│  - Row highlighted on hover             │
+│  - Checkbox for batch actions           │
+│  - Main action: click on row            │
 │                                         │
 ├─────────────────────────────────────────┤
-│ Página 1 de 5 | [< | >] | 50 por página│
+│ Page 1 of 5 | [< | >] | 50 per page│
 └─────────────────────────────────────────┘
 ```
 
-### Formulário de Criação/Edição
+### Create/Edit Form
 
 ```
 ┌─────────────────────────────────────────┐
-│  Título (criar vs. editar)              │
-│  Descrição do formulário                │
+│  Title (create vs. edit)              │
+│  Form description                    │
 ├─────────────────────────────────────────┤
 │                                         │
-│  [Seção 1]          [Seção 2]           │
-│  ├─ Campo 1         ├─ Campo A          │
-│  ├─ Campo 2         ├─ Campo B          │
+│  [Section 1]          [Section 2]           │
+│  ├─ Field 1         ├─ Field A          │
+│  ├─ Field 2         ├─ Field B          │
 │                                         │
 │  ┌──────────────────────────────────┐   │
-│  │ Seção expandida (tabela, lista)  │   │
+│  │ Expandable section (table, list)  │   │
 │  └──────────────────────────────────┘   │
 │                                         │
 ├─────────────────────────────────────────┤
-│ [Cancelar] ... [Salvar] | [Salvar+Novo]│
+│ [Cancel] ... [Save] | [Save+New]│
 └─────────────────────────────────────────┘
 ```
 
-## Estados de Página
+## Page States
 
-### Vazia
-- Ícone grande (ilustração)
-- Título curto ("Nenhum produto ainda")
-- Descrição leve
-- CTA primário ("Criar primeiro produto")
+### Empty
+- Large icon (illustration)
+- Short title ("No products yet")
+- Light description
+- Primary CTA ("Create first product")
 
-### Erro
-- Ícone de erro (❌ ou ⚠️)
-- Mensagem amigável
-- Motivo (ex. "Conexão perdida")
-- CTA ("Tentar novamente")
+### Error
+- Error icon (❌ or ⚠️)
+- Friendly message
+- Reason (ex. "Connection lost")
+- CTA ("Try again")
 
-### Carregamento
-- Skeleton/spinner apropriado
-- Não alterar layout
-- Placeholder similar ao conteúdo final
+### Loading
+- Appropriate skeleton/spinner
+- Do not change layout
+- Placeholder similar to final content
 
-## Formulários de Validação
+## Form Validation
 
 ```typescript
-// Integração com React Hook Form + Zod
+// Integration with React Hook Form + Zod
 <form onSubmit={handleSubmit(onSubmit)}>
   <Input
     {...register("email", {
-      required: "E-mail é obrigatório",
+      required: "Email is required",
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-        message: "E-mail inválido"
+        message: "Invalid email"
       }
     })}
     error={errors.email?.message}
   />
   
   <Button type="submit" loading={isSubmitting}>
-    Salvar
+    Save
   </Button>
 </form>
 ```
 
-## Temas (Dark Mode)
+## Theming (Dark Mode)
 
 ```typescript
-// Context de tema
+// Theme context
 <ThemeProvider>
   <App />
 </ThemeProvider>
 
-// em componentes
+// in components
 const { theme, toggleTheme } = useTheme();
 
 // Tailwind dark mode
 // class="dark:bg-gray-900 dark:text-white"
 ```
 
-## Responsividade
+## Responsiveness
 
-| Device | Breakpoint | Cols | Comportamento |
+| Device | Breakpoint | Cols | Behavior |
 |--------|-----------|------|---|
-| Mobile | < 640px | 1 | Stack vertical, botões full-width |
-| Tablet | 640-1024px | 2 | Sidebar colapsável |
-| Desktop | > 1024px | 3-4 | Layout completo |
+| Mobile | < 640px | 1 | Stack vertical, full-width buttons |
+| Tablet | 640-1024px | 2 | Collapsible sidebar |
+| Desktop | > 1024px | 3-4 | Complete layout |
 
-## Testes de Acessibilidade
+## Accessibility Testing
 
 ```bash
-# Integrar jest-axe
+# Install jest-axe
 npm install jest-axe
 
-# em testes
+# in tests
 import { axe } from 'jest-axe';
 
-test('renderiza accessivelmente', async () => {
+test('renders accessibly', async () => {
   const { container } = render(<MyComponent />);
   const results = await axe(container);
   expect(results).toHaveNoViolations();
 });
 ```
 
-## Fluxos Críticos (wireframes)
+## Critical Flows (Wireframes)
 
 ### Login
-1. E-mail + password
-2. "Esqueceu a senha?" link
-3. Validação inline
-4. Erro: mensagem clara
-5. Sucesso: redireção para dashboard
+1. Email + password
+2. "Forgot password?" link
+3. Inline validation
+4. Error: clear message
+5. Success: redirect to dashboard
 
-### CRUD de Produto
-1. **Listar**: tabela com busca + filtros
-2. **Criar**: modal ou página dedicada
-3. **Editar**: in-place ou modal
-4. **Deletar**: confirmação com aviso
+### Product CRUD
+1. **List**: table with search + filters
+2. **Create**: modal or dedicated page
+3. **Edit**: in-place or modal
+4. **Delete**: confirmation with warning
 
 ## Captura de Tela / Maquetes
 
@@ -279,5 +279,5 @@ docs/
 
 ---
 
-**Coordenador de Design:** [Sua equipe]  
-**Última atualização:** Dezembro 2025
+**Design Coordinator:** [Your team]
+**Last update:** December 2025

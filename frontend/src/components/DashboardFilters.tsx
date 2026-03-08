@@ -125,7 +125,7 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
           </div>
           <div>
             <p className="text-sm font-semibold" style={{ color: ds.textPrimary }}>
-              Filtros
+              Filters
               {activeCount > 0 && (
                 <span
                   className="ml-2 text-xs font-bold px-2 py-0.5 rounded-full"
@@ -301,7 +301,7 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
                 cursor: activeCount === 0 ? 'not-allowed' : 'pointer',
               }}
             >
-              Limpar filtros
+              Clear filters
             </button>
 
             {loading && (

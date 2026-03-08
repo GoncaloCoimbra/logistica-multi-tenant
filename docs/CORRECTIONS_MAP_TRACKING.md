@@ -68,7 +68,7 @@ locations: [
 const match = trackingRoutes.find(r => r.id === transportId || (r as any).transportId === transportId);
 if (match) {
   setSelectedTrackingRoute(match.id);
-  alert('Simulação da rota do transporte iniciada'); // Only alert
+  alert('Simulating transport route started'); // Only alert
 }
 ```
 
@@ -90,20 +90,20 @@ if (match) {
    - Origin: Braga
    - Destination: Lisbon
    - Select a vehicle
-   - Click "Novo Transporte"
+   - Click "New Transport"
 
 2. **Simulate the route:**
    - Click the "Simular" button of the transport
    - Will be redirected to Tracking page
-   - The "Histórico" tab will be activated automatically
+   - The "History" tab will be activated automatically
    - The Leaflet map will correctly show Portugal (Braga → Lisbon)
 
 3. **Verificar coordinates:**
    - Na console do navegador (Dev Tools)
    - Procurar por logs como:
      ```
-     🎯 Rota de transporte encontrada para simulação: transport-id
-     📍 Origem: Braga → Destino: Lisboa
+     🎏 Found transport route for simulation: transport-id
+     📄 Origin: Braga → Destination: Lisbon
      📊 Localizações: 3
      ```
 
@@ -124,16 +124,16 @@ if (match) {
 
 2. **Fallback:** Se uma cidade não for encontrada, o sistema usa Lisboa como fallback e registra um aviso
 
-3. **Validação de Limites:** Todas as coordenadas são validadas para estar em Portugal continental (latitude 36-43, longitude -11 a -5)
+3. **Boundary Validation:** All coordinates are validated to be in continental Portugal (latitude 36-43, longitude -11 to -5)
 
-## 🔧 Próximas Melhorias (Futuro)
+## 🔧 Next Improvements (Future)
 
-- [ ] Integração com API real de geolocalização (Google Maps, Mapbox)
-- [ ] Suporte a endereços completos, não apenas cidades
-- [ ] Cálculo dinâmico de rotas mais realistas
+- [ ] Integration with real geolocation API (Google Maps, Mapbox)
+- [ ] Support for complete addresses, not just cities
+- [ ] Dynamic calculation of more realistic routes
 - [ ] Cache de coordenadas para performance
 
 ---
 
 **Data:** 27 de Fevereiro de 2026
-**Status:** ✅ Pronto para Testes
+**Status:** ✅ Ready for Testing

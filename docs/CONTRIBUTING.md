@@ -441,7 +441,7 @@ Thank you for contributing! 🚀
 ## Decisão: Backend
 
 - **Código ativo**: `backend-nest` (NestJS).
-- **Código legado**: `backend` (Express) – **não modifique** salvo para fins de migração documentados.
+- **Legacy Code**: `backend` (Express) – **do not modify** except for documented migration purposes.
 
 ## Estrutura de Projetos
 
@@ -460,7 +460,7 @@ backend-nest/          # NestJS + Prisma + Swagger
 frontend/              # React + Vite
 ├─ src/
 │  ├─ components/     # Componentes reutilizáveis
-│  ├─ pages/          # Páginas/roteiros
+│  ├─ pages/          # Pages/routes
 │  ├─ hooks/          # Custom hooks
 │  ├─ services/       # API clients
 │  ├─ types/          # TypeScript types

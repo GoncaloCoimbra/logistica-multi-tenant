@@ -52,14 +52,14 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
     setError('');
     
     try {
-      console.log('🔍 [ProductSelector] Carregando produtos...');
+      console.log('🔍 [ProductSelector] Loading products...');
       
       const response = await api.get('/products');
       
-      console.log('📦 [ProductSelector] Resposta do backend:', response.data);
-      console.log('📊 [ProductSelector] Total de produtos:', response.data.length);
+      console.log('📦 [ProductSelector] Backend response:', response.data);
+      console.log('📊 [ProductSelector] Total products:', response.data.length);
       
-      // Filtrar apenas produtos disponíveis para transporte
+      // Filter only products available for transport
       const availableProducts = response.data.filter((product: Product) => {
         const isInStorage = product.status === 'IN_STORAGE';
         const hasQuantity = product.quantity > 0;
@@ -69,8 +69,8 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
         return isInStorage && hasQuantity;
       });
       
-      console.log(' [ProductSelector] Produtos disponíveis:', availableProducts.length);
-      console.log('📋 [ProductSelector] Produtos filtrados:', availableProducts.map((p: Product) => ({
+      console.log('[ProductSelector] Available products:', availableProducts.length);
+      console.log('📋 [ProductSelector] Filtered products:', availableProducts.map((p: Product) => ({
         code: p.internalCode,
         desc: p.description,
         qty: p.quantity,
@@ -80,19 +80,19 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
       setProducts(availableProducts);
       
       if (availableProducts.length === 0) {
-        console.warn('⚠️ [ProductSelector] Nenhum produto disponível (IN_STORAGE com quantity > 0)');
-        setError('Não há produtos disponíveis para transporte. Certifique-se de que existem produtos com status "Em Armazém" e quantidade disponível.');
+        console.warn('⚠️ [ProductSelector] No products available (IN_STORAGE with quantity > 0)');
+        setError('No products available for transport. Make sure there are products with "In Storage" status and available quantity.');
       }
       
     } catch (error: any) {
-      console.error(' [ProductSelector] Erro ao carregar produtos:', error);
-      console.error('📋 [ProductSelector] Detalhes do erro:', {
+      console.error('[ProductSelector] Error loading products:', error);
+      console.error('📋 [ProductSelector] Error details:', {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status
       });
       
-      setError('Erro ao carregar produtos. Tente novamente.');
+      setError('Error loading products. Try again.');
       setProducts([]);
     } finally {
       setLoading(false);
@@ -154,13 +154,13 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
 
   const handleConfirm = () => {
     if (selectedProducts.length === 0) {
-      alert('Selecione pelo menos um produto');
+      alert('Select at least one product');
       return;
     }
 
     const invalidProducts = selectedProducts.filter((sp) => sp.quantity <= 0);
     if (invalidProducts.length > 0) {
-      alert('Todos os produtos devem ter quantidade maior que zero');
+      alert('All products must have quantity greater than zero');
       return;
     }
 
@@ -201,9 +201,9 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                 <Package className="w-6 h-6 text-amber-400" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white">Selecionar Produtos</h3>
+                <h3 className="text-xl font-bold text-white">Select Products</h3>
                 <p className="text-sm text-amber-300/70 mt-1">
-                  {selectedProducts.length} produto(s) selecionado(s)
+                  {selectedProducts.length} product(s) selected
                 </p>
               </div>
             </div>
@@ -221,7 +221,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-amber-500" />
               <input
                 type="text"
-                placeholder="Pesquisar por código, descrição ou fornecedor..."
+                placeholder="Search by code, description or supplier..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-amber-500/30 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
@@ -235,7 +235,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
             {loading ? (
               <div className="flex flex-col items-center justify-center py-12 text-slate-400">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mb-4"></div>
-                <p>A carregar produtos...</p>
+                <p>Loading products...</p>
               </div>
             ) : error ? (
               <div className="flex flex-col items-center justify-center py-12 text-red-400">
@@ -244,34 +244,34 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                     <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                     </svg>
-                    <p className="font-semibold">Erro ao carregar</p>
+                    <p className="font-semibold">Error loading</p>
                   </div>
                   <p className="text-sm text-red-300">{error}</p>
                   <button
                     onClick={loadProducts}
                     className="mt-4 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors w-full font-semibold"
                   >
-                    Tentar Novamente
+                    Try Again
                   </button>
                 </div>
               </div>
             ) : filteredProducts.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-slate-400">
                 <Package className="w-16 h-16 text-slate-600 mb-4" />
-                <p className="text-lg font-semibold text-amber-400">Nenhum produto encontrado</p>
+                <p className="text-lg font-semibold text-amber-400">No products found</p>
                 <p className="text-sm mt-2 text-center max-w-md">
                   {searchTerm ? (
-                    'Tente ajustar sua pesquisa'
+                    'Try adjusting your search'
                   ) : products.length === 0 ? (
                     <>
-                      Não há produtos disponíveis para transporte.
+                      There are no products available for transport.
                       <br />
                       <span className="text-xs text-slate-500 mt-2 block">
-                        (Certifique-se de que existem produtos com status "Em Armazém" e quantidade disponível)
+                        (Make sure there are products with "In Storage" status and available quantity)
                       </span>
                     </>
                   ) : (
-                    'Nenhum produto corresponde à pesquisa'
+                    'No products match your search'
                   )}
                 </p>
                 {products.length === 0 && !loading && (
@@ -390,14 +390,14 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                 {selectedProducts.length > 0 ? (
                   <div>
                     <p className="font-semibold text-amber-300">
-                      {selectedProducts.length} produto(s) selecionado(s)
+                      {selectedProducts.length} product(s) selected
                     </p>
                     <p className="text-xs mt-1">
-                      Total: {selectedProducts.reduce((sum, p) => sum + p.quantity, 0)} unidades
+                      Total: {selectedProducts.reduce((sum, p) => sum + p.quantity, 0)} units
                     </p>
                   </div>
                 ) : (
-                  <p>Nenhum produto selecionado</p>
+                  <p>No products selected</p>
                 )}
               </div>
 
@@ -407,7 +407,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                   onClick={onClose}
                   className="px-6 py-3 border-2 border-amber-500/50 text-amber-400 rounded-lg hover:bg-amber-900/20 transition-all font-bold"
                 >
-                  Cancelar
+                  Cancel
                 </button>
                 <button
                   type="button"

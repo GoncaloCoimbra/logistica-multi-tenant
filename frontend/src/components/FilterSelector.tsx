@@ -66,7 +66,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({
   type,
   onSelect,
   currentFilters = {},
-  placeholder = 'Selecione...',
+  placeholder = 'Select...',
 }) => {
   // Modo dropdown: usa isOpen interno
   // Modo modal: usa prop open

@@ -135,7 +135,7 @@ const GlobalUserManagement: React.FC = () => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Novo Utilizador
+              New User
             </button>
           </div>
         </div>
@@ -317,7 +317,7 @@ const GlobalUserManagement: React.FC = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                         <p className="text-lg font-medium text-slate-400">Nenhum utilizador encontrado</p>
-                        <p className="text-sm text-slate-500">Ajuste os filtros ou crie um novo utilizador</p>
+                        <p className="text-sm text-slate-500">Adjust the filters or create a new user</p>
                       </div>
                     </td>
                   </tr>
@@ -360,7 +360,7 @@ const GlobalUserManagement: React.FC = () => {
                           <button
                             onClick={() => handleEdit(user)}
                             className="text-blue-400 hover:text-blue-300 transition-colors p-1 hover:bg-blue-900/20 rounded disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-                            title="Editar"
+                            title="Edit"
                             disabled={user.role === 'SUPER_ADMIN' || !user.company}
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

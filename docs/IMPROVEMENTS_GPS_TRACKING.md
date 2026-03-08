@@ -68,7 +68,7 @@ The following improvements were implemented in the transport tracking history mo
 
 ### 🚀 How to Use
 
-#### On History Page (tab "Histórico"):
+#### On History Page (tab "History"):
 
 1. **View Routes on Map:**
    - The interactive map shows all routes with different colors
@@ -158,6 +158,6 @@ interface RouteSimulatorProps {
 
 ---
 
-**Data de Implementação:** 27 de Fevereiro de 2026
-**Versão:** 2.0
-**Status:** ✅ Pronto para Produção
+**Implementation Date:** February 27, 2026
+**Version:** 2.0
+**Status:** ✅ Ready for Production

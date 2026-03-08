@@ -149,7 +149,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({ company, onClose, o
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-white mb-2" htmlFor="phone">
-              Telefone
+              Phone
             </label>
             <input
               type="tel"
@@ -163,7 +163,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({ company, onClose, o
 
           <div className="mb-6">
             <label className="block text-sm font-medium text-white mb-2" htmlFor="address">
-              Endereço
+              Address
             </label>
             <textarea
               id="address"
@@ -182,7 +182,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({ company, onClose, o
               className="px-4 py-2 text-slate-300 hover:text-white font-medium"
               disabled={loading}
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"

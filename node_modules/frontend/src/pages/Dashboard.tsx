@@ -320,7 +320,7 @@ const Dashboard: React.FC = () => {
   // ── Metric cards ──
   const metricCards = [
     {
-      label: 'Total de Produtos',
+      label: 'Total Products',
       value: stats.totalProducts,
       color: '#f59e0b',
       badge: stats.percentages.received !== '0' ? `${stats.percentages.received}% received` : null,
@@ -332,10 +332,10 @@ const Dashboard: React.FC = () => {
       ),
     },
     {
-      label: 'Em Armazém',
+      label: 'In Storage',
       value: stats.summary.inStorage,
       color: '#a855f7',
-      badge: stats.percentages.inStorage !== '0' ? `${stats.percentages.inStorage}% do total` : null,
+      badge: stats.percentages.inStorage !== '0' ? `${stats.percentages.inStorage}% of total` : null,
       icon: (
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -463,8 +463,8 @@ const Dashboard: React.FC = () => {
           >
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="font-semibold text-sm text-white">Distribuição por Estado</h3>
-                <p className="text-xs mt-0.5 text-slate-400">Produtos por status actual</p>
+              <h3 className="font-semibold text-sm text-white">Distribution by Status</h3>
+              <p className="text-xs mt-0.5 text-slate-400">Products by current status</p>
               </div>
               <button
                 onClick={() => setExpandedChart(expandedChart === 'pie' ? null : 'pie')}
@@ -627,8 +627,8 @@ const Dashboard: React.FC = () => {
         <Card>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="font-semibold text-sm text-white">Top 5 Fornecedores</h3>
-              <p className="text-xs mt-0.5 text-slate-400">Por volume de produtos fornecidos</p>
+              <h3 className="font-semibold text-sm text-white">Top 5 Suppliers</h3>
+              <p className="text-xs mt-0.5 text-slate-400">By volume of supplied products</p>
             </div>
             <button
               onClick={loadAllSuppliers}

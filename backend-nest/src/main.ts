@@ -68,11 +68,11 @@ export async function createApp(): Promise<NestExpressApplication> {
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-tenant-id'],
   });
-  logger.log('🌐 CORS habilitado para:', corsOrigin);
+  logger.log('🌐 CORS enabled for:', corsOrigin);
 
   // SWAGGER / OPENAPI DOCUMENTATION
   const config = new DocumentBuilder()
-    .setTitle('Logística Multi-Tenant API')
+    .setTitle('Logistics Multi-Tenant API')
     .setDescription('Documentação completa da API de gestão logística multi-tenant')
     .setVersion('1.0.0')
     .addBearerAuth()

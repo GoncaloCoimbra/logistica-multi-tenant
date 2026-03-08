@@ -34,7 +34,7 @@ const UserManagementTable: React.FC = () => {
       const response = await api.get('/users');
       setUsers(response.data);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao carregar utilizadores');
+      setError(err.response?.data?.message || 'Error loading users');
     } finally {
       setLoading(false);
     }
@@ -51,15 +51,15 @@ const UserManagementTable: React.FC = () => {
   };
 
   const handleToggleStatus = async (user: User) => {
-    //  Não permitir desativar a si próprio
+    //  Cannot deactivate yourself
     if (user.id === currentUser?.id) {
-      setError('Não pode desativar a sua própria conta');
+      setError('Cannot deactivate your own account');
       setTimeout(() => setError(''), 5000);
       return;
     }
 
-    const action = user.isActive ? 'desativar' : 'reativar';
-    if (!window.confirm(`Tem certeza que deseja ${action} este utilizador?`)) {
+    const action = user.isActive ? 'deactivate' : 'reactivate';
+    if (!window.confirm(`Are you sure you want to ${action} this user?`)) {
       return;
     }
 
@@ -67,19 +67,19 @@ const UserManagementTable: React.FC = () => {
       setActionLoading(user.id);
       
       if (user.isActive) {
-        // Desativar
+        // Deactivate
         await api.delete(`/users/${user.id}`);
-        setSuccess('Utilizador desativado com sucesso!');
+        setSuccess('User deactivated successfully!');
       } else {
-        // Reativar
+        // Reactivate
         await api.patch(`/users/${user.id}/reactivate`);
-        setSuccess('Utilizador reativado com sucesso!');
+        setSuccess('User reactivated successfully!');
       }
       
       await loadUsers();
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
-      setError(err.response?.data?.message || `Erro ao ${action} utilizador`);
+      setError(err.response?.data?.message || `Error ${action}ing user`);
       setTimeout(() => setError(''), 5000);
     } finally {
       setActionLoading(null);
@@ -92,7 +92,7 @@ const UserManagementTable: React.FC = () => {
   };
 
   const handleModalSuccess = () => {
-    setSuccess(editingUser ? 'Utilizador atualizado com sucesso!' : 'Utilizador criado com sucesso!');
+    setSuccess(editingUser ? 'User updated successfully!' : 'User created successfully!');
     loadUsers();
     handleModalClose();
     setTimeout(() => setSuccess(''), 3000);
@@ -187,11 +187,11 @@ const UserManagementTable: React.FC = () => {
           <div className="text-2xl font-bold text-white">{stats.total}</div>
         </div>
         <div className="bg-green-900/30 rounded-lg border border-green-700 p-4">
-          <div className="text-sm text-green-300">Ativos</div>
+          <div className="text-sm text-green-300">Active</div>
           <div className="text-2xl font-bold text-green-400">{stats.active}</div>
         </div>
         <div className="bg-gray-700/30 rounded-lg border border-slate-600 p-4">
-          <div className="text-sm text-slate-300">Inativos</div>
+          <div className="text-sm text-slate-300">Inactive</div>
           <div className="text-2xl font-bold text-slate-200">{stats.inactive}</div>
         </div>
         <div className="bg-purple-900/30 rounded-lg border border-purple-700 p-4">
@@ -199,18 +199,18 @@ const UserManagementTable: React.FC = () => {
           <div className="text-2xl font-bold text-purple-400">{stats.admins}</div>
         </div>
         <div className="bg-blue-900/30 rounded-lg border border-blue-700 p-4">
-          <div className="text-sm text-blue-300">Operadores</div>
+          <div className="text-sm text-blue-300">Operators</div>
           <div className="text-2xl font-bold text-blue-400">{stats.operators}</div>
         </div>
       </div>
 
-      {/* Tabela */}
+      {/* Table */}
       <div className="bg-[#1e293b]/80 rounded-lg shadow-sm border border-slate-700">
         <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
           <div>
-            <h3 className="text-lg font-semibold text-white">Utilizadores da Empresa</h3>
+            <h3 className="text-lg font-semibold text-white">Company Users</h3>
             <p className="text-sm text-slate-300 mt-1">
-              Gerir utilizadores e permissões
+              Manage users and permissions
             </p>
           </div>
           
@@ -233,7 +233,7 @@ const UserManagementTable: React.FC = () => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
-              <span>Novo Utilizador</span>
+              <span>New User</span>
             </button>
           </div>
         </div>
@@ -323,7 +323,7 @@ const UserManagementTable: React.FC = () => {
                           <button
                             onClick={() => handleEditUser(user)}
                             className="text-blue-600 hover:text-blue-900 transition-colors"
-                            title="Editar"
+                            title="Edit"
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -363,7 +363,7 @@ const UserManagementTable: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal de Criar/Editar */}
+      {/* Modal Create/Edit */}}
       {isModalOpen && (
         <UserFormModal
           user={editingUser}

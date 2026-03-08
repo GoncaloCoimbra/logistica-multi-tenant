@@ -36,7 +36,7 @@ export const ProductHistory: React.FC<ProductHistoryProps> = ({ productId }) => 
       });
       
       if (!response.ok) {
-        throw new Error('Erro ao buscar histórico');
+        throw new Error('Error loading history');
       }
       
       const data = await response.json();

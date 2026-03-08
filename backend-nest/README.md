@@ -2,7 +2,7 @@
 
 Código ativo e produtivo da API NestJS com Prisma, Swagger e design modular.
 
-## Inicialização Rápida
+## Quick Start
 
 ```bash
 # Instalar dependências (na raiz)
@@ -50,7 +50,7 @@ src/
 
 prisma/
 ├─ schema.prisma           # Modelo de dados
-├─ migrations/             # Histórico de mudanças
+├─ migrations/             # Change history
 └─ seed.ts                 # Dados iniciais
 ```
 
@@ -60,7 +60,7 @@ Swagger disponível em: `http://localhost:3000/api/docs`
 
 - Todos os endpoints estão anotados com `@ApiOperation()` e `@ApiProperty()`
 - Exemplos incluídos nos DTOs
-- Autenticação JWT documentada
+- JWT Authentication documented
 
 ## Testes
 
@@ -94,11 +94,11 @@ NODE_ENV=development
 - **Modules**: cada feature em seu módulo separado
 - **Services**: lógica de negócio
 - **Controllers**: endpoints HTTP
-- **DTOs**: validação com class-validator
+- **DTOs**: validation with class-validator
 - **Guards**: JWT, roles, tenant
 - **Interceptors**: logging, transform, audit
 
-## Documentação Adicional
+## Additional Documentation
 
 - [ARCHITECTURE.md](../docs/ARCHITECTURE.md) - Decisões de design
 - [CONTRIBUTING.md](../CONTRIBUTING.md) - Como contribuir
@@ -106,7 +106,7 @@ NODE_ENV=development
 
 ---
 
-**Última atualização:** Fevereiro 2026
+**Last update:** February 2026
 $ npm install
 ```
 

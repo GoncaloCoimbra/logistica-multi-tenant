@@ -601,7 +601,7 @@ const SupplierList: React.FC = () => {
             {activeFilters.length > 0 ? (
               <p className="text-sm mt-1">Nenhum fornecedor encontrado com os filtros aplicados</p>
             ) : (
-              <p className="text-sm mt-1">Clique em "Novo Fornecedor" para começar</p>
+              <p className="text-sm mt-1">Click "New Supplier" to get started</p>
             )}
           </div>
         )}
