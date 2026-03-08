@@ -6,7 +6,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 
 
-// CORREÇÃO DE SERIALIZAÇÃO (BigInt/Date)
+// SERIALIZATION FIX (BigInt/Date)
 
 (BigInt.prototype as any).toJSON = function () {
   const int = Number(this.toString());
@@ -26,7 +26,7 @@ export async function createApp(): Promise<NestExpressApplication> {
     throw new Error('Missing DATABASE_URL');
   }
 
-  // CRIAR APLICAÇÃO NEST
+  // CREATE NEST APPLICATION
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: ['log', 'error', 'warn', 'debug', 'verbose'],
   });
@@ -73,21 +73,21 @@ export async function createApp(): Promise<NestExpressApplication> {
   // SWAGGER / OPENAPI DOCUMENTATION
   const config = new DocumentBuilder()
     .setTitle('Logistics Multi-Tenant API')
-    .setDescription('Documentação completa da API de gestão logística multi-tenant')
+    .setDescription('Complete API documentation for multi-tenant logistics management')
     .setVersion('1.0.0')
     .addBearerAuth()
     .addApiKey({ type: 'apiKey', in: 'header', name: 'x-tenant-id' }, 'tenant-id')
-    .addTag('Auth', 'Endpoints de autenticação e autorização')
-    .addTag('Users', 'Gestão de utilizadores')
-    .addTag('Products', 'Gestão de produtos')
-    .addTag('Vehicles', 'Gestão de veículos')
-    .addTag('Transports', 'Gestão de transportes')
-    .addTag('Companies', 'Gestão de empresas')
+    .addTag('Auth', 'Authentication and authorization endpoints')
+    .addTag('Users', 'User management')
+    .addTag('Products', 'Product management')
+    .addTag('Vehicles', 'Vehicle management')
+    .addTag('Transports', 'Transport management')
+    .addTag('Companies', 'Company management')
     .addTag('Audit', 'Logs de auditoria')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
-  logger.log('📖 Swagger/OpenAPI disponível em: /api/docs');
+  logger.log('📖 Swagger/OpenAPI available at: /api/docs');
 
   
   // STATIC ASSETS (Uploads)
@@ -98,7 +98,7 @@ export async function createApp(): Promise<NestExpressApplication> {
   logger.log('📁 Pasta de uploads configurada: /uploads/');
 
   
-  // LOGS DE INICIALIZAÇÃO (apenas informação — o `listen` é controlado por quem chama)
+  // INITIALIZATION LOGS (just information — `listen` is controlled by the caller)
   logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   logger.log('✅ Aplicação Nest pronta (sem listener).');
   logger.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);

@@ -6,12 +6,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service'; 
 
 
-// MÓDULOS DE DATABASE
+// DATABASE MODULES
 
 import { DatabaseModule } from './database/database.module';
 
 
-// MÓDULOS NA RAIZ DE SRC/
+// MODULES IN SRC/ ROOT
 
 import { CompaniesModule } from './companies/companies.module'; 
 import { UsersModule } from './users/users.module'; 
@@ -21,7 +21,7 @@ import { SettingsModule } from './settings/settings.module';
 import { RegistrationModule } from './registration/registration.module'; 
 
 
-// MÓDULOS DENTRO DE SRC/MODULES/
+// MODULES INSIDE SRC/MODULES/
 
 import { AuthModule } from './modules/auth/auth.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';

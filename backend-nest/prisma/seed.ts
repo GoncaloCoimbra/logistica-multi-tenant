@@ -35,7 +35,7 @@ async function main() {
     where: { email: 'admin@logistica.com' },
     update: {},
     create: {
-      name: 'Logística Demo Lda',
+      name: 'Logistics Demo Ltd',
       nif: '500000000',
       email: 'admin@logistica.com',
       phone: '+351 220 000 000',
@@ -334,20 +334,20 @@ async function main() {
   console.log('   Role: SUPER_ADMIN');
   console.log('   Company: (sem empresa - acesso global)');
 
-  console.log('\n EMPRESA 1 - Logística Demo Lda');
+  console.log('\n COMPANY 1 - Logistics Demo Ltd');
   console.log('    Admin: superadmin@sistema.com /superadmin123');
   console.log('    Admin: admin@logistica.com / admin123');
-  console.log('   Operador: operador@logistica.com / operator123');
-  console.log(`    Produtos: ${products1.length}`);
-  console.log(`    Veículos: 1`);
-  console.log(`    Fornecedores: 1`);
+  console.log('   Operator: operador@logistica.com / operator123');
+  console.log(`    Products: ${products1.length}`);
+  console.log(`    Vehicles: 1`);
+  console.log(`    Suppliers: 1`);
 
-  console.log('\nEMPRESA 2 - TransPorto Express Lda');
+  console.log('\nCOMPANY 2 - TransPorto Express Ltd');
   console.log('    Admin: carlos@transporte.com / admin456');
-  console.log('    Operador: maria@transporte.com / operator456');
-  console.log(`    Produtos: ${products2.length}`);
-  console.log(`    Veículos: 1`);
-  console.log(`    Fornecedores: 1`);
+  console.log('    Operator: maria@transporte.com / operator456');
+  console.log(`    Products: ${products2.length}`);
+  console.log(`    Vehicles: 1`);
+  console.log(`    Suppliers: 1`);
 
   console.log('\n' + '='.repeat(50));
   console.log('💡 TIP: Use o Super Admin para gerenciar todas as empresas!');
