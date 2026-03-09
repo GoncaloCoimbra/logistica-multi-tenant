@@ -126,7 +126,7 @@ export class DashboardService {
         .slice(0, 5);
 
       
-      // 6. MOVIMENTAÇÕES RECENTES (últimos 30 dias)
+      // 6. MOVIMENTAÇÕES RECENTES (Last 30 days)
       
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

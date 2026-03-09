@@ -48,12 +48,12 @@ const SuperAdminHome: React.FC = () => {
       const response = await api.get('/superadmin/stats');
       setStats(response.data);
     } catch (error: any) {
-      console.error('Erro ao carregar estatísticas:', error);
+      console.error('Error loading statistics:', error);
       
       let errorMessage = '';
       
       if (error.response?.status === 404) {
-        errorMessage = 'Rota de estatísticas não encontrada no backend. Por favor, implemente o endpoint /superadmin/stats';
+        errorMessage = 'Statistics route not found in backend. Please implement the /superadmin/stats endpoint';
       } else if (error.response?.data?.message && typeof error.response.data.message === 'string') {
         errorMessage = error.response.data.message;
       } else if (error.response?.data?.error && typeof error.response.data.error === 'string') {
@@ -61,7 +61,7 @@ const SuperAdminHome: React.FC = () => {
       } else if (error.message && typeof error.message === 'string') {
         errorMessage = error.message;
       } else {
-        errorMessage = 'Erro ao carregar estatísticas do sistema';
+        errorMessage = 'Error loading system statistics';
       }
       
       setError(errorMessage);
@@ -75,7 +75,7 @@ const SuperAdminHome: React.FC = () => {
       <div className={`min-h-screen flex items-center justify-center ${theme.backgrounds.page}`}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-amber-500 mx-auto mb-4"></div>
-          <p className="text-slate-300 font-medium">A carregar dashboard...</p>
+          <p className="text-slate-300 font-medium">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -83,7 +83,7 @@ const SuperAdminHome: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header com logo e perfil - Tema escuro */}
+      {/* Header with logo and profile - Dark theme */}
       <header className={`${theme.backgrounds.header} px-6 py-4 flex items-center justify-between border-b border-slate-700`}>
         {/* Logo */}
         <div className="flex items-center space-x-3 group">
@@ -96,10 +96,10 @@ const SuperAdminHome: React.FC = () => {
           </div>
         </div>
 
-        {/* Ícone do Perfil com Logout */}
+        {/* Profile Icon with Logout */}
         <div className="flex items-center gap-4">
           <span className="text-sm text-slate-300">
-            {user?.name || 'Super Administrador'}
+            {user?.name || 'Super Administrator'}
           </span>
           <div className="relative group">
             <button className="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold hover:from-amber-600 hover:to-amber-700 transition-all">
@@ -115,7 +115,7 @@ const SuperAdminHome: React.FC = () => {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                Perfil
+                Profile
               </button>
               <button
                 onClick={logout}
@@ -124,17 +124,17 @@ const SuperAdminHome: React.FC = () => {
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
-                Sair
+                Logout
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Conteúdo Principal - Dashboard SuperAdmin com tema escuro */}
+      {/* Main Content - SuperAdmin Dashboard with dark theme */}
       <main className={`flex-1 ${theme.backgrounds.page}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Mostrar erro como aviso, não bloquear o dashboard */}
+          {/* Show error as warning, do not block dashboard */}
           {error && (
             <div className="mb-6 bg-amber-900/30 border border-amber-500/50 rounded-lg p-4">
               <div className="flex items-start">
@@ -142,13 +142,13 @@ const SuperAdminHome: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
                 <div className="flex-1">
-                  <h3 className="text-sm font-bold text-amber-400">Aviso do Sistema</h3>
+                  <h3 className="text-sm font-bold text-amber-400">System Warning</h3>
                   <p className="mt-1 text-sm text-amber-300">{error}</p>
                   <button
                     onClick={loadStats}
                     className="mt-3 text-sm text-amber-400 hover:text-amber-300 font-medium underline"
                   >
-                    Tentar carregar novamente
+                    Try loading again
                   </button>
                 </div>
               </div>
@@ -157,7 +157,7 @@ const SuperAdminHome: React.FC = () => {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-            {/* Total de Empresas */}
+            {/* Total Companies */}
             <div className={theme.cards.stat}>
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/20 rounded-xl p-3 shadow-lg text-purple-400 border border-purple-500/30">
@@ -169,10 +169,10 @@ const SuperAdminHome: React.FC = () => {
                   <p className="text-3xl font-bold text-white">{stats.totalCompanies}</p>
                 </div>
               </div>
-              <p className="text-sm font-medium text-slate-400">Total de Empresas</p>
+              <p className="text-sm font-medium text-slate-400">Total Companies</p>
             </div>
 
-            {/* Total de Utilizadores */}
+            {/* Total Users */}
             <div className={theme.cards.stat}>
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 rounded-xl p-3 shadow-lg text-blue-400 border border-blue-500/30">
@@ -184,10 +184,10 @@ const SuperAdminHome: React.FC = () => {
                   <p className="text-3xl font-bold text-white">{stats.totalUsers}</p>
                 </div>
               </div>
-              <p className="text-sm font-medium text-slate-400">Total de Utilizadores</p>
+              <p className="text-sm font-medium text-slate-400">Total Users</p>
             </div>
 
-            {/* Total de Produtos */}
+            {/* Total Products */}
             <div className={theme.cards.stat}>
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 rounded-xl p-3 shadow-lg text-emerald-400 border border-emerald-500/30">
@@ -199,10 +199,10 @@ const SuperAdminHome: React.FC = () => {
                   <p className="text-3xl font-bold text-white">{stats.totalProducts}</p>
                 </div>
               </div>
-              <p className="text-sm font-medium text-slate-400">Total de Produtos</p>
+              <p className="text-sm font-medium text-slate-400">Total Products</p>
             </div>
 
-            {/* Total de Fornecedores */}
+            {/* Total Suppliers */}
             <div className={theme.cards.stat}>
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-gradient-to-br from-orange-500/20 to-orange-600/20 rounded-xl p-3 shadow-lg text-orange-400 border border-orange-500/30">
@@ -214,10 +214,10 @@ const SuperAdminHome: React.FC = () => {
                   <p className="text-3xl font-bold text-white">{stats.totalSuppliers}</p>
                 </div>
               </div>
-              <p className="text-sm font-medium text-slate-400">Total de Fornecedores</p>
+              <p className="text-sm font-medium text-slate-400">Total Suppliers</p>
             </div>
 
-            {/* Total de Veículos */}
+            {/* Total Vehicles */}
             <div className={theme.cards.stat}>
               <div className="flex items-center justify-between mb-4">
                 <div className="bg-gradient-to-br from-indigo-500/20 to-indigo-600/20 rounded-xl p-3 shadow-lg text-indigo-400 border border-indigo-500/30">
@@ -229,19 +229,19 @@ const SuperAdminHome: React.FC = () => {
                   <p className="text-3xl font-bold text-white">{stats.totalVehicles}</p>
                 </div>
               </div>
-              <p className="text-sm font-medium text-slate-400">Total de Veículos</p>
+              <p className="text-sm font-medium text-slate-400">Total Vehicles</p>
             </div>
           </div>
 
           {/* Top 5 Companies */}
           <div className={`${theme.cards.base} mb-8`}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-white">Top 5 Empresas</h3>
+              <h3 className="text-lg font-bold text-white">Top 5 Companies</h3>
               <button
                 onClick={() => navigate('/empresas')}
                 className="text-sm text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1 transition-colors"
               >
-                Ver todas
+                View all
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -254,13 +254,13 @@ const SuperAdminHome: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
                 <p className="text-slate-400 font-medium mb-2">
-                  {error ? 'Não foi possível carregar as empresas' : 'Nenhuma empresa registada'}
+                  {error ? 'Could not load companies' : 'No companies registered'}
                 </p>
                 <button
                   onClick={() => navigate('/empresas')}
                   className="text-sm text-amber-400 hover:text-amber-300 font-medium transition-colors"
                 >
-                  Adicionar empresa →
+                  Add company →
                 </button>
               </div>
             ) : (
@@ -279,20 +279,20 @@ const SuperAdminHome: React.FC = () => {
                         <p className="font-semibold text-white">{company.name}</p>
                         <div className="flex items-center gap-4 mt-2">
                           <span className="text-xs text-slate-400">
-                            👥 {company._count.users} utilizadores
+                            👥 {company._count.users} users
                           </span>
                           <span className="text-xs text-slate-400">
-                            📦 {company._count.products} produtos
+                            📦 {company._count.products} products
                           </span>
                           <span className="text-xs text-slate-400">
-                            🏢 {company._count.suppliers} fornecedores
+                            🏢 {company._count.suppliers} suppliers
                           </span>
                         </div>
                       </div>
                     </div>
                     <div className="text-right ml-4">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-purple-900/30 text-purple-400 border border-purple-500/30">
-                        {company._count.products} produtos
+                        {company._count.products} products
                       </span>
                     </div>
                   </div>
@@ -303,13 +303,13 @@ const SuperAdminHome: React.FC = () => {
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            {/* Gestão de Empresas */}
+            {/* Company Management */}
             <div className="bg-gradient-to-br from-blue-600/20 to-blue-700/20 rounded-xl border border-blue-500/30 p-6 hover:border-blue-400/50 transition-all">
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-2">Gestão de Empresas</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">Company Management</h3>
                   <p className="text-blue-300 text-sm">
-                    Criar, editar e gerir todas as empresas do sistema
+                    Create, edit, and manage all companies in the system
                   </p>
                 </div>
                 <div className="bg-blue-500/20 rounded-lg p-3 border border-blue-500/30">
@@ -322,17 +322,17 @@ const SuperAdminHome: React.FC = () => {
                 onClick={() => navigate('/empresas')}
                 className={`${theme.buttons.primary} bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 w-full`}
               >
-                Aceder à Gestão →
+                Access Management →
               </button>
             </div>
 
-            {/* Gestão de Utilizadores */}
+            {/* User Management */}
             <div className="bg-gradient-to-br from-purple-600/20 to-purple-700/20 rounded-xl border border-purple-500/30 p-6 hover:border-purple-400/50 transition-all">
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-2">Gestão de Utilizadores</h3>
+                  <h3 className="text-xl font-bold text-white mb-2">User Management</h3>
                   <p className="text-purple-300 text-sm">
-                    Gerir utilizadores de todas as empresas do sistema
+                    Manage users from all companies in the system
                   </p>
                 </div>
                 <div className="bg-purple-500/20 rounded-lg p-3 border border-purple-500/30">
@@ -345,7 +345,7 @@ const SuperAdminHome: React.FC = () => {
                 onClick={() => navigate('/users')}
                 className={`${theme.buttons.primary} bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 w-full`}
               >
-                Aceder à Gestão →
+                Access Management →
               </button>
             </div>
           </div>
@@ -355,17 +355,17 @@ const SuperAdminHome: React.FC = () => {
             <div className="flex items-center justify-between text-sm text-slate-500">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span>Sistema em funcionamento</span>
+                <span>System running</span>
               </div>
               <div>
-                <span>Last update: {new Date().toLocaleDateString('pt-BR')}</span>
+                <span>Last update: {new Date().toLocaleDateString('en-US')}</span>
               </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Footer com tema escuro */}
+      {/* Footer with dark theme */}
       <div className={`${theme.backgrounds.header} border-t border-slate-700`}>
         <Footer />
       </div>

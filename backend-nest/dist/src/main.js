@@ -45,24 +45,24 @@ async function createApp() {
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'x-tenant-id'],
     });
-    logger.log('🌐 CORS habilitado para:', corsOrigin);
+    logger.log('🌐 CORS enabled for:', corsOrigin);
     const config = new swagger_1.DocumentBuilder()
-        .setTitle('Logística Multi-Tenant API')
-        .setDescription('Documentação completa da API de gestão logística multi-tenant')
+        .setTitle('Logistics Multi-Tenant API')
+        .setDescription('Complete API documentation for multi-tenant logistics management')
         .setVersion('1.0.0')
         .addBearerAuth()
         .addApiKey({ type: 'apiKey', in: 'header', name: 'x-tenant-id' }, 'tenant-id')
-        .addTag('Auth', 'Endpoints de autenticação e autorização')
-        .addTag('Users', 'Gestão de utilizadores')
-        .addTag('Products', 'Gestão de produtos')
-        .addTag('Vehicles', 'Gestão de veículos')
-        .addTag('Transports', 'Gestão de transportes')
-        .addTag('Companies', 'Gestão de empresas')
+        .addTag('Auth', 'Authentication and authorization endpoints')
+        .addTag('Users', 'User management')
+        .addTag('Products', 'Product management')
+        .addTag('Vehicles', 'Vehicle management')
+        .addTag('Transports', 'Transport management')
+        .addTag('Companies', 'Company management')
         .addTag('Audit', 'Logs de auditoria')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api/docs', app, document);
-    logger.log('📖 Swagger/OpenAPI disponível em: /api/docs');
+    logger.log('📖 Swagger/OpenAPI available at: /api/docs');
     app.useStaticAssets((0, path_1.join)(__dirname, '..', 'uploads'), {
         prefix: '/uploads/',
     });

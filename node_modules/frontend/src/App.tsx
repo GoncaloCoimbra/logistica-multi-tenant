@@ -66,6 +66,11 @@ import TutorialDetail from './pages/TutorialDetail';
 import Updates from './pages/Updates';
 import SystemStatus from './pages/SystemStatus';
 
+// Add imports for new informational pages
+import PrivacyPolicy from './pages/Privacy Policy';
+import TermsOfUse from './pages/TermsofUse';
+import Cookies from './pages/cookies';
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -79,6 +84,11 @@ function App() {
             =================== */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+
+            {/* Add new public informational routes here */}
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-use" element={<TermsOfUse />} />
+            <Route path="/cookies" element={<Cookies />} />
 
             {/* ===================
                 SUPER ADMIN ROUTES (WITHOUT MainLayout)
@@ -121,28 +131,42 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="dashboard/advanced" element={<DashboardAdvanced />} />
 
-              {/* Products */}
+              {/* Products - English & Portuguese */}
               <Route path="products" element={<ProductList />} />
+              <Route path="produtos" element={<ProductList />} />
               <Route path="products/new" element={<NewProduct />} />
+              <Route path="produtos/novo" element={<NewProduct />} />
               <Route path="products/:id" element={<ProductDetails />} />
+              <Route path="produtos/:id" element={<ProductDetails />} />
 
-              {/* Suppliers */}
+              {/* Suppliers - English & Portuguese */}
               <Route path="suppliers" element={<SupplierList />} />
+              <Route path="fornecedores" element={<SupplierList />} />
 
-              {/* Companies (SuperAdmin within MainLayout) */}
+              {/* Companies - English & Portuguese */}
               <Route 
-                path="companies" 
+                path="companies"
                 element={
-                  <PrivateRoute requireSuperAdmin>
+                  <PrivateRoute>
+                    <CompanyManagement />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="empresas"
+                element={
+                  <PrivateRoute>
                     <CompanyManagement />
                   </PrivateRoute>
                 } 
               />
 
-              {/* Vehicles */}
+              {/* Vehicles - English & Portuguese */}
+              <Route path="vehicles" element={<VehicleList />} />
               <Route path="veiculos" element={<VehicleList />} />
 
-              {/* Transports */}
+              {/* Transports - English & Portuguese */}
+              <Route path="transports" element={<TransportList />} />
               <Route path="transportes" element={<TransportList />} />
 
               {/* Documentation/Help Pages */}
@@ -156,7 +180,15 @@ function App() {
               {/* GPS Tracking and Route Optimization */}
               <Route path="rastreamento" element={<LiveTrackingRouteOptimization />} />
 
-              {/* Tasks - only Operator and Admin */}}
+              {/* Tasks - English & Portuguese - only Operator and Admin */}
+              <Route
+                path="tasks"
+                element={
+                  <PrivateRoute requireOperator>
+                    <Tasks />
+                  </PrivateRoute>
+                }
+              />
               <Route
                 path="tarefas"
                 element={
@@ -223,20 +255,8 @@ function App() {
                 } 
               />
 
-              {/* Redirect old English routes to Portuguese URL paths */}
-              <Route path="products" element={<Navigate to="/produtos" replace />} />
-              <Route path="products/new" element={<Navigate to="/produtos/novo" replace />} />
-              <Route path="products/:id" element={<Navigate to="/produtos/:id" replace />} />
-              <Route path="suppliers" element={<Navigate to="/fornecedores" replace />} />
-              <Route path="companies" element={<Navigate to="/empresas" replace />} />
-              <Route path="vehicles" element={<Navigate to="/veiculos" replace />} />
-              <Route path="transports" element={<Navigate to="/transportes" replace />} />
-              <Route path="tasks" element={<Navigate to="/tarefas" replace />} />
             </Route>
 
-            {/* ===================
-                404 - Redirect para dashboard
-            =================== */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
 
           </Routes>

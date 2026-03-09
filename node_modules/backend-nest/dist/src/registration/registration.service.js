@@ -140,14 +140,14 @@ let RegistrationService = RegistrationService_1 = class RegistrationService {
                 this.logger.log(` Usuário criado: ${user.id} - ${user.name} (ADMIN)`);
                 this.logger.log(`   Email armazenado: ${user.email}`);
                 this.logger.log(`   isActive: ${user.isActive}`);
-                this.logger.log('⚙️ Criando configurações padrão...');
+                this.logger.log('⚙️ Criando Configurations padrão...');
                 await tx.settings.create({
                     data: {
                         companyId: company.id,
                         taxRate: 0.23,
                     },
                 });
-                this.logger.log(' Configurações criadas');
+                this.logger.log(' Configurations criadas');
                 this.logger.log('📍 DENTRO DA TRANSAÇÃO - finalizando...');
                 return { company, user };
             });

@@ -151,11 +151,15 @@ const Footer: React.FC = () => {
               © {currentYear} LogiSphere. All rights reserved.
             </span>
             <div className="flex items-center gap-5">
-              {['Privacy Policy', 'Terms of Use', 'Cookies'].map((label, i, arr) => (
-                <React.Fragment key={label}>
-                  <a href="#" className="text-sm text-slate-400 hover:text-amber-400 transition-colors">
-                    {label}
-                  </a>
+              {[
+                { label: 'Privacy Policy', to: '/privacy-policy' },
+                { label: 'Terms of Use', to: '/terms-of-use' },
+                { label: 'Cookies', to: '/cookies' },
+              ].map((link, i, arr) => (
+                <React.Fragment key={link.label}>
+                  <Link to={link.to} className="text-sm text-slate-400 hover:text-amber-400 transition-colors">
+                    {link.label}
+                  </Link>
                   {i < arr.length - 1 && <span className="text-amber-500/30">|</span>}
                 </React.Fragment>
               ))}

@@ -226,7 +226,7 @@ const DashboardAdvanced: React.FC = () => {
     if (stats.customDateRange) {
       return `${new Date(stats.customDateRange.startDate).toLocaleDateString('en-GB')} – ${new Date(stats.customDateRange.endDate).toLocaleDateString('en-GB')}`;
     }
-    const labels: Record<string, string> = { '7d': 'Últimos 7 dias', '30d': 'Últimos 30 dias', '90d': 'Últimos 90 dias', '1y': 'Último ano' };
+    const labels: Record<string, string> = { '7d': 'Últimos 7 dias', '30d': 'Last 30 days', '90d': 'Últimos 90 dias', '1y': 'Último ano' };
     return labels[stats.period] || stats.period;
   };
 

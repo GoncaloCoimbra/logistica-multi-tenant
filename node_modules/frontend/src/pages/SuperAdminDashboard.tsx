@@ -65,7 +65,7 @@ const SuperAdminDashboard: React.FC = () => {
     topCompanies: [],
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     injectFonts();
@@ -81,9 +81,9 @@ const SuperAdminDashboard: React.FC = () => {
     } catch (err: any) {
       const msg =
         err.response?.status === 404
-          ? 'Endpoint /superadmin/stats não encontrado no backend.'
-          : err.response?.data?.message || err.message || 'Erro ao carregar estatísticas do sistema';
-      setError(typeof msg === 'string' ? msg : 'Erro desconhecido');
+          ? 'Endpoint /superadmin/stats not found in backend.'
+          : err.response?.data?.message || err.message || 'Error loading system statistics';
+      setError(typeof msg === 'string' ? msg : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -97,7 +97,7 @@ const SuperAdminDashboard: React.FC = () => {
         <div className="text-center">
           <div className="w-12 h-12 rounded-full border-2 border-t-transparent animate-spin mx-auto mb-4"
             style={{ borderColor: `${ds.accent} transparent transparent transparent` }} />
-          <p className="text-sm" style={{ color: ds.textMuted }}>A carregar dashboard...</p>
+          <p className="text-sm" style={{ color: ds.textMuted }}>Loading dashboard...</p>
         </div>
       </div>
     );
@@ -106,7 +106,7 @@ const SuperAdminDashboard: React.FC = () => {
   // ── Metric cards config ──
   const metricCards = [
     {
-      label: 'Empresas',
+      label: 'Companies',
       value: stats.totalCompanies,
       color: ds.purple,
       icon: (
@@ -117,7 +117,7 @@ const SuperAdminDashboard: React.FC = () => {
       ),
     },
     {
-      label: 'Utilizadores',
+      label: 'Users',
       value: stats.totalUsers,
       color: ds.accent,
       icon: (
@@ -128,7 +128,7 @@ const SuperAdminDashboard: React.FC = () => {
       ),
     },
     {
-      label: 'Produtos',
+      label: 'Products',
       value: stats.totalProducts,
       color: ds.success,
       icon: (
@@ -139,7 +139,7 @@ const SuperAdminDashboard: React.FC = () => {
       ),
     },
     {
-      label: 'Fornecedores',
+      label: 'Suppliers',
       value: stats.totalSuppliers,
       color: ds.orange,
       icon: (
@@ -150,7 +150,7 @@ const SuperAdminDashboard: React.FC = () => {
       ),
     },
     {
-      label: 'Veículos',
+      label: 'Vehicles',
       value: stats.totalVehicles,
       color: ds.warning,
       icon: (
@@ -167,8 +167,8 @@ const SuperAdminDashboard: React.FC = () => {
   // ── Quick actions ──
   const quickActions = [
     {
-      title:    'Gestão de Empresas',
-      subtitle: 'Criar, editar e gerir todas as empresas do sistema',
+      title:    'Company Management',
+      subtitle: 'Create, edit, and manage all companies in the system',
       color:    ds.accent,
       path:     '/empresas',
       icon: (
@@ -179,8 +179,8 @@ const SuperAdminDashboard: React.FC = () => {
       ),
     },
     {
-      title:    'Gestão de Utilizadores',
-      subtitle: 'Gerir utilizadores de todas as empresas do sistema',
+      title:    'User Management',
+      subtitle: 'Manage users from all companies in the system',
       color:    ds.purple,
       path:     '/users',
       icon: (
@@ -214,7 +214,7 @@ const SuperAdminDashboard: React.FC = () => {
               </h1>
             </div>
             <p className="text-sm" style={{ color: ds.textMuted }}>
-              Gestão global do sistema multi-tenant
+              Global system management multi-tenant
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -235,7 +235,7 @@ const SuperAdminDashboard: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
               </svg>
-              Gerir Empresas
+              Manage Companies
             </button>
             <button
               onClick={() => navigate('/users')}
@@ -246,7 +246,7 @@ const SuperAdminDashboard: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
               </svg>
-              Gerir Utilizadores
+              Manage Users
             </button>
           </div>
         </div>
@@ -271,7 +271,7 @@ const SuperAdminDashboard: React.FC = () => {
             </div>
             <div className="flex-1">
               <p className="text-sm font-semibold mb-1" style={{ color: ds.warning }}>
-                Aviso do sistema
+                System Warning
               </p>
               <p className="text-sm" style={{ color: ds.textSecondary }}>{error}</p>
               <button
@@ -279,7 +279,7 @@ const SuperAdminDashboard: React.FC = () => {
                 className="text-xs font-semibold mt-2 transition-colors"
                 style={{ color: ds.warning }}
               >
-                Tentar novamente →
+                Try again →
               </button>
             </div>
           </div>
@@ -299,7 +299,7 @@ const SuperAdminDashboard: React.FC = () => {
                 className="text-3xl font-bold mb-1"
                 style={{ color: ds.textPrimary, fontFamily: "'DM Mono', monospace" }}
               >
-                {m.value.toLocaleString('pt-PT')}
+                {m.value.toLocaleString('en-US')}
               </p>
               <p className="text-xs" style={{ color: ds.textMuted }}>{m.label}</p>
             </Card>
@@ -311,10 +311,10 @@ const SuperAdminDashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="font-semibold text-sm" style={{ color: ds.textPrimary }}>
-                Top 5 Empresas
+                Top 5 Companies
               </h3>
               <p className="text-xs mt-0.5" style={{ color: ds.textMuted }}>
-                Por volume de actividade
+                By activity volume
               </p>
             </div>
             <button
@@ -322,7 +322,7 @@ const SuperAdminDashboard: React.FC = () => {
               className="text-xs font-semibold transition-colors"
               style={{ color: ds.accent }}
             >
-              Ver todas →
+              View all →
             </button>
           </div>
 
@@ -334,11 +334,11 @@ const SuperAdminDashboard: React.FC = () => {
                   d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
               </svg>
               <p className="text-sm mb-3" style={{ color: ds.textMuted }}>
-                {error ? 'Não foi possível carregar as empresas' : 'Nenhuma empresa registada'}
+                {error ? 'Could not load companies' : 'No companies registered'}
               </p>
               <button onClick={() => navigate('/empresas')}
                 className="text-xs font-semibold" style={{ color: ds.accent }}>
-                Adicionar empresa →
+                Add company →
               </button>
             </div>
           ) : (
@@ -377,9 +377,9 @@ const SuperAdminDashboard: React.FC = () => {
                     </p>
                     <div className="flex items-center gap-4">
                       {[
-                        { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>, label: `${company._count.users} utilizadores` },
-                        { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>, label: `${company._count.products} produtos` },
-                        { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>, label: `${company._count.suppliers} fornecedores` },
+                        { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>, label: `${company._count.users} users` },
+                        { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>, label: `${company._count.products} products` },
+                        { icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>, label: `${company._count.suppliers} suppliers` },
                       ].map((s, si) => (
                         <span key={si} className="flex items-center gap-1 text-xs" style={{ color: ds.textMuted }}>
                           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">{s.icon}</svg>
@@ -434,7 +434,7 @@ const SuperAdminDashboard: React.FC = () => {
                 className="w-full py-2.5 rounded-xl text-sm font-semibold transition-all duration-200"
                 style={{ background: a.color, color: '#fff' }}
               >
-                Aceder à Gestão →
+                Access Management →
               </button>
             </div>
           ))}
@@ -447,9 +447,9 @@ const SuperAdminDashboard: React.FC = () => {
         >
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" style={{ color: ds.success }} />
-            <span style={{ color: ds.success }}>Sistema em funcionamento</span>
+            <span style={{ color: ds.success }}>System running</span>
           </div>
-          <span>Última actualização: {new Date().toLocaleDateString('pt-PT')}</span>
+          <span>Last update: {new Date().toLocaleDateString('en-US')}</span>
         </div>
 
       </div>

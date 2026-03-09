@@ -155,7 +155,7 @@ const AuditLog: React.FC = () => {
       },
       DELETE: { 
         color: 'bg-gradient-to-r from-red-900/40 to-red-800/30 text-red-300 border-red-500/30',
-        label: 'Delete
+        label: 'Delete'
       },
       LOGIN: { 
         color: 'bg-gradient-to-r from-blue-900/40 to-blue-800/30 text-blue-300 border-blue-500/30',

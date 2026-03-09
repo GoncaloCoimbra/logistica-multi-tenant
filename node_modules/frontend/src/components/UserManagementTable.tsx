@@ -363,7 +363,7 @@ const UserManagementTable: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal Create/Edit */}}
+      {/* Modal Create/Edit */}
       {isModalOpen && (
         <UserFormModal
           user={editingUser}

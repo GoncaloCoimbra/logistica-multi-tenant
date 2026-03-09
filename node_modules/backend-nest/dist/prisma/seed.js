@@ -26,7 +26,7 @@ async function main() {
         where: { email: 'admin@logistica.com' },
         update: {},
         create: {
-            name: 'Logística Demo Lda',
+            name: 'Logistics Demo Ltd',
             nif: '500000000',
             email: 'admin@logistica.com',
             phone: '+351 220 000 000',
@@ -49,11 +49,11 @@ async function main() {
     console.log(' Admin user created:', admin1.email);
     const operator1Password = await bcrypt_1.default.hash('operator123', 10);
     const operator1 = await prisma.user.upsert({
-        where: { email: 'operador@logistica.com' },
+        where: { email: 'operator@logistica.com' },
         update: {},
         create: {
-            name: 'Operador Demo',
-            email: 'operador@logistica.com',
+            name: 'Operator Demo',
+            email: 'operator@logistica.com',
             password: operator1Password,
             role: client_1.Role.OPERATOR,
             companyId: company1.id,
@@ -62,11 +62,11 @@ async function main() {
     console.log(' Operator user created:', operator1.email);
     const supplier1 = await prisma.supplier.create({
         data: {
-            name: 'Fornecedor Teste Lda',
+            name: 'Supplier Test Ltd',
             nif: '501000000',
-            email: 'fornecedor@teste.com',
+            email: 'supplier@test.com',
             phone: '+351 220 100 000',
-            address: 'Rua Fornecedor, 456, Lisboa',
+            address: 'Supplier Street, 456, Lisbon',
             city: 'Lisboa',
             state: 'Lisboa',
             companyId: company1.id,
@@ -76,7 +76,7 @@ async function main() {
     const vehicle1 = await prisma.vehicle.create({
         data: {
             licensePlate: 'AB-12-CD',
-            type: 'Camião',
+            type: 'Truck',
             model: 'Mercedes Actros',
             brand: 'Mercedes',
             capacity: 10000,
@@ -90,12 +90,12 @@ async function main() {
         prisma.product.create({
             data: {
                 internalCode: 'PROD-001',
-                description: 'Produto Teste A - Eletrónica',
+                description: 'Test Product A - Electronics',
                 quantity: 100,
                 unit: 'UN',
                 totalWeight: 50.5,
                 totalVolume: 2.5,
-                currentLocation: 'Armazém A - Prateleira 1',
+                currentLocation: 'Warehouse A - Shelf 1',
                 status: client_1.ProductStatus.IN_STORAGE,
                 supplierId: supplier1.id,
                 companyId: company1.id,
@@ -104,12 +104,12 @@ async function main() {
         prisma.product.create({
             data: {
                 internalCode: 'PROD-002',
-                description: 'Produto Teste B - Têxtil',
+                description: 'Test Product B - Textile',
                 quantity: 250,
                 unit: 'UN',
                 totalWeight: 125.0,
                 totalVolume: 5.0,
-                currentLocation: 'Armazém B - Zona 2',
+                currentLocation: 'Warehouse B - Zone 2',
                 status: client_1.ProductStatus.RECEIVED,
                 supplierId: supplier1.id,
                 companyId: company1.id,
@@ -118,12 +118,12 @@ async function main() {
         prisma.product.create({
             data: {
                 internalCode: 'PROD-003',
-                description: 'Produto Teste C - Alimentar',
+                description: 'Test Product C - Food',
                 quantity: 500,
                 unit: 'KG',
                 totalWeight: 500.0,
                 totalVolume: 10.0,
-                currentLocation: 'Armazém C - Câmara Fria',
+                currentLocation: 'Warehouse C - Cold Room',
                 status: client_1.ProductStatus.IN_ANALYSIS,
                 supplierId: supplier1.id,
                 companyId: company1.id,
@@ -137,8 +137,8 @@ async function main() {
             previousStatus: client_1.ProductStatus.RECEIVED,
             newStatus: client_1.ProductStatus.IN_STORAGE,
             quantity: 100,
-            location: 'Armazém A - Prateleira 1',
-            reason: 'Produto aprovado e armazenado',
+            location: 'Warehouse A - Shelf 1',
+            reason: 'Product approved and stored',
             userId: operator1.id,
         },
     });
@@ -180,11 +180,11 @@ async function main() {
     console.log(' Operator user created:', operator2.email);
     const supplier2 = await prisma.supplier.create({
         data: {
-            name: 'Fornecedor Norte Lda',
+            name: 'North Supplier Lda',
             nif: '502000000',
             email: 'norte@fornecedor.com',
             phone: '+351 220 200 000',
-            address: 'Rua do Norte, 321, Porto',
+            address: 'North Street, 321, Porto',
             city: 'Porto',
             state: 'Porto',
             companyId: company2.id,
@@ -194,7 +194,7 @@ async function main() {
     const vehicle2 = await prisma.vehicle.create({
         data: {
             licensePlate: 'XY-34-ZW',
-            type: 'Carrinha',
+            type: 'Van',
             model: 'Sprinter',
             brand: 'Mercedes',
             capacity: 3500,
@@ -208,12 +208,12 @@ async function main() {
         prisma.product.create({
             data: {
                 internalCode: 'TRANS-001',
-                description: 'Material de Embalagem',
+                description: 'Packaging Material',
                 quantity: 1000,
                 unit: 'UN',
                 totalWeight: 200.0,
                 totalVolume: 15.0,
-                currentLocation: 'Armazém Principal',
+                currentLocation: 'Main Warehouse',
                 status: client_1.ProductStatus.IN_STORAGE,
                 supplierId: supplier2.id,
                 companyId: company2.id,
@@ -222,7 +222,7 @@ async function main() {
         prisma.product.create({
             data: {
                 internalCode: 'TRANS-002',
-                description: 'Paletes de Madeira',
+                description: 'Wooden Pallets',
                 quantity: 50,
                 unit: 'UN',
                 totalWeight: 1000.0,
@@ -273,19 +273,19 @@ async function main() {
     console.log('   Password: superadmin123');
     console.log('   Role: SUPER_ADMIN');
     console.log('   Company: (sem empresa - acesso global)');
-    console.log('\n EMPRESA 1 - Logística Demo Lda');
+    console.log('\n COMPANY 1 - Logistics Demo Ltd');
     console.log('    Admin: superadmin@sistema.com /superadmin123');
     console.log('    Admin: admin@logistica.com / admin123');
-    console.log('   Operador: operador@logistica.com / operator123');
-    console.log(`    Produtos: ${products1.length}`);
-    console.log(`    Veículos: 1`);
-    console.log(`    Fornecedores: 1`);
-    console.log('\nEMPRESA 2 - TransPorto Express Lda');
+    console.log('   Operator: operador@logistica.com / operator123');
+    console.log(`    Products: ${products1.length}`);
+    console.log(`    Vehicles: 1`);
+    console.log(`    Suppliers: 1`);
+    console.log('\nCOMPANY 2 - TransPorto Express Ltd');
     console.log('    Admin: carlos@transporte.com / admin456');
-    console.log('    Operador: maria@transporte.com / operator456');
-    console.log(`    Produtos: ${products2.length}`);
-    console.log(`    Veículos: 1`);
-    console.log(`    Fornecedores: 1`);
+    console.log('    Operator: maria@transporte.com / operator456');
+    console.log(`    Products: ${products2.length}`);
+    console.log(`    Vehicles: 1`);
+    console.log(`    Suppliers: 1`);
     console.log('\n' + '='.repeat(50));
     console.log('💡 TIP: Use o Super Admin para gerenciar todas as empresas!');
     console.log('='.repeat(50) + '\n');

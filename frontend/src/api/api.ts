@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-//  CORRETO: COM /api no final
 const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
 
 console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -32,14 +31,14 @@ api.interceptors.request.use(
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log(`🔵 [REQUEST] ${config.method?.toUpperCase()} ${fullUrl}`);
     if (config.data) {
-      console.log(' [DATA]', config.data);
+      console.log('📤 [DATA]', config.data);
     }
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     
     return config;
   },
   (error) => {
-    console.error(' [REQUEST ERROR]', error);
+    console.error('❌ [REQUEST ERROR]', error);
     return Promise.reject(error);
   }
 );
@@ -50,7 +49,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => {
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log(` [RESPONSE] ${response.status} ${response.config.url}`);
+    console.log(`✅ [RESPONSE] ${response.status} ${response.config.url}`);
     console.log('📥 [DATA]', response.data);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     return response;
@@ -61,10 +60,30 @@ api.interceptors.response.use(
     const errorData = error.response?.data;
     
     console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.error(` [ERROR] ${status || 'NETWORK ERROR'} ${url}`);
+    console.error(`❌ [ERROR] ${status || 'NETWORK ERROR'} ${url}`);
     console.error('📥 [ERROR DATA]', errorData);
     console.error('🔗 [ATTEMPTED URL]', error.config?.baseURL + error.config?.url);
     console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+    // ✅ Normalize error data to always be a plain string
+    // This prevents "Objects are not valid as a React child" crashes
+    if (error.response) {
+      const data = error.response.data;
+      let message = 'An unexpected error occurred';
+
+      if (typeof data === 'string') {
+        message = data;
+      } else if (typeof data?.message === 'string') {
+        message = data.message;
+      } else if (Array.isArray(data?.message)) {
+        // NestJS validation errors return message as string[]
+        message = data.message.join(', ');
+      } else if (typeof data?.error === 'string') {
+        message = data.error;
+      }
+
+      error.response.data = { message };
+    }
 
     if (status === 401) {
       console.log('🚪 Invalid token - Clearing localStorage');

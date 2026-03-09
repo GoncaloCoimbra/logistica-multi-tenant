@@ -36,10 +36,10 @@ const Profile: React.FC = () => {
     try {
       const response = await api.put('/auth/profile', { name, email });
       updateUserData(response.data.user);
-      setProfileSuccess('Perfil atualizado com sucesso!');
+      setProfileSuccess('Profile updated successfully!');
       setTimeout(() => setProfileSuccess(''), 3000);
     } catch (error: any) {
-      setProfileError(error.response?.data?.error || 'Erro ao atualizar perfil');
+      setProfileError(error.response?.data?.error || 'Error updating profile');
     } finally {
       setProfileLoading(false);
     }
@@ -51,12 +51,12 @@ const Profile: React.FC = () => {
     setPasswordSuccess('');
 
     if (newPassword !== confirmPassword) {
-      setPasswordError('As passwords não coincidem');
+      setPasswordError('Passwords do not match');
       return;
     }
 
     if (newPassword.length < 6) {
-      setPasswordError('A nova password deve ter pelo menos 6 caracteres');
+      setPasswordError('New password must be at least 6 characters');
       return;
     }
 
@@ -67,13 +67,13 @@ const Profile: React.FC = () => {
         currentPassword, 
         newPassword 
       });
-      setPasswordSuccess('Password alterada com sucesso!');
+      setPasswordSuccess('Password changed successfully!');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setTimeout(() => setPasswordSuccess(''), 3000);
     } catch (error: any) {
-      setPasswordError(error.response?.data?.error || 'Erro ao alterar password');
+      setPasswordError(error.response?.data?.error || 'Error changing password');
     } finally {
       setPasswordLoading(false);
     }
@@ -87,15 +87,15 @@ const Profile: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validar tipo
+    // Validate type
     if (!file.type.startsWith('image/')) {
-      setProfileError('Por favor, selecione uma imagem');
+      setProfileError('Please select an image');
       return;
     }
 
-    // Validar tamanho (5MB)
+    // Validate size (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setProfileError('A imagem deve ter no máximo 5MB');
+      setProfileError('Image must be no larger than 5MB');
       return;
     }
 
@@ -119,11 +119,11 @@ const Profile: React.FC = () => {
       });
 
       updateUserData(response.data.user);
-      setProfileSuccess('Avatar atualizado com sucesso!');
+      setProfileSuccess('Avatar updated successfully!');
       setAvatarPreview(null);
       setTimeout(() => setProfileSuccess(''), 3000);
     } catch (error: any) {
-      setProfileError(error.response?.data?.error || 'Erro ao fazer upload');
+      setProfileError(error.response?.data?.error || 'Upload error');
       setAvatarPreview(null);
     } finally {
       setAvatarLoading(false);
@@ -131,16 +131,16 @@ const Profile: React.FC = () => {
   };
 
   const handleRemoveAvatar = async () => {
-    if (!window.confirm('Tem certeza que deseja remover o avatar?')) return;
+    if (!window.confirm('Are you sure you want to remove the avatar?')) return;
 
     setAvatarLoading(true);
     try {
       await api.delete('/auth/avatar');
       updateUserData({ avatarUrl: undefined });
-      setProfileSuccess('Avatar removido com sucesso!');
+      setProfileSuccess('Avatar removed successfully!');
       setTimeout(() => setProfileSuccess(''), 3000);
     } catch (error: any) {
-      setProfileError(error.response?.data?.error || 'Erro ao remover avatar');
+      setProfileError(error.response?.data?.error || 'Error removing avatar');
     } finally {
       setAvatarLoading(false);
     }
@@ -161,8 +161,8 @@ const Profile: React.FC = () => {
       <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Meu Perfil</h1>
-          <p className={theme.colors.secondary.text}>Gerir as suas informações pessoais</p>
+          <h1 className="text-3xl font-bold text-white">My Profile</h1>
+          <p className={theme.colors.secondary.text}>Manage your personal information</p>
         </div>
 
         {/* Avatar Card */}
@@ -220,7 +220,7 @@ const Profile: React.FC = () => {
                 disabled={avatarLoading}
                 className={theme.buttons.primary}
               >
-                Alterar Foto
+                Change Photo
               </button>
               {user?.avatarUrl && (
                 <button
@@ -228,7 +228,7 @@ const Profile: React.FC = () => {
                   disabled={avatarLoading}
                   className={theme.buttons.danger}
                 >
-                  Remover Foto
+                  Remove Photo
                 </button>
               )}
             </div>
@@ -243,13 +243,13 @@ const Profile: React.FC = () => {
                 onClick={() => setActiveTab('profile')}
                 className={activeTab === 'profile' ? theme.tabs.active : theme.tabs.inactive}
               >
-                Informações Pessoais
+                Personal Information
               </button>
               <button
                 onClick={() => setActiveTab('password')}
                 className={activeTab === 'password' ? theme.tabs.active : theme.tabs.inactive}
               >
-                Alterar Password
+                Change Password
               </button>
             </nav>
           </div>
@@ -272,7 +272,7 @@ const Profile: React.FC = () => {
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
-                      Nome Completo
+                      Full Name
                     </label>
                     <input
                       type="text"
@@ -305,10 +305,10 @@ const Profile: React.FC = () => {
                       {profileLoading ? (
                         <>
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                          A guardar...
+                          Saving...
                         </>
                       ) : (
-                        'Guardar Alterações'
+                        'Save Changes'
                       )}
                     </button>
                   </div>
@@ -333,7 +333,7 @@ const Profile: React.FC = () => {
                 <div className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
-                      Password Atual
+                      Current Password
                     </label>
                     <input
                       type="password"
@@ -346,7 +346,7 @@ const Profile: React.FC = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
-                      Nova Password
+                      New Password
                     </label>
                     <input
                       type="password"
@@ -356,12 +356,12 @@ const Profile: React.FC = () => {
                       required
                       minLength={6}
                     />
-                    <p className="text-xs text-[#64748b] mt-1">Mínimo 6 caracteres</p>
+                    <p className="text-xs text-[#64748b] mt-1">Minimum 6 characters</p>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-[#cbd5e1] mb-2">
-                      Confirmar Nova Password
+                      Confirm New Password
                     </label>
                     <input
                       type="password"
@@ -381,10 +381,10 @@ const Profile: React.FC = () => {
                       {passwordLoading ? (
                         <>
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                          A alterar...
+                          Changing...
                         </>
                       ) : (
-                        'Alterar Password'
+                        'Change Password'
                       )}
                     </button>
                   </div>

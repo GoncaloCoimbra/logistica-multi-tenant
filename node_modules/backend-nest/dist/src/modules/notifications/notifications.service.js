@@ -227,7 +227,7 @@ let NotificationsService = class NotificationsService {
     }
     async notifyTransportArrived(companyId, transportCode, origin, destination) {
         try {
-            console.log(`📧 [ARRIVED] Notificando chegada do transporte ${transportCode}`);
+            console.log(`📧 [ARRIVED] Notifying transport arrival ${transportCode}`);
             const operators = await this.prisma.user.findMany({
                 where: {
                     companyId,
@@ -237,12 +237,12 @@ let NotificationsService = class NotificationsService {
                 select: { id: true, name: true },
             });
             if (operators.length === 0) {
-                console.warn(`⚠️ [ARRIVED] Nenhum operador encontrado para empresa ${companyId}`);
+                console.warn(`⚠️ [ARRIVED] No operator found for company ${companyId}`);
                 return;
             }
             const notifications = operators.map(operator => ({
-                title: '🚚 Transporte Chegou ao Destino',
-                content: `O transporte ${transportCode} chegou de ${origin} para ${destination}. Aguardando conferência física dos produtos.`,
+                title: '🚚 Transport Arrived at Destination',
+                content: `Transport ${transportCode} arrived from ${origin} to ${destination}. Awaiting physical verification of products.`,
                 companyId,
                 userId: operator.id,
                 isRead: false,
@@ -250,15 +250,15 @@ let NotificationsService = class NotificationsService {
             await this.prisma.notification.createMany({
                 data: notifications,
             });
-            console.log(`✅ [ARRIVED] ${notifications.length} notificações criadas`);
+            console.log(`✅ [ARRIVED] ${notifications.length} notifications created`);
         }
         catch (error) {
-            console.error(` [ARRIVED] Erro ao notificar chegada:`, error.message);
+            console.error(`❌ [ARRIVED] Error notifying arrival:`, error.message);
         }
     }
     async notifyTransportDelivered(companyId, transportCode, receivedBy) {
         try {
-            console.log(`📧 [DELIVERED] Notificando entrega do transporte ${transportCode}`);
+            console.log(`📧 [DELIVERED] Notifying transport delivery ${transportCode}`);
             const admins = await this.prisma.user.findMany({
                 where: {
                     companyId,
@@ -268,12 +268,12 @@ let NotificationsService = class NotificationsService {
                 select: { id: true },
             });
             if (admins.length === 0) {
-                console.warn(`⚠️ [DELIVERED] Nenhum admin encontrado para empresa ${companyId}`);
+                console.warn(`⚠️ [DELIVERED] No admin found for company ${companyId}`);
                 return;
             }
             const notifications = admins.map(admin => ({
-                title: '✅ Transporte Entregue',
-                content: `O transporte ${transportCode} foi conferido e entregue por ${receivedBy}.`,
+                title: '✅ Transport Delivered',
+                content: `Transport ${transportCode} was verified and delivered by ${receivedBy}.`,
                 companyId,
                 userId: admin.id,
                 isRead: false,

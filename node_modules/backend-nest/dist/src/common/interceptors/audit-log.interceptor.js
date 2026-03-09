@@ -35,12 +35,12 @@ let AuditLogInterceptor = AuditLogInterceptor_1 = class AuditLogInterceptor {
         console.log('🔍 [INTERCEPTOR] Should log?', shouldLog);
         console.log('🔍 [INTERCEPTOR] Has user?', !!user);
         if (!shouldLog || !user) {
-            console.log('⚠️ [INTERCEPTOR] Pulando log - shouldLog:', shouldLog, 'user:', !!user);
+            console.log('⚠️ [INTERCEPTOR] Skipping log - shouldLog:', shouldLog, 'user:', !!user);
             return next.handle();
         }
-        console.log(' [INTERCEPTOR] Vai processar o log!');
+        console.log(' [INTERCEPTOR] Will process the log!');
         return next.handle().pipe((0, operators_1.tap)(async (response) => {
-            console.log('🔍 [INTERCEPTOR TAP] Response recebida:', JSON.stringify(response));
+            console.log('🔍 [INTERCEPTOR TAP] Response received:', JSON.stringify(response));
             try {
                 const { entity, action } = this.extractEntityAndAction(method, url);
                 console.log('🔍 [INTERCEPTOR] Entity:', entity, 'Action:', action);

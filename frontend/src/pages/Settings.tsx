@@ -34,6 +34,24 @@ const Settings: React.FC = () => {
     loadCompanyInfo();
   }, []);
 
+  // Helper to safely extract a string message from an error response
+  const extractErrorMessage = (err: any, fallback: string): string => {
+    if (err.response?.data?.message) {
+      return typeof err.response.data.message === 'string'
+        ? err.response.data.message
+        : JSON.stringify(err.response.data.message);
+    }
+    if (err.response?.data?.error) {
+      return typeof err.response.data.error === 'string'
+        ? err.response.data.error
+        : JSON.stringify(err.response.data.error);
+    }
+    if (err.message) {
+      return String(err.message);
+    }
+    return fallback;
+  };
+
   const loadCompanyInfo = async () => {
     try {
       setLoading(true);
@@ -41,7 +59,7 @@ const Settings: React.FC = () => {
       console.log('🔍 Loading company information...');
       
       const response = await api.get('/companies/info');
-      console.log(' Company information loaded:', response.data);
+      console.log('✅ Company information loaded:', response.data);
       
       setCompanyInfo(response.data);
       setFormData({
@@ -52,19 +70,8 @@ const Settings: React.FC = () => {
         phone: response.data.phone || '',
       });
     } catch (err: any) {
-      console.error(' Error loading company information:', err);
-      
-      let errorMessage = 'Error loading company information';
-      
-      if (err.response?.data?.message) {
-        errorMessage = err.response.data.message;
-      } else if (err.response?.data?.error) {
-        errorMessage = err.response.data.error;
-      } else if (err.message) {
-        errorMessage = err.message;
-      }
-      
-      setError(errorMessage);
+      console.error('❌ Error loading company information:', err);
+      setError(extractErrorMessage(err, 'Error loading company information'));
     } finally {
       setLoading(false);
     }
@@ -82,25 +89,14 @@ const Settings: React.FC = () => {
       await api.put('/companies/info', formData);
       
       setSuccess('Information updated successfully!');
-      console.log(' Information updated successfully');
+      console.log('✅ Information updated successfully');
       
       await loadCompanyInfo();
       
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
-      console.error(' Error updating information:', err);
-      
-      let errorMessage = 'Error updating information';
-      
-      if (err.response?.data?.message) {
-        errorMessage = err.response.data.message;
-      } else if (err.response?.data?.error) {
-        errorMessage = err.response.data.error;
-      } else if (err.message) {
-        errorMessage = err.message;
-      }
-      
-      setError(errorMessage);
+      console.error('❌ Error updating information:', err);
+      setError(extractErrorMessage(err, 'Error updating information'));
     } finally {
       setSaving(false);
     }
@@ -185,7 +181,7 @@ const Settings: React.FC = () => {
               <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              <span className="font-medium">{String(success)}</span>
+              <span className="font-medium">{success}</span>
             </div>
           </div>
         )}
@@ -196,7 +192,7 @@ const Settings: React.FC = () => {
               <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
-              <span className="font-medium">{String(error)}</span>
+              <span className="font-medium">{error}</span>
             </div>
           </div>
         )}

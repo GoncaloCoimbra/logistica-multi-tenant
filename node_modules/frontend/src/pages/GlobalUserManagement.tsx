@@ -35,6 +35,24 @@ const ROLE_COLORS: Record<string, string> = {
   OPERATOR: 'bg-emerald-900/30 text-emerald-400 border border-emerald-700/30'
 };
 
+// Helper to safely extract a string message from an error response
+const extractErrorMessage = (err: any, fallback: string): string => {
+  if (err.response?.data?.message) {
+    return typeof err.response.data.message === 'string'
+      ? err.response.data.message
+      : JSON.stringify(err.response.data.message);
+  }
+  if (err.response?.data?.error) {
+    return typeof err.response.data.error === 'string'
+      ? err.response.data.error
+      : JSON.stringify(err.response.data.error);
+  }
+  if (err.message) {
+    return String(err.message);
+  }
+  return fallback;
+};
+
 const GlobalUserManagement: React.FC = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
@@ -61,7 +79,7 @@ const GlobalUserManagement: React.FC = () => {
       setUsers(usersResponse.data);
       setCompanies(companiesResponse.data);
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
+      console.error('Error loading data:', error);
     } finally {
       setLoading(false);
     }
@@ -74,16 +92,16 @@ const GlobalUserManagement: React.FC = () => {
 
   const handleDelete = async (user: User) => {
     if (user.role === 'SUPER_ADMIN') {
-      alert('Não é possível eliminar um Super Administrador');
+      alert('Cannot delete a Super Administrator');
       return;
     }
 
-    if (window.confirm(`Tem certeza que deseja eliminar o utilizador "${user.name}"?`)) {
+    if (window.confirm(`Are you sure you want to delete the user "${user.name}"?`)) {
       try {
         await api.delete(`/superadmin/users/${user.id}`);
         await loadData();
       } catch (error: any) {
-        alert(error.response?.data?.message || 'Erro ao eliminar utilizador');
+        alert(extractErrorMessage(error, 'Error deleting user'));
       }
     }
   };
@@ -124,8 +142,8 @@ const GlobalUserManagement: React.FC = () => {
                 </svg>
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-white">Gestão Global de Utilizadores</h1>
-                <p className="text-sm text-slate-400 mt-1">{users.length} utilizadores registados</p>
+                <h1 className="text-2xl font-bold text-white">Global User Management</h1>
+                <p className="text-sm text-slate-400 mt-1">{users.length} registered users</p>
               </div>
             </div>
             <button
@@ -154,7 +172,7 @@ const GlobalUserManagement: React.FC = () => {
               </div>
               <input
                 type="text"
-                placeholder="Pesquisar por nome, email ou empresa..."
+                placeholder="Search by name, email or company..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={`${theme.inputs.base} pl-10 w-full`}
@@ -167,7 +185,7 @@ const GlobalUserManagement: React.FC = () => {
               onChange={(e) => setFilterCompany(e.target.value)}
               className={`${theme.inputs.base} w-full`}
             >
-              <option value="">Todas as empresas</option>
+              <option value="">All companies</option>
               {companies.map(company => (
                 <option key={company.id} value={company.id}>{company.name}</option>
               ))}
@@ -179,58 +197,39 @@ const GlobalUserManagement: React.FC = () => {
               onChange={(e) => setFilterRole(e.target.value)}
               className={`${theme.inputs.base} w-full`}
             >
-              <option value="">Todas as funções</option>
-              <option value="ADMIN">Administrador</option>
-              <option value="OPERATOR">Operador</option>
+              <option value="">All roles</option>
+              <option value="ADMIN">Administrator</option>
+              <option value="OPERATOR">Operator</option>
             </select>
           </div>
 
           {/* Active Filters */}
           {(searchTerm || filterCompany || filterRole) && (
             <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-700/50">
-              <span className="text-sm text-slate-400">Filtros ativos:</span>
+              <span className="text-sm text-slate-400">Active filters:</span>
               {searchTerm && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                  Pesquisa: {searchTerm}
-                  <button 
-                    onClick={() => setSearchTerm('')} 
-                    className="ml-2 hover:text-slate-200"
-                  >
-                    ×
-                  </button>
+                  Search: {searchTerm}
+                  <button onClick={() => setSearchTerm('')} className="ml-2 hover:text-slate-200">×</button>
                 </span>
               )}
               {filterCompany && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                  Empresa: {companies.find(c => c.id === filterCompany)?.name}
-                  <button 
-                    onClick={() => setFilterCompany('')} 
-                    className="ml-2 hover:text-slate-200"
-                  >
-                    ×
-                  </button>
+                  Company: {companies.find(c => c.id === filterCompany)?.name}
+                  <button onClick={() => setFilterCompany('')} className="ml-2 hover:text-slate-200">×</button>
                 </span>
               )}
               {filterRole && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">
-                  Função: {ROLE_LABELS[filterRole]}
-                  <button 
-                    onClick={() => setFilterRole('')} 
-                    className="ml-2 hover:text-slate-200"
-                  >
-                    ×
-                  </button>
+                  Role: {ROLE_LABELS[filterRole]}
+                  <button onClick={() => setFilterRole('')} className="ml-2 hover:text-slate-200">×</button>
                 </span>
               )}
               <button
-                onClick={() => {
-                  setSearchTerm('');
-                  setFilterCompany('');
-                  setFilterRole('');
-                }}
+                onClick={() => { setSearchTerm(''); setFilterCompany(''); setFilterRole(''); }}
                 className="text-sm text-amber-400 hover:text-amber-300 font-medium"
               >
-                Limpar tudo
+                Clear all
               </button>
             </div>
           )}
@@ -249,7 +248,7 @@ const GlobalUserManagement: React.FC = () => {
                 <p className="text-2xl font-bold text-white">{filteredUsers.length}</p>
               </div>
             </div>
-            <p className="text-sm font-medium text-slate-400">Total de Utilizadores</p>
+            <p className="text-sm font-medium text-slate-400">Total Users</p>
           </div>
 
           <div className={theme.cards.stat}>
@@ -291,21 +290,11 @@ const GlobalUserManagement: React.FC = () => {
             <table className="min-w-full divide-y divide-slate-700">
               <thead className="bg-slate-800/50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Utilizador
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Empresa
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Função
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Data Criação
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Ações
-                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">User</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Company</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Role</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Creation Date</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700">
@@ -316,7 +305,7 @@ const GlobalUserManagement: React.FC = () => {
                         <svg className="w-16 h-16 mb-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
-                        <p className="text-lg font-medium text-slate-400">Nenhum utilizador encontrado</p>
+                        <p className="text-lg font-medium text-slate-400">No users found</p>
                         <p className="text-sm text-slate-500">Adjust the filters or create a new user</p>
                       </div>
                     </td>
@@ -344,7 +333,7 @@ const GlobalUserManagement: React.FC = () => {
                             <div className="text-sm text-slate-400">NIF: {user.company.nif}</div>
                           </>
                         ) : (
-                          <div className="text-sm text-slate-500 italic">Sem empresa</div>
+                          <div className="text-sm text-slate-500 italic">No company</div>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -353,7 +342,7 @@ const GlobalUserManagement: React.FC = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
-                        {new Date(user.createdAt).toLocaleDateString('pt-PT')}
+                        {new Date(user.createdAt).toLocaleDateString('en-US')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center justify-end gap-2">
@@ -370,7 +359,7 @@ const GlobalUserManagement: React.FC = () => {
                           <button
                             onClick={() => handleDelete(user)}
                             className="text-red-400 hover:text-red-300 transition-colors p-1 hover:bg-red-900/20 rounded disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-                            title="Eliminar"
+                            title="Delete"
                             disabled={user.role === 'SUPER_ADMIN'}
                           >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -393,10 +382,7 @@ const GlobalUserManagement: React.FC = () => {
         <CreateGlobalUserModal
           companies={companies}
           onClose={() => setShowCreateModal(false)}
-          onSuccess={() => {
-            loadData();
-            setShowCreateModal(false);
-          }}
+          onSuccess={() => { loadData(); setShowCreateModal(false); }}
         />
       )}
 
@@ -404,15 +390,8 @@ const GlobalUserManagement: React.FC = () => {
         <EditGlobalUserModal
           user={selectedUser as User & { company: { id: string; name: string; nif: string } }}
           companies={companies}
-          onClose={() => {
-            setShowEditModal(false);
-            setSelectedUser(null);
-          }}
-          onSuccess={() => {
-            loadData();
-            setShowEditModal(false);
-            setSelectedUser(null);
-          }}
+          onClose={() => { setShowEditModal(false); setSelectedUser(null); }}
+          onSuccess={() => { loadData(); setShowEditModal(false); setSelectedUser(null); }}
         />
       )}
 
@@ -421,10 +400,10 @@ const GlobalUserManagement: React.FC = () => {
         <div className="flex items-center justify-between text-sm text-slate-500">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-            <span>Sistema global de utilizadores</span>
+            <span>Global user system</span>
           </div>
           <div>
-            <span>Last update: {new Date().toLocaleDateString('pt-PT')}</span>
+            <span>Last update: {new Date().toLocaleDateString('en-US')}</span>
           </div>
         </div>
       </div>

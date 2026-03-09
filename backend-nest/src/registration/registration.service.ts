@@ -148,8 +148,8 @@ export class RegistrationService {
         this.logger.log(`   Email armazenado: ${user.email}`);
         this.logger.log(`   isActive: ${user.isActive}`);
 
-        // 5.3 Criar configurações padrão
-        this.logger.log('⚙️ Criando configurações padrão...');
+        // 5.3 Criar Configurations padrão
+        this.logger.log('⚙️ Criando Configurations padrão...');
         await tx.settings.create({
           data: {
             companyId: company.id,
@@ -157,7 +157,7 @@ export class RegistrationService {
           },
         });
 
-        this.logger.log(' Configurações criadas');
+        this.logger.log(' Configurations criadas');
         this.logger.log('📍 DENTRO DA TRANSAÇÃO - finalizando...');
 
         return { company, user };

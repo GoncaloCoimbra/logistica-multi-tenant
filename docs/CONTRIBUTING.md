@@ -450,7 +450,7 @@ backend-nest/          # NestJS + Prisma + Swagger
 ├─ src/
 │  ├─ common/         # Guards, interceptors, pipes, interfaces
 │  ├─ modules/        # Features (auth, users, products, etc.)
-│  ├─ database/       # Prisma e configurações
+│  ├─ database/       # Prisma e Configurations
 │  └─ main.ts
 ├─ prisma/
 ├─ test/              # E2E tests
