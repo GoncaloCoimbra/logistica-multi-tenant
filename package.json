@@ -14,18 +14,30 @@
     "format-all": "npm run --workspace=backend-nest format && npm run --workspace=frontend format"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "npm run lint-all",
-      "npm run format-all"
+    "backend-nest/**/*.{ts,tsx}": [
+      "npm run --workspace=backend-nest lint --",
+      "npm run --workspace=backend-nest format --"
+    ],
+    "frontend/**/*.{ts,tsx}": [
+      "npm run --workspace=frontend lint --",
+      "npm run --workspace=frontend format --"
+    ],
+    "*.{js,json}": [
+      "prettier --write"
     ]
   },
-  "husky": {},
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "concurrently": "^8.2.0",
     "husky": "^8.0.0",
     "jest": "^30.2.0",
     "lint-staged": "^13.0.0",
+    "prettier": "^3.0.0",
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2"
   },
