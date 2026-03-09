@@ -11,83 +11,83 @@ export declare class CompaniesController {
         nif: string;
     }[]>;
     create(createCompanyDto: CreateCompanyDto): Promise<{
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(req: any): Promise<{
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }[]>;
-    findOne(id: string, req: any): Promise<{
-        id: string;
-        createdAt: Date;
-        email: string;
-        name: string;
-        isActive: boolean;
-        updatedAt: Date;
-        nif: string;
-        phone: string | null;
-        address: string | null;
-    }>;
     getCompanyInfo(req: any): Promise<{
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
+    findOne(id: string, req: any): Promise<{
+        name: string;
+        id: string;
+        nif: string;
+        email: string;
+        phone: string | null;
+        address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findWithUsers(id: string, req: any): Promise<{
         products: {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            quantity: number;
             internalCode: string;
             description: string;
+            quantity: number;
             unit: string;
             totalWeight: number | null;
             totalVolume: number | null;
             currentLocation: string | null;
             status: import(".prisma/client").$Enums.ProductStatus;
             supplierId: string;
+            companyId: string;
         }[];
         users: {
-            id: string;
-            companyId: string | null;
-            createdAt: Date;
-            email: string;
             name: string;
+            id: string;
+            email: string;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            companyId: string | null;
             password: string;
             role: import(".prisma/client").$Enums.Role;
-            isActive: boolean;
             avatarUrl: string | null;
-            updatedAt: Date;
         }[];
         vehicles: {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
             status: import(".prisma/client").$Enums.VehicleStatus;
+            companyId: string;
             licensePlate: string;
             type: string;
             model: string;
@@ -96,15 +96,15 @@ export declare class CompaniesController {
             year: number;
         }[];
     } & {
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findWithStats(id: string, req: any): Promise<{
         _count: {
@@ -113,26 +113,26 @@ export declare class CompaniesController {
             vehicles: number;
         };
     } & {
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     update(id: string, updateCompanyDto: UpdateCompanyDto, req: any): Promise<{
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
         message: string;
