@@ -167,7 +167,7 @@ const AuditLog: React.FC = () => {
       },
       RECEIVE: { 
         color: 'bg-gradient-to-r from-purple-900/40 to-purple-800/30 text-purple-300 border-purple-500/30',
-        label: 'Receber'
+        label: 'Receive'
       },
       DISPATCH: { 
         color: 'bg-gradient-to-r from-indigo-900/40 to-indigo-800/30 text-indigo-300 border-indigo-500/30',
@@ -175,11 +175,11 @@ const AuditLog: React.FC = () => {
       },
       APPROVE: { 
         color: 'bg-gradient-to-r from-green-900/40 to-green-800/30 text-green-300 border-green-500/30',
-        label: 'Aprovar'
+        label: 'Approve'
       },
       REJECT: { 
         color: 'bg-gradient-to-r from-orange-900/40 to-orange-800/30 text-orange-300 border-orange-500/30',
-        label: 'Rejeitar'
+        label: 'Reject'
       },
       CANCEL: { 
         color: 'bg-gradient-to-r from-slate-900/40 to-slate-800/30 text-slate-300 border-slate-500/30',
@@ -272,7 +272,7 @@ const AuditLog: React.FC = () => {
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto"></div>
-          <p className="mt-4 text-amber-300">A carregar histórico...</p>
+          <p className="mt-4 text-amber-300">Loading history...</p>
         </div>
       </div>
     );
@@ -282,8 +282,8 @@ const AuditLog: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 py-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b] min-h-screen">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">Histórico de Operações</h1>
-        <p className="mt-2 text-amber-300/70">Registo completo de todas as ações realizadas no sistema</p>
+        <h1 className="text-3xl font-bold text-white">Operation History</h1>
+        <p className="mt-2 text-amber-300/70">Complete record of all actions performed in the system</p>
 
       {/* Clear All Button */}
       {logs.length > 0 && (
@@ -295,19 +295,19 @@ const AuditLog: React.FC = () => {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
-            Limpar Todo o Histórico
+            Clear All History
           </button>
         </div>
       )}
       </div>
 
-      {/* Estatísticas */}
+      {/* Statistics */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-amber-300">Total de Ações</p>
+                <p className="text-sm text-amber-300">Total Actions</p>
                 <p className="text-2xl font-bold text-white">{stats.totalActions}</p>
               </div>
               <div className="bg-gradient-to-br from-amber-900/30 to-amber-900/20 border border-amber-500/30 rounded-lg p-3">
@@ -332,21 +332,21 @@ const AuditLog: React.FC = () => {
         </div>
       )}
 
-      {/* Filtros */}
+      {/* Filters */}
       <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6 mb-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-white">Filtros</h2>
+          <h2 className="text-lg font-semibold text-white">Filters</h2>
           <button
             onClick={clearFilters}
             className="text-sm text-amber-400 hover:text-amber-300 font-medium hover:bg-amber-900/30 px-4 py-2 rounded-lg transition-all border border-amber-500/30"
           >
-            Limpar filtros
+            Clear Filters
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <div>
-            <label className="block text-sm font-medium text-amber-300 mb-2">Data Início</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">Start Date</label>
             <input
               type="date"
               value={filters.startDate}
@@ -356,7 +356,7 @@ const AuditLog: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-amber-300 mb-2">Data Fim</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">End Date</label>
             <input
               type="date"
               value={filters.endDate}
@@ -366,22 +366,22 @@ const AuditLog: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-amber-300 mb-2">Ação</label>
+            <label className="block text-sm font-medium text-amber-300 mb-2">Action</label>
             <select
               value={filters.action}
               onChange={(e) => handleFilterChange('action', e.target.value)}
               className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white"
             >
-              <option value="" className="bg-[#1e293b]">Todas</option>
-              <option value="CREATE" className="bg-[#1e293b]">Criar</option>
-              <option value="UPDATE" className="bg-[#1e293b]">Atualizar</option>
-              <option value="DELETE" className="bg-[#1e293b]">Eliminar</option>
+              <option value="" className="bg-[#1e293b]">All</option>
+              <option value="CREATE" className="bg-[#1e293b]">Create</option>
+              <option value="UPDATE" className="bg-[#1e293b]">Update</option>
+              <option value="DELETE" className="bg-[#1e293b]">Delete</option>
               <option value="LOGIN" className="bg-[#1e293b]">Login</option>
               <option value="LOGOUT" className="bg-[#1e293b]">Logout</option>
-              <option value="RECEIVE" className="bg-[#1e293b]">Receber</option>
+              <option value="RECEIVE" className="bg-[#1e293b]">Receive</option>
               <option value="DISPATCH" className="bg-[#1e293b]">Send</option>
-              <option value="APPROVE" className="bg-[#1e293b]">Aprovar</option>
-              <option value="REJECT" className="bg-[#1e293b]">Rejeitar</option>
+              <option value="APPROVE" className="bg-[#1e293b]">Approve</option>
+              <option value="REJECT" className="bg-[#1e293b]">Reject</option>
               <option value="CANCEL" className="bg-[#1e293b]">Cancel</option>
             </select>
           </div>
@@ -416,17 +416,17 @@ const AuditLog: React.FC = () => {
         </div>
       </div>
 
-      {/* Tabela de Logs */}
+      {/* Logs Table */}
       <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-amber-500/10">
             <thead className="bg-gradient-to-r from-amber-900/30 to-amber-900/20">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Ação</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Entidade</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Utilizador</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Action</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Entity</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">User</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">IP</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Data/Hora</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Date/Time</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-amber-500/10">
@@ -437,7 +437,7 @@ const AuditLog: React.FC = () => {
                       <svg className="w-12 h-12 text-amber-500/30 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
-                      <p className="text-amber-300/70">Nenhum registo encontrado</p>
+                      <p className="text-amber-300/70">No records found</p>
                     </div>
                   </td>
                 </tr>
@@ -467,11 +467,11 @@ const AuditLog: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-amber-300">
                       <div className="flex items-center justify-between gap-4">
-                        <div>{new Date(log.createdAt).toLocaleString('pt-PT')}</div>
+                        <div>{new Date(log.createdAt).toLocaleString('en-US')}</div>
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleDeleteLog(log.id)}
-                            title="Eliminar registo"
+                            title="Delete record"
                             className="text-red-400 hover:text-red-300 transition-colors p-1 hover:bg-red-900/20 rounded"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -488,11 +488,11 @@ const AuditLog: React.FC = () => {
           </table>
         </div>
 
-        {/* Paginação */}
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="bg-gradient-to-r from-amber-900/30 to-amber-900/20 px-6 py-4 flex items-center justify-between border-t border-amber-500/30">
             <div className="text-sm text-amber-300">
-              Página {page} de {totalPages}
+              Page {page} of {totalPages}
             </div>
             <div className="flex gap-2">
               <button
@@ -500,26 +500,26 @@ const AuditLog: React.FC = () => {
                 disabled={page === 1}
                 className="px-4 py-2 bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-900/20 hover:text-amber-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Anterior
+                Previous
               </button>
               <button
                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
                 className="px-4 py-2 bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-900/20 hover:text-amber-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Próxima
+                Next
               </button>
             </div>
           </div>
         )}
       </div>
 
-      {/* Estatísticas Adicionais */}
+      {/* Additional Statistics */}
       {stats && ((stats.actionsByEntity && stats.actionsByEntity.length > 0) || (stats.topUsers && stats.topUsers.length > 0)) && (
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {stats.actionsByEntity && stats.actionsByEntity.length > 0 && (
             <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Ações por Entidade</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">Actions by Entity</h3>
               <div className="space-y-3">
                 {stats.actionsByEntity.slice(0, 5).map((item, index) => (
                   <div key={index} className="flex items-center justify-between">
@@ -535,7 +535,7 @@ const AuditLog: React.FC = () => {
 
           {stats.topUsers && stats.topUsers.length > 0 && (
             <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Top Utilizadores</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">Top Users</h3>
               <div className="space-y-3">
                 {stats.topUsers.slice(0, 5).map((user, index) => (
                   <div key={index} className="flex items-center justify-between">
@@ -544,7 +544,7 @@ const AuditLog: React.FC = () => {
                       <div className="text-xs text-amber-300/70">{user.userEmail}</div>
                     </div>
                     <span className="px-3 py-1 bg-gradient-to-r from-amber-900/40 to-amber-800/30 text-amber-300 rounded-full text-sm font-medium border border-amber-500/30">
-                      {user.count} ações
+                      {user.count} actions
                     </span>
                   </div>
                 ))}
@@ -554,7 +554,7 @@ const AuditLog: React.FC = () => {
         </div>
       )}
 
-      {/* Modal de Confirmação para Limpar Histórico */}
+      {/* Clear History Confirmation Modal */}
       {showClearModal && (
         <>
           <div 
@@ -570,11 +570,11 @@ const AuditLog: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold text-white">Eliminar Todo o Histórico</h3>
+                  <h3 className="text-xl font-bold text-white">Delete All History</h3>
                 </div>
 
                 <p className="text-amber-200 mb-4">
-                  Tem certeza que deseja ELIMINAR <strong>TODO O HISTÓRICO</strong>?<br />
+                  Are you sure you want to DELETE <strong>ALL HISTORY</strong>?<br />
                   <br />
                   <span className="text-red-300">This action is irreversible</span> and will remove <strong className="text-white">{logs.length} records</strong>.
                 </p>
@@ -601,14 +601,14 @@ const AuditLog: React.FC = () => {
                     {clearingLogs ? (
                       <>
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                        A eliminar...
+                        Deleting...
                       </>
                     ) : (
                       <>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
-                        Eliminar Tudo
+                        Delete All
                       </>
                     )}
                   </button>
@@ -619,13 +619,13 @@ const AuditLog: React.FC = () => {
         </>
       )}
 
-      {/* Mensagem de Sucesso */}
+      {/* Success Message */}
       {clearSuccess && (
         <div className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg shadow-2xl flex items-center gap-3 border border-green-400/50">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
           </svg>
-          <span>Histórico eliminado com sucesso!</span>
+          <span>History cleared successfully!</span>
         </div>
       )}
     </div>

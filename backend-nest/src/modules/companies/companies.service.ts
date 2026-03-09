@@ -10,12 +10,12 @@ export class CompaniesService {
   async create(createCompanyDto: CreateCompanyDto) {
     const existingNif = await this.companyRepository.findByNif(createCompanyDto.nif);
     if (existingNif) {
-      throw new ConflictException('NIF já está em uso');
+      throw new ConflictException('NIF is already in use');
     }
 
     const existingEmail = await this.companyRepository.findByEmail(createCompanyDto.email);
     if (existingEmail) {
-      throw new ConflictException('Email já está em uso');
+      throw new ConflictException('Email is already in use');
     }
 
     return this.companyRepository.create(createCompanyDto);
@@ -26,9 +26,9 @@ export class CompaniesService {
   }
 
   async findOne(id: string) {
-    const company = await this.companyRepository.findOne(id);
+    const company = await this.companyRepository.findOne({ id }); // ✅
     if (!company) {
-      throw new NotFoundException('Empresa não encontrada');
+      throw new NotFoundException('Company not found');
     }
     return company;
   }
@@ -36,7 +36,7 @@ export class CompaniesService {
   async findWithUsers(id: string) {
     const company = await this.companyRepository.findWithUsers(id);
     if (!company) {
-      throw new NotFoundException('Empresa não encontrada');
+      throw new NotFoundException('Company not found');
     }
     return company;
   }
@@ -44,19 +44,19 @@ export class CompaniesService {
   async findWithStats(id: string) {
     const company = await this.companyRepository.findWithStats(id);
     if (!company) {
-      throw new NotFoundException('Empresa não encontrada');
+      throw new NotFoundException('Company not found');
     }
     return company;
   }
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto) {
     await this.findOne(id);
-    return this.companyRepository.update(id, updateCompanyDto);
+    return this.companyRepository.update({ id }, updateCompanyDto); // ✅
   }
 
   async remove(id: string) {
     await this.findOne(id);
-    await this.companyRepository.delete(id);
-    return { message: 'Empresa eliminada com sucesso' };
+    await this.companyRepository.delete({ id }); // ✅
+    return { message: 'Company deleted successfully' };
   }
 }

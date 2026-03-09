@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../api/api';
 import UserManagementTable from '../components/UserManagementTable';
-import { theme, getStatusBadgeClass, statusLabels, statusColors } from '../theme.config';
+import { theme } from '../theme.config';
 
 interface CompanyInfo {
   id: string;
@@ -30,37 +31,24 @@ const Settings: React.FC = () => {
     phone: '',
   });
 
+  // ✅ SUPER_ADMIN has no company — redirect to their own dashboard
+  if (user?.role === 'SUPER_ADMIN') {
+    return <Navigate to="/superadmin-home" replace />;
+  }
+
   useEffect(() => {
     loadCompanyInfo();
   }, []);
 
-  // Helper to safely extract a string message from an error response
   const extractErrorMessage = (err: any, fallback: string): string => {
-    if (err.response?.data?.message) {
-      return typeof err.response.data.message === 'string'
-        ? err.response.data.message
-        : JSON.stringify(err.response.data.message);
-    }
-    if (err.response?.data?.error) {
-      return typeof err.response.data.error === 'string'
-        ? err.response.data.error
-        : JSON.stringify(err.response.data.error);
-    }
-    if (err.message) {
-      return String(err.message);
-    }
-    return fallback;
+    return err.response?.data?.message || err.message || fallback;
   };
 
   const loadCompanyInfo = async () => {
     try {
       setLoading(true);
       setError('');
-      console.log('🔍 Loading company information...');
-      
       const response = await api.get('/companies/info');
-      console.log('✅ Company information loaded:', response.data);
-      
       setCompanyInfo(response.data);
       setFormData({
         name: response.data.name || '',
@@ -70,7 +58,6 @@ const Settings: React.FC = () => {
         phone: response.data.phone || '',
       });
     } catch (err: any) {
-      console.error('❌ Error loading company information:', err);
       setError(extractErrorMessage(err, 'Error loading company information'));
     } finally {
       setLoading(false);
@@ -84,18 +71,12 @@ const Settings: React.FC = () => {
     setSuccess('');
 
     try {
-      console.log('💾 Updating company information...', formData);
-      
-      await api.put('/companies/info', formData);
-      
+      // ✅ PATCH /companies/:id — correct endpoint
+      await api.patch(`/companies/${companyInfo?.id}`, formData);
       setSuccess('Information updated successfully!');
-      console.log('✅ Information updated successfully');
-      
       await loadCompanyInfo();
-      
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
-      console.error('❌ Error updating information:', err);
       setError(extractErrorMessage(err, 'Error updating information'));
     } finally {
       setSaving(false);

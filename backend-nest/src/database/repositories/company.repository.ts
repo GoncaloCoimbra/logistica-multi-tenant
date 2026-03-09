@@ -22,7 +22,7 @@ export class CompanyRepository extends BaseRepository<Company> {
 
   async findByTenant(tenant: string): Promise<Company | null> {
     return this.prisma.company.findFirst({
-      where: { 
+      where: {
         OR: [
           { name: { contains: tenant, mode: 'insensitive' } },
           { id: tenant },
@@ -52,5 +52,5 @@ export class CompanyRepository extends BaseRepository<Company> {
         },
       },
     });
-  }}
-
+  }
+}

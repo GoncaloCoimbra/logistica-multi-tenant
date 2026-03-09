@@ -20,11 +20,11 @@ let CompaniesService = class CompaniesService {
     async create(createCompanyDto) {
         const existingNif = await this.companyRepository.findByNif(createCompanyDto.nif);
         if (existingNif) {
-            throw new common_1.ConflictException('NIF já está em uso');
+            throw new common_1.ConflictException('NIF is already in use');
         }
         const existingEmail = await this.companyRepository.findByEmail(createCompanyDto.email);
         if (existingEmail) {
-            throw new common_1.ConflictException('Email já está em uso');
+            throw new common_1.ConflictException('Email is already in use');
         }
         return this.companyRepository.create(createCompanyDto);
     }
@@ -32,34 +32,34 @@ let CompaniesService = class CompaniesService {
         return this.companyRepository.findAll();
     }
     async findOne(id) {
-        const company = await this.companyRepository.findOne(id);
+        const company = await this.companyRepository.findOne({ id });
         if (!company) {
-            throw new common_1.NotFoundException('Empresa não encontrada');
+            throw new common_1.NotFoundException('Company not found');
         }
         return company;
     }
     async findWithUsers(id) {
         const company = await this.companyRepository.findWithUsers(id);
         if (!company) {
-            throw new common_1.NotFoundException('Empresa não encontrada');
+            throw new common_1.NotFoundException('Company not found');
         }
         return company;
     }
     async findWithStats(id) {
         const company = await this.companyRepository.findWithStats(id);
         if (!company) {
-            throw new common_1.NotFoundException('Empresa não encontrada');
+            throw new common_1.NotFoundException('Company not found');
         }
         return company;
     }
     async update(id, updateCompanyDto) {
         await this.findOne(id);
-        return this.companyRepository.update(id, updateCompanyDto);
+        return this.companyRepository.update({ id }, updateCompanyDto);
     }
     async remove(id) {
         await this.findOne(id);
-        await this.companyRepository.delete(id);
-        return { message: 'Empresa eliminada com sucesso' };
+        await this.companyRepository.delete({ id });
+        return { message: 'Company deleted successfully' };
     }
 };
 exports.CompaniesService = CompaniesService;

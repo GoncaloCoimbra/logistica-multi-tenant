@@ -5,72 +5,72 @@ export declare class CompaniesService {
     private companyRepository;
     constructor(companyRepository: CompanyRepository);
     create(createCompanyDto: CreateCompanyDto): Promise<{
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findAll(): Promise<{
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }[]>;
     findOne(id: string): Promise<{
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findWithUsers(id: string): Promise<{
         products: {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            quantity: number;
             internalCode: string;
             description: string;
+            quantity: number;
             unit: string;
             totalWeight: number | null;
             totalVolume: number | null;
             currentLocation: string | null;
             status: import(".prisma/client").$Enums.ProductStatus;
             supplierId: string;
+            companyId: string;
         }[];
         users: {
-            id: string;
-            companyId: string | null;
-            createdAt: Date;
-            email: string;
             name: string;
+            id: string;
+            email: string;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            companyId: string | null;
             password: string;
             role: import(".prisma/client").$Enums.Role;
-            isActive: boolean;
             avatarUrl: string | null;
-            updatedAt: Date;
         }[];
         vehicles: {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
             status: import(".prisma/client").$Enums.VehicleStatus;
+            companyId: string;
             licensePlate: string;
             type: string;
             model: string;
@@ -79,15 +79,15 @@ export declare class CompaniesService {
             year: number;
         }[];
     } & {
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     findWithStats(id: string): Promise<{
         _count: {
@@ -96,26 +96,26 @@ export declare class CompaniesService {
             vehicles: number;
         };
     } & {
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<{
-        id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
+        id: string;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
         message: string;
