@@ -90,7 +90,7 @@ const Sidebar: React.FC = () => {
 
   if (user?.role === 'ADMIN' || user?.role === 'OPERATOR') {
     navLinks.push({
-      path: '/tarefas',
+      path: '/tasks',
       label: 'Tasks',
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
