@@ -476,11 +476,11 @@ const NewProduct: React.FC = () => {
                       }`}
                       required
                     >
-                      <option value="RECEIVED" className="bg-[#1e293b]">📦 Received</option>
-                      <option value="IN_ANALYSIS" className="bg-[#1e293b]">🔍 Under Analysis</option>
-                      <option value="IN_STORAGE" className="bg-[#1e293b]">🏢 In Storage</option>
-                      <option value="APPROVED" className="bg-[#1e293b]">✅ Approved</option>
-                      <option value="DISPATCHED" className="bg-[#1e293b]">🚛 Dispatched</option>
+                      <option value="RECEIVED" className="bg-[#1e293b]">Received</option>
+                      <option value="IN_ANALYSIS" className="bg-[#1e293b]">Under Analysis</option>
+                      <option value="IN_STORAGE" className="bg-[#1e293b]">In Storage</option>
+                      <option value="APPROVED" className="bg-[#1e293b]">Approved</option>
+                      <option value="DISPATCHED" className="bg-[#1e293b]">Dispatched</option>
                     </select>
                     {errors.status && (
                       <p className="text-red-400 text-xs mt-2 flex items-center gap-1">

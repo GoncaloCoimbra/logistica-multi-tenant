@@ -71,7 +71,7 @@ let RegistrationService = RegistrationService_1 = class RegistrationService {
             this.logger.error('Error:', err.message);
             throw new common_1.InternalServerErrorException('Database connection error');
         }
-        this.logger.log('🔍 Validating data...');
+        this.logger.log('[Registration] Validating data...');
         if (!data.companyName || !data.companyNif || !data.companyEmail) {
             throw new common_1.BadRequestException('Company data incomplete');
         }
@@ -81,7 +81,7 @@ let RegistrationService = RegistrationService_1 = class RegistrationService {
         if (data.userPassword.length < 6) {
             throw new common_1.BadRequestException('Password must be at least 6 characters');
         }
-        this.logger.log('🔍 Checking if company already exists...');
+        this.logger.log('[Registration] Checking if company already exists...');
         const existingCompany = await this.prisma.company.findFirst({
             where: {
                 OR: [{ nif: data.companyNif }, { email: data.companyEmail }],
@@ -97,7 +97,7 @@ let RegistrationService = RegistrationService_1 = class RegistrationService {
                 throw new common_1.ConflictException('A company with this email already exists');
             }
         }
-        this.logger.log('🔍 Checking if user already exists...');
+        this.logger.log('[Registration] Checking if user already exists...');
         const existingUser = await this.prisma.user.findUnique({
             where: { email: data.userEmail },
         });
@@ -149,7 +149,7 @@ let RegistrationService = RegistrationService_1 = class RegistrationService {
                 return { company, user };
             });
             this.logger.log('📍 TRANSACTION COMPLETED SUCCESSFULLY');
-            this.logger.log('🔍 Verifying if user was really created in database...');
+            this.logger.log('[Registration] Verifying if user was really created in database...');
             const userInDb = await this.prisma.user.findUnique({
                 where: { email: result.user.email },
             });

@@ -48,7 +48,7 @@ export class RegistrationService {
 
     // 1. VALIDATIONS
 
-    this.logger.log('🔍 Validating data...');
+    this.logger.log('[Registration] Validating data...');
 
     if (!data.companyName || !data.companyNif || !data.companyEmail) {
       throw new BadRequestException('Company data incomplete');
@@ -64,7 +64,7 @@ export class RegistrationService {
 
     // 2. CHECK IF COMPANY ALREADY EXISTS
 
-    this.logger.log('🔍 Checking if company already exists...');
+    this.logger.log('[Registration] Checking if company already exists...');
 
     const existingCompany = await this.prisma.company.findFirst({
       where: {
@@ -85,7 +85,7 @@ export class RegistrationService {
 
     // 3. CHECK IF USER ALREADY EXISTS
 
-    this.logger.log('🔍 Checking if user already exists...');
+    this.logger.log('[Registration] Checking if user already exists...');
 
     const existingUser = await this.prisma.user.findUnique({
       where: { email: data.userEmail },
@@ -159,7 +159,7 @@ export class RegistrationService {
 
       // 6. VERIFY USER WAS CREATED
 
-      this.logger.log('🔍 Verifying if user was really created in database...');
+      this.logger.log('[Registration] Verifying if user was really created in database...');
       const userInDb = await this.prisma.user.findUnique({
         where: { email: result.user.email },
       });

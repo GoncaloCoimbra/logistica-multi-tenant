@@ -24,17 +24,17 @@ export class AuditLogInterceptor implements NestInterceptor {
     const user = request.user;
     const body = request.body;
 
-    console.log('🔍 [INTERCEPTOR] Executado!');
-    console.log('🔍 [INTERCEPTOR] Method:', method);
-    console.log('🔍 [INTERCEPTOR] URL:', url);
-    console.log('🔍 [INTERCEPTOR] User:', user ? user.email : 'NO USER');
-    console.log('🔍 [INTERCEPTOR] Body:', JSON.stringify(body));
+    console.log('[INTERCEPTOR] Executed!');
+    console.log('[INTERCEPTOR] Method:', method);
+    console.log('[INTERCEPTOR] URL:', url);
+    console.log('[INTERCEPTOR] User:', user ? user.email : 'NO USER');
+    console.log('[INTERCEPTOR] Body:', JSON.stringify(body));
 
     // Apenas captura ações relevantes
     const shouldLog = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method);
 
-    console.log('🔍 [INTERCEPTOR] Should log?', shouldLog);
-    console.log('🔍 [INTERCEPTOR] Has user?', !!user);
+    console.log('[INTERCEPTOR] Should log?', shouldLog);
+    console.log('[INTERCEPTOR] Has user?', !!user);
 
     if (!shouldLog || !user) {
       console.log(
@@ -51,13 +51,13 @@ export class AuditLogInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap(async (response) => {
         console.log(
-          '🔍 [INTERCEPTOR TAP] Response received:',
+          '[INTERCEPTOR TAP] Response received:',
           JSON.stringify(response),
         );
 
         try {
           const { entity, action } = this.extractEntityAndAction(method, url);
-          console.log('🔍 [INTERCEPTOR] Entity:', entity, 'Action:', action);
+          console.log('[INTERCEPTOR] Entity:', entity, 'Action:', action);
 
           if (!entity) {
             console.log(
@@ -68,12 +68,12 @@ export class AuditLogInterceptor implements NestInterceptor {
 
           //  EXTRAÇÃO MELHORADA DO ID DA ENTIDADE
           const entityId = this.extractEntityId(response, body, url);
-          console.log('🔍 [INTERCEPTOR] Entity ID extraído:', entityId);
+          console.log('[INTERCEPTOR] Entity ID extracted:', entityId);
 
           const ipAddress = request.ip || request.connection?.remoteAddress;
 
           // Registra no audit log
-          console.log('🔍 [INTERCEPTOR] Chamando auditLogService.createLog...');
+          console.log('[INTERCEPTOR] Calling auditLogService.createLog...');
           await this.auditLogService.createLog({
             action,
             entity,

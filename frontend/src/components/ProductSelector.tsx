@@ -52,7 +52,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
     setError('');
     
     try {
-      console.log('🔍 [ProductSelector] Loading products...');
+      console.log('[ProductSelector] Loading products...');
       
       const response = await api.get('/products');
       

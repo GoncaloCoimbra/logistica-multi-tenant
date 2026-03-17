@@ -70,7 +70,7 @@ let NotificationsService = class NotificationsService {
     }
     async findByCompany(companyId) {
         try {
-            console.log('🔍 Finding notifications for companyId:', companyId);
+            console.log('[Notifications] Finding notifications for companyId:', companyId);
             const whereClause = companyId ? { companyId } : {};
             const notifications = await this.prisma.notification.findMany({
                 where: whereClause,
@@ -119,7 +119,7 @@ let NotificationsService = class NotificationsService {
     }
     async findUnreadByCompany(companyId) {
         try {
-            console.log('🔍 Finding unread notifications for companyId:', companyId);
+            console.log('[Notifications] Finding unread notifications for companyId:', companyId);
             const whereClause = companyId
                 ? { companyId, isRead: false }
                 : { isRead: false };

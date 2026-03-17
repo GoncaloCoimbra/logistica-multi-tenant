@@ -105,7 +105,7 @@ let AuthService = AuthService_1 = class AuthService {
             this.logger.error(` CRITICAL ERROR: User not found after creation: ${email}`);
             throw new Error('Error creating user');
         }
-        this.logger.log(`🔍 User confirmed in database: ${savedUser.id}`);
+        this.logger.log(`[Auth] User confirmed in database: ${savedUser.id}`);
         this.logger.log(`🏢 Associated company: ${savedUser.companyId || 'None'}`);
         const tokens = await this.generateTokens(savedUser.id, savedUser.email, savedUser.role);
         return {

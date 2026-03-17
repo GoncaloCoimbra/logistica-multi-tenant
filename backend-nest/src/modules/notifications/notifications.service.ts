@@ -75,7 +75,7 @@ export class NotificationsService {
 
   async findByCompany(companyId: string | null | undefined) {
     try {
-      console.log('🔍 Finding notifications for companyId:', companyId);
+      console.log('[Notifications] Finding notifications for companyId:', companyId);
 
       // Se companyId for null/undefined (SUPER_ADMIN), retorna TODAS as notificações
       const whereClause = companyId ? { companyId } : {};
@@ -132,7 +132,7 @@ export class NotificationsService {
 
   async findUnreadByCompany(companyId: string | null | undefined) {
     try {
-      console.log('🔍 Finding unread notifications for companyId:', companyId);
+      console.log('[Notifications] Finding unread notifications for companyId:', companyId);
 
       // Se companyId for null/undefined (SUPER_ADMIN), retorna TODAS não lidas
       const whereClause = companyId
