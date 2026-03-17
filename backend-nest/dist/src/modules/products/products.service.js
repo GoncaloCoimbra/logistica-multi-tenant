@@ -94,7 +94,9 @@ let ProductsService = ProductsService_1 = class ProductsService {
         return product;
     }
     async findAll(companyId, filters) {
-        const where = {};
+        const where = {
+            companyId,
+        };
         if (filters?.supplierId) {
             where.supplierId = filters.supplierId;
         }

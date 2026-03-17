@@ -41,15 +41,22 @@ interface UpdateProductStatusDto {
   reason?: string;
 }
 
-export function useProducts(filters?: { status?: string; supplierId?: string; search?: string }) {
+export function useProducts(filters?: { status?: string; supplierId?: string; search?: string; location?: string; dateFrom?: string; dateTo?: string }) {
   return useQuery({
     queryKey: ['products', filters],
     queryFn: async () => {
-      const response = await apiClient.get<Product[]>('/products', { params: filters });
-      return response.data;
+      console.log('[useProducts] Fetching with filters:', filters);
+      try {
+        const response = await apiClient.get<Product[]>('/products', { params: filters });
+        console.log('[useProducts] Response:', response.data);
+        return response.data;
+      } catch (err: any) {
+        console.error('[useProducts] Error:', err.message, err.response?.data);
+        throw err;
+      }
     },
-    staleTime: 0, // Always consider data stale
-    gcTime: 0, // Don't cache
+    staleTime: 0,
+    gcTime: 0,
   });
 }
 
