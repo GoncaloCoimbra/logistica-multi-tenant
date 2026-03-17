@@ -48,6 +48,8 @@ export function useProducts(filters?: { status?: string; supplierId?: string; se
       const response = await apiClient.get<Product[]>('/products', { params: filters });
       return response.data;
     },
+    staleTime: 0, // Always consider data stale
+    gcTime: 0, // Don't cache
   });
 }
 
@@ -91,8 +93,13 @@ export function useCreateProduct() {
       const response = await apiClient.post<Product>('/products', data);
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (newProduct) => {
+      // Invalidate all product queries
       queryClient.invalidateQueries({ queryKey: ['products'] });
+      // Force immediate refetch of main products list
+      setTimeout(() => {
+        queryClient.refetchQueries({ queryKey: ['products', undefined] });
+      }, 500);
     },
   });
 }

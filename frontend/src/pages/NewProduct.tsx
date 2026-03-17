@@ -124,7 +124,10 @@ const NewProduct: React.FC = () => {
     try {
       await createProductMutation.mutateAsync(payload);
       alert("✅ Product created successfully!");
-      navigate("/products");
+      // Wait a moment for React Query to refetch before navigating
+      setTimeout(() => {
+        navigate("/products");
+      }, 800);
     } catch (error: any) {
       console.error("❌ Error creating product:", error);
       

@@ -69,7 +69,7 @@ api.interceptors.response.use(
     // This prevents "Objects are not valid as a React child" crashes
     if (error.response) {
       const date = error.response.data;
-      let message = 'An unexpected error occurred';
+      let message = `Server error (${status}): Please try again or contact support`;
 
       if (typeof date === 'string') {
         message = date;
