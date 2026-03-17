@@ -13,18 +13,18 @@ export declare class SuppliersService {
     findByVehicle(vehicleId: string, companyId?: string): Promise<SerializedSupplier[]>;
     findWithProducts(id: string, companyId?: string): Promise<{
         products: {
-            description: string;
-            status: import(".prisma/client").$Enums.ProductStatus;
             id: string;
-            internalCode: string;
-            totalWeight: number | null;
+            companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            companyId: string;
             quantity: number;
+            internalCode: string;
+            description: string;
             unit: string;
+            totalWeight: number | null;
             totalVolume: number | null;
             currentLocation: string | null;
+            status: import(".prisma/client").$Enums.ProductStatus;
             supplierId: string;
         }[];
         id: string;

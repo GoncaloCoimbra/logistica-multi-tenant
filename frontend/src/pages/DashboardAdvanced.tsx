@@ -473,7 +473,7 @@ const DashboardAdvanced: React.FC = () => {
             />
             {stats.avgTimeInStatus.length === 0 ? (
               <div className="flex items-center justify-center h-48">
-                <p className="text-sm" style={{ color: ds.textMuted }}>Sem dados disponíveis</p>
+                <p className="text-sm" style={{ color: ds.textMuted }}>No data available</p>
               </div>
             ) : (
               <div className="space-y-4">

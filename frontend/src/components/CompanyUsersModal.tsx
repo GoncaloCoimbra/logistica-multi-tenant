@@ -172,22 +172,22 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
                             {user.isActive ? 'Active' : 'Inactive'}
                           </span>
                         </td>
-                        <td>{new Date(user.createdAt).toLocaleDateString('pt-BR')}</td>
+                        <td>{new Date(user.createdAt).toLocaleDateString('en-US')}</td>
                         <td>
                           <div className="action-buttons">
                             <button
                               className={`btn-toggle ${user.isActive ? 'btn-deactivate' : 'btn-activate'}`}
                               onClick={() => handleToggleUserStatus(user.id, user.isActive)}
-                              title={user.isActive ? 'Desativar' : 'Ativar'}
+                              title={user.isActive ? 'Deactivate' : 'Activate'}
                             >
-                              {user.isActive ? '🔒' : '🔓'}
+                              {user.isActive ? 'Lock' : 'Unlock'}
                             </button>
                             <button
                               className="btn-remove"
                               onClick={() => handleRemoveUser(user.id)}
                               title="Remove from company"
                             >
-                              🗑️
+                              Delete
                             </button>
                           </div>
                         </td>

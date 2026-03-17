@@ -585,7 +585,7 @@ const VehicleList: React.FC = () => {
                       : 'border-[#334155] hover:border-emerald-500/50 text-[#cbd5e1]'
                   }`}
                 >
-                  ✓ Available
+                  Available
                 </button>
                 <button
                   type="button"

@@ -445,7 +445,7 @@ const Dashboard: React.FC = () => {
                 className="text-3xl font-bold mb-1 text-white"
                 style={{ fontFamily: "'DM Mono', monospace" }}
               >
-                {m.value.toLocaleString('pt-PT')}
+                {m.value.toLocaleString('en-US')}
               </p>
               <p className="text-xs text-slate-400">{m.label}</p>
             </div>

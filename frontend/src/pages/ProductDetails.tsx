@@ -439,11 +439,11 @@ const ProductDetails: React.FC = () => {
                         </span>
                       </span>
                       <div className="text-sm text-amber-300 mt-2">
-                        <span className="font-medium">Por:</span> {movement.user.name} ({movement.user.email})
+                        <span className="font-medium">By:</span> {movement.user.name} ({movement.user.email})
                       </div>
                       {movement.location && (
                         <div className="text-sm text-amber-300 mt-1">
-                          <span className="font-medium">Localização:</span> {movement.location}
+                          <span className="font-medium">Location:</span> {movement.location}
                         </div>
                       )}
                     </div>

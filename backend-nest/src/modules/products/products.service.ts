@@ -316,15 +316,15 @@ export class ProductsService {
       });
 
       const statusLabel: Record<string, string> = {
-        RECEIVED: '📦 Recebido',
-        IN_ANALYSIS: '🔍 Em Análise',
-        IN_STORAGE: '📦 Em Armazém',
-        APPROVED: '✔️ Aprovado',
-        DISPATCHED: '🚚 Enviado',
+        RECEIVED: 'Received',
+        IN_ANALYSIS: 'Under Analysis',
+        IN_STORAGE: 'In Storage',
+        APPROVED: 'Approved',
+        DISPATCHED: 'Dispatched',
       };
 
       await this.notificationsService.create({
-        title: `🔄 product Atualizado`,
+        title: `Product Updated`,
         message: `product "${product.description}" (${product.internalCode}) foi alterado de ${statusLabel[product.status] || product.status} para ${statusLabel[statusDto.newStatus] || statusDto.newStatus} por ${user?.name || 'Utilizador'}`,
         userId,
         companyId,

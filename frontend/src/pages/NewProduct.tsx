@@ -497,34 +497,34 @@ const NewProduct: React.FC = () => {
 
                   {/* Info sobre Status */}
                   <div className="mt-2 p-4 bg-gradient-to-r from-amber-900/20 to-amber-900/10 border border-amber-500/20 rounded-lg">
-                    <p className="text-xs text-amber-300 font-medium mb-3">ℹ️ About the Status:</p>
+                    <p className="text-xs text-amber-300 font-medium mb-3">About the Status:</p>
                     <ul className="text-xs text-amber-200/80 space-y-2 ml-4">
                       <li className="flex items-start gap-2">
-                        <span className="text-green-400 mt-0.5">📦</span>
+                        <span className="text-green-400 font-bold mt-0.5">[RCV]</span>
                         <div>
                           <strong>Received:</strong> Product just arrived from supplier
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-400 mt-0.5">🔍</span>
+                        <span className="text-blue-400 font-bold mt-0.5">[ANL]</span>
                         <div>
                           <strong>Under Analysis:</strong> Product being inspected/verified
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-purple-400 mt-0.5">🏢</span>
+                        <span className="text-purple-400 font-bold mt-0.5">[STG]</span>
                         <div>
                           <strong>In Storage:</strong> Product stored in warehouse
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-emerald-400 mt-0.5">✅</span>
+                        <span className="text-emerald-400 font-bold mt-0.5">[APR]</span>
                         <div>
                           <strong>Approved:</strong> Product ready to be used/dispatched
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-amber-400 mt-0.5">🚛</span>
+                        <span className="text-amber-400 font-bold mt-0.5">[DSP]</span>
                         <div>
                           <strong>Dispatched:</strong> Product sent for transport/delivery
                         </div>
