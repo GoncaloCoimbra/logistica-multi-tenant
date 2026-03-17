@@ -2,7 +2,7 @@ import { PrismaService } from '../../database/prisma.service';
 export declare class NotificationsService {
     private prisma;
     constructor(prisma: PrismaService);
-    create(data: {
+    create(date: {
         title: string;
         message: string;
         companyId: string;
@@ -19,13 +19,13 @@ export declare class NotificationsService {
         };
     } & {
         id: string;
-        userId: string;
-        companyId: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         isRead: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        userId: string;
     }>;
     findByCompany(companyId: string | null | undefined): Promise<{
         total: number;
@@ -57,13 +57,13 @@ export declare class NotificationsService {
         };
     } & {
         id: string;
-        userId: string;
-        companyId: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         isRead: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        userId: string;
     })[]>;
     markAsRead(id: string): Promise<{
         company: {
@@ -77,24 +77,24 @@ export declare class NotificationsService {
         };
     } & {
         id: string;
-        userId: string;
-        companyId: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         isRead: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        userId: string;
     }>;
     markAllAsRead(companyId: string | null | undefined): Promise<import(".prisma/client").Prisma.BatchPayload>;
     delete(id: string): Promise<{
         id: string;
-        userId: string;
-        companyId: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
         content: string;
         isRead: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        userId: string;
     }>;
     countUnread(companyId: string | null | undefined): Promise<number>;
     notifyTransportArrived(companyId: string, transportCode: string, origin: string, destination: string): Promise<void>;

@@ -45,9 +45,7 @@ export class TransportRepository extends BaseRepository<Transport> {
 
   async updateStatus(id: string, status: any) {
     return this.prisma.transport.update({
-      where: { id },
-      data: { status },
+      where: { id }, data: { status },
     });
-  }}
-
-
+  }
+}

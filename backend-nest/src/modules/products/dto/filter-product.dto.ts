@@ -1,4 +1,10 @@
-﻿import { IsOptional, IsEnum, IsString, IsUUID, IsDateString } from 'class-validator';
+﻿import {
+  IsOptional,
+  IsEnum,
+  IsString,
+  IsUUID,
+  IsDateString,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ProductStatus } from '@prisma/client';
 
@@ -8,32 +14,35 @@ export class FilterProductDto {
   @IsEnum(ProductStatus)
   status?: ProductStatus;
 
-  @ApiProperty({ required: false, description: 'ID do fornecedor' })
+  @ApiProperty({ required: false, description: 'Supplier ID' })
   @IsOptional()
   @IsUUID()
   supplierId?: string;
 
-  @ApiProperty({ required: false, description: 'Busca por código ou descrição' })
+  @ApiProperty({
+    required: false,
+    description: 'Search by code or description',
+  })
   @IsOptional()
   @IsString()
   search?: string;
 
-  @ApiProperty({ required: false, description: 'Nome do fornecedor' })
+  @ApiProperty({ required: false, description: 'Supplier name' })
   @IsOptional()
   @IsString()
   supplier?: string;
 
-  @ApiProperty({ required: false, description: 'Localização atual do produto' })
+  @ApiProperty({ required: false, description: 'Current product location' })
   @IsOptional()
   @IsString()
   location?: string;
 
-  @ApiProperty({ required: false, description: 'Data inicial (YYYY-MM-DD)' })
+  @ApiProperty({ required: false, description: 'Start date (YYYY-MM-DD)' })
   @IsOptional()
   @IsDateString()
   dateFrom?: string;
 
-  @ApiProperty({ required: false, description: 'Data final (YYYY-MM-DD)' })
+  @ApiProperty({ required: false, description: 'End date (YYYY-MM-DD)' })
   @IsOptional()
   @IsDateString()
   dateTo?: string;

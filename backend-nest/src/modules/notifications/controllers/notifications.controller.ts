@@ -55,7 +55,9 @@ export class NotificationsController {
     const companyId = user.companyId;
 
     if (!companyId) {
-      throw new Error('SUPER_ADMIN cannot create notifications without specifying a company');
+      throw new Error(
+        'SUPER_ADMIN cannot create notifications without specifying a company',
+      );
     }
 
     console.log('🎯 Creating notification for userId:', userId);
@@ -96,7 +98,7 @@ export class NotificationsController {
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
   async findAll(@CurrentUser() user: UserPayload) {
     // SUPER_ADMIN pode ver todas as notificações (companyId = null)
-    // ADMIN/OPERATOR vêem apenas da sua empresa
+    // ADMIN/OPERATOR see only from their company
     return this.notificationsService.findByCompany(user.companyId);
   }
 
@@ -138,18 +140,22 @@ export class NotificationsController {
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
   @HttpCode(HttpStatus.OK)
   async removeAll(@CurrentUser() user: UserPayload) {
-    // Deletar todas as notificações da empresa
+    // Delete all notifications from the company
     const companyId = user.companyId;
     if (!companyId) {
-      throw new Error('SUPER_ADMIN cannot delete all notifications without specifying a company');
+      throw new Error(
+        'SUPER_ADMIN cannot delete all notifications without specifying a company',
+      );
     }
 
     const result = await this.prisma.notification.deleteMany({
       where: { companyId },
     });
 
-    console.log(`🗑️  Deleted ${result.count} notifications for company ${companyId}`);
-    
+    console.log(
+      `🗑️  Deleted ${result.count} notifications for company ${companyId}`,
+    );
+
     return {
       success: true,
       deleted: result.count,

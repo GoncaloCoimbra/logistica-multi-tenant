@@ -89,7 +89,7 @@ const Referrals: React.FC = () => {
       setReferrals(Array.isArray(rRes.data) ? rRes.data : []);
     } catch (err) {
       console.error('Error loading referrals from backend:', err);
-      setReferralsError('Live data unavailable. Enable the backend or use sample data.');
+      setReferralsError('Live date unavailable. Enable the backend or use sample date.');
     } finally {
       setLoadingReferrals(false);
     }
@@ -457,7 +457,7 @@ const Referrals: React.FC = () => {
                   >
                     {creatingSamples ? (
                       <><svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>Creating...</>
-                    ) : 'Create sample data'}
+                    ) : 'Create sample date'}
                   </button>
                 </div>
               </div>
@@ -477,7 +477,7 @@ const Referrals: React.FC = () => {
               <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="text-sm text-slate-300">Local mode: In-memory mock data</span>
+              <span className="text-sm text-slate-300">Local mode: In-memory mock date</span>
               <span className="text-xs text-slate-500 ml-2">({filteredReferrals.length} referrals)</span>
             </div>
           </div>
@@ -978,7 +978,7 @@ const Referrals: React.FC = () => {
               </div>
             </div>
             <p className="text-slate-300 mb-6">
-              Are you sure you want to delete this referral? All data will be permanently removed.
+              Are you sure you want to delete this referral? All date will be permanently removed.
             </p>
             <div className="flex gap-2">
               <button onClick={() => referralToDelete && handleDeleteReferral(referralToDelete)} disabled={deletingReferralLoading}

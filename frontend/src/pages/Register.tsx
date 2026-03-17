@@ -199,7 +199,7 @@ const Register: React.FC = () => {
           Create New Account
         </h2>
         <p className="text-sm mb-8" style={{ color: ds.textSecondary }}>
-          Choose the account type and fill in the data
+          Choose the account type and fill in the date
         </p>
 
         {/* ── Tabs ── */}
@@ -246,11 +246,11 @@ const Register: React.FC = () => {
         ════════════════════════════════════════ */}
         {activeTab === 'company' && (
           <form onSubmit={handleCompanySubmit} className="space-y-7">
-            {/* Company data */}
+            {/* Company date */}
             <div>
               <SectionHeader
                 icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>}
-                title="Company Data"
+                title="Company Date"
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
@@ -386,7 +386,7 @@ const Register: React.FC = () => {
             <div>
               <SectionHeader
                 icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>}
-                title="Personal Data"
+                title="Personal Date"
               />
               <div className="space-y-4">
                 <div>

@@ -17,10 +17,7 @@ let TasksModule = class TasksModule {
 exports.TasksModule = TasksModule;
 exports.TasksModule = TasksModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            database_module_1.DatabaseModule,
-            auth_module_1.AuthModule,
-        ],
+        imports: [database_module_1.DatabaseModule, auth_module_1.AuthModule],
         controllers: [tasks_controller_1.TasksController],
         providers: [tasks_service_1.TasksService],
         exports: [tasks_service_1.TasksService],

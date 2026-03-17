@@ -2,15 +2,15 @@ import React from 'react';
 
 const Updates: React.FC = () => {
   const releases = [
-    { version: 'v1.4.0', date: '2026-02-20', notes: ['Melhoria de performance no rastreamento', 'Correção em filtros de transportes'] },
-    { version: 'v1.3.2', date: '2026-01-10', notes: ['Ajuste nas permissões de usuário', 'Melhorias de logging'] },
+    { version: 'v1.4.0', data: '2026-02-20', notes: ['Performance improvements in tracking', 'Fixes in transport filters'] },
+    { version: 'v1.3.2', data: '2026-01-10', notes: ['User permission adjustments', 'Logging improvements'] },
   ];
 
   return (
     <div className="max-w-5xl mx-auto p-8">
       <header>
-        <h1 className="text-3xl font-extrabold text-white">Atualizações & Changelog</h1>
-        <p className="text-gray-400 mt-2">Histórico de versões, notas de release e como elas afetam sua operação.</p>
+        <h1 className="text-3xl font-extrabold text-white">Updates & Changelog</h1>
+        <p className="text-gray-400 mt-2">Version history, release notes and how they affect your operation.</p>
       </header>
 
       <main className="mt-6 space-y-6">
@@ -19,7 +19,7 @@ const Updates: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg text-white font-semibold">{r.version}</h3>
-                <p className="text-sm text-gray-400">Publicado em {r.date}</p>
+                <p className="text-sm text-gray-400">Released on {r.data}</p>
               </div>
             </div>
             <ul className="mt-3 ml-4 list-disc text-gray-300">
@@ -30,7 +30,7 @@ const Updates: React.FC = () => {
       </main>
 
       <footer className="mt-8 text-gray-400 text-sm">
-        <p>Para ver o roadmap e planejamentos, consulte a documentação do projeto ou entre em contacto via centro de ajuda.</p>
+        <p>To see the roadmap and planning, consult the project documentation or contact via help center.</p>
       </footer>
     </div>
   );

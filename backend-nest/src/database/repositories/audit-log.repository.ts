@@ -49,7 +49,10 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
     });
   }
 
-  async findByEntity(entityType: string, entityId: string): Promise<AuditLog[]> {
+  async findByEntity(
+    entityType: string,
+    entityId: string,
+  ): Promise<AuditLog[]> {
     return this.prisma.auditLog.findMany({
       where: { entityId },
       orderBy: { createdAt: 'desc' },
@@ -128,16 +131,16 @@ export class AuditLogRepository extends BaseRepository<AuditLog> {
     });
 
     // Buscar informações dos usuários
-    const userIds = result.map(r => r.userId);
+    const userIds = result.map((r) => r.userId);
     const users = await this.prisma.user.findMany({
       where: { id: { in: userIds } },
       select: { id: true, name: true, email: true },
     });
 
-    return result.map(r => ({
+    return result.map((r) => ({
       userId: r.userId,
       _count: r._count,
-      user: users.find(u => u.id === r.userId),
+      user: users.find((u) => u.id === r.userId),
     }));
   }
 

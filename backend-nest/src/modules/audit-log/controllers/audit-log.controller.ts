@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Delete, Query, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Query,
+  Param,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuditLogService } from '../audit-log.service';
 import { FilterAuditLogDto } from '../dto/filter-audit-log.dto';
@@ -16,17 +24,23 @@ import { Role } from '@prisma/client';
 export class AuditLogController {
   constructor(private readonly auditLogService: AuditLogService) {}
 
-  //  LIMPAR TODO O HISTÓRICO (ANTES DE ROTAS GENÉRICAS)
+  // CLEAR ALL HISTORY (BEFORE GENERIC ROUTES)
   @Post('clear-all')
   @Roles(Role.ADMIN, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Limpar todo o histórico de auditoria (apenas ADMIN/SUPER_ADMIN)' })
+  @ApiOperation({
+    summary: 'Limpar todo o histórico de auditoria (apenas ADMIN/SUPER_ADMIN)',
+  })
   async clearAllLogs(@CurrentUser() user: any) {
     try {
-      const deletedCount = await this.auditLogService.clearAllLogs(user.companyId);
-      console.log(`[Controller] Cleared ${deletedCount} audit logs for company ${user.companyId}`);
+      const deletedCount = await this.auditLogService.clearAllLogs(
+        user.companyId,
+      );
+      console.log(
+        `[Controller] Cleared ${deletedCount} audit logs for company ${user.companyId}`,
+      );
       return {
         success: true,
-        message: `${deletedCount} registos eliminados com sucesso`,
+        message: `${deletedCount} registos eliminados com success`,
         deletedCount,
         timestamp: new Date().toISOString(),
       };
@@ -67,12 +81,14 @@ export class AuditLogController {
   //  ELIMINAR REGISTO INDIVIDUAL
   @Delete(':id')
   @Roles(Role.ADMIN, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Eliminar um registo de auditoria específico' })
+  @ApiOperation({ summary: 'Delete um registo de auditoria específico' })
   async deleteLog(@Param('id') id: string, @CurrentUser() user: any) {
     const success = await this.auditLogService.deleteLog(id, user.companyId);
     return {
       success,
-      message: success ? 'Registo eliminado com sucesso' : 'Registo não encontrado',
+      message: success
+        ? 'Registo eliminado com success'
+        : 'Registo não encontrado',
     };
   }
 

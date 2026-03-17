@@ -61,8 +61,8 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({ company, onClose, o
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Error updating company');
+        const date = await response.json();
+        throw new Error(date.message || 'Error updating company');
       }
 
       onSuccess();
@@ -104,7 +104,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({ company, onClose, o
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-white mb-2" htmlFor="name">
-              Nome da Empresa *
+              Company Name *
             </label>
             <input
               type="text"
@@ -130,7 +130,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({ company, onClose, o
               className={theme.inputs.base}
               required
             />
-            <p className="text-slate-400 text-xs mt-1">Usado para identificar a empresa no sistema</p>
+            <p className="text-slate-400 text-xs mt-1">Used to identify the company in the system</p>
           </div>
 
           <div className="mb-4">

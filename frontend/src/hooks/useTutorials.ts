@@ -11,8 +11,7 @@ export interface Tutorial {
   videoUrl?: string;
 }
 
-interface PaginationData {
-  data: Tutorial[];
+interface PaginationData { data: Tutorial[];
   pagination: {
     currentPage: number;
     totalPages: number;
@@ -36,7 +35,7 @@ export const useTutorials = (page: number = 1, limit: number = 10) => {
         setData(response.data);
         setError(null);
       } catch (err: any) {
-        setError(err.message || 'Erro ao carregar tutoriais');
+        setError(err.message || 'Error loading tutorials');
         setData(null);
       } finally {
         setLoading(false);
@@ -68,7 +67,7 @@ export const useTutorialDetail = (id: number | null) => {
         setTutorial(response.data.data);
         setError(null);
       } catch (err: any) {
-        setError(err.message || 'Erro ao carregar tutorial');
+        setError(err.message || 'Error loading tutorial');
         setTutorial(null);
       } finally {
         setLoading(false);

@@ -34,7 +34,7 @@ let AuditLogController = class AuditLogController {
             console.log(`[Controller] Cleared ${deletedCount} audit logs for company ${user.companyId}`);
             return {
                 success: true,
-                message: `${deletedCount} registos eliminados com sucesso`,
+                message: `${deletedCount} registos eliminados com success`,
                 deletedCount,
                 timestamp: new Date().toISOString(),
             };
@@ -57,7 +57,9 @@ let AuditLogController = class AuditLogController {
         const success = await this.auditLogService.deleteLog(id, user.companyId);
         return {
             success,
-            message: success ? 'Registo eliminado com sucesso' : 'Registo não encontrado',
+            message: success
+                ? 'Registo eliminado com success'
+                : 'Registo não encontrado',
         };
     }
     async findAll(user, filters) {
@@ -83,7 +85,9 @@ exports.AuditLogController = AuditLogController;
 __decorate([
     (0, common_1.Post)('clear-all'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Limpar todo o histórico de auditoria (apenas ADMIN/SUPER_ADMIN)' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Limpar todo o histórico de auditoria (apenas ADMIN/SUPER_ADMIN)',
+    }),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -122,7 +126,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Eliminar um registo de auditoria específico' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete um registo de auditoria específico' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),

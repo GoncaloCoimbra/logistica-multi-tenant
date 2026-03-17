@@ -59,27 +59,27 @@ interface SelectedProduct {
   };
 }
 
-const extractErrorMessage = (error: any, defaultMessage: string = 'Erro ao processar requisição'): string => {
+const extractErrorMessage = (error: any, defaultMessage: string = 'Error processing request'): string => {
   if (!error) return defaultMessage;
   
   if (error.response?.data) {
-    const data = error.response.data;
+    const date = error.response.data;
     
-    if (typeof data === 'string') {
-      return data;
+    if (typeof date === 'string') {
+      return date;
     }
     
-    if (data.message) {
-      if (Array.isArray(data.message)) {
-        return data.message[0] || defaultMessage;
+    if (date.message) {
+      if (Array.isArray(date.message)) {
+        return date.message[0] || defaultMessage;
       }
-      if (typeof data.message === 'string') {
-        return data.message;
+      if (typeof date.message === 'string') {
+        return date.message;
       }
     }
     
-    if (data.error && typeof data.error === 'string') {
-      return data.error;
+    if (date.error && typeof date.error === 'string') {
+      return date.error;
     }
   }
   
@@ -147,9 +147,9 @@ const TransportList: React.FC = () => {
     try {
       const response = await api.get('/auth/me');
       setUser(response.data);
-      console.log('👤 Usuário carregado:', response.data);
+      console.log('👤 User loaded:', response.data);
     } catch (error) {
-      console.error('Erro ao carregar usuário:', error);
+      console.error('Error loading user:', error);
     }
   };
 
@@ -158,7 +158,7 @@ const TransportList: React.FC = () => {
       const response = await api.get('/companies');
       setCompanies(response.data);
     } catch (error) {
-      console.error('Erro ao carregar empresas:', error);
+      console.error('Error loading companies:', error);
     }
   };
 
@@ -176,8 +176,8 @@ const TransportList: React.FC = () => {
       const response = await api.get(`/transports?${params.toString()}`);
       setTransports(response.data);
     } catch (error: any) {
-      console.error('Erro ao carregar transportes:', error);
-      setError(extractErrorMessage(error, 'Erro ao carregar transportes'));
+      console.error('Error loading transports:', error);
+      setError(extractErrorMessage(error, 'Error loading transports'));
     } finally {
       setLoading(false);
     }
@@ -188,8 +188,8 @@ const TransportList: React.FC = () => {
       const response = await api.get('/vehicles');
       setVehicles(response.data);
     } catch (error: any) {
-      console.error('Erro ao carregar veículos:', error);
-      setError(extractErrorMessage(error, 'Erro ao carregar veículos'));
+      console.error('Error loading vehicles:', error);
+      setError(extractErrorMessage(error, 'Error loading vehicles'));
     }
   };
 
@@ -221,7 +221,7 @@ const TransportList: React.FC = () => {
 
   const getNextFilter = () => {
     if (!getFilter('vehicle')) return { type: 'vehicle' as const, label: 'Veículo' };
-    if (!getFilter('status')) return { type: 'status' as const, label: 'Estado' };
+    if (!getFilter('status')) return { type: 'status' as const, label: 'Status' };
     return null;
   };
 
@@ -239,14 +239,14 @@ const TransportList: React.FC = () => {
       }
 
       if (!formData.estimatedArrival) {
-        setError('Data de chegada estimada é obrigatória');
+        setError('Date de chegada estimada é obrigatória');
         return;
       }
 
-      // ⚠️ Validação de produtos APENAS na criação
+      // ⚠️ Validation de products APENAS na criação
       if (!editingId && formData.products.length === 0) {
         const confirm = window.confirm(
-          'Nenhum produto foi adicionado ao transporte. Deseja continuar mesmo assim?'
+          'Nenhum product foi adicionado ao transport. Deseja continuar mesmo assim?'
         );
         if (!confirm) return;
       }
@@ -256,21 +256,21 @@ const TransportList: React.FC = () => {
         : (user?.role === 'SUPER_ADMIN' ? selectedCompanyId : user?.companyId);
 
       if (user?.role === 'SUPER_ADMIN' && !editingId && !selectedCompanyId) {
-        setError('Por favor, selecione uma empresa');
+        setError('Please select a company');
         return;
       }
 
       const weight = parseFloat(formData.totalWeight.toString());
       if (isNaN(weight) || weight <= 0) {
-        setError('Peso total inválido. Digite um número maior que zero.');
+        setError('Invalid total weight. Enter a number greater than zero.');
         return;
       }
 
-      //  PREPARAR PAYLOAD BASEADO NO MODO (CRIAÇÃO vs EDIÇÃO)
+      //  PREPARE PAYLOAD BASED ON MODE (CREATE vs EDIT)
       let dataToSend: any;
 
       if (editingId) {
-        // ⚠️ MODO EDIÇÃO: NÃO ENVIA PRODUTOS
+        // ⚠️ EDIT MODE: DOES NOT SEND PRODUCTS
         dataToSend = {
           vehicleId: formData.vehicleId,
           origin: formData.origin.trim(),
@@ -280,13 +280,13 @@ const TransportList: React.FC = () => {
           totalWeight: weight,
           notes: formData.notes?.trim() || null,
           status: formData.status,
-          //  SEM campo 'products'
+          //  WITHOUT 'products' field
         };
 
-        console.log('⚠️ MODO EDIÇÃO: Produtos NÃO serão enviados');
+        console.log('⚠️ EDIT MODE: Products WILL NOT be sent');
         
       } else {
-        //  MODO CRIAÇÃO: ENVIA PRODUTOS
+        //  CREATE MODE: SENDS PRODUCTS
         dataToSend = {
           vehicleId: formData.vehicleId,
           origin: formData.origin.trim(),
@@ -302,12 +302,12 @@ const TransportList: React.FC = () => {
           })),
         };
 
-        // Adicionar companyId se necessário
+        // Add companyId if necessary
         if (companyIdToUse) {
           dataToSend.companyId = companyIdToUse;
         }
 
-        console.log(' MODO CRIAÇÃO: Produtos serão enviados');
+        console.log(' CREATE MODE: Products will be sent');
       }
 
       // Ensure backend enum compatibility: frontend uses 'CANCELLED' label, backend expects 'CANCELED'
@@ -316,43 +316,43 @@ const TransportList: React.FC = () => {
       }
 
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      console.log('📤 Enviando dados do transporte');
-      console.log('🔄 Modo:', editingId ? 'EDIÇÃO' : 'CRIAÇÃO');
-      console.log('📦 Produtos:', editingId ? 'NÃO ENVIADOS' : formData.products.length);
-      console.log('📊 Dados:', JSON.stringify(dataToSend, null, 2));
+      console.log('📤 Sending transport date');
+      console.log('🔄 Mode:', editingId ? 'EDIT' : 'CREATE');
+      console.log('📦 Products:', editingId ? 'NOT SENT' : formData.products.length);
+      console.log('📊 Date:', JSON.stringify(dataToSend, null, 2));
       console.log('👤 User Role:', user?.role);
-      console.log('🏢 CompanyId:', companyIdToUse || 'não enviado');
+      console.log('🏢 CompanyId:', companyIdToUse || 'not sent');
 
       try {
         setSavingTransport(true);
         if (editingId) {
           console.log(`🔧 PATCH /transports/${editingId}`);
           await api.patch(`/transports/${editingId}`, dataToSend);
-          setTransportMessage('Transporte atualizado com sucesso');
+          setTransportMessage('Transport updated successfully');
         } else {
           console.log('🆕 POST /transports');
           await api.post('/transports', dataToSend);
-          setTransportMessage('Transporte criado com sucesso');
+          setTransportMessage('Transport created successfully');
         }
 
-        // Recarregar dados e limpar formulário
+        // Reload date and clear form
         await loadTransports();
         await loadVehicles();
         resetForm();
 
-        // Remover mensagem após breve período
+        // Remove message after brief period
         setTimeout(() => setTransportMessage(''), 5000);
       } finally {
         setSavingTransport(false);
       }
     } catch (error: any) {
       console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      console.error(' Erro ao guardar transporte');
-      console.error('📋 Mensagem:', error.message);
-      console.error('📊 Response data:', error.response?.data);
+      console.error(' Error saving transport');
+      console.error('📋 Message:', error.message);
+      console.error('📊 Response date:', error.response?.data);
       console.error('🔢 Response status:', error.response?.status);
       console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      setError(extractErrorMessage(error, 'Erro ao guardar transporte'));
+      setError(extractErrorMessage(error, 'Error saving transport'));
     }
   };
 
@@ -365,9 +365,9 @@ const TransportList: React.FC = () => {
       estimatedArrival: transport.estimatedArrival.split('T')[0],
       totalWeight: transport.totalWeight,
       notes: transport.notes || '',
-      // Normalizar status do backend (podendo ser 'CANCELED') para o rótulo usado na UI ('CANCELLED')
+      // Normalize backend status (may be 'CANCELED') to the label used in UI ('CANCELLED')
       status: (transport.status as string) === 'CANCELED' ? 'CANCELLED' : transport.status,
-      products: [], // ⚠️ Limpar produtos na edição
+      products: [], // ⚠️ Clear products when editing
     });
     setEditingId(transport.id);
     setShowForm(true);
@@ -375,18 +375,18 @@ const TransportList: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Deseja realmente excluir este transporte?')) {
+    if (window.confirm('Are you sure you want to delete this transport?')) {
       try {
         setError('');
         setDeletingTransportId(id);
         await api.delete(`/transports/${id}`);
         await loadTransports();
         await loadVehicles();
-        setTransportMessage('Transporte excluído');
+        setTransportMessage('Transport deleted');
         setTimeout(() => setTransportMessage(''), 4000);
       } catch (error: any) {
-        console.error('Erro ao excluir transporte:', error);
-        setError(extractErrorMessage(error, 'Erro ao excluir transporte'));
+        console.error('Error deleting transport:', error);
+        setError(extractErrorMessage(error, 'Error deleting transport'));
       } finally {
         setDeletingTransportId(null);
       }
@@ -423,7 +423,7 @@ const TransportList: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-PT');
+    return new Date(dateString).toLocaleDateString('en-GB');
   };
 
   if (loading) {
@@ -441,8 +441,8 @@ const TransportList: React.FC = () => {
     <div className={`${theme.backgrounds.page} p-6 min-h-screen`}>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-white">Transportes</h1>
-          <p className="text-sm text-[#cbd5e1] mt-1">Gestão de transportes e entregas</p>
+          <h1 className="text-3xl font-bold text-white">Transports</h1>
+          <p className="text-sm text-[#cbd5e1] mt-1">Management of transports and deliveries</p>
         </div>
         <button
           onClick={() => {
@@ -460,14 +460,14 @@ const TransportList: React.FC = () => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
-              Cancelar
+              Cancel
             </>
           ) : (
             <>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Novo Transporte
+              New Transport
             </>
           )}
         </button>
@@ -480,7 +480,7 @@ const TransportList: React.FC = () => {
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
             </svg>
             <div>
-              <p className="font-semibold">Erro</p>
+              <p className="font-semibold">Error</p>
               <p className="text-sm">{error}</p>
             </div>
           </div>
@@ -491,7 +491,7 @@ const TransportList: React.FC = () => {
         <div className="flex-1 relative">
           <input
             type="text"
-            placeholder="Pesquisar transportes..."
+            placeholder="Search transports..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-4 pr-4 py-2 border border-gray-300 rounded-lg bg-[#1e293b] text-white"
@@ -528,14 +528,14 @@ const TransportList: React.FC = () => {
                 <svg className="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                Editar Transporte
+                Edit Transport
               </>
             ) : (
               <>
                 <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
-                Novo Transporte
+                 new Transport
               </>
             )}
           </h2>
@@ -547,11 +547,11 @@ const TransportList: React.FC = () => {
                     SUPER ADMIN
                   </span>
                   <span className="text-sm text-[#cbd5e1] font-medium">
-                    Selecione a empresa para criar o transporte
+                    Select the company to create the transport
                   </span>
                 </div>
                 <label className="block text-sm font-medium mb-2 text-amber-200">
-                  Empresa *
+                  Company *
                 </label>
                 <select
                   required
@@ -559,7 +559,7 @@ const TransportList: React.FC = () => {
                   onChange={(e) => setSelectedCompanyId(e.target.value)}
                   className={theme.inputs.base}
                 >
-                  <option value="">Selecione uma empresa...</option>
+                  <option value="">Select a company...</option>
                   {companies.map(company => (
                     <option key={company.id} value={company.id}>
                       {company.name}
@@ -577,7 +577,7 @@ const TransportList: React.FC = () => {
                 onChange={(e) => setFormData({ ...formData, vehicleId: e.target.value })}
                 className={theme.inputs.base}
               >
-                <option value="">Selecione um veículo</option>
+                <option value="">Select a vehicle</option>
                 {vehicles.map((vehicle) => (
                   <option key={vehicle.id} value={vehicle.id}>
                     {vehicle.licensePlate} - {vehicle.model} ({vehicle.brand})
@@ -586,7 +586,7 @@ const TransportList: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1 text-amber-200">Peso Total (kg) *</label>
+              <label className="block text-sm font-medium mb-1 text-amber-200">Weight Total (kg) *</label>
               <input
                 type="number"
                 required
@@ -599,29 +599,29 @@ const TransportList: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1 text-amber-200">Origem *</label>
+              <label className="block text-sm font-medium mb-1 text-amber-200">Origin *</label>
               <input
                 type="text"
                 required
                 value={formData.origin}
                 onChange={(e) => setFormData({ ...formData, origin: e.target.value })}
                 className={theme.inputs.base}
-                placeholder="Cidade/Local de origem"
+                placeholder="City/Local de origin"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1 text-amber-200">Destino *</label>
+              <label className="block text-sm font-medium mb-1 text-amber-200">Destination *</label>
               <input
                 type="text"
                 required
                 value={formData.destination}
                 onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
                 className={theme.inputs.base}
-                placeholder="Cidade/Local de destino"
+                placeholder="City/Local de destination"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1 text-amber-200">Data de Partida *</label>
+              <label className="block text-sm font-medium mb-1 text-amber-200">Date de Partida *</label>
               <input
                 type="date"
                 required
@@ -647,10 +647,10 @@ const TransportList: React.FC = () => {
                 onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
                 className={theme.inputs.base}
               >
-                <option value="PENDING">Pendente</option>
+                <option value="PENDING">Pending</option>
                 <option value="IN_TRANSIT">Em Trânsito</option>
                 <option value="DELIVERED">Entregue</option>
-                <option value="CANCELLED">Cancelado</option>
+                <option value="CANCELLED">Cancelled</option>
               </select>
             </div>
             <div className="col-span-2">
@@ -664,13 +664,13 @@ const TransportList: React.FC = () => {
               />
             </div>
 
-            {/*  SEÇÃO DE PRODUTOS COM LÓGICA CORRIGIDA */}
+            {/*  SEÇÃO DE productS COM LÓGICA CORRIGIDA */}
             <div className="col-span-2 border-t border-amber-500/30 pt-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Package className="w-5 h-5 text-amber-400" />
                   <h3 className="text-lg font-semibold text-white">
-                    Produtos ({formData.products.length})
+                    Products ({formData.products.length})
                   </h3>
                   {editingId && (
                     <span className="px-2 py-1 bg-orange-900/30 text-orange-400 text-xs font-bold rounded border border-orange-500/30">
@@ -687,7 +687,7 @@ const TransportList: React.FC = () => {
                     className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-lg hover:from-emerald-600 hover:to-emerald-700 transition-all font-bold shadow-lg flex items-center gap-2"
                   >
                     <Package className="w-4 h-4" />
-                    Adicionar Produtos
+                    Add Products
                   </button>
                 )}
               </div>
@@ -701,10 +701,10 @@ const TransportList: React.FC = () => {
                     </svg>
                     <div>
                       <p className="text-amber-300 font-semibold text-sm">
-                        ℹ️ Produtos não podem ser editados após a criação do transporte
+                        ℹ️ Products cannot be edited after transport creation
                       </p>
                       <p className="text-amber-400/70 text-xs mt-1">
-                        Para alterar produtos: cancele este transporte e crie um novo
+                        To change products: cancel this transport and create a new one
                       </p>
                     </div>
                   </div>
@@ -714,9 +714,9 @@ const TransportList: React.FC = () => {
               {formData.products.length === 0 && !editingId ? (
                 <div className="p-6 bg-slate-800/50 border-2 border-dashed border-amber-500/30 rounded-lg text-center">
                   <Package className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-                  <p className="text-slate-400 font-medium">Nenhum produto adicionado</p>
+                  <p className="text-slate-400 font-medium">Nenhum product adicionado</p>
                   <p className="text-sm text-slate-500 mt-1">
-                    Clique em "Adicionar Produtos" para selecionar
+                    Click "Add Products" to select
                   </p>
                 </div>
               ) : formData.products.length > 0 ? (
@@ -736,7 +736,7 @@ const TransportList: React.FC = () => {
                             {item.product?.internalCode || item.productId}
                           </span>
                           <h4 className="text-white font-semibold">
-                            {item.product?.description || 'Produto'}
+                            {item.product?.description || 'product'}
                           </h4>
                           {editingId && (
                             <span className="text-xs text-slate-500 italic">
@@ -745,19 +745,19 @@ const TransportList: React.FC = () => {
                           )}
                         </div>
                         <p className="text-sm text-slate-400">
-                          Quantidade: <span className="text-amber-300 font-semibold">
+                          Quantity: <span className="text-amber-300 font-semibold">
                             {item.quantity} {item.product?.unit || 'un'}
                           </span>
                         </p>
                       </div>
                       
-                      {/*  Botão remover só aparece na CRIAÇÃO */}
+                      {/*  Botão remove só aparece na CRIAÇÃO */}
                       {!editingId && (
                         <button
                           type="button"
                           onClick={() => handleRemoveProduct(item.productId)}
                           className="p-2 text-red-400 hover:text-red-300 hover:bg-red-900/30 rounded-lg transition-all"
-                          title="Remover produto"
+                          title="Remove product"
                         >
                           <Trash2 className="w-5 h-5" />
                         </button>
@@ -767,7 +767,7 @@ const TransportList: React.FC = () => {
 
                   <div className="p-4 bg-gradient-to-r from-amber-900/20 to-amber-800/10 border border-amber-500/30 rounded-lg">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-400">Total de produtos:</span>
+                      <span className="text-slate-400">Total products:</span>
                       <span className="text-amber-300 font-bold text-lg">
                         {formData.products.length}
                       </span>
@@ -789,7 +789,7 @@ const TransportList: React.FC = () => {
                 onClick={resetForm}
                 className="px-6 py-2 border-2 border-amber-500/50 text-amber-400 rounded-lg hover:bg-amber-900/20 transition-all font-bold hover:border-amber-400"
               >
-                Cancelar
+                Cancel
               </button>
               <button
                 type="submit"
@@ -802,14 +802,14 @@ const TransportList: React.FC = () => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
-                    {editingId ? 'Atualizando...' : 'Criando...'}
+                    {editingId ? 'Updating...' : 'Criando...'}
                   </>
                 ) : (
                   <>
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    {editingId ? 'Atualizar' : 'Criar'}
+                    {editingId ? 'Update' : 'Create'}
                   </>
                 )}
               </button>
@@ -827,7 +827,7 @@ const TransportList: React.FC = () => {
                   Veículo
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
-                  Rota
+                  Route
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Partida
@@ -836,7 +836,7 @@ const TransportList: React.FC = () => {
                   Chegada
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
-                  Peso
+                  Weight
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Status
@@ -881,7 +881,7 @@ const TransportList: React.FC = () => {
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
-                      Editar
+                      Edit
                     </button>
                     <button
                       onClick={() => handleDelete(transport.id)}
@@ -924,7 +924,7 @@ const TransportList: React.FC = () => {
             <svg className="w-16 h-16 mx-auto mb-4 text-amber-500/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <p className="text-lg font-bold text-amber-400">Nenhum transporte cadastrado</p>
+            <p className="text-lg font-bold text-amber-400">Nenhum transport cadastrado</p>
             <p className="text-sm mt-1">Click "New Transport" to get started</p>
           </div>
         )}
@@ -938,7 +938,7 @@ const TransportList: React.FC = () => {
 
       {transports.length > 0 && (
         <div className="mt-4 text-sm text-amber-400/80 font-medium">
-          Total: <span className="font-bold text-amber-400">{transports.length}</span> transporte{transports.length !== 1 ? 's' : ''}
+          Total: <span className="font-bold text-amber-400">{transports.length}</span> transport{transports.length !== 1 ? 's' : ''}
         </div>
       )}
 

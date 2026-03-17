@@ -33,7 +33,10 @@ let ProductsController = class ProductsController {
     }
     create(createProductDto, user) {
         console.log('🔍 [CONTROLLER] Body recebido:', createProductDto);
-        console.log('🔍 [CONTROLLER] User:', { id: user.id, companyId: user.companyId });
+        console.log('🔍 [CONTROLLER] User:', {
+            id: user.id,
+            companyId: user.companyId,
+        });
         return this.productsService.create(createProductDto, user.companyId, user.id);
     }
     findAll(user, filters) {
@@ -62,7 +65,7 @@ exports.ProductsController = ProductsController;
 __decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR),
-    (0, swagger_1.ApiOperation)({ summary: 'Criar novo produto' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Create  new product' }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
@@ -72,7 +75,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR),
-    (0, swagger_1.ApiOperation)({ summary: 'Listar todos os produtos' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Listar todos os products' }),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -91,7 +94,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR),
-    (0, swagger_1.ApiOperation)({ summary: 'Obter produto por ID' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get product por ID' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
@@ -101,7 +104,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id/movements'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR),
-    (0, swagger_1.ApiOperation)({ summary: 'Obter histórico de movimentos' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get histórico de movimentos' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
@@ -111,7 +114,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar produto' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update product' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, current_user_decorator_1.CurrentUser)()),
@@ -122,7 +125,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id/status'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar estado do produto' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update estado do product' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, current_user_decorator_1.CurrentUser)()),
@@ -133,7 +136,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Eliminar produto' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete product' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),

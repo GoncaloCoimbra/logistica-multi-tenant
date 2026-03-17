@@ -1,9 +1,17 @@
-﻿import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
+﻿import {
+  Injectable,
+  OnModuleInit,
+  OnModuleDestroy,
+  Logger,
+} from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { TenantContextService } from '../common/tenant-context.service';
 
 @Injectable()
-export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
   private readonly logger = new Logger(PrismaService.name);
 
   constructor(private readonly tenantContext: TenantContextService) {
@@ -35,12 +43,18 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
             ...params.args.data,
             companyId,
           };
-        } else if (params.action === 'update' || params.action === 'updateMany') {
+        } else if (
+          params.action === 'update' ||
+          params.action === 'updateMany'
+        ) {
           params.args.where = {
             ...params.args.where,
             companyId,
           };
-        } else if (params.action === 'delete' || params.action === 'deleteMany') {
+        } else if (
+          params.action === 'delete' ||
+          params.action === 'deleteMany'
+        ) {
           params.args.where = {
             ...params.args.where,
             companyId,

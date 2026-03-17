@@ -49,7 +49,7 @@ const collectDefaultMetrics = client.collectDefaultMetrics || client.collectDefa
 collectDefaultMetrics();
 let MetricsController = class MetricsController {
     async metrics() {
-        return (await client.register.metrics());
+        return await client.register.metrics();
     }
 };
 exports.MetricsController = MetricsController;

@@ -35,7 +35,7 @@ let TransportsController = TransportsController_1 = class TransportsController {
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         this.logger.log(`📥 POST /transports`);
         this.logger.log(`👤 User: ${user.email} (${user.role})`);
-        this.logger.log(`🏢 CompanyId: ${user.companyId || 'SUPER_ADMIN - sem empresa'}`);
+        this.logger.log(`🏢 CompanyId: ${user.companyId || 'SUPER_ADMIN - sem company'}`);
         this.logger.log(`📋 DTO recebido: ${JSON.stringify(createTransportDto)}`);
         const companyId = createTransportDto.companyId || user.companyId;
         if (!companyId) {
@@ -43,56 +43,44 @@ let TransportsController = TransportsController_1 = class TransportsController {
             throw new common_1.HttpException('CompanyId obrigatório', common_1.HttpStatus.BAD_REQUEST);
         }
         const result = await this.transportsService.create(createTransportDto, companyId, user.id);
-        this.logger.log(` Transporte criado: ${result.id}`);
+        this.logger.log(` Transport criado: ${result.id}`);
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         return result;
     }
     findAll(req, filters, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /transports - User: ${user.email} (${user.role})`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.transportsService.findAll(companyId, filters);
     }
     findPending(req, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /transports/pending - User: ${user.email}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.transportsService.findPending(companyId);
     }
     findInTransit(req, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /transports/in-transit - User: ${user.email}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.transportsService.findInTransit(companyId);
     }
     findOne(id, req) {
         const user = req.user;
         this.logger.log(`📥 GET /transports/${id} - User: ${user.email}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? undefined : user.companyId;
         return this.transportsService.findOne(id, companyId);
     }
     async update(id, updateTransportDto, req) {
         const user = req.user;
         this.logger.log(`📥 PATCH /transports/${id} - User: ${user.email}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? undefined : user.companyId;
         return this.transportsService.update(id, updateTransportDto, companyId, user.id);
     }
     async updateStatus(id, body, req) {
         const user = req.user;
         this.logger.log(`📥 PATCH /transports/${id}/status - New status: ${body.status}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? undefined : user.companyId;
         const status = body.status;
         return this.transportsService.updateStatus(id, status, companyId, user.id);
     }
@@ -100,11 +88,11 @@ let TransportsController = TransportsController_1 = class TransportsController {
         const user = req.user;
         this.logger.log(`🗑️ DELETE /transports/${id} (force=${force})`);
         this.logger.log(`👤 User: ${user.email} (${user.role})`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? undefined : user.companyId;
         const forceFlag = force === 'true' || force === '1' || force === 'yes';
-        if (forceFlag && user.role !== client_1.Role.ADMIN && user.role !== client_1.Role.SUPER_ADMIN) {
+        if (forceFlag &&
+            user.role !== client_1.Role.ADMIN &&
+            user.role !== client_1.Role.SUPER_ADMIN) {
             throw new common_1.ForbiddenException('Apenas utilizadores com privilégios de admin podem forçar a eliminação de transportes.');
         }
         return this.transportsService.remove(id, companyId, user.id, forceFlag);

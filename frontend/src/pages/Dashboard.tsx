@@ -213,10 +213,10 @@ const Dashboard: React.FC = () => {
 
   // ── Export ──
   const handleExportReport = () => {
-    if (!stats || stats.totalProducts === 0) { alert('No data to export'); return; }
+    if (!stats || stats.totalProducts === 0) { alert('No date to export'); return; }
     const csv = [
       ['Performance Report – LogiSphere'],
-      ['Date', new Date().toLocaleDateString('pt-PT')],
+      ['Date', new Date().toLocaleDateString('en-US')],
       [''],
       ['GENERAL SUMMARY'],
       ['Total Products', stats.totalProducts],
@@ -242,7 +242,7 @@ const Dashboard: React.FC = () => {
     const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `relatorio_${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `report_${new Date().toISOString().split('T')[0]}.csv`;
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -277,11 +277,11 @@ const Dashboard: React.FC = () => {
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 className="text-lg font-bold mb-2 text-white">Error loading data</h2>
+          <h2 className="text-lg font-bold mb-2 text-white">Error loading date</h2>
           <p className="text-sm mb-6 text-slate-300">
             {error instanceof AxiosError
               ? error.response?.data?.message || error.message
-              : (error as any)?.message || 'Erro desconhecido'}
+              : (error as any)?.message || 'Unknown error'}
           </p>
           <div className="flex gap-3 justify-center">
             <button
@@ -302,7 +302,7 @@ const Dashboard: React.FC = () => {
     );
   }
 
-  // ── Chart data ──
+  // ── Chart date ──
   const pieData = stats.productsByStatus.map((item: any) => ({
     name:  statusLabels.product[item.status] || item.status,
     value: item.count,
@@ -379,7 +379,7 @@ const Dashboard: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-white">Performance Report</h1>
-            <p className="text-sm text-slate-300 mt-0.5">Visão geral do sistema logístico</p>
+            <p className="text-sm text-slate-300 mt-0.5">Logistics system overview</p>
           </div>
           <div className="flex items-center gap-3">
             {/* Period badge */}
@@ -510,7 +510,7 @@ const Dashboard: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
                     d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
                 </svg>
-                <p className="text-sm">No data to display</p>
+                <p className="text-sm">No date to display</p>
               </div>
             )}
           </div>
@@ -524,8 +524,8 @@ const Dashboard: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="font-semibold text-sm text-white">Resumo por Categoria</h3>
-                  <p className="text-xs mt-0.5 text-slate-400">Contagem por estado do produto</p>
+                  <h3 className="font-semibold text-sm text-white">Summary by Category</h3>
+                  <p className="text-xs mt-0.5 text-slate-400">Count by product status</p>
                 </div>
                 <button
                   onClick={() => setExpandedChart(expandedChart === 'bar' ? null : 'bar')}
@@ -568,7 +568,7 @@ const Dashboard: React.FC = () => {
                   />
                   <Bar
                     dataKey="value"
-                    name="Produtos"
+                    name="Products"
                     radius={[8, 8, 0, 0]}
                     shape={(props: any) => (
                       <RoundedBar {...props} colorIndex={props.colorIndex ?? barData.findIndex(d => d.name === props.name)} />
@@ -623,7 +623,7 @@ const Dashboard: React.FC = () => {
           )}
         </div>
 
-        {/* ── Top 5 Fornecedores ───────────────────────────────────────────── */}
+        {/* ── Top 5 Suppliers ─────────────────────────────────────────────── */}
         <Card>
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -634,7 +634,7 @@ const Dashboard: React.FC = () => {
               onClick={loadAllSuppliers}
               className="text-xs font-bold text-amber-400 hover:text-amber-300 transition-colors"
             >
-              Ver todos →
+              View all →
             </button>
           </div>
 
@@ -718,16 +718,16 @@ const Dashboard: React.FC = () => {
             <div className="flex-1">
               <p className="font-bold text-sm text-red-400 mb-1">Attention required</p>
               <p className="text-sm text-slate-300">
-                Existem{' '}
-                <strong className="text-red-400">{stats.summary.rejected} produto(s) rejeitado(s)</strong>{' '}
-                que requerem acção imediata.
+                There are{' '}
+                <strong className="text-red-400">{stats.summary.rejected} rejected product(s)</strong>{' '}
+                that require immediate action.
               </p>
             </div>
             <button
-              onClick={() => navigate('/produtos?status=REJECTED')}
+              onClick={() => navigate('/products?status=REJECTED')}
               className="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-bold transition-all bg-red-900/20 text-red-400 border border-red-500/40 hover:bg-red-900/40"
             >
-              Ver produtos →
+              View products →
             </button>
           </div>
         )}
@@ -735,7 +735,7 @@ const Dashboard: React.FC = () => {
         {/* ── Summary ─────────────────────────────────────────────────────── */}
         <Card>
           <p className="text-xs font-black uppercase tracking-widest text-amber-400 mb-5">
-            Resumo do Período
+            Period Summary
           </p>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {[
@@ -772,7 +772,7 @@ const Dashboard: React.FC = () => {
           <div className="w-full max-w-3xl rounded-2xl overflow-hidden flex flex-col bg-gradient-to-br from-slate-800 to-slate-900 border-2 border-amber-500/30 max-h-[80vh]">
             {/* header */}
             <div className="flex items-center justify-between px-6 py-5 border-b-2 border-amber-500/20 bg-gradient-to-r from-slate-900 to-black">
-              <h2 className="font-bold text-lg text-white">Todos os Fornecedores</h2>
+              <h2 className="font-bold text-lg text-white">All Suppliers</h2>
               <button
                 onClick={() => setShowSuppliersModal(false)}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-white transition-colors"
@@ -787,7 +787,7 @@ const Dashboard: React.FC = () => {
             <div className="overflow-y-auto p-6 flex-1">
               {allSuppliers.length === 0 ? (
                 <p className="text-center py-12 text-sm text-amber-500/70 font-bold">
-                  Nenhum fornecedor encontrado
+                  No suppliers found
                 </p>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -822,7 +822,7 @@ const Dashboard: React.FC = () => {
                 onClick={() => { navigate('/fornecedores'); setShowSuppliersModal(false); }}
                 className="w-full py-3 rounded-xl text-sm font-bold transition-all bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-white shadow-lg"
               >
-                Ir para Gestão de Fornecedores
+                Go to Supplier Management
               </button>
             </div>
           </div>

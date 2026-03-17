@@ -40,9 +40,9 @@ const COLORS = {
 
   // Semantic
   semantic: {
-    success: '#34d399',          // Verde (sucesso)
-    warning: '#f59e0b',          // Âmbar (aviso)
-    danger: '#f87171',           // Vermelho (erro)
+    success: '#34d399',          // Verde (success)
+    warning: '#f59e0b',          // Âmbar (warning)
+    danger: '#f87171',           // Vermelho (error)
     info: '#4f85f6',             // Azul (informação)
     purple: '#a78bfa',           // Roxo adicional
     orange: '#fb923c',           // Laranja adicional

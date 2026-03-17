@@ -37,7 +37,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
             },
         });
         if (!user || !user.isActive) {
-            throw new common_1.UnauthorizedException('Utilizador não encontrado ou inativo');
+            throw new common_1.UnauthorizedException('User not found or inactive');
         }
         return user;
     }

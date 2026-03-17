@@ -10,8 +10,8 @@ export class ReportsService {
       where: { companyId },
       include: { supplier: true, company: true },
     });
-    
-    return { title: 'Relatório de Produtos', data: products, generatedAt: new Date() };
+
+    return { title: 'Product Report', data: products, generatedAt: new Date() };
   }
 
   async generateTransportReport(companyId: string) {
@@ -19,7 +19,11 @@ export class ReportsService {
       where: { companyId },
       include: { vehicle: true },
     });
-    
-    return { title: 'Relatório de Transportes', data: transports, generatedAt: new Date() };
+
+    return {
+      title: 'Relatório de Transportes',
+      data: transports,
+      generatedAt: new Date(),
+    };
   }
 }

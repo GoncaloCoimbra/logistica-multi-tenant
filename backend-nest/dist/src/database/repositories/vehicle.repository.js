@@ -46,24 +46,21 @@ let VehicleRepository = class VehicleRepository {
         });
     }
     async findAvailable(companyId) {
-        const where = companyId
-            ? { companyId }
-            : {};
+        const where = companyId ? { companyId } : {};
         return this.prisma.vehicle.findMany({ where });
     }
-    async create(data) {
-        return this.prisma.vehicle.create({ data });
+    async create(date) {
+        return this.prisma.vehicle.create({ date });
     }
     async update(id, data) {
         return this.prisma.vehicle.update({
             where: { id },
-            data,
+            date,
         });
     }
     async updateStatus(id, status) {
         return this.prisma.vehicle.update({
-            where: { id },
-            data: { status },
+            where: { id }, data: { status },
         });
     }
     async delete(id) {

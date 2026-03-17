@@ -8,10 +8,10 @@ export declare class TasksService {
     constructor(prisma: PrismaService);
     create(createTaskDto: CreateTaskDto, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
-        companyId: string;
+        title: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
+        companyId: string;
         description: string;
         status: import(".prisma/client").$Enums.TaskStatus;
         priority: import(".prisma/client").$Enums.TaskPriority;
@@ -21,10 +21,10 @@ export declare class TasksService {
     }>;
     findAll(filterDto: FilterTaskDto, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
-        companyId: string;
+        title: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
+        companyId: string;
         description: string;
         status: import(".prisma/client").$Enums.TaskStatus;
         priority: import(".prisma/client").$Enums.TaskPriority;
@@ -34,10 +34,10 @@ export declare class TasksService {
     }[]>;
     findOne(id: string, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
-        companyId: string;
+        title: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
+        companyId: string;
         description: string;
         status: import(".prisma/client").$Enums.TaskStatus;
         priority: import(".prisma/client").$Enums.TaskPriority;
@@ -47,10 +47,10 @@ export declare class TasksService {
     }>;
     update(id: string, updateTaskDto: UpdateTaskDto, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
-        companyId: string;
+        title: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
+        companyId: string;
         description: string;
         status: import(".prisma/client").$Enums.TaskStatus;
         priority: import(".prisma/client").$Enums.TaskPriority;
@@ -60,10 +60,10 @@ export declare class TasksService {
     }>;
     updateStatus(id: string, updateStatusDto: UpdateTaskStatusDto, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
-        companyId: string;
+        title: string;
         createdAt: Date;
         updatedAt: Date;
-        title: string;
+        companyId: string;
         description: string;
         status: import(".prisma/client").$Enums.TaskStatus;
         priority: import(".prisma/client").$Enums.TaskPriority;

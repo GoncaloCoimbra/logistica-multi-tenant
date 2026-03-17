@@ -67,9 +67,14 @@ describeOrSkip('Transports e2e', () => {
   }, 30000);
 
   afterAll(async () => {
-    if (transportId) await prisma.transport.delete({ where: { id: transportId } }).catch(() => {});
-    if (productId) await prisma.product.delete({ where: { id: productId } }).catch(() => {});
-    if (companyId) await prisma.company.delete({ where: { id: companyId } }).catch(() => {});
+    if (transportId)
+      await prisma.transport
+        .delete({ where: { id: transportId } })
+        .catch(() => {});
+    if (productId)
+      await prisma.product.delete({ where: { id: productId } }).catch(() => {});
+    if (companyId)
+      await prisma.company.delete({ where: { id: companyId } }).catch(() => {});
     await prisma.$disconnect();
     await app.close();
   });
@@ -84,8 +89,10 @@ describeOrSkip('Transports e2e', () => {
         vehicleId,
         origin: 'Warehouse A',
         destination: 'Client B',
-        departureDate: new Date().toISOString().slice(0,10),
-        estimatedArrival: new Date(Date.now() + 24 * 3600 * 1000).toISOString().slice(0,10),
+        departureDate: new Date().toISOString().slice(0, 10),
+        estimatedArrival: new Date(Date.now() + 24 * 3600 * 1000)
+          .toISOString()
+          .slice(0, 10),
         totalWeight: 10,
         products: [{ productId, quantity: 1 }],
       });

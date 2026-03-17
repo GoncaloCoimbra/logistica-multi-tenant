@@ -17,19 +17,15 @@ export class ReportsController {
 
   @Get('products')
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Relatório de produtos' })
+  @ApiOperation({ summary: 'Relatï¿½rio dproducttos' })
   getProductsReport(@CurrentUser() user: any) {
     return this.reportsService.generateProductReport(user.companyId);
   }
 
   @Get('transports')
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Relatório de transportes' })
+  @ApiOperation({ summary: 'Relatï¿½rio de transportes' })
   getTransportsReport(@CurrentUser() user: any) {
     return this.reportsService.generateTransportReport(user.companyId);
   }
 }
-
-
-
-

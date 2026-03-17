@@ -7,7 +7,7 @@ async function main() {
   console.log('🌱 Starting seed...\n');
 
 
-  // 1️ SUPER ADMIN (SEM EMPRESA)
+  // 1️ SUPER ADMIN (WITHOUT COMPANY)
   
   console.log(' Creating Super Admin...');
   
@@ -332,7 +332,7 @@ async function main() {
   console.log('   Email: superadmin@sistema.com');
   console.log('   Password: superadmin123');
   console.log('   Role: SUPER_ADMIN');
-  console.log('   Company: (sem empresa - acesso global)');
+  console.log('   Company: (no company - global access)');
 
   console.log('\n COMPANY 1 - Logistics Demo Ltd');
   console.log('    Admin: superadmin@sistema.com /superadmin123');
@@ -350,7 +350,7 @@ async function main() {
   console.log(`    Suppliers: 1`);
 
   console.log('\n' + '='.repeat(50));
-  console.log('💡 TIP: Use o Super Admin para gerenciar todas as empresas!');
+  console.log('💡 TIP: Use the Super Admin to manage all companies!');
   console.log('='.repeat(50) + '\n');
 }
 

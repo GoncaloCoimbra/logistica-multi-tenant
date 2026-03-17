@@ -38,7 +38,7 @@ exports.ReportsController = ReportsController;
 __decorate([
     (0, common_1.Get)('products'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Relat�rio de produtos' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Relat�rio dproducttos' }),
     __param(0, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

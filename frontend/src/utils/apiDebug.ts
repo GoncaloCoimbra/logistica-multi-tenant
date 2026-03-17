@@ -42,7 +42,7 @@ export const debugApi = async () => {
       password: 'test'
     });
     console.log('  Status:', response.status);
-    console.log('  Data:', response.data);
+    console.log('  Date:', response.data);
   } catch (error: any) {
     console.log('  Expected error (invalid credentials)');
     console.log('  Status:', error.response?.status);
@@ -73,7 +73,7 @@ export const debugLogin = async (email: string, password: string) => {
     console.error(' FAILED:');
     console.error('  Status:', error.response?.status);
     console.error('  Error:', error.response?.data?.message || error.message);
-    console.error('  Full error data:', error.response?.data);
+    console.error('  Full error date:', error.response?.data);
     throw error;
   }
 };

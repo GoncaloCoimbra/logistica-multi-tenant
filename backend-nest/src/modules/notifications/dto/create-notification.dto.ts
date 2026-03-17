@@ -2,17 +2,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateNotificationDto {
-  @ApiProperty({ 
-    example: 'Nova movimentação de produto',
-    description: 'Título da notificação'
+  @ApiProperty({
+    example: 'New product movement',
+    description: 'Notification title',
   })
   @IsString()
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty({ 
-    example: 'O produto XYZ foi movido para o armazém A',
-    description: 'Conteúdo da notificação'
+  @ApiProperty({
+    example: 'Product XYZ was moved to warehouse A',
+    description: 'Notification content',
   })
   @IsString()
   @IsNotEmpty()
@@ -22,7 +22,7 @@ export class CreateNotificationDto {
 export class MarkAsReadDto {
   @ApiProperty({
     example: '123e4567-e89b-12d3-a456-426614174000',
-    description: 'ID da notificação'
+    description: 'Notification ID',
   })
   @IsString()
   @IsNotEmpty()

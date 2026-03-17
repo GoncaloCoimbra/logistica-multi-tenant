@@ -89,7 +89,7 @@ let SuperadminService = class SuperadminService {
             };
         }
         catch (error) {
-            console.error('Erro ao buscar estatísticas globais:', error);
+            console.error('Error fetching global statistics:', error);
             throw error;
         }
     }

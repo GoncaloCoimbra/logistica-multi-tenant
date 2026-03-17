@@ -1,12 +1,12 @@
 ﻿// src/modules/vehicles/vehicles.service.ts
 
-import { 
-  Injectable, 
-  NotFoundException, 
-  ConflictException, 
-  Logger, 
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  Logger,
   BadRequestException,
-  InternalServerErrorException
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { VehicleStatus, TransportStatus } from '@prisma/client';
@@ -17,37 +17,37 @@ export class VehiclesService {
 
   constructor(private prisma: PrismaService) {}
 
-  async create(data: any, companyId: string) {
+  async create(date: any, companyId: string) {
     try {
       this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-      this.logger.log(`📝 Criando veículo para company: ${companyId}`);
-      this.logger.log(`📋 Dados recebidos: ${JSON.stringify(data)}`);
+      this.logger.log(`📝 Creating vehicle for company: ${companyId}`);
+      this.logger.log(`📋 Received date: ${JSON.stringify(date)}`);
 
-      // Validar campos obrigatórios
-      if (!data.licensePlate) {
-        throw new BadRequestException('Matrícula é obrigatória');
+      // Validate campos obrigatórios
+      if (!date.licensePlate) {
+        throw new BadRequestException('License plate is required');
       }
-      if (!data.model) {
-        throw new BadRequestException('Modelo é obrigatório');
+      if (!date.model) {
+        throw new BadRequestException('Model is required');
       }
-      if (!data.brand) {
-        throw new BadRequestException('Marca é obrigatória');
+      if (!date.brand) {
+        throw new BadRequestException('Brand is required');
       }
-      if (!data.type) {
-        throw new BadRequestException('Tipo é obrigatório');
+      if (!date.type) {
+        throw new BadRequestException('Type is required');
       }
-      if (!data.capacity && data.capacity !== 0) {
-        throw new BadRequestException('Capacidade é obrigatória');
+      if (!date.capacity && date.capacity !== 0) {
+        throw new BadRequestException('Capacity is required');
       }
-      if (!data.year) {
-        throw new BadRequestException('Ano é obrigatório');
+      if (!date.year) {
+        throw new BadRequestException('Year is required');
       }
 
-      // Normalizar matrícula (remover espaços, converter para maiúsculas)
-      const normalizedPlate = data.licensePlate.trim().toUpperCase();
-      this.logger.log(`🔤 Matrícula normalizada: ${normalizedPlate}`);
+      // Normalizar matrícula (remove espaços, converter para maiúsculas)
+      const normalizedPlate = date.licensePlate.trim().toUpperCase();
+      this.logger.log(`🔤 License plate normalized: ${normalizedPlate}`);
 
-      // Verificar se matrícula já existe
+      // Check se matrícula already exists
       const existing = await this.prisma.vehicle.findFirst({
         where: {
           licensePlate: normalizedPlate,
@@ -56,85 +56,96 @@ export class VehiclesService {
       });
 
       if (existing) {
-        this.logger.error(` Matrícula ${normalizedPlate} já existe`);
-        throw new ConflictException('Já existe um veículo com esta matrícula');
+        this.logger.error(` License plate ${normalizedPlate} already exists`);
+        throw new ConflictException(
+          'A vehicle with this license plate already exists',
+        );
       }
 
-      // Converter e validar números
+      // Converter e validate números
       let capacity: number;
       let year: number;
 
       try {
-        capacity = Number(data.capacity);
+        capacity = Number(date.capacity);
         if (isNaN(capacity) || capacity < 0) {
-          throw new Error('Capacidade inválida');
+          throw new Error('Invalid capacity');
         }
       } catch (error) {
-        this.logger.error(` Capacidade inválida: ${data.capacity}`);
-        throw new BadRequestException('Capacidade deve ser um número válido maior ou igual a 0');
+        this.logger.error(`❌ Invalid capacity: ${date.capacity}`);
+        throw new BadRequestException(
+          'Capacity must be a valid number greater than or equal to 0',
+        );
       }
 
       try {
-        year = Number(data.year);
+        year = Number(date.year);
         if (isNaN(year) || year < 1900 || year > new Date().getFullYear() + 1) {
-          throw new Error('Ano inválido');
+          throw new Error('Invalid year');
         }
       } catch (error) {
-        this.logger.error(` Ano inválido: ${data.year}`);
-        throw new BadRequestException(`Ano deve ser entre 1900 e ${new Date().getFullYear() + 1}`);
+        this.logger.error(`❌ Invalid year: ${date.year}`);
+        throw new BadRequestException(
+          `Year must be between 1900 and ${new Date().getFullYear() + 1}`,
+        );
       }
 
-      // Validar e normalizar status
+      // Validate and normalize status
       let status = VehicleStatus.available;
-      if (data.status) {
+      if (date.status) {
         const validStatuses = Object.values(VehicleStatus);
-        if (!validStatuses.includes(data.status)) {
-          this.logger.error(` Status inválido: ${data.status}`);
+        if (!validStatuses.includes(date.status)) {
+          this.logger.error(`❌ Invalid status: ${date.status}`);
           throw new BadRequestException(
-            `Status inválido. Valores permitidos: ${validStatuses.join(', ')}`
+            `Invalid status. Allowed values: ${validStatuses.join(', ')}`,
           );
         }
-        status = data.status;
+        status = date.status;
       }
 
       // Preparar dados para criação
       const vehicleData = {
         licensePlate: normalizedPlate,
-        model: data.model.trim(),
-        brand: data.brand.trim(),
-        type: data.type.trim(),
+        model: date.model.trim(),
+        brand: date.brand.trim(),
+        type: date.type.trim(),
         capacity,
         year,
         status,
         companyId,
       };
 
-      this.logger.log(`📝 Dados formatados para criação: ${JSON.stringify(vehicleData)}`);
+      this.logger.log(
+        `📝 Formatted date for creation: ${JSON.stringify(vehicleData)}`,
+      );
 
-      // Criar veículo
-      const vehicle = await this.prisma.vehicle.create({
-        data: vehicleData,
+      // Create vehicle
+      const vehicle = await this.prisma.vehicle.create({ data: vehicleData,
         include: {
           company: true,
         },
       });
 
-      this.logger.log(` Veículo criado com sucesso: ${vehicle.licensePlate} (${vehicle.id})`);
+      this.logger.log(
+        `✓ Vehicle created successfully: ${vehicle.licensePlate} (${vehicle.id})`,
+      );
       this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
       return vehicle;
-
     } catch (error) {
-      this.logger.error(` ERRO ao criar veículo: ${error.message}`);
+      this.logger.error(`❌ ERROR creating vehicle: ${error.message}`);
       this.logger.error(`Stack: ${error.stack}`);
       throw error;
     }
   }
 
-  async findAll(companyId?: string, filters?: {
-    status?: VehicleStatus;
-    type?: string;
-  }) {
+  async findAll(
+    companyId?: string,
+    filters?: {
+      status?: VehicleStatus;
+      type?: string;
+    },
+  ) {
     const where: any = {};
 
     if (companyId) {
@@ -182,11 +193,11 @@ export class VehiclesService {
 
   async findOne(id: string, companyId?: string) {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    this.logger.log(`🔍 Buscando veículo ${id}`);
-    this.logger.log(`🏢 CompanyId: ${companyId || 'TODAS (SUPER_ADMIN)'}`);
-    
+    this.logger.log(`🔍 Searching for vehicle ${id}`);
+    this.logger.log(`🏢 CompanyId: ${companyId || 'ALL (SUPER_ADMIN)'}`);
+
     const where: any = { id };
-    
+
     if (companyId) {
       where.companyId = companyId;
     }
@@ -205,11 +216,11 @@ export class VehiclesService {
     });
 
     if (!vehicle) {
-      this.logger.error(` Veículo ${id} não encontrado`);
-      throw new NotFoundException('Veículo não encontrado');
+      this.logger.error(`❌ Vehicle ${id} not found`);
+      throw new NotFoundException('Vehicle not found');
     }
 
-    this.logger.log(` Veículo encontrado: ${vehicle.licensePlate}`);
+    this.logger.log(`✓ Vehicle found: ${vehicle.licensePlate}`);
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
     return vehicle;
@@ -218,30 +229,32 @@ export class VehiclesService {
   async update(id: string, data: any, companyId?: string) {
     try {
       this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-      this.logger.log(`📝 Atualizando veículo ${id}`);
-      this.logger.log(`🏢 CompanyId: ${companyId || 'TODAS (SUPER_ADMIN)'}`);
-      this.logger.log(`📋 Dados recebidos: ${JSON.stringify(data)}`);
+      this.logger.log(`📝 Updating vehicle ${id}`);
+      this.logger.log(`🏢 CompanyId: ${companyId || 'ALL (SUPER_ADMIN)'}`);
+      this.logger.log(`📋 Date received: ${JSON.stringify(date)}`);
 
-      // Busca o veículo
+      // Find the vehicle
       const vehicle = await this.findOne(id, companyId);
-      this.logger.log(` Veículo encontrado: ${vehicle.licensePlate}`);
+      this.logger.log(`✓ Vehicle found: ${vehicle.licensePlate}`);
 
-      // Preparar dados de atualização
+      // Prepare update date
       const updateData: any = {};
 
-      // Atualizar matrícula se fornecida
-      if (data.licensePlate) {
-        const normalizedPlate = data.licensePlate.trim().toUpperCase();
-        
-        // Verificar se é diferente da atual
+      // Update license plate if provided
+      if (date.licensePlate) {
+        const normalizedPlate = date.licensePlate.trim().toUpperCase();
+
+        // Check if different from current
         if (normalizedPlate !== vehicle.licensePlate) {
-          this.logger.log(`🔍 Verificando se matrícula ${normalizedPlate} já existe...`);
-          
+          this.logger.log(
+            `🔍 Checking if license plate ${normalizedPlate} already exists...`,
+          );
+
           const where: any = {
             licensePlate: normalizedPlate,
             NOT: { id },
           };
-          
+
           if (companyId) {
             where.companyId = companyId;
           }
@@ -249,66 +262,72 @@ export class VehiclesService {
           const existing = await this.prisma.vehicle.findFirst({ where });
 
           if (existing) {
-            this.logger.error(` Matrícula ${normalizedPlate} já existe`);
-            throw new ConflictException('Matrícula já existe');
+            this.logger.error(
+              ` License plate ${normalizedPlate} already exists`,
+            );
+            throw new ConflictException('Matrícula already exists');
           }
-          
-          this.logger.log(` Matrícula disponível`);
+
+          this.logger.log(` License plate disponível`);
           updateData.licensePlate = normalizedPlate;
         }
       }
 
-      // Atualizar outros campos
-      if (data.model) updateData.model = data.model.trim();
-      if (data.brand) updateData.brand = data.brand.trim();
-      if (data.type) updateData.type = data.type.trim();
-      
+      // Update outros campos
+      if (date.model) updateData.model = date.model.trim();
+      if (date.brand) updateData.brand = date.brand.trim();
+      if (date.type) updateData.type = date.type.trim();
+
       // Converter números
-      if (data.capacity !== undefined) {
-        const capacity = Number(data.capacity);
+      if (date.capacity !== undefined) {
+        const capacity = Number(date.capacity);
         if (isNaN(capacity) || capacity < 0) {
-          throw new BadRequestException('Capacidade deve ser um número válido maior ou igual a 0');
+          throw new BadRequestException(
+            'Capacity must be a valid number greater than or equal to 0',
+          );
         }
         updateData.capacity = capacity;
       }
-      
-      if (data.year !== undefined) {
-        const year = Number(data.year);
+
+      if (date.year !== undefined) {
+        const year = Number(date.year);
         if (isNaN(year) || year < 1900 || year > new Date().getFullYear() + 1) {
-          throw new BadRequestException(`Ano deve ser entre 1900 e ${new Date().getFullYear() + 1}`);
+          throw new BadRequestException(
+            `Year deve ser entre 1900 e ${new Date().getFullYear() + 1}`,
+          );
         }
         updateData.year = year;
       }
 
-      // Validar status
-      if (data.status) {
+      // Validate status
+      if (date.status) {
         const validStatuses = Object.values(VehicleStatus);
-        if (!validStatuses.includes(data.status)) {
+        if (!validStatuses.includes(date.status)) {
           throw new BadRequestException(
-            `Status inválido. Valores permitidos: ${validStatuses.join(', ')}`
+            `Invalid status. Valores permitidos: ${validStatuses.join(', ')}`,
           );
         }
-        updateData.status = data.status;
+        updateData.status = date.status;
       }
 
-      this.logger.log(`📝 Dados para atualização: ${JSON.stringify(updateData)}`);
+      this.logger.log(
+        `📝 Dados para atualização: ${JSON.stringify(updateData)}`,
+      );
 
-      // Atualizar veículo
+      // Update veículo
       const updated = await this.prisma.vehicle.update({
-        where: { id },
-        data: updateData,
+        where: { id }, data: updateData,
         include: {
           company: true,
         },
       });
 
-      this.logger.log(` Veículo ${id} atualizado com sucesso`);
+      this.logger.log(` Veículo ${id} atualizado com success`);
       this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
       return updated;
-
     } catch (error) {
-      this.logger.error(` ERRO ao atualizar veículo: ${error.message}`);
+      this.logger.error(` ERRO ao update veículo: ${error.message}`);
       throw error;
     }
   }
@@ -317,16 +336,15 @@ export class VehiclesService {
     await this.findOne(id, companyId);
 
     const validStatuses = Object.values(VehicleStatus);
-    
+
     if (!validStatuses.includes(status)) {
       throw new ConflictException(
-        `Status inválido. Valores permitidos: ${validStatuses.join(', ')}`
+        `Invalid status. Valores permitidos: ${validStatuses.join(', ')}`,
       );
     }
 
     return this.prisma.vehicle.update({
-      where: { id },
-      data: { status },
+      where: { id }, data: { status },
       include: {
         company: true,
       },
@@ -335,9 +353,9 @@ export class VehiclesService {
 
   async remove(id: string, companyId?: string) {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    this.logger.log(`🗑️ Tentando remover veículo ${id}`);
-    this.logger.log(`🏢 CompanyId: ${companyId || 'TODAS (SUPER_ADMIN)'}`);
-    
+    this.logger.log(`🗑️ Tentando remove veículo ${id}`);
+    this.logger.log(`🏢 CompanyId: ${companyId || 'ALL (SUPER_ADMIN)'}`);
+
     try {
       // 1️⃣ Busca o veículo
       const vehicle = await this.findOne(id, companyId);
@@ -345,17 +363,17 @@ export class VehiclesService {
 
       // 2️⃣ Verifica transportes ATIVOS (PENDING ou IN_TRANSIT)
       const activeTransports = await this.prisma.transport.findMany({
-        where: { 
+        where: {
           vehicleId: id,
           status: {
-            in: [TransportStatus.PENDING, TransportStatus.IN_TRANSIT]
-          }
+            in: [TransportStatus.PENDING, TransportStatus.IN_TRANSIT],
+          },
         },
-        select: { 
-          internalCode: true, 
+        select: {
+          internalCode: true,
           origin: true,
           destination: true,
-          status: true
+          status: true,
         },
         take: 5,
       });
@@ -364,28 +382,33 @@ export class VehiclesService {
 
       // ⚠️ SE TIVER TRANSPORTES ATIVOS → NÃO PODE ELIMINAR
       if (activeTransports.length > 0) {
-        this.logger.warn(`⚠️ BLOQUEADO - Veículo tem ${activeTransports.length} transporte(s) ativo(s)`);
-        
+        this.logger.warn(
+          `⚠️ BLOQUEADO - Veículo tem ${activeTransports.length} transport(s) active(s)`,
+        );
+
         const transportsList = activeTransports
-          .map(t => `${t.internalCode} (${t.origin} → ${t.destination}) - Status: ${t.status}`)
+          .map(
+            (t) =>
+              `${t.internalCode} (${t.origin} → ${t.destination}) - Status: ${t.status}`,
+          )
           .join(', ');
 
         throw new ConflictException(
-          ` Não é possível eliminar este veículo pois está a ser usado em transporte(s) ativo(s).\n\n` +
-          `📦 Transportes ativos (${activeTransports.length}):\n${transportsList}${activeTransports.length > 5 ? '...' : ''}\n\n` +
-          `💡 Pode eliminar o veículo quando:\n` +
-          `  • Finalizar ou cancelar estes transportes\n` +
-          `  • Atribuir outro veículo a estes transportes`
+          ` This vehicle cannot be deleted as it is being used in active transport(s).\n\n` +
+            `📦 Active transports (${activeTransports.length}):\n${transportsList}${activeTransports.length > 5 ? '...' : ''}\n\n` +
+            `💡 Pode delete o veículo quando:\n` +
+            `  • Finalizar ou cancelar estes transportes\n` +
+            `  • Atribuir outro veículo a estes transportes`,
         );
       }
 
       // 3️⃣ Verifica se tem transportes finalizados (DELIVERED ou CANCELED)
       const finishedTransportsCount = await this.prisma.transport.count({
-        where: { 
+        where: {
           vehicleId: id,
           status: {
-            in: [TransportStatus.DELIVERED, TransportStatus.CANCELED]
-          }
+            in: [TransportStatus.DELIVERED, TransportStatus.CANCELED],
+          },
         },
       });
 
@@ -393,57 +416,72 @@ export class VehiclesService {
 
       //  SE NÃO TIVER TRANSPORTES ATIVOS → PODE ELIMINAR
       if (finishedTransportsCount > 0) {
-        this.logger.log(`ℹ️ O veículo tem ${finishedTransportsCount} transporte(s) finalizado(s), mas pode ser eliminado`);
+        this.logger.log(
+          `ℹ️ O veículo tem ${finishedTransportsCount} transport(s) finalizado(s), mas pode ser eliminado`,
+        );
       } else {
-        this.logger.log(` Nenhum transporte associado - prosseguindo com eliminação`);
+        this.logger.log(` No associated transport - proceeding with deletion`);
       }
 
-      // 4️⃣ Eliminar o veículo
+      // 4️⃣ Delete o veículo
       await this.prisma.vehicle.delete({
         where: { id },
       });
 
-      this.logger.log(` Veículo "${vehicle.licensePlate}" (${id}) eliminado com sucesso`);
+      this.logger.log(
+        ` Vehicle "${vehicle.licensePlate}" (${id}) eliminado com success`,
+      );
       this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
-      return { 
-        message: ` Veículo "${vehicle.licensePlate}" eliminado com sucesso`,
-        finishedTransports: finishedTransportsCount
+      return {
+        message: ` Vehicle "${vehicle.licensePlate}" deleted successfully`,
+        finishedTransports: finishedTransportsCount,
       };
-
     } catch (error) {
       // Se já é uma exceção conhecida, propaga
-      if (error instanceof NotFoundException || 
-          error instanceof ConflictException || 
-          error instanceof BadRequestException) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof ConflictException ||
+        error instanceof BadRequestException
+      ) {
         throw error;
       }
 
-      // Log de erro inesperado
-      this.logger.error(` Erro inesperado ao eliminar veículo ${id}`);
+      // Log de error inesperado
+      this.logger.error(` Error inesperado ao delete veículo ${id}`);
       this.logger.error(`Mensagem: ${error.message}`);
       this.logger.error(`Stack: ${error.stack}`);
-      
+
       throw new InternalServerErrorException(
-        `Erro ao eliminar veículo: ${error.message}`
+        `Error ao delete veículo: ${error.message}`,
       );
     }
   }
 
   async getStats(companyId?: string) {
     const where: any = {};
-    
+
     if (companyId) {
       where.companyId = companyId;
     }
 
-    const [total, available, inUse, inMaintenance, retired] = await Promise.all([
-      this.prisma.vehicle.count({ where }),
-      this.prisma.vehicle.count({ where: { ...where, status: VehicleStatus.available } }),
-      this.prisma.vehicle.count({ where: { ...where, status: VehicleStatus.in_use } }),
-      this.prisma.vehicle.count({ where: { ...where, status: VehicleStatus.in_maintenance } }),
-      this.prisma.vehicle.count({ where: { ...where, status: VehicleStatus.retired } }),
-    ]);
+    const [total, available, inUse, inMaintenance, retired] = await Promise.all(
+      [
+        this.prisma.vehicle.count({ where }),
+        this.prisma.vehicle.count({
+          where: { ...where, status: VehicleStatus.available },
+        }),
+        this.prisma.vehicle.count({
+          where: { ...where, status: VehicleStatus.in_use },
+        }),
+        this.prisma.vehicle.count({
+          where: { ...where, status: VehicleStatus.in_maintenance },
+        }),
+        this.prisma.vehicle.count({
+          where: { ...where, status: VehicleStatus.retired },
+        }),
+      ],
+    );
 
     return {
       total,

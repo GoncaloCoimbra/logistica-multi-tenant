@@ -2,24 +2,21 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { AppController } from './app.controller'; 
-import { AppService } from './app.service'; 
-
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 // DATABASE MODULES
 
 import { DatabaseModule } from './database/database.module';
 
-
 // MODULES IN SRC/ ROOT
 
-import { CompaniesModule } from './companies/companies.module'; 
-import { UsersModule } from './users/users.module'; 
+import { CompaniesModule } from './companies/companies.module';
+import { UsersModule } from './users/users.module';
 import { TransportsModule } from './transports/transports.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
-import { SettingsModule } from './settings/settings.module'; 
-import { RegistrationModule } from './registration/registration.module'; 
-
+import { SettingsModule } from './settings/settings.module';
+import { RegistrationModule } from './registration/registration.module';
 
 // MODULES INSIDE SRC/MODULES/
 
@@ -35,7 +32,6 @@ import { ReferralsModule } from './modules/Referrals/referrals.module';
 import { TutorialsModule } from './modules/tutorials/tutorials.module';
 import { MetricsModule } from './common/metrics/metrics.module';
 
-
 // GUARDS, FILTERS, INTERCEPTORS
 
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
@@ -48,87 +44,77 @@ import { TenantInterceptor } from '@common/interceptors/tenant.interceptor';
 
 @Module({
   imports: [
-    
     // CONFIG MODULE (GLOBAL)
-    
-    ConfigModule.forRoot({ 
-      isGlobal: true, 
-      envFilePath: '.env' 
+
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
     }),
-    
-    
-    DatabaseModule, 
-    
-    
-    AuthModule, 
-    RegistrationModule, 
-    
-    
-    AuditLogModule, 
-     
-    
-    UsersModule, 
-    CompaniesModule, 
-    
-    
+
+    DatabaseModule,
+
+    AuthModule,
+    RegistrationModule,
+
+    AuditLogModule,
+
+    UsersModule,
+    CompaniesModule,
+
     // BUSINESS MODULES
-    
+
     DashboardModule,
-    ProductsModule, 
-    SuppliersModule, 
-    TransportsModule, 
+    ProductsModule,
+    SuppliersModule,
+    TransportsModule,
     VehiclesModule,
     NotificationsModule,
     TasksModule, // ← ADICIONE ESTA LINHA
     TutorialsModule,
-    
-    
+
     // ADMIN & SETTINGS
-    
-    SuperadminModule, 
-    MetricsModule, 
-    SettingsModule, 
+
+    SuperadminModule,
+    MetricsModule,
+    SettingsModule,
   ],
-  
+
   controllers: [AppController],
-  
+
   providers: [
     AppService,
-    
-    
+
     // GLOBAL GUARDS
-    
-    { 
+
+    {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard 
+      useClass: JwtAuthGuard,
     },
-    { 
-      provide: APP_GUARD, 
-      useClass: RolesGuard 
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
-    
-    
+
     // GLOBAL FILTERS
-    
-    { 
-      provide: APP_FILTER, 
-      useClass: HttpExceptionFilter 
+
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
-    
-    
+
     // GLOBAL INTERCEPTORS
-    
-    { 
-      provide: APP_INTERCEPTOR, 
-      useClass: LoggingInterceptor 
-    },
-    { 
-      provide: APP_INTERCEPTOR, 
-      useClass: AuditLogInterceptor 
+
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: TenantInterceptor
+      useClass: AuditLogInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: TenantInterceptor,
     },
 
     // GLOBAL SERVICES

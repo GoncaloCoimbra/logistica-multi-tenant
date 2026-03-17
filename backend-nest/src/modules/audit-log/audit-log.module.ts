@@ -5,14 +5,11 @@ import { AuditLogController } from './controllers/audit-log.controller';
 import { AuditLogRepository } from '../../database/repositories/audit-log.repository';
 import { DatabaseModule } from '../../database/database.module';
 
-@Global()  //  CRÍTICO: Torna o módulo disponível globalmente
+@Global() //  CRÍTICO: Torna o módulo disponível globalmente
 @Module({
   imports: [DatabaseModule],
   controllers: [AuditLogController],
-  providers: [
-    AuditLogService,
-    AuditLogRepository,
-  ],
-  exports: [AuditLogService],  
+  providers: [AuditLogService, AuditLogRepository],
+  exports: [AuditLogService],
 })
 export class AuditLogModule {}

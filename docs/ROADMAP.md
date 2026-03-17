@@ -99,12 +99,12 @@ Q4 2026:  Production & Operations
 
 ---
 
-## Q3 2026 (Jul-Set) - Performance & Escala
+## Q3 2026 (Jul-Sep) - Performance & Scale
 
-### Objetivos
+### Objectives
 - System optimized for production
 - Support for data growth
-- Experiência fluida em redes lentas
+- Smooth experience on slow networks
 
 ### Tarefas
 
@@ -129,55 +129,55 @@ Q4 2026:  Production & Operations
 
 #### Data
 
-- [ ] **Backup automático** (cron + offsite)
+- [ ] **Automatic backup** (cron + offsite)
 - [ ] **Replication** (secundário para HA)
 - [ ] **Migration strategy** testada
-- [ ] **Point-in-time recovery** documentado
+- [ ] **Point-in-time recovery** documented
 
-### DL: **30 Setembro 2026**
+### DL: **September 30, 2026**
 
 ---
 
 ## Q4 2026 (Oct-Dec) - Production & Operations
 
-### Objetivos
+### Objectives
 - System ready for production
 - Runbook documentation
-- Equipe preparada para operações
+- Team prepared for operations
 
 ### Tarefas
 
 #### Deploy & Infrastructure
 
-- [ ] **Ambiente de staging** separado
+- [ ] **Separate staging environment**
 - [ ] **DNS + SSL/TLS** configurado
 - [ ] **Load balancer** (Ingress Nginx, ALB)
-- [ ] **Auto-scaling** HPA configurado
-- [ ] **Disaster recovery** plan + testes
-- [ ] **Rollback automático** em casos de falha
+- [ ] **Auto-scaling** HPA configured
+- [ ] **Disaster recovery** plan + tests
+- [ ] **Automatic rollback** in case of failure
 
-#### Monitoring & Alertas
+#### Monitoring & Alerts
 
 - [ ] **Prometheus + Grafana** full setup
 - [ ] **Alert rules** for critical metrics
-- [ ] **On-call rotation** documentado
-- [ ] **SLO/SLI** definidos (uptime, latency)
+- [ ] **On-call rotation** documented
+- [ ] **SLO/SLI** defined (uptime, latency)
 
 #### Documentation & Training
 
-- [ ] **Runbooks** para operações diárias
+- [ ] **Runbooks** for daily operations
 - [ ] **Troubleshooting guide**
-- [ ] **Training sessions** para equipe ops
+- [ ] **Training sessions** for ops team
 - [ ] **Incident response** procedure
 
 #### Security Audit
 
 - [ ] **Pentest** or security review
 - [ ] **OWASP Top 10** checklist
-- [ ] **Compliance** (GDPR, se aplicável)
+- [ ] **Compliance** (GDPR, if applicable)
 - [ ] **Secrets management** (Vault)
 
-### DL: **31 Dezembro 2026**
+### DL: **December 31, 2026**
 
 ---
 
@@ -188,31 +188,32 @@ Q4 2026:  Production & Operations
 - [ ] **Mobile app** (React Native)
 - [ ] **Internationalization** (i18n - multilingual)
 - [ ] **Two-factor authentication** (2FA/MFA)
-- [ ] **Audit trail** baseado em eventos
+- [ ] **Event-based audit trail**
 - [ ] **GraphQL** API alternativa
-- [ ] **API rate-limiting granular** (por user/org)
-- [ ] **Machine learning** (previsão de rotas, anomalias)
+- [ ] **Granular API rate-limiting** (per user/org)
+- [ ] **Machine learning** (route prediction, anomalies)
 
 ---
 
-## Dependências Entre Fases
+## Dependencies Between Phases
 
 ```
-Q1: Testes ─┬─→ Q2: Observabilidade
-           └─→ Q2: Segurança
-           
+Q1: Tests ──┬─→ Q2: Observability
+            └─→ Q2: Security
+            
 Q2: Performance ──> Q3: Optimization
-                → Q3: Escala
+                → Q3: Scale
                 
-Q3: Backup ─────→ Q4: DR Plan
-Q3: Monitoring ─→ Q4: Alertas
+Q3: Backup ────→ Q4: DR Plan
+Q3: Monitoring ─→ Q4: Alerts
 ```
 
 ---
 
-## Métricas de Sucesso
+## Success Metrics
 
-| Métrica | Q1 | Q2 | Q3 | Q4 |
+| Metric | Q1 | Q2 | Q3 | Q4 |
+|--------|----|----|----|----|
 |---------|----|----|----|----|
 | Test Coverage | 80% | 85% | 90% | 95% |
 | Lighthouse Score | 75 | 80 | 90 | 95 |
@@ -222,11 +223,13 @@ Q3: Monitoring ─→ Q4: Alertas
 
 ---
 
-## Revisão & Ajustes
+## Review & Adjustments
 
-Este roadmap será revisado:
-- **Mensalmente**: Status check nas tarefas
-- **Trimestral**: Ajustes baseado em feedback e blockers
+This roadmap will be reviewed:
+- **Monthly**: Status check on tasks
+- **Quarterly**: Adjustments based on feedback and blockers
+
+**Questions?** Contact the PM or technical leader.
 
 Last review: **Feb 27, 2026**  
 Próxima revisão: **31 Mar 2026**

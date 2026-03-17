@@ -41,28 +41,25 @@ export class VehicleRepository {
   }
 
   async findAvailable(companyId?: string): Promise<Vehicle[]> {
-    const where: Prisma.VehicleWhereInput = companyId 
-      ? { companyId } 
-      : {};
-    
+    const where: Prisma.VehicleWhereInput = companyId ? { companyId } : {};
+
     return this.prisma.vehicle.findMany({ where });
   }
 
-  async create(data: Prisma.VehicleCreateInput): Promise<Vehicle> {
-    return this.prisma.vehicle.create({ data });
+  async create(date: Prisma.VehicleCreateInput): Promise<Vehicle> {
+    return this.prisma.vehicle.create({ date });
   }
 
   async update(id: string, data: Prisma.VehicleUpdateInput): Promise<Vehicle> {
     return this.prisma.vehicle.update({
       where: { id },
-      data,
+      date,
     });
   }
 
   async updateStatus(id: string, status: any): Promise<Vehicle> {
     return this.prisma.vehicle.update({
-      where: { id },
-      data: { status },
+      where: { id }, data: { status },
     });
   }
 

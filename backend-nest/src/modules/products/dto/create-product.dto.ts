@@ -1,25 +1,32 @@
-﻿import { IsNotEmpty, IsString, IsNumber, IsOptional, IsUUID, IsEnum } from 'class-validator';
+﻿import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsUUID,
+  IsEnum,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ProductStatus } from '@prisma/client';
 
 export class CreateProductDto {
   @ApiProperty({ example: 'PROD-001' })
-  @IsNotEmpty({ message: 'Código interno é obrigatório' })
+  @IsNotEmpty({ message: 'Internal code is required' })
   @IsString()
   internalCode: string;
 
-  @ApiProperty({ example: 'Produto de teste' })
-  @IsNotEmpty({ message: 'Descrição é obrigatória' })
+  @ApiProperty({ example: 'Test product' })
+  @IsNotEmpty({ message: 'Description is required' })
   @IsString()
   description: string;
 
   @ApiProperty({ example: 100 })
-  @IsNotEmpty({ message: 'Quantidade é obrigatória' })
+  @IsNotEmpty({ message: 'Quantity is required' })
   @IsNumber()
   quantity: number;
 
   @ApiProperty({ example: 'kg' })
-  @IsNotEmpty({ message: 'Unidade é obrigatória' })
+  @IsNotEmpty({ message: 'Unit is required' })
   @IsString()
   unit: string;
 
@@ -33,23 +40,23 @@ export class CreateProductDto {
   @IsNumber()
   totalVolume?: number;
 
-  @ApiProperty({ example: 'Armazém A', required: false })
+  @ApiProperty({ example: 'Warehouse A', required: false })
   @IsOptional()
   @IsString()
   currentLocation?: string;
 
-  @ApiProperty({ description: 'ID do fornecedor', required: true })
-  @IsNotEmpty({ message: 'Fornecedor é obrigatório' })
-  @IsUUID('4', { message: 'ID do fornecedor inválido' })
+  @ApiProperty({ description: 'Supplier ID', required: true })
+  @IsNotEmpty({ message: 'Supplier is required' })
+  @IsUUID('4', { message: 'Invalid supplier ID' })
   supplierId: string;
 
-  @ApiProperty({ 
-    enum: ProductStatus, 
+  @ApiProperty({
+    enum: ProductStatus,
     example: ProductStatus.RECEIVED,
     required: false,
-    description: 'Status do produto (padrão: RECEIVED)'
+    description: 'Product status (default: RECEIVED)',
   })
   @IsOptional()
-  @IsEnum(ProductStatus, { message: 'Status inválido' })
+  @IsEnum(ProductStatus, { message: 'Invalid status' })
   status?: ProductStatus;
 }

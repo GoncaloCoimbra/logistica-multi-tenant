@@ -79,7 +79,7 @@ const GlobalUserManagement: React.FC = () => {
       setUsers(usersResponse.data);
       setCompanies(companiesResponse.data);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Error loading date:', error);
     } finally {
       setLoading(false);
     }

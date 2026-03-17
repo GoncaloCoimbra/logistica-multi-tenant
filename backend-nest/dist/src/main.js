@@ -68,7 +68,7 @@ async function createApp() {
     });
     logger.log('📁 Pasta de uploads configurada: /uploads/');
     logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    logger.log('✅ Aplicação Nest pronta (sem listener).');
+    logger.log('✅ NestJS application ready (no listener).');
     logger.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
     logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     return app;

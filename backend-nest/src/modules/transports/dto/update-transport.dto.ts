@@ -1,141 +1,140 @@
 ﻿// src/modules/transports/dto/update-transport.dto.ts
 
-import { 
-  IsOptional, 
-  IsString, 
-  IsDateString, 
-  IsNumber, 
+import {
+  IsOptional,
+  IsString,
+  IsDateString,
+  IsNumber,
   IsUUID,
-  IsEnum
+  IsEnum,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { TransportStatus } from '@prisma/client';
 
 /**
  * DTO para atualização de transportes
- * 
- * ⚠️ REGRA IMPORTANTE: Produtos NÃO podem ser editados após criação do transporte
- * 
- * Campos editáveis:
- * - Veículo (vehicleId)
- * - Origem e Destino (origin, destination)
- * - Datas (departureDate, estimatedArrival)
- * - Peso e Observações (totalWeight, notes)
- * - Status (status) - com automações especiais para ARRIVED, DELIVERED e CANCELED
- * - Conferência (actualArrival, receivedBy, receivingNotes) - usado ao mudar ARRIVED → DELIVERED
- * 
- * Para alterar produtos:
- * 1. Cancele o transporte (produtos voltam ao stock)
- * 2. Crie um novo transporte com os produtos corretos
+ *
+ * ⚠️ IMPORTANT RULE: Products CANNOT be edited after transport creation
+ *
+ * Editable fields:
+ * - Vehicle (vehicleId)
+ * - Origin and Destination (origin, destination)
+ * - Dates (departureDate, estimatedArrival)
+ * - Weight and Notes (totalWeight, notes)
+ * - Status (status) - with special automations for ARRIVED, DELIVERED and CANCELED
+ * - Verification (actualArrival, receivedBy, receivingNotes) - used when changing ARRIVED → DELIVERED
+ *
+ * To change products:
+ * 1. Cancel the transport (products return to stock)
+ * 2. Create a new transport with the correct products
  */
 export class UpdateTransportDto {
-  
-  // 🚗 VEÍCULO
-  @ApiProperty({ 
+  // 🚗 VEHICLE
+  @ApiProperty({
     example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-    description: 'ID do veículo (UUID)',
-    required: false
+    description: 'Vehicle ID (UUID)',
+    required: false,
   })
   @IsOptional()
-  @IsUUID('4', { message: 'VehicleId inválido' })
+  @IsUUID('4', { message: 'Invalid VehicleId' })
   vehicleId?: string;
 
-  // 📍 ORIGEM E DESTINO
-  @ApiProperty({ 
+  // 📍 ORIGIN AND DESTINATION
+  @ApiProperty({
     example: 'Lisboa',
-    description: 'Cidade/Local de origem',
-    required: false
+    description: 'City/Origin location',
+    required: false,
   })
   @IsOptional()
   @IsString()
   origin?: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'Porto',
-    description: 'Cidade/Local de destino',
-    required: false
+    description: 'City/Destination location',
+    required: false,
   })
   @IsOptional()
   @IsString()
   destination?: string;
 
-  // 📅 DATAS
-  @ApiProperty({ 
+  // 📅 DATES
+  @ApiProperty({
     example: '2025-12-01',
-    description: 'Data de partida (YYYY-MM-DD)',
-    required: false
+    description: 'Departure date (YYYY-MM-DD)',
+    required: false,
   })
   @IsOptional()
-  @IsDateString({}, { message: 'Data de partida inválida' })
+  @IsDateString({}, { message: 'Date de partida inválida' })
   departureDate?: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: '2025-12-05',
-    description: 'Data estimada de chegada (YYYY-MM-DD)',
-    required: false
+    description: 'Estimated arrival date (YYYY-MM-DD)',
+    required: false,
   })
   @IsOptional()
-  @IsDateString({}, { message: 'Data de chegada inválida' })
+  @IsDateString({}, { message: 'Invalid arrival date' })
   estimatedArrival?: string;
 
-  // ⚖️ PESO E OBSERVAÇÕES
-  @ApiProperty({ 
-    example: 1500.50,
-    description: 'Peso total da carga em kg',
-    required: false
+  // ⚖️ WEIGHT AND NOTES
+  @ApiProperty({
+    example: 1500.5,
+    description: 'Total load weight in kg',
+    required: false,
   })
   @IsOptional()
-  @IsNumber({}, { message: 'Peso deve ser um número' })
+  @IsNumber({}, { message: 'Weight must be a number' })
   totalWeight?: number;
 
-  @ApiProperty({ 
-    example: 'Carga frágil - manusear com cuidado',
-    description: 'Observações sobre o transporte',
-    required: false
+  @ApiProperty({
+    example: 'Load frágil - manusear com cuidado',
+    description: 'Notes about transport',
+    required: false,
   })
   @IsOptional()
   @IsString()
   notes?: string;
 
   // 📊 STATUS
-  @ApiProperty({ 
+  @ApiProperty({
     enum: TransportStatus,
     example: TransportStatus.IN_TRANSIT,
     required: false,
-    description: `Status do transporte:
-    - PENDING: Aguardando partida
-    - IN_TRANSIT: Em trânsito
-    - ARRIVED: Chegou ao destino (automático na data estimada)
-    - DELIVERED: Entregue após conferência (produtos mudam para APPROVED automaticamente)
-    - CANCELED: Cancelado (produtos voltam ao stock automaticamente)`
+    description: `Transport status:
+    - PENDING: Awaiting departure
+    - IN_TRANSIT: In transit
+    - ARRIVED: Arrived at destination (automatic on estimated date)
+    - DELIVERED: Delivered after verification (products automatically change to APPROVED)
+    - CANCELED: Canceled (products automatically return to stock)`,
   })
   @IsOptional()
-  @IsEnum(TransportStatus, { message: 'Status inválido' })
+  @IsEnum(TransportStatus, { message: 'Invalid status' })
   status?: TransportStatus;
 
-  //  NOVOS CAMPOS DE CONFERÊNCIA
-  @ApiProperty({ 
+  //  NEW VERIFICATION FIELDS
+  @ApiProperty({
     example: '2025-12-05T14:30:00Z',
-    description: 'Data/hora real de chegada (preenchido ao conferir entrega)',
-    required: false
+    description: 'Actual arrival date/time (filled in when verifying delivery)',
+    required: false,
   })
   @IsOptional()
-  @IsDateString({}, { message: 'Data de chegada real inválida' })
+  @IsDateString({}, { message: 'Invalid actual arrival date' })
   actualArrival?: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     example: 'João Silva',
-    description: 'Nome de quem recebeu fisicamente a carga',
-    required: false
+    description: 'Name of person who physically received the load',
+    required: false,
   })
   @IsOptional()
   @IsString()
   receivedBy?: string;
 
-  @ApiProperty({ 
-    example: 'Carga recebida em perfeitas condições. 2 paletes verificadas.',
-    description: 'Observações sobre o recebimento',
-    required: false
+  @ApiProperty({
+    example: 'Load received in perfect condition. 2 pallets verified.',
+    description: 'Notes about receipt',
+    required: false,
   })
   @IsOptional()
   @IsString()

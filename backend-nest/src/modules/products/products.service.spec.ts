@@ -40,7 +40,8 @@ describe('ProductsService - State Machine Tests', () => {
 
     service = module.get<ProductsService>(ProductsService);
     prisma = module.get<PrismaService>(PrismaService);
-    notificationsService = module.get<NotificationsService>(NotificationsService);
+    notificationsService =
+      module.get<NotificationsService>(NotificationsService);
   });
 
   describe('Product Status Transitions', () => {
@@ -71,8 +72,12 @@ describe('ProductsService - State Machine Tests', () => {
               status: toStatus,
             };
 
-            (prisma.product.findFirst as jest.Mock).mockResolvedValue(mockProduct);
-            (prisma.product.update as jest.Mock).mockResolvedValue(mockUpdatedProduct);
+            (prisma.product.findFirst as jest.Mock).mockResolvedValue(
+              mockProduct,
+            );
+            (prisma.product.update as jest.Mock).mockResolvedValue(
+              mockUpdatedProduct,
+            );
             (prisma.productMovement.create as jest.Mock).mockResolvedValue({});
             (notificationsService.create as jest.Mock).mockResolvedValue({});
 
@@ -80,12 +85,11 @@ describe('ProductsService - State Machine Tests', () => {
               mockProductId,
               { newStatus: toStatus },
               mockCompanyId,
-              mockUserId
+              mockUserId,
             );
 
             expect(result.status).toBe(toStatus);
-            expect(prisma.productMovement.create).toHaveBeenCalledWith({
-              data: {
+            expect(prisma.productMovement.create).toHaveBeenCalledWith({ data: {
                 productId: mockProductId,
                 previousStatus: fromStatus as ProductStatus,
                 newStatus: toStatus,
@@ -100,7 +104,9 @@ describe('ProductsService - State Machine Tests', () => {
 
         // Test invalid transitions
         const allStatuses = Object.values(ProductStatus);
-        const invalidTransitions = allStatuses.filter(status => !toStatuses.includes(status));
+        const invalidTransitions = allStatuses.filter(
+          (status) => !toStatuses.includes(status),
+        );
 
         invalidTransitions.forEach((invalidStatus) => {
           it(`should allow transition to ${invalidStatus} (no business rule validation)`, async () => {
@@ -121,8 +127,12 @@ describe('ProductsService - State Machine Tests', () => {
               status: invalidStatus,
             };
 
-            (prisma.product.findFirst as jest.Mock).mockResolvedValue(mockProduct);
-            (prisma.product.update as jest.Mock).mockResolvedValue(mockUpdatedProduct);
+            (prisma.product.findFirst as jest.Mock).mockResolvedValue(
+              mockProduct,
+            );
+            (prisma.product.update as jest.Mock).mockResolvedValue(
+              mockUpdatedProduct,
+            );
             (prisma.productMovement.create as jest.Mock).mockResolvedValue({});
             (notificationsService.create as jest.Mock).mockResolvedValue({});
 
@@ -130,7 +140,7 @@ describe('ProductsService - State Machine Tests', () => {
               mockProductId,
               { newStatus: invalidStatus },
               mockCompanyId,
-              mockUserId
+              mockUserId,
             );
 
             expect(result.status).toBe(invalidStatus);
@@ -160,7 +170,9 @@ describe('ProductsService - State Machine Tests', () => {
       };
 
       (prisma.product.findFirst as jest.Mock).mockResolvedValue(mockProduct);
-      (prisma.product.update as jest.Mock).mockResolvedValue(mockUpdatedProduct);
+      (prisma.product.update as jest.Mock).mockResolvedValue(
+        mockUpdatedProduct,
+      );
       (prisma.productMovement.create as jest.Mock).mockResolvedValue({});
       (notificationsService.create as jest.Mock).mockResolvedValue({});
 
@@ -169,16 +181,15 @@ describe('ProductsService - State Machine Tests', () => {
         {
           newStatus: ProductStatus.IN_STORAGE,
           location: newLocation,
-          reason: 'Moving to storage'
+          reason: 'Moving to storage',
         },
         mockCompanyId,
-        mockUserId
+        mockUserId,
       );
 
       expect(result.status).toBe(ProductStatus.IN_STORAGE);
       expect(result.currentLocation).toBe(newLocation);
-      expect(prisma.productMovement.create).toHaveBeenCalledWith({
-        data: {
+      expect(prisma.productMovement.create).toHaveBeenCalledWith({ data: {
           productId: mockProductId,
           previousStatus: ProductStatus.RECEIVED,
           newStatus: ProductStatus.IN_STORAGE,
@@ -208,7 +219,9 @@ describe('ProductsService - State Machine Tests', () => {
       };
 
       (prisma.product.findFirst as jest.Mock).mockResolvedValue(mockProduct);
-      (prisma.product.update as jest.Mock).mockResolvedValue(mockUpdatedProduct);
+      (prisma.product.update as jest.Mock).mockResolvedValue(
+        mockUpdatedProduct,
+      );
       (prisma.productMovement.create as jest.Mock).mockResolvedValue({});
       (notificationsService.create as jest.Mock).mockResolvedValue({});
 
@@ -217,15 +230,14 @@ describe('ProductsService - State Machine Tests', () => {
         {
           newStatus: ProductStatus.DISPATCHED,
           quantity: newQuantity,
-          reason: 'Partial dispatch'
+          reason: 'Partial dispatch',
         },
         mockCompanyId,
-        mockUserId
+        mockUserId,
       );
 
       expect(result.status).toBe(ProductStatus.DISPATCHED);
-      expect(prisma.productMovement.create).toHaveBeenCalledWith({
-        data: {
+      expect(prisma.productMovement.create).toHaveBeenCalledWith({ data: {
           productId: mockProductId,
           previousStatus: ProductStatus.IN_STORAGE,
           newStatus: ProductStatus.DISPATCHED,

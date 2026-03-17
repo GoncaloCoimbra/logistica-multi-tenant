@@ -103,7 +103,7 @@ const RouteSimulator: React.FC<RouteSimulatorProps> = ({
           </p>
         </div>
         <div className="text-right">
-          <p className="text-xs text-slate-400">Tempo Decorrido</p>
+          <p className="text-xs text-slate-400">Time Decorrido</p>
           <p className="text-sm font-bold text-white font-mono">
             {formatTime(elapsedTime)} / {formatTime(totalDuration)}
           </p>
@@ -123,7 +123,7 @@ const RouteSimulator: React.FC<RouteSimulatorProps> = ({
             <p className="text-white font-mono">{currentLocation.lng.toFixed(6)}</p>
           </div>
           <div>
-            <p className="text-slate-400">Velocidade</p>
+            <p className="text-slate-400">Speed</p>
             <p className="text-white font-mono">{currentLocation.speed || 0} km/h</p>
           </div>
         </div>
@@ -132,7 +132,7 @@ const RouteSimulator: React.FC<RouteSimulatorProps> = ({
       {/* Barra de Progresso */}
       <div>
         <div className="flex justify-between items-center mb-1">
-          <span className="text-xs text-slate-400">Progresso da Rota</span>
+          <span className="text-xs text-slate-400">Progresso da Route</span>
           <span className="text-xs font-bold text-white">{Math.round(progress)}%</span>
         </div>
         <div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden">

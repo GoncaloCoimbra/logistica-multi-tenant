@@ -37,7 +37,7 @@ const ApiDocumentation: React.FC = () => {
               <span className="text-xs text-green-400 font-semibold">GET</span>
               <span className="font-mono">/vehicles</span>
             </div>
-            <p className="mt-2 text-gray-400">Lista veiculos com paginação e filtros por status/tenant.</p>
+            <p className="mt-2 text-gray-400">List vehicles with pagination and filters by status/tenant.</p>
             <pre className="mt-3 bg-gray-700 p-3 rounded text-xs overflow-auto"><code>{`curl -H "Authorization: Bearer <token>" https://api.example.com/vehicles?page=1&limit=20`}</code></pre>
           </div>
 

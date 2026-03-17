@@ -24,7 +24,7 @@ let ProductsService = ProductsService_1 = class ProductsService {
     }
     async create(createProductDto, companyId, userId) {
         if (!createProductDto.supplierId) {
-            throw new common_1.BadRequestException('Fornecedor é obrigatório');
+            throw new common_1.BadRequestException('Supplier is required');
         }
         const supplier = await this.prisma.supplier.findFirst({
             where: {
@@ -33,11 +33,10 @@ let ProductsService = ProductsService_1 = class ProductsService {
             },
         });
         if (!supplier) {
-            throw new common_1.NotFoundException('Fornecedor não encontrado');
+            throw new common_1.NotFoundException('Supplier not found');
         }
         const status = createProductDto.status || 'RECEIVED';
-        const product = await this.prisma.product.create({
-            data: {
+        const product = await this.prisma.product.create({ data: {
                 internalCode: createProductDto.internalCode,
                 description: createProductDto.description,
                 quantity: createProductDto.quantity,
@@ -53,46 +52,45 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 supplier: true,
             },
         });
-        await this.prisma.productMovement.create({
-            data: {
+        await this.prisma.productMovement.create({ data: {
                 productId: product.id,
                 previousStatus: status,
                 newStatus: status,
                 quantity: product.quantity,
                 location: product.currentLocation || 'Entrada',
-                reason: 'Receção inicial do produto',
+                reason: 'Initial product receipt',
                 userId,
             },
         });
         try {
-            this.logger.log(`🔔 [NOTIF-1] Iniciando notificação: userId=${userId}, companyId=${companyId}`);
+            this.logger.log(`🔔 [NOTIF-1] Starting notification: userId=${userId}, companyId=${companyId}`);
             const user = await this.prisma.user.findUnique({
                 where: { id: userId },
                 select: { name: true, companyId: true, id: true },
             });
             if (!user) {
-                this.logger.error(`❌ [NOTIF-2] Utilizador não encontrado para notificação: ${userId}`);
+                this.logger.error(`❌ [NOTIF-2] User not found para notificação: ${userId}`);
                 throw new Error(`User not found: ${userId}`);
             }
-            this.logger.log(`✅ [NOTIF-2] Utilizador encontrado: ${user.id}, userCompanyId=${user.companyId}, requestCompanyId=${companyId}`);
+            this.logger.log(`✅ [NOTIF-2] User found: ${user.id}, userCompanyId=${user.companyId}, requestCompanyId=${companyId}`);
             if (user.companyId !== companyId) {
                 this.logger.error(`❌ [NOTIF-3] CompanyId mismatch: ${user.companyId} !== ${companyId}`);
                 throw new Error(`Company mismatch`);
             }
-            this.logger.log(`🔔 [NOTIF-3] Chamando notificationsService.create()`);
+            this.logger.log(`🔔 [NOTIF-3] Calling notificationsService.create()`);
             const result = await this.notificationsService.create({
-                title: '📦 Novo Produto Registado',
-                message: `Novo produto "${product.description}" (${product.internalCode}) foi registado por ${user?.name || 'Utilizador'}`,
+                title: '📦 New Product Registered',
+                message: `New product "${product.description}" (${product.internalCode}) was registered by ${user?.name || 'Utilizador'}`,
                 userId,
                 companyId,
             });
-            this.logger.log(`✅ [NOTIF-4] Notificação criada: ${result?.id}`);
+            this.logger.log(`✅ [NOTIF-4] Notification created: ${result?.id}`);
         }
         catch (error) {
             this.logger.error(`❌ [NOTIF-ERROR] ${error?.message}`);
             this.logger.error('Stack:', error?.stack);
         }
-        console.log('🔍 [SERVICE] Produto criado, retornando:', product);
+        console.log('🔍 [SERVICE] Product created, returning:', product);
         return product;
     }
     async findAll(companyId, filters) {
@@ -114,13 +112,13 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 mode: 'insensitive',
             };
         }
-        if (filters?.dateFrom || filters?.dateTo) {
+        if (filters?.dataFrom || filters?.dataTo) {
             where.createdAt = {};
-            if (filters.dateFrom) {
-                where.createdAt.gte = new Date(filters.dateFrom);
+            if (filters.dataFrom) {
+                where.createdAt.gte = new Date(filters.dataFrom);
             }
-            if (filters.dateTo) {
-                const endDate = new Date(filters.dateTo);
+            if (filters.dataTo) {
+                const endDate = new Date(filters.dataTo);
                 endDate.setHours(23, 59, 59, 999);
                 where.createdAt.lte = endDate;
             }
@@ -153,7 +151,7 @@ let ProductsService = ProductsService_1 = class ProductsService {
             },
         });
         if (!product) {
-            throw new common_1.NotFoundException('Produto não encontrado');
+            throw new common_1.NotFoundException('product not found');
         }
         return product;
     }
@@ -191,13 +189,14 @@ let ProductsService = ProductsService_1 = class ProductsService {
             },
         });
         if (!product) {
-            throw new common_1.NotFoundException('Produto não encontrado');
+            throw new common_1.NotFoundException('product not found');
         }
         return product;
     }
     async update(id, updateProductDto, companyId, userId) {
         const product = await this.findOne(id, companyId);
-        if (updateProductDto.supplierId && updateProductDto.supplierId !== product.supplierId) {
+        if (updateProductDto.supplierId &&
+            updateProductDto.supplierId !== product.supplierId) {
             const supplier = await this.prisma.supplier.findFirst({
                 where: {
                     id: updateProductDto.supplierId,
@@ -205,12 +204,11 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 },
             });
             if (!supplier) {
-                throw new common_1.NotFoundException('Fornecedor não encontrado');
+                throw new common_1.NotFoundException('Supplier not found');
             }
         }
         return this.prisma.product.update({
-            where: { id: product.id },
-            data: updateProductDto,
+            where: { id: product.id }, data: updateProductDto,
             include: {
                 supplier: true,
             },
@@ -219,8 +217,7 @@ let ProductsService = ProductsService_1 = class ProductsService {
     async updateStatus(id, statusDto, companyId, userId) {
         const product = await this.findOne(id, companyId);
         const updatedProduct = await this.prisma.product.update({
-            where: { id: product.id },
-            data: {
+            where: { id: product.id }, data: {
                 status: statusDto.newStatus,
                 currentLocation: statusDto.location || product.currentLocation,
             },
@@ -228,8 +225,7 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 supplier: true,
             },
         });
-        await this.prisma.productMovement.create({
-            data: {
+        await this.prisma.productMovement.create({ data: {
                 productId: product.id,
                 previousStatus: product.status,
                 newStatus: statusDto.newStatus,
@@ -252,22 +248,22 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 DISPATCHED: '🚚 Enviado',
             };
             await this.notificationsService.create({
-                title: `🔄 Produto Atualizado`,
-                message: `Produto "${product.description}" (${product.internalCode}) foi alterado de ${statusLabel[product.status] || product.status} para ${statusLabel[statusDto.newStatus] || statusDto.newStatus} por ${user?.name || 'Utilizador'}`,
+                title: `🔄 product Atualizado`,
+                message: `product "${product.description}" (${product.internalCode}) foi alterado de ${statusLabel[product.status] || product.status} para ${statusLabel[statusDto.newStatus] || statusDto.newStatus} por ${user?.name || 'Utilizador'}`,
                 userId,
                 companyId,
             });
             this.logger.log(`✅ Notificação enviada para atualização de status: ${product.id}`);
         }
         catch (error) {
-            this.logger.error(`❌ Erro ao enviar notificação de atualização de status: ${error.message}`);
+            this.logger.error(`❌ Error ao send notificação de atualização de status: ${error.message}`);
         }
         return updatedProduct;
     }
     async remove(id, companyId, userId) {
         const product = await this.findOne(id, companyId);
         if (product.status !== 'RECEIVED') {
-            throw new common_1.BadRequestException(`Não é possível excluir este produto. Apenas produtos no estado "RECEBIDO" podem ser eliminados. Estado atual: ${product.status}`);
+            throw new common_1.BadRequestException(`Não é possível excluir este product. Apenas products no estado "RECEBIDO" podem ser eliminados. Estado atual: ${product.status}`);
         }
         await this.prisma.productMovement.deleteMany({
             where: { productId: product.id },

@@ -36,12 +36,12 @@ let VehiclesController = VehiclesController_1 = class VehiclesController {
         this.logger.log(`🏢 CompanyId: ${req.user.companyId || 'SUPER_ADMIN'}`);
         const companyId = createVehicleDto.companyId || req.user.companyId;
         if (!companyId) {
-            this.logger.error(` CompanyId não encontrado!`);
-            throw new common_1.BadRequestException('CompanyId obrigatório');
+            this.logger.error(` CompanyId not found!`);
+            throw new common_1.BadRequestException('CompanyId is required');
         }
-        this.logger.log(`Validação passou, criando veículo...`);
+        this.logger.log(`Validation passed, creating vehicle...`);
         const result = await this.vehiclesService.create(createVehicleDto, companyId);
-        this.logger.log(`Veículo criado com sucesso: ${result.id}`);
+        this.logger.log(`Vehicle created successfully: ${result.id}`);
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         return result;
     }
@@ -55,57 +55,45 @@ let VehiclesController = VehiclesController_1 = class VehiclesController {
     }
     async findAvailable(req, queryCompanyId) {
         this.logger.log(`📥 GET /vehicles/available - User: ${req.user.email}`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : req.user.companyId;
         return this.vehiclesService.findAvailable(companyId);
     }
     async getStats(req, queryCompanyId) {
         this.logger.log(`📥 GET /vehicles/stats - User: ${req.user.email}`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : req.user.companyId;
         return this.vehiclesService.getStats(companyId);
     }
     async findOne(id, req) {
         this.logger.log(`📥 GET /vehicles/${id} - User: ${req.user.email}`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? undefined : req.user.companyId;
         return this.vehiclesService.findOne(id, companyId);
     }
     async update(id, updateVehicleDto, req) {
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         this.logger.log(`📥 PATCH /vehicles/${id} - User: ${req.user.email}`);
         this.logger.log(`🏢 CompanyId do user: ${req.user.companyId}`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? undefined : req.user.companyId;
         const result = await this.vehiclesService.update(id, updateVehicleDto, companyId);
-        this.logger.log(`Veículo ${id} atualizado com sucesso`);
+        this.logger.log(`Vehicle ${id} updated successfully`);
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         return result;
     }
     async updateStatus(id, body, req) {
         this.logger.log(`📥 PATCH /vehicles/${id}/status - Status: ${body.status}`);
         if (!Object.values(client_1.VehicleStatus).includes(body.status)) {
-            throw new common_1.BadRequestException(`Status inválido. Valores: ${Object.values(client_1.VehicleStatus).join(', ')}`);
+            throw new common_1.BadRequestException(`Invalid status. Valid values: ${Object.values(client_1.VehicleStatus).join(', ')}`);
         }
         const status = body.status;
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? undefined : req.user.companyId;
         return this.vehiclesService.updateStatus(id, status, companyId);
     }
     async remove(id, req) {
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         this.logger.log(`📥 DELETE /vehicles/${id} - User: ${req.user.email}`);
         this.logger.log(`🏢 CompanyId do user: ${req.user.companyId}`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? undefined : req.user.companyId;
         const result = await this.vehiclesService.remove(id, companyId);
-        this.logger.log(`Veículo ${id} eliminado com sucesso`);
+        this.logger.log(`Vehicle ${id} deleted successfully`);
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         return result;
     }
@@ -114,7 +102,7 @@ exports.VehiclesController = VehiclesController;
 __decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Criar novo veículo' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Create new vehicle' }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -124,7 +112,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Listar veículos' }),
+    (0, swagger_1.ApiOperation)({ summary: 'List vehicles' }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
@@ -134,7 +122,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)('available'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Listar veículos disponíveis' }),
+    (0, swagger_1.ApiOperation)({ summary: 'List available vehicles' }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('companyId')),
     __metadata("design:type", Function),
@@ -144,7 +132,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)('stats'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Estatísticas de veículos' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Vehicle statistics' }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('companyId')),
     __metadata("design:type", Function),
@@ -154,7 +142,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Obter veículo por ID' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get vehicle by ID' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -164,7 +152,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar veículo' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update vehicle' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Request)()),
@@ -175,7 +163,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id/status'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar status do veículo' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update vehicle status' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Request)()),
@@ -186,7 +174,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Eliminar veículo' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete vehicle' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),

@@ -123,28 +123,28 @@ const NewProduct: React.FC = () => {
 
     try {
       await createProductMutation.mutateAsync(payload);
-      alert(" Produto criado com sucesso!");
-      navigate("/produtos");
+      alert(" product criado com success!");
+      navigate("/products");
     } catch (error: any) {
-      console.error(" Erro ao criar produto:", error);
+      console.error(" Error creating product:", error);
       
       if (error.response) {
-        const { status, data } = error.response;
+        const { status, date } = error.response;
 
         if (status === 400) {
-          if (Array.isArray(data.message)) {
-            setApiError(data.message.join(', '));
-          } else if (typeof data.message === 'object') {
-            setApiError(JSON.stringify(data.message));
+          if (Array.isArray(date.message)) {
+            setApiError(date.message.join(', '));
+          } else if (typeof date.message === 'object') {
+            setApiError(JSON.stringify(date.message));
           } else {
-            setApiError(data.message || data.error || "Invalid data");
+            setApiError(date.message || date.error || "Invalid date");
           }
         } else if (status === 404) {
           setApiError("Supplier not found.");
         } else if (status === 409) {
           setApiError("A product with this internal code already exists.");
         } else {
-          setApiError(data.message || data.error || `Server error (${status})`);
+          setApiError(date.message || date.error || `Server error (${status})`);
         }
       } else if (error.request) {
         setApiError("No server response. Check your connection.");
@@ -185,7 +185,7 @@ const NewProduct: React.FC = () => {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-red-300">Erro</p>
+                    <p className="text-sm font-medium text-red-300">Error</p>
                     <p className="text-sm text-red-200/90 mt-1">{apiError}</p>
                   </div>
                 </div>
@@ -266,7 +266,7 @@ const NewProduct: React.FC = () => {
                       id="description"
                       name="description"
                       type="text"
-                      placeholder="Descrição detalhada do produto"
+                      placeholder="Descrição detalhada do product"
                       value={formData.description}
                       onChange={handleChange}
                       className={`w-full px-4 py-3 bg-[#1e293b]/50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white placeholder-amber-300/50 ${
@@ -300,7 +300,7 @@ const NewProduct: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <label htmlFor="quantity" className="block text-sm font-medium text-amber-300 mb-2">
-                      Quantidade <span className="text-red-400">*</span>
+                      Quantity <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="quantity"
@@ -329,7 +329,7 @@ const NewProduct: React.FC = () => {
 
                   <div>
                     <label htmlFor="totalWeight" className="block text-sm font-medium text-amber-300 mb-2">
-                      Peso Total (kg)
+                      Weight Total (kg)
                     </label>
                     <input
                       id="totalWeight"
@@ -363,7 +363,7 @@ const NewProduct: React.FC = () => {
                 </div>
               </div>
 
-              {/* Fornecedor e Localização */}
+              {/* Supplier e Localização */}
               <div className="border-b border-amber-500/20 pb-8">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="bg-gradient-to-br from-amber-900/30 to-amber-900/20 border border-amber-500/30 rounded-lg p-2">
@@ -371,18 +371,18 @@ const NewProduct: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Fornecedor e Localização</h3>
+                  <h3 className="text-lg font-semibold text-white">Supplier and Location</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="supplierId" className="block text-sm font-medium text-amber-300 mb-2">
-                      Fornecedor <span className="text-red-400">*</span>
+                      Supplier <span className="text-red-400">*</span>
                     </label>
                     {loadingSuppliers ? (
                       <div className="w-full px-4 py-3 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg text-amber-300/70">
                         <div className="flex items-center gap-2">
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-amber-500"></div>
-                          A carregar fornecedores...
+                          Loading suppliers...
                         </div>
                       </div>
                     ) : (
@@ -397,7 +397,7 @@ const NewProduct: React.FC = () => {
                             : "border-amber-500/30"
                         }`}
                       >
-                        <option value="" className="bg-[#1e293b] text-amber-300/50">Selecione um fornecedor</option>
+                        <option value="" className="bg-[#1e293b] text-amber-300/50">Select a supplier</option>
                         {suppliers?.map((supplier) => (
                           <option key={supplier.id} value={supplier.id} className="bg-[#1e293b]">
                             {supplier.name} (NIF: {supplier.nif})
@@ -419,13 +419,13 @@ const NewProduct: React.FC = () => {
                           <svg className="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                           </svg>
-                          Nenhum fornecedor disponível.{" "}
+                          No suppliers available.{" "}
                           <button
                             type="button"
                             onClick={() => navigate('/fornecedores')}
                             className="text-amber-400 hover:text-amber-300 underline font-medium"
                           >
-                            Criar fornecedor
+                            Create supplier
                           </button>
                         </p>
                       </div>
@@ -449,7 +449,7 @@ const NewProduct: React.FC = () => {
                 </div>
               </div>
 
-              {/* Status do Produto */}
+              {/* Status do product */}
               <div className="border-b border-amber-500/20 pb-8">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="bg-gradient-to-br from-green-900/30 to-emerald-900/20 border border-green-500/30 rounded-lg p-2">
@@ -457,7 +457,7 @@ const NewProduct: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Status do Produto</h3>
+                  <h3 className="text-lg font-semibold text-white">Status do product</h3>
                 </div>
                 <div className="grid grid-cols-1 gap-6">
                   <div>
@@ -476,7 +476,7 @@ const NewProduct: React.FC = () => {
                       }`}
                       required
                     >
-                      <option value="RECEIVED" className="bg-[#1e293b]">📦 Recebido</option>
+                      <option value="RECEIVED" className="bg-[#1e293b]">📦 Received</option>
                       <option value="IN_ANALYSIS" className="bg-[#1e293b]">🔍 Em Análise</option>
                       <option value="IN_STORAGE" className="bg-[#1e293b]">🏢 Armazenado</option>
                       <option value="APPROVED" className="bg-[#1e293b]"> ✅ Aprovado</option>
@@ -491,7 +491,7 @@ const NewProduct: React.FC = () => {
                       </p>
                     )}
                     <p className="text-xs text-amber-400/70 mt-2">
-                      💡 Status padrão ao criar: <strong>Recebido</strong>
+                      💡 Default status when creating: <strong>Received</strong>
                     </p>
                   </div>
 
@@ -502,31 +502,31 @@ const NewProduct: React.FC = () => {
                       <li className="flex items-start gap-2">
                         <span className="text-green-400 mt-0.5">📦</span>
                         <div>
-                          <strong>Recebido:</strong> Produto acabou de chegar do fornecedor
+                          <strong>Received:</strong> Product just arrived from supplier
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-blue-400 mt-0.5">🔍</span>
                         <div>
-                          <strong>Em Análise:</strong> Produto sendo inspecionado/verificado
+                          <strong>Em Análise:</strong> product sendo inspecionado/verificado
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-purple-400 mt-0.5">🏢</span>
                         <div>
-                          <strong>Armazenado:</strong> Produto guardado no armazém
+                          <strong>Armazenado:</strong> product guardado no armazém
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-emerald-400 mt-0.5"></span>
                         <div>
-                          <strong>Aprovado:</strong> Produto pronto para ser usado/expedido
+                          <strong>Aprovado:</strong> product pronto para ser usado/expedido
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-amber-400 mt-0.5">🚛</span>
                         <div>
-                          <strong>Expedido:</strong> Produto saiu para transporte/entrega
+                          <strong>Expedido:</strong> product saiu para transport/entrega
                         </div>
                       </li>
                     </ul>
@@ -538,7 +538,7 @@ const NewProduct: React.FC = () => {
               <div className="flex justify-end gap-4 pt-6">
                 <button
                   type="button"
-                  onClick={() => navigate("/produtos")}
+                  onClick={() => navigate("/products")}
                   className="px-6 py-3 bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 text-amber-300 border border-amber-500/30 rounded-lg hover:bg-amber-900/20 hover:text-amber-200 transition-all font-medium"
                   disabled={isSubmitting}
                 >
@@ -559,7 +559,7 @@ const NewProduct: React.FC = () => {
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      Criar Produto
+                      Create Product
                     </>
                   )}
                 </button>

@@ -186,7 +186,7 @@
     │
     └── backend-nest/
         └── src/modules/products/
-            ├── products.service.ts ✏️ (MODIFICADO)
+            ├── products.service.ts ✏️ (MODIFIED)
             └── products.module.ts ✏️ (MODIFICADO)
 
 

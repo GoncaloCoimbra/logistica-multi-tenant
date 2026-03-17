@@ -107,7 +107,7 @@ if (match) {
      📊 Localizações: 3
      ```
 
-## 📊 Cidades Suportadas
+## 📈 Supported Cities
 
 **Portugal Continental:**
 - Lisboa, Braga, Porto, Covilhã, Aveiro
@@ -118,11 +118,11 @@ if (match) {
 - Caparica, Loures, Oeiras, Setúbal, Almada
 - Cacém, Alcântara, Belém, Azambuja, Alcochete
 
-## ⚠️ Notas Importantes
+## ⚠️ Important Notes
 
-1. **Variações Ortográficas:** O sistema remove acentos e converte para minúsculas, então "Covilhã", "Covilha" e "COVILHÃ" funcionam todas
+1. **Spelling Variations:** The system removes accents and converts to lowercase, so "Covilhã", "Covilha" and "COVILHÃ" all work
 
-2. **Fallback:** Se uma cidade não for encontrada, o sistema usa Lisboa como fallback e registra um aviso
+2. **Fallback:** If a city is not found, the system uses Lisbon as fallback and logs a warning
 
 3. **Boundary Validation:** All coordinates are validated to be in continental Portugal (latitude 36-43, longitude -11 to -5)
 
@@ -131,9 +131,9 @@ if (match) {
 - [ ] Integration with real geolocation API (Google Maps, Mapbox)
 - [ ] Support for complete addresses, not just cities
 - [ ] Dynamic calculation of more realistic routes
-- [ ] Cache de coordenadas para performance
+- [ ] Coordinate caching for performance
 
 ---
 
-**Data:** 27 de Fevereiro de 2026
+**Date:** February 27, 2026
 **Status:** ✅ Ready for Testing

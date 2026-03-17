@@ -32,12 +32,17 @@ export class AuditLogInterceptor implements NestInterceptor {
 
     // Apenas captura ações relevantes
     const shouldLog = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method);
-    
+
     console.log('🔍 [INTERCEPTOR] Should log?', shouldLog);
     console.log('🔍 [INTERCEPTOR] Has user?', !!user);
 
     if (!shouldLog || !user) {
-      console.log('⚠️ [INTERCEPTOR] Skipping log - shouldLog:', shouldLog, 'user:', !!user);
+      console.log(
+        '⚠️ [INTERCEPTOR] Skipping log - shouldLog:',
+        shouldLog,
+        'user:',
+        !!user,
+      );
       return next.handle();
     }
 
@@ -45,14 +50,19 @@ export class AuditLogInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(async (response) => {
-        console.log('🔍 [INTERCEPTOR TAP] Response received:', JSON.stringify(response));
-        
+        console.log(
+          '🔍 [INTERCEPTOR TAP] Response received:',
+          JSON.stringify(response),
+        );
+
         try {
           const { entity, action } = this.extractEntityAndAction(method, url);
           console.log('🔍 [INTERCEPTOR] Entity:', entity, 'Action:', action);
 
           if (!entity) {
-            console.log('⚠️ [INTERCEPTOR] Nenhuma entity encontrada, saindo...');
+            console.log(
+              '⚠️ [INTERCEPTOR] Nenhuma entity encontrada, saindo...',
+            );
             return;
           }
 
@@ -71,7 +81,7 @@ export class AuditLogInterceptor implements NestInterceptor {
             userId: user.id,
             companyId: user.companyId,
             ipAddress: ipAddress ? String(ipAddress) : undefined,
-            metadata: {
+            metadate: {
               method,
               url,
               body: this.sanitizeBody(body),
@@ -90,11 +100,23 @@ export class AuditLogInterceptor implements NestInterceptor {
         }
       }),
       catchError((error) => {
-        const errorDetail = error?.response || (typeof error?.getResponse === 'function' ? error.getResponse() : undefined) || error?.message || 'Unknown error';
+        const errorDetail =
+          error?.response ||
+          (typeof error?.getResponse === 'function'
+            ? error.getResponse()
+            : undefined) ||
+          error?.message ||
+          'Unknown error';
         try {
-          console.log(' [INTERCEPTOR] Erro na requisição (detalhes):', JSON.stringify(errorDetail));
+          console.log(
+            ' [INTERCEPTOR] Error na requisição (detalhes):',
+            JSON.stringify(errorDetail),
+          );
         } catch (e) {
-          console.log(' [INTERCEPTOR] Erro na requisição (detalhes):', errorDetail);
+          console.log(
+            ' [INTERCEPTOR] Error na requisição (detalhes):',
+            errorDetail,
+          );
         }
 
         // If there is an error in the request, also tries to register
@@ -102,7 +124,10 @@ export class AuditLogInterceptor implements NestInterceptor {
           if (user) {
             const { entity, action } = this.extractEntityAndAction(method, url);
             if (entity) {
-              const errMsg = (typeof errorDetail === 'string') ? errorDetail : (errorDetail?.message || JSON.stringify(errorDetail));
+              const errMsg =
+                typeof errorDetail === 'string'
+                  ? errorDetail
+                  : errorDetail?.message || JSON.stringify(errorDetail);
               this.logger.warn(
                 `⚠️ [AUDIT] ${action} ${entity} falhou - ${errMsg}`,
               );
@@ -125,7 +150,11 @@ export class AuditLogInterceptor implements NestInterceptor {
   /**
    *  NOVA FUNÇÃO: Extrai o ID da entidade de múltiplas fontes
    */
-  private extractEntityId(response: any, body: any, url: string): string | null {
+  private extractEntityId(
+    response: any,
+    body: any,
+    url: string,
+  ): string | null {
     // 1️⃣ Tenta na resposta direta
     if (response && typeof response === 'object') {
       // Tenta: response.id
@@ -134,14 +163,30 @@ export class AuditLogInterceptor implements NestInterceptor {
       }
 
       // Tenta: response.data.id (padrão comum)
-      if (response.data && typeof response.data === 'object' && response.data.id) {
+      if (
+        response.data &&
+        typeof response.data === 'object' &&
+        response.data.id
+      ) {
         return String(response.data.id);
       }
 
       // Tenta: response.product.id, response.user.id, etc.
-      const possibleKeys = ['product', 'user', 'vehicle', 'transport', 'supplier', 'company', 'setting'];
+      const possibleKeys = [
+        'product',
+        'user',
+        'vehicle',
+        'transport',
+        'supplier',
+        'company',
+        'setting',
+      ];
       for (const key of possibleKeys) {
-        if (response[key] && typeof response[key] === 'object' && response[key].id) {
+        if (
+          response[key] &&
+          typeof response[key] === 'object' &&
+          response[key].id
+        ) {
           return String(response[key].id);
         }
       }
@@ -162,7 +207,10 @@ export class AuditLogInterceptor implements NestInterceptor {
     return null;
   }
 
-  private extractEntityAndAction(method: string, url: string): { entity: string | null; action: string } {
+  private extractEntityAndAction(
+    method: string,
+    url: string,
+  ): { entity: string | null; action: string } {
     // Remove query params
     const cleanUrl = url.split('?')[0];
 
@@ -206,7 +254,7 @@ export class AuditLogInterceptor implements NestInterceptor {
   private extractIdFromUrl(url: string): string | null {
     // Remove query params
     const cleanUrl = url.split('?')[0];
-    
+
     // Tenta extrair UUID ou ID da URL
     const patterns = [
       /\/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})(?:\/|$)/i, // UUID

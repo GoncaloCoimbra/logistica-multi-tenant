@@ -31,51 +31,73 @@ __decorate([
     __metadata("design:type", String)
 ], TaskResponseDto.prototype, "id", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Título da tarefa', example: 'Implementar novo recurso' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Título da tarefa',
+        example: 'Implementar  new recurso',
+    }),
     __metadata("design:type", String)
 ], TaskResponseDto.prototype, "title", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Descrição da tarefa', example: 'Implementar sistema de notificações' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Descrição da tarefa',
+        example: 'Implementar sistema de notificações',
+    }),
     __metadata("design:type", String)
 ], TaskResponseDto.prototype, "description", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Status da tarefa',
         enum: create_task_dto_1.TaskStatus,
-        example: create_task_dto_1.TaskStatus.PENDING
+        example: create_task_dto_1.TaskStatus.PENDING,
     }),
     __metadata("design:type", String)
 ], TaskResponseDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Prioridade da tarefa',
+        description: 'Priority da tarefa',
         enum: create_task_dto_1.TaskPriority,
-        example: create_task_dto_1.TaskPriority.MEDIUM
+        example: create_task_dto_1.TaskPriority.MEDIUM,
     }),
     __metadata("design:type", String)
 ], TaskResponseDto.prototype, "priority", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Data de vencimento', example: '2026-01-15T00:00:00.000Z' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Date de vencimento',
+        example: '2026-01-15T00:00:00.000Z',
+    }),
     __metadata("design:type", Date)
 ], TaskResponseDto.prototype, "dueDate", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Nome do responsável', example: 'João Silva', nullable: true }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Name do responsável',
+        example: 'João Silva',
+        nullable: true,
+    }),
     __metadata("design:type", Object)
 ], TaskResponseDto.prototype, "assignedTo", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Data de criação', example: '2026-01-06T10:00:00.000Z' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Date de criação',
+        example: '2026-01-06T10:00:00.000Z',
+    }),
     __metadata("design:type", Date)
 ], TaskResponseDto.prototype, "createdAt", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Data da última atualização', example: '2026-01-06T10:00:00.000Z' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Date da última atualização',
+        example: '2026-01-06T10:00:00.000Z',
+    }),
     __metadata("design:type", Date)
 ], TaskResponseDto.prototype, "updatedAt", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'ID da empresa', example: 'uuid-da-empresa' }),
+    (0, swagger_1.ApiProperty)({ description: 'Company ID', example: 'uuid-company' }),
     __metadata("design:type", String)
 ], TaskResponseDto.prototype, "companyId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'ID do usuário que criou a tarefa', example: 'uuid-do-usuario' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'ID of the user who created the task',
+        example: 'uuid-user',
+    }),
     __metadata("design:type", String)
 ], TaskResponseDto.prototype, "createdById", void 0);
 class TaskStatsDto {

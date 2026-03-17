@@ -28,7 +28,7 @@ exports.CreateTaskDto = CreateTaskDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Título da tarefa',
-        example: 'Implementar novo recurso'
+        example: 'Implementar  new recurso',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -37,7 +37,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Descrição detalhada da tarefa',
-        example: 'Implementar sistema de notificações em tempo real'
+        example: 'Implementar sistema de notificações em time real',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -48,7 +48,7 @@ __decorate([
         description: 'Status da tarefa',
         enum: client_1.TaskStatus,
         example: client_1.TaskStatus.PENDING,
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsEnum)(client_1.TaskStatus),
     (0, class_validator_1.IsOptional)(),
@@ -56,9 +56,9 @@ __decorate([
 ], CreateTaskDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Prioridade da tarefa',
+        description: 'Priority da tarefa',
         enum: client_1.TaskPriority,
-        example: client_1.TaskPriority.MEDIUM
+        example: client_1.TaskPriority.MEDIUM,
     }),
     (0, class_validator_1.IsEnum)(client_1.TaskPriority),
     (0, class_validator_1.IsNotEmpty)(),
@@ -66,8 +66,8 @@ __decorate([
 ], CreateTaskDto.prototype, "priority", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Data de vencimento da tarefa',
-        example: '2026-01-15T00:00:00.000Z'
+        description: 'Date de vencimento da tarefa',
+        example: '2026-01-15T00:00:00.000Z',
     }),
     (0, class_validator_1.IsDateString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -75,9 +75,9 @@ __decorate([
 ], CreateTaskDto.prototype, "dueDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Nome do responsável pela tarefa',
+        description: 'Name do responsável pela tarefa',
         example: 'João Silva',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -85,9 +85,9 @@ __decorate([
 ], CreateTaskDto.prototype, "assignedTo", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'ID da empresa (apenas para SUPER_ADMIN)',
-        example: 'uuid-da-empresa',
-        required: false
+        description: 'ID da company (apenas para SUPER_ADMIN)',
+        example: 'uuid-da-company',
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),

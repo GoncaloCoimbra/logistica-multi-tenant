@@ -21,19 +21,18 @@ let TasksService = class TasksService {
         let companyId = userCompanyId;
         if (userRole === 'SUPER_ADMIN') {
             if (!createTaskDto.companyId) {
-                throw new common_1.BadRequestException('SUPER_ADMIN deve especificar o ID da empresa');
+                throw new common_1.BadRequestException('SUPER_ADMIN deve especificar o ID da company');
             }
             companyId = createTaskDto.companyId;
             const companyExists = await this.prisma.company.findUnique({
                 where: { id: companyId },
             });
             if (!companyExists) {
-                throw new common_1.NotFoundException('Empresa não encontrada');
+                throw new common_1.NotFoundException('Company não encontrada');
             }
         }
         const dueDate = new Date(createTaskDto.dueDate);
-        const task = await this.prisma.task.create({
-            data: {
+        const task = await this.prisma.task.create({ data: {
                 title: createTaskDto.title,
                 description: createTaskDto.description,
                 status: 'PENDING',
@@ -85,10 +84,7 @@ let TasksService = class TasksService {
         }
         const tasks = await this.prisma.task.findMany({
             where,
-            orderBy: [
-                { priority: 'desc' },
-                { dueDate: 'asc' },
-            ],
+            orderBy: [{ priority: 'desc' }, { dueDate: 'asc' }],
         });
         return tasks;
     }
@@ -126,16 +122,14 @@ let TasksService = class TasksService {
             updateData.assignedTo = updateTaskDto.assignedTo || null;
         }
         const updatedTask = await this.prisma.task.update({
-            where: { id },
-            data: updateData,
+            where: { id }, data: updateData,
         });
         return updatedTask;
     }
     async updateStatus(id, updateStatusDto, userId, userRole, userCompanyId) {
         const task = await this.findOne(id, userId, userRole, userCompanyId);
         const updatedTask = await this.prisma.task.update({
-            where: { id },
-            data: {
+            where: { id }, data: {
                 status: updateStatusDto.status,
             },
         });
@@ -146,7 +140,7 @@ let TasksService = class TasksService {
         await this.prisma.task.delete({
             where: { id },
         });
-        return { message: 'Tarefa excluída com sucesso' };
+        return { message: 'Tarefa excluída com success' };
     }
     async getStats(userId, userRole, userCompanyId, companyId) {
         const where = {};
@@ -156,7 +150,7 @@ let TasksService = class TasksService {
         else if (userRole !== 'SUPER_ADMIN') {
             where.companyId = userCompanyId;
         }
-        const [total, pending, inProgress, completed, cancelled, urgent, overdue,] = await Promise.all([
+        const [total, pending, inProgress, completed, cancelled, urgent, overdue] = await Promise.all([
             this.prisma.task.count({ where }),
             this.prisma.task.count({ where: { ...where, status: 'PENDING' } }),
             this.prisma.task.count({ where: { ...where, status: 'IN_PROGRESS' } }),

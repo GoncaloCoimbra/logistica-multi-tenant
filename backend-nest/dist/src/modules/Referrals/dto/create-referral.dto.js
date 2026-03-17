@@ -30,7 +30,7 @@ exports.CreateReferralDto = CreateReferralDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Nome do cliente',
-        example: 'Empresa Alpha'
+        example: 'Empresa Alpha',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -39,7 +39,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Informações de contacto',
-        example: 'alpha@example.com | +351 912 345 678'
+        example: 'alpha@example.com | +351 912 345 678',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -49,7 +49,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Fonte da referência',
         example: 'Website',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -60,7 +60,7 @@ __decorate([
         description: 'Status da referência',
         enum: client_1.ReferralStatus,
         example: client_1.ReferralStatus.NEW,
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsEnum)(client_1.ReferralStatus),
     (0, class_validator_1.IsOptional)(),
@@ -69,7 +69,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Tipo de projeto',
-        example: 'FREIGHT'
+        example: 'FREIGHT',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -78,7 +78,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Valor estimado do projeto',
-        example: 1200
+        example: 1200,
     }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -87,7 +87,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Data da referência',
-        example: '2026-01-07'
+        example: '2026-01-07',
     }),
     (0, class_validator_1.IsDateString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -97,7 +97,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Notas adicionais',
         example: 'Cliente potencial vindo do site',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -106,7 +106,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Nome de quem fez a referência',
-        example: 'João Silva'
+        example: 'João Silva',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -116,7 +116,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Valor da comissão',
         example: 60,
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsOptional)(),
@@ -126,7 +126,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'ID da empresa (apenas para SUPER_ADMIN)',
         example: 'uuid-da-empresa',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),

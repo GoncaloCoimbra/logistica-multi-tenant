@@ -22,7 +22,7 @@ export class TenantInterceptor implements NestInterceptor {
       this.logger.debug(`Setting tenant context for user ${user.email}`);
       return this.tenantContext.run(
         { companyId: user.companyId, userId: user.id },
-        () => next.handle()
+        () => next.handle(),
       );
     }
 

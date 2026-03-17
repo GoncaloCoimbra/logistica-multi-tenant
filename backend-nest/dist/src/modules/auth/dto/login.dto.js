@@ -20,24 +20,24 @@ exports.LoginDto = LoginDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'admin@logistica.com',
-        description: 'Email do utilizador registado no sistema',
+        description: 'User email registered in the system',
         type: String,
     }),
-    (0, class_validator_1.IsEmail)({}, { message: 'Email inválido. Por favor, insira um email válido.' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Email é obrigatório' }),
+    (0, class_validator_1.IsEmail)({}, { message: 'Invalid email. Please enter a valid email.' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Email is required' }),
     __metadata("design:type", String)
 ], LoginDto.prototype, "email", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'admin123',
-        description: 'Password do utilizador (mínimo 6 caracteres)',
+        description: 'User password (minimum 6 characters)',
         minLength: 6,
         maxLength: 128,
         type: String,
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Password é obrigatória' }),
-    (0, class_validator_1.MinLength)(6, { message: 'Password deve ter no mínimo 6 caracteres' }),
-    (0, class_validator_1.MaxLength)(128, { message: 'Password não pode exceder 128 caracteres' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Password is required' }),
+    (0, class_validator_1.MinLength)(6, { message: 'Password must be at least 6 characters long' }),
+    (0, class_validator_1.MaxLength)(128, { message: 'Password cannot exceed 128 characters' }),
     __metadata("design:type", String)
 ], LoginDto.prototype, "password", void 0);
 //# sourceMappingURL=login.dto.js.map

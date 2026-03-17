@@ -19,10 +19,7 @@ export class TutorialsController {
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '10',
   ) {
-    return this.tutorialsService.findAll(
-      parseInt(page),
-      parseInt(limit),
-    );
+    return this.tutorialsService.findAll(parseInt(page), parseInt(limit));
   }
 
   @Public()
@@ -44,7 +41,7 @@ export class TutorialsController {
 
   @Public()
   @Get(':id')
-  @ApiOperation({ summary: 'Obter detalhes de um tutorial específico' })
+  @ApiOperation({ summary: 'Get detalhes de um tutorial específico' })
   async findOne(@Param('id') id: string) {
     const tutorial = await this.tutorialsService.findOne(parseInt(id));
     if (!tutorial) {

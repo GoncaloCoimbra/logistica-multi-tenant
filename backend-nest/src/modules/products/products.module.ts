@@ -11,8 +11,3 @@ import { AuditLogModule } from '../audit-log/audit-log.module';
   exports: [ProductsService],
 })
 export class ProductsModule {}
-
-
-
-
-

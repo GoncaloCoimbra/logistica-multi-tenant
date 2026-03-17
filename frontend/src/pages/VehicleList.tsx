@@ -29,9 +29,9 @@ interface Company {
   name: string;
 }
 
-// 🔧 FUNÇÃO MELHORADA para extrair mensagens de erro do backend
+// 🔧 FUNÇÃO MELHORADA para extrair mensagens de error do backend
 const extractErrorMessage = (error: any, defaultMessage: string): string => {
-  console.log('🔍 [ERROR DEBUG] Estrutura completa do erro:', error);
+  console.log('🔍 [ERROR DEBUG] Estrutura completa do error:', error);
   console.log('🔍 [ERROR DEBUG] error.response:', error?.response);
   console.log('🔍 [ERROR DEBUG] error.response.data:', error?.response?.data);
   
@@ -39,39 +39,39 @@ const extractErrorMessage = (error: any, defaultMessage: string): string => {
   
   // 1️⃣ Tentar extrair de error.response.data
   if (error.response?.data) {
-    const data = error.response.data;
-    console.log('📦 [ERROR DEBUG] data type:', typeof data);
-    console.log('📦 [ERROR DEBUG] data.message:', data.message);
+    const date = error.response.data;
+    console.log('📦 [ERROR DEBUG] date type:', typeof date);
+    console.log('📦 [ERROR DEBUG] date.message:', date.message);
     
-    // Se data é string diretamente
-    if (typeof data === 'string') {
-      console.log(' [ERROR DEBUG] Retornando data como string');
-      return data;
+    // Se date é string diretamente
+    if (typeof date === 'string') {
+      console.log(' [ERROR DEBUG] Retornando date como string');
+      return date;
     }
     
-    // Se data.message existe
-    if (data.message) {
+    // Se date.message existe
+    if (date.message) {
       // Se é array (validação do NestJS)
-      if (Array.isArray(data.message)) {
+      if (Array.isArray(date.message)) {
         console.log(' [ERROR DEBUG] Retornando primeiro item do array');
-        return data.message[0] || defaultMessage;
+        return date.message[0] || defaultMessage;
       }
       // Se é string
-      if (typeof data.message === 'string') {
-        console.log(' [ERROR DEBUG] Retornando data.message');
-        return data.message;
+      if (typeof date.message === 'string') {
+        console.log(' [ERROR DEBUG] Retornando date.message');
+        return date.message;
       }
       // Se é objeto (pode ter nested message)
-      if (typeof data.message === 'object' && data.message.message) {
-        console.log(' [ERROR DEBUG] Retornando data.message.message');
-        return data.message.message;
+      if (typeof date.message === 'object' && date.message.message) {
+        console.log(' [ERROR DEBUG] Retornando date.message.message');
+        return date.message.message;
       }
     }
     
-    // Se data.error existe e é string
-    if (data.error && typeof data.error === 'string') {
-      console.log(' [ERROR DEBUG] Retornando data.error');
-      return data.error;
+    // Se date.error existe e é string
+    if (date.error && typeof date.error === 'string') {
+      console.log(' [ERROR DEBUG] Retornando date.error');
+      return date.error;
     }
 
     // 🆕 Tentar statusText do response
@@ -139,7 +139,7 @@ const VehicleList: React.FC = () => {
       const response = await api.get('/auth/me');
       setUser(response.data);
     } catch (error) {
-      console.error('Erro ao carregar usuário:', error);
+      console.error('Error loading user:', error);
     }
   };
 
@@ -148,7 +148,7 @@ const VehicleList: React.FC = () => {
       const response = await api.get('/companies');
       setCompanies(response.data);
     } catch (error) {
-      console.error('Erro ao carregar empresas:', error);
+      console.error('Error loading companies:', error);
     }
   };
 
@@ -164,8 +164,8 @@ const VehicleList: React.FC = () => {
       const response = await api.get(`/vehicles?${params.toString()}`);
       setVehicles(response.data);
     } catch (error: any) {
-      console.error(' Erro ao carregar veículos:', error);
-      setError(extractErrorMessage(error, 'Erro ao carregar veículos'));
+      console.error('Error loading vehicles:', error);
+      setError(extractErrorMessage(error, 'Error loading vehicles'));
     } finally {
       setLoading(false);
     }
@@ -188,8 +188,8 @@ const VehicleList: React.FC = () => {
   };
 
   const getNextFilter = () => {
-    if (!getFilter('status')) return { type: 'status' as const, label: 'Estado' };
-    if (!getFilter('transport')) return { type: 'transport' as const, label: 'Transporte' };
+    if (!getFilter('status')) return { type: 'status' as const, label: 'Status' };
+    if (!getFilter('transport')) return { type: 'transport' as const, label: 'Transport' };
     return null;
   };
 
@@ -201,17 +201,17 @@ const VehicleList: React.FC = () => {
     
     try {
       if (!formData.licensePlate || !formData.model || !formData.brand) {
-        setError('Por favor, preencha todos os campos obrigatórios');
+        setError('Please fill in all required fields');
         return;
       }
 
       if (formData.capacity <= 0) {
-        setError('A capacidade deve ser maior que zero');
+        setError('Capacity must be greater than zero');
         return;
       }
 
       if (formData.year < 1900 || formData.year > new Date().getFullYear() + 1) {
-        setError('Ano inválido');
+        setError('Invalid year');
         return;
       }
 
@@ -220,7 +220,7 @@ const VehicleList: React.FC = () => {
         : user?.companyId;
 
       if (user?.role === 'SUPER_ADMIN' && !editingId && !selectedCompanyId) {
-        setError('Por favor, selecione uma empresa');
+        setError('Please select a company');
         return;
       }
 
@@ -228,12 +228,12 @@ const VehicleList: React.FC = () => {
       const year = Number(formData.year);
       
       if (isNaN(capacity) || capacity <= 0) {
-        setError('Capacidade inválida. Digite um número maior que zero.');
+        setError('Invalid capacity. Please enter a number greater than zero.');
         return;
       }
       
       if (isNaN(year) || year < 1900 || year > new Date().getFullYear() + 1) {
-        setError('Ano inválido. Digite um ano válido.');
+        setError('Invalid year. Please enter a valid year');
         return;
       }
 
@@ -248,7 +248,7 @@ const VehicleList: React.FC = () => {
         companyId: companyIdToUse
       };
 
-      console.log('📤 Enviando dados do veículo:', dataToSend);
+      console.log('📤 Sending vehicle date:', dataToSend);
 
       if (editingId) {
         await api.patch(`/vehicles/${editingId}`, dataToSend);
@@ -259,8 +259,8 @@ const VehicleList: React.FC = () => {
       await loadVehicles();
       resetForm();
     } catch (error: any) {
-      console.error(' Erro ao guardar veículo:', error);
-      const errorMsg = extractErrorMessage(error, 'Erro ao guardar veículo');
+      console.error('Error saving vehicle:', error);
+      const errorMsg = extractErrorMessage(error, 'Error saving vehicle');
       setError(errorMsg);
     }
   };
@@ -281,23 +281,23 @@ const VehicleList: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Deseja realmente excluir este veículo?')) {
+    if (window.confirm('Do you really want to delete this vehicle?')) {
       try {
         setError('');
-        console.log('🗑️ Tentando eliminar veículo:', id);
+        console.log('🗑️ Trying to delete vehicle:', id);
         await api.delete(`/vehicles/${id}`);
-        console.log(' Veículo eliminado com sucesso');
+        console.log('✓ Vehicle deleted successfully');
         await loadVehicles();
       } catch (error: any) {
-        console.error(' Erro ao excluir veículo:', error);
-        console.error(' Status do erro:', error?.response?.status);
-        console.error(' Data do erro:', error?.response?.data);
+        console.error('❌ Error deleting vehicle:', error);
+        console.error(' Status do error:', error?.response?.status);
+        console.error(' Date do error:', error?.response?.data);
         
-        const errorMsg = extractErrorMessage(error, 'Erro ao excluir veículo');
-        console.log('📝 Mensagem de erro extraída:', errorMsg);
+        const errorMsg = extractErrorMessage(error, 'Error deleting vehicle');
+        console.log('📝 Extracted error message:', errorMsg);
         setError(errorMsg);
         
-        // 🔔 Scroll suave para o topo para mostrar o erro
+        // 🔔 Scroll suave para o topo para mostrar o error
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
@@ -343,8 +343,8 @@ const VehicleList: React.FC = () => {
     <div className={`${theme.backgrounds.page} p-6 min-h-screen`}>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-white">Veículos</h1>
-          <p className="text-sm text-[#cbd5e1] mt-1">Gestão da frota de veículos</p>
+          <h1 className="text-3xl font-bold text-white">Vehicles</h1>
+          <p className="text-sm text-[#cbd5e1] mt-1">Vehicle Fleet Management</p>
         </div>
         <button
           onClick={() => {
@@ -362,14 +362,14 @@ const VehicleList: React.FC = () => {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
-              Cancelar
+              Cancel
             </>
           ) : (
             <>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
-              Novo Veículo
+              New Vehicle
             </>
           )}
         </button>
@@ -383,7 +383,7 @@ const VehicleList: React.FC = () => {
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
             </svg>
             <div className="flex-1">
-              <p className="font-bold text-lg text-red-200">⚠️ Erro</p>
+              <p className="font-bold text-lg text-red-200">⚠️ Error</p>
               <p className="text-base mt-2 leading-relaxed">{String(error)}</p>
             </div>
             <button
@@ -406,7 +406,7 @@ const VehicleList: React.FC = () => {
           </svg>
           <input
             type="text"
-            placeholder="Pesquisar veículos..."
+            placeholder="Search vehicles..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-[#1e293b] text-white"
@@ -416,7 +416,7 @@ const VehicleList: React.FC = () => {
           type="submit"
           className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
         >
-          Pesquisar
+          Search
         </button>
       </form>
 
@@ -467,11 +467,11 @@ const VehicleList: React.FC = () => {
                     SUPER ADMIN
                   </span>
                   <span className="text-sm text-[#cbd5e1] font-medium">
-                    Selecione a empresa para criar o veículo
+                    Select the company to create the vehicle
                   </span>
                 </div>
                 <label className="block text-sm font-medium mb-2 text-amber-200">
-                  Empresa *
+                  Company *
                 </label>
                 <select
                   required
@@ -479,7 +479,7 @@ const VehicleList: React.FC = () => {
                   onChange={(e) => setSelectedCompanyId(e.target.value)}
                   className={theme.inputs.base}
                 >
-                  <option value="">Selecione uma empresa...</option>
+                  <option value="">Select a company...</option>
                   {companies.map(company => (
                     <option key={company.id} value={company.id}>
                       {company.name}
@@ -491,7 +491,7 @@ const VehicleList: React.FC = () => {
             
             <div>
               <label className="block text-sm font-medium mb-1 text-amber-200">
-                Placa/Matrícula *
+                License Plate *
               </label>
               <input
                 type="text"
@@ -504,7 +504,7 @@ const VehicleList: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1 text-amber-200">
-                Modelo *
+                Model *
               </label>
               <input
                 type="text"
@@ -517,7 +517,7 @@ const VehicleList: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1 text-amber-200">
-                Marca *
+                Brand *
               </label>
               <input
                 type="text"
@@ -530,7 +530,7 @@ const VehicleList: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1 text-amber-200">
-                Ano *
+                Year *
               </label>
               <input
                 type="number"
@@ -544,7 +544,7 @@ const VehicleList: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1 text-amber-200">
-                Capacidade (kg) *
+                Capacity (kg) *
               </label>
               <input
                 type="number"
@@ -559,16 +559,16 @@ const VehicleList: React.FC = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1 text-amber-200">
-                Tipo *
+                Type *
               </label>
               <select
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                 className={theme.inputs.base}
               >
-                <option value="truck">Caminhão</option>
-                <option value="Carrinha">Carrinha</option>
-                <option value="car">Carro</option>
+                <option value="truck">Truck</option>
+                <option value="Carrinha">Van</option>
+                <option value="car">Car</option>
               </select>
             </div>
             <div className="col-span-2">
@@ -585,7 +585,7 @@ const VehicleList: React.FC = () => {
                       : 'border-[#334155] hover:border-emerald-500/50 text-[#cbd5e1]'
                   }`}
                 >
-                  ✓ Disponível
+                  ✓ Available
                 </button>
                 <button
                   type="button"
@@ -596,7 +596,7 @@ const VehicleList: React.FC = () => {
                       : 'border-[#334155] hover:border-[#3b82f6]/50 text-[#cbd5e1]'
                   }`}
                 >
-                  🚛 Em Uso
+                  🚛 In Use
                 </button>
                 <button
                   type="button"
@@ -607,7 +607,7 @@ const VehicleList: React.FC = () => {
                       : 'border-[#334155] hover:border-amber-500/50 text-[#cbd5e1]'
                   }`}
                 >
-                  🔧 Manutenção
+                  🔧 Maintenance
                 </button>
               </div>
             </div>
@@ -627,7 +627,7 @@ const VehicleList: React.FC = () => {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                {editingId ? 'Atualizar' : 'Criar'}
+                {editingId ? 'Update' : 'Create'}
               </button>
             </div>
           </div>
@@ -640,22 +640,22 @@ const VehicleList: React.FC = () => {
             <thead className="bg-gradient-to-r from-[#0f172a] to-black">
               <tr>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
-                  Veículo
+                  Vehicle
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
-                  Marca/Modelo
+                  Brand/Model
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
-                  Ano
+                  Year
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
-                  Capacidade
+                  Capacity
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Status
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-right text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
-                  Ações
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -708,7 +708,7 @@ const VehicleList: React.FC = () => {
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
-                      Excluir
+                      Delete
                     </button>
                   </td>
                 </tr>
@@ -722,7 +722,7 @@ const VehicleList: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
             </svg>
-            <p className="text-lg font-bold text-amber-400">Nenhum veículo cadastrado</p>
+            <p className="text-lg font-bold text-amber-400">No vehicles registered</p>
             <p className="text-sm mt-1">Click "New Vehicle" to get started</p>
           </div>
         )}
@@ -731,20 +731,20 @@ const VehicleList: React.FC = () => {
       {vehicles.length > 0 && (
         <div className="mt-4 flex justify-between items-center text-sm text-amber-400/80">
           <div>
-            Total: <span className="font-bold text-amber-400">{vehicles.length}</span> veículo{vehicles.length !== 1 ? 's' : ''}
+            Total: <span className="font-bold text-amber-400">{vehicles.length}</span> vehicle{vehicles.length !== 1 ? 's' : ''}
           </div>
           <div className="flex gap-4">
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-              {vehicles.filter(v => v.status === 'available').length} disponível{vehicles.filter(v => v.status === 'available').length !== 1 ? 'eis' : ''}
+              {vehicles.filter(v => v.status === 'available').length} available
             </span>
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 bg-[#3b82f6] rounded-full"></span>
-              {vehicles.filter(v => v.status === 'in_use').length} em uso
+              {vehicles.filter(v => v.status === 'in_use').length} in use
             </span>
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
-              {vehicles.filter(v => v.status === 'maintenance').length} em manutenção
+              {vehicles.filter(v => v.status === 'maintenance').length} in maintenance
             </span>
           </div>
         </div>
@@ -764,7 +764,7 @@ const VehicleList: React.FC = () => {
             status: getFilter('status') || '',
             transportId: getFilter('transport') || '',
           }}
-          placeholder={`Pesquisar ${currentFilterType === 'status' ? 'estados' : 'transportes'}...`}
+          placeholder={`Search ${currentFilterType === 'status' ? 'statuses' : 'transports'}...`}
         />
       )}
     </div>

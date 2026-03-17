@@ -51,11 +51,11 @@ let ReferralsController = class ReferralsController {
 exports.ReferralsController = ReferralsController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Criar nova referência' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Create nova referência' }),
     (0, swagger_1.ApiResponse)({
         status: 201,
-        description: 'Referência criada com sucesso',
-        type: referrals_dto_1.ReferralResponseDto
+        description: 'Referência criada com success',
+        type: referrals_dto_1.ReferralResponseDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Dados inválidos' }),
     (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado' }),
@@ -67,11 +67,13 @@ __decorate([
 ], ReferralsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Listar todas as referências com filtros opcionais' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Listar todas as referências com filtros opcionais',
+    }),
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'Lista de referências',
-        type: [referrals_dto_1.ReferralResponseDto]
+        type: [referrals_dto_1.ReferralResponseDto],
     }),
     __param(0, (0, common_1.Query)()),
     __param(1, (0, common_1.Request)()),
@@ -81,12 +83,16 @@ __decorate([
 ], ReferralsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('stats'),
-    (0, swagger_1.ApiOperation)({ summary: 'Obter estatísticas das referências' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'ID da empresa (apenas SUPER_ADMIN)' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get estatísticas das referências' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'ID da company (apenas SUPER_ADMIN)',
+    }),
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'Estatísticas das referências',
-        type: referrals_dto_1.ReferralStatsDto
+        type: referrals_dto_1.ReferralStatsDto,
     }),
     __param(0, (0, common_1.Query)('companyId')),
     __param(1, (0, common_1.Request)()),
@@ -96,11 +102,11 @@ __decorate([
 ], ReferralsController.prototype, "getStats", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Buscar referência por ID' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Search referência por ID' }),
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'Referência encontrada',
-        type: referrals_dto_1.ReferralResponseDto
+        type: referrals_dto_1.ReferralResponseDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Referência não encontrada' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Sem permissão' }),
@@ -112,11 +118,11 @@ __decorate([
 ], ReferralsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar referência' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update referência' }),
     (0, swagger_1.ApiResponse)({
         status: 200,
-        description: 'Referência atualizada com sucesso',
-        type: referrals_dto_1.ReferralResponseDto
+        description: 'Referência atualizada com success',
+        type: referrals_dto_1.ReferralResponseDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Referência não encontrada' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Sem permissão' }),
@@ -129,11 +135,11 @@ __decorate([
 ], ReferralsController.prototype, "update", null);
 __decorate([
     (0, common_1.Patch)(':id/status'),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar status da referência' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update status da referência' }),
     (0, swagger_1.ApiResponse)({
         status: 200,
-        description: 'Status atualizado com sucesso',
-        type: referrals_dto_1.ReferralResponseDto
+        description: 'Status atualizado com success',
+        type: referrals_dto_1.ReferralResponseDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Referência não encontrada' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Sem permissão' }),
@@ -148,7 +154,7 @@ __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOperation)({ summary: 'Excluir referência' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Referência excluída com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Referência excluída com success' }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Referência não encontrada' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Sem permissão' }),
     __param(0, (0, common_1.Param)('id')),

@@ -5,13 +5,13 @@ const extractErrorMessage = (error: any, defaultMessage: string = 'Error process
   if (!error) return defaultMessage;
 
   if (error.response?.data) {
-    const data = error.response.data;
-    if (typeof data === 'string') return data;
-    if (data.message) {
-      if (Array.isArray(data.message)) return data.message[0] || defaultMessage;
-      if (typeof data.message === 'string') return data.message;
+    const date = error.response.data;
+    if (typeof date === 'string') return date;
+    if (date.message) {
+      if (Array.isArray(date.message)) return date.message[0] || defaultMessage;
+      if (typeof date.message === 'string') return date.message;
     }
-    if (data.error && typeof data.error === 'string') return data.error;
+    if (date.error && typeof date.error === 'string') return date.error;
   }
 
   if (error.message && typeof error.message === 'string') return error.message;
@@ -84,7 +84,7 @@ const Tasks: React.FC = () => {
       setUser(response.data);
     } catch (error: any) {
       console.error('Error loading user:', error);
-      setTasksError(extractErrorMessage(error, 'Error loading user data'));
+      setTasksError(extractErrorMessage(error, 'Error loading user date'));
     }
   };
 

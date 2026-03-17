@@ -22,19 +22,19 @@ exports.TransportProductDto = TransportProductDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        description: 'ID do produto'
+        description: 'Product ID',
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'ID do produto é obrigatório' }),
-    (0, class_validator_1.IsUUID)('4', { message: 'ID do produto inválido' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Product ID is required' }),
+    (0, class_validator_1.IsUUID)('4', { message: 'Invalid product ID' }),
     __metadata("design:type", String)
 ], TransportProductDto.prototype, "productId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 50,
-        description: 'Quantidade a transportar'
+        description: 'Quantity to transport',
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Quantidade é obrigatória' }),
-    (0, class_validator_1.IsNumber)({}, { message: 'Quantidade deve ser um número' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Quantity is required' }),
+    (0, class_validator_1.IsNumber)({}, { message: 'Quantity must be a number' }),
     __metadata("design:type", Number)
 ], TransportProductDto.prototype, "quantity", void 0);
 class CreateTransportDto {
@@ -53,65 +53,65 @@ exports.CreateTransportDto = CreateTransportDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        description: 'ID do veículo (UUID)',
-        required: true
+        description: 'Vehicle ID (UUID)',
+        required: true,
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Veículo é obrigatório' }),
-    (0, class_validator_1.IsUUID)('4', { message: 'VehicleId inválido' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Vehicle is required' }),
+    (0, class_validator_1.IsUUID)('4', { message: 'Invalid vehicle ID' }),
     __metadata("design:type", String)
 ], CreateTransportDto.prototype, "vehicleId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 'Lisboa',
-        description: 'Cidade/Local de origem'
+        example: 'Lisbon',
+        description: 'City/Origin location',
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Origem é obrigatória' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Origin is required' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateTransportDto.prototype, "origin", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'Porto',
-        description: 'Cidade/Local de destino'
+        description: 'City/Destination location',
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Destino é obrigatório' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Destination is required' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateTransportDto.prototype, "destination", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '2025-12-01',
-        description: 'Data de partida (YYYY-MM-DD)',
-        required: true
+        description: 'Departure date (YYYY-MM-DD)',
+        required: true,
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Data de partida é obrigatória' }),
-    (0, class_validator_1.IsDateString)({}, { message: 'Data de partida inválida' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Departure date is required' }),
+    (0, class_validator_1.IsDateString)({}, { message: 'Invalid departure date' }),
     __metadata("design:type", String)
 ], CreateTransportDto.prototype, "departureDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '2025-12-05',
-        description: 'Data estimada de chegada (YYYY-MM-DD)',
-        required: true
+        description: 'Estimated arrival date (YYYY-MM-DD)',
+        required: true,
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Data de chegada é obrigatória' }),
-    (0, class_validator_1.IsDateString)({}, { message: 'Data de chegada inválida' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Arrival date is required' }),
+    (0, class_validator_1.IsDateString)({}, { message: 'Invalid arrival date' }),
     __metadata("design:type", String)
 ], CreateTransportDto.prototype, "estimatedArrival", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 1500.50,
-        description: 'Peso total da carga em kg',
-        required: true
+        example: 1500.5,
+        description: 'Total load weight in kg',
+        required: true,
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Peso total é obrigatório' }),
-    (0, class_validator_1.IsNumber)({}, { message: 'Peso deve ser um número' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Total weight is required' }),
+    (0, class_validator_1.IsNumber)({}, { message: 'Weight must be a number' }),
     __metadata("design:type", Number)
 ], CreateTransportDto.prototype, "totalWeight", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 'Carga frágil - manusear com cuidado',
-        required: false
+        example: 'Fragile cargo - handle with care',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -122,17 +122,17 @@ __decorate([
         enum: client_1.TransportStatus,
         example: client_1.TransportStatus.PENDING,
         required: false,
-        default: client_1.TransportStatus.PENDING
+        default: client_1.TransportStatus.PENDING,
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(client_1.TransportStatus, { message: 'Status inválido' }),
+    (0, class_validator_1.IsEnum)(client_1.TransportStatus, { message: 'Invalid status' }),
     __metadata("design:type", String)
 ], CreateTransportDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        description: 'ID da empresa (injetado automaticamente)',
-        required: false
+        description: 'Company ID (automatically injected)',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsUUID)('4'),
@@ -142,11 +142,11 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         type: [TransportProductDto],
         required: false,
-        description: 'Produtos a transportar com suas quantidades',
+        description: 'Products to transport with their quantities',
         example: [
             { productId: 'uuid-1', quantity: 50 },
-            { productId: 'uuid-2', quantity: 30 }
-        ]
+            { productId: 'uuid-2', quantity: 30 },
+        ],
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),

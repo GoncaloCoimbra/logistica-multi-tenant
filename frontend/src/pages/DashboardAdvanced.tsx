@@ -50,9 +50,9 @@ interface DashboardStats {
   totalProducts: number;
   productsByStatus: Array<{ status: string; count: number }>;
   recentMovements: number;
-  movementsByDay: Array<{ date: string; count: number }>;
-  productsCreatedByDay: Array<{ date: string; count: number }>;
-  deliveredByDay: Array<{ date: string; count: number }>;
+  movementsByDay: Array<{ data: string; count: number }>;
+  productsCreatedByDay: Array<{ data: string; count: number }>;
+  deliveredByDay: Array<{ data: string; count: number }>;
   summary: { received: number; inAnalysis: number; inStorage: number; delivered: number; rejected: number };
   percentages: { received: string; inStorage: string; delivered: string; rejected: string };
   topSuppliers: Array<{ id: string; name: string; productCount: number }>;
@@ -166,7 +166,7 @@ const DashboardAdvanced: React.FC = () => {
       setStats(response.data);
       setCurrentFilters(filters);
     } catch (error) {
-      console.error('Erro ao carregar estatísticas:', error);
+      console.error('Error loading statistics:', error);
     } finally {
       setLoading(false);
     }
@@ -179,7 +179,7 @@ const DashboardAdvanced: React.FC = () => {
     const filterInfo = [];
     if (stats.appliedFilters.supplierId) {
       const s = stats.availableSuppliers.find(s => s.id === stats.appliedFilters.supplierId);
-      filterInfo.push(['Fornecedor Filtrado', s?.name || 'N/A']);
+      filterInfo.push(['Supplier Filtrado', s?.name || 'N/A']);
     }
     if (stats.customDateRange) {
       filterInfo.push(['Custom Period',
@@ -190,24 +190,24 @@ const DashboardAdvanced: React.FC = () => {
     const csvContent = [
       ['Performance Report – LogiSphere'],
       ['Export Date', new Date().toLocaleDateString('en-GB')],
-      [''], ['FILTROS APLICADOS'], ...filterInfo,
-      [''], ['RESUMO GERAL'],
+      [''], ['APPLIED FILTERS'], ...filterInfo,
+      [''], ['GENERAL SUMMARY'],
       ['Total Products', stats.totalProducts],
       ['Received', stats.summary.received],
-      ['Em Análise', stats.summary.inAnalysis],
-      ['Em Armazenamento', stats.summary.inStorage],
-      ['Entregues', stats.summary.delivered],
-      ['Rejeitados', stats.summary.rejected],
-      [''], ['TENDÊNCIAS'],
+      ['In Analysis', stats.summary.inAnalysis],
+      ['In Storage', stats.summary.inStorage],
+      ['Delivered', stats.summary.delivered],
+      ['Rejected', stats.summary.rejected],
+      [''], ['TRENDS'],
       ['Products vs Previous Period', `${stats.trends.products}%`],
       ['Deliveries vs Previous Period', `${stats.trends.deliveries}%`],
-      [''], ['TOP FORNECEDORES'],
+      [''], ['TOP SUPPLIERS'],
       ['Position', 'Name', 'Products', 'Percentage'],
       ...stats.topSuppliers.map((s, i) => {
         const pct = stats.totalProducts > 0 ? ((s.productCount / stats.totalProducts) * 100).toFixed(1) : '0';
         return [`#${i + 1}`, s.name, s.productCount, `${pct}%`];
       }),
-      [''], ['TAXA DE REJEIÇÃO POR FORNECEDOR'],
+      [''], ['REJECTION RATE BY SUPPLIER'],
       ['Supplier', 'Total Products', 'Rejected', 'Rate (%)'],
       ...stats.rejectionRateBySupplier.map(r => [r.supplierName, r.totalProducts, r.rejectedProducts, r.rejectionRate]),
     ].map(row => row.join(',')).join('\n');
@@ -226,7 +226,7 @@ const DashboardAdvanced: React.FC = () => {
     if (stats.customDateRange) {
       return `${new Date(stats.customDateRange.startDate).toLocaleDateString('en-GB')} – ${new Date(stats.customDateRange.endDate).toLocaleDateString('en-GB')}`;
     }
-    const labels: Record<string, string> = { '7d': 'Últimos 7 dias', '30d': 'Last 30 days', '90d': 'Últimos 90 dias', '1y': 'Último ano' };
+    const labels: Record<string, string> = { '7d': 'Last 7 days', '30d': 'Last 30 days', '90d': 'Last 90 days', '1y': 'Last year' };
     return labels[stats.period] || stats.period;
   };
 
@@ -237,7 +237,7 @@ const DashboardAdvanced: React.FC = () => {
         <div className="text-center">
           <div className="w-12 h-12 rounded-full border-2 border-t-transparent animate-spin mx-auto mb-4"
             style={{ borderColor: `${ds.accent} transparent transparent transparent` }} />
-          <p className="text-sm" style={{ color: ds.textMuted }}>A carregar dashboard...</p>
+          <p className="text-sm" style={{ color: ds.textMuted }}>Loading dashboard...</p>
         </div>
       </div>
     );
@@ -250,7 +250,7 @@ const DashboardAdvanced: React.FC = () => {
           <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: ds.danger }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
-          <p style={{ color: ds.textSecondary }}>Erro ao carregar estatísticas</p>
+          <p style={{ color: ds.textSecondary }}>Error loading statistics</p>
         </div>
       </div>
     );
@@ -264,11 +264,10 @@ const DashboardAdvanced: React.FC = () => {
 
   const formatDate = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 
-  const timelineData = stats.movementsByDay.map(m => ({
-    date: formatDate(m.date),
+  const timelineData = stats.movementsByDay.map(m => ({ data: formatDate(m.data),
     Movimentos: m.count,
-    Entradas: stats.productsCreatedByDay.find(p => p.date === m.date)?.count || 0,
-    Saídas: stats.deliveredByDay.find(d => d.date === m.date)?.count || 0,
+    Entradas: stats.productsCreatedByDay.find(p => p.data === m.data)?.count || 0,
+    Saídas: stats.deliveredByDay.find(d => d.data === m.data)?.count || 0,
   }));
 
   // ── Icons reused ──
@@ -309,7 +308,7 @@ const DashboardAdvanced: React.FC = () => {
               disabled={loading}
               className="p-2 rounded-xl transition-all duration-200"
               style={{ background: ds.bgCard, border: `1px solid ${ds.border}` }}
-              title="Atualizar"
+              title="Update"
             >
               <svg className={`w-4 h-4 transition-transform duration-500 ${loading ? 'animate-spin' : ''}`}
                 fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: ds.accent }}>
@@ -334,8 +333,8 @@ const DashboardAdvanced: React.FC = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { icon: iconBox,      label: 'Total Products',  value: stats.totalProducts,       trend: stats.trends.products,    color: ds.accent },
-            { icon: iconStorage,  label: 'Em Armazenamento',   value: stats.summary.inStorage,   pct: stats.percentages.inStorage, color: ds.purple },
-            { icon: iconCheck,    label: 'Entregues',          value: stats.summary.delivered,   trend: stats.trends.deliveries,  color: ds.success },
+            { icon: iconStorage,  label: 'In Storage',        value: stats.summary.inStorage,   pct: stats.percentages.inStorage, color: ds.purple },
+            { icon: iconCheck,    label: 'Delivered',          value: stats.summary.delivered,   trend: stats.trends.deliveries,  color: ds.success },
             { icon: iconActivity, label: 'Movements',      value: stats.recentMovements,     period: true,                    color: ds.orange },
           ].map((m, i) => (
             <Card key={i} className="p-5 group" style={{ cursor: 'default' }}>
@@ -371,15 +370,15 @@ const DashboardAdvanced: React.FC = () => {
         <Card className="p-5">
           <div className="flex items-center justify-between mb-4">
             <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: ds.textMuted }}>
-              Acções rápidas
+              Quick actions
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { label: 'New Product',  sub: 'Add product',    path: '/produtos/novo',  icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/> },
-              { label: 'Fornecedores', sub: 'Gerir fornecedores',    path: '/fornecedores',   icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/> },
-              { label: 'Veículos',     sub: 'Gerir frota',           path: '/veiculos',       icon: <><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></> },
-              { label: 'Transportes',  sub: 'Gerir expedições',      path: '/transportes',    icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/> },
+              { label: 'New Product',  sub: 'Add product',    path: '/products/ new',  icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4"/> },
+              { label: 'Suppliers',     sub: 'Manage suppliers',     path: '/fornecedores',   icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/> },
+              { label: 'Vehicles',     sub: 'Manage fleet',        path: '/veiculos',       icon: <><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></> },
+              { label: 'Transports',  sub: 'Manage shipments',      path: '/transports',    icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/> },
             ].map(a => (
               <button
                 key={a.path}
@@ -408,8 +407,8 @@ const DashboardAdvanced: React.FC = () => {
         <Card className="p-6">
           <CardHeader
             icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>}
-            title="Actividade ao Longo do Tempo"
-            subtitle="Evolução de movimentos, entradas e saídas"
+            title="Actividade ao Longo do Time"
+            subtitle="Evolution of movements, inflows and outflows"
           />
           <ResponsiveContainer width="100%" height={320}>
             <AreaChart data={timelineData}>
@@ -435,7 +434,7 @@ const DashboardAdvanced: React.FC = () => {
               />
               <Area type="monotone" dataKey="Movimentos" stroke={ds.accent}   fill="url(#mv)" strokeWidth={2} />
               <Area type="monotone" dataKey="Entradas"   stroke={ds.success}  fill="url(#en)" strokeWidth={2} />
-              <Area type="monotone" dataKey="Saídas"     stroke={ds.orange}   fill="url(#sa)" strokeWidth={2} />
+              <Area type="monotone" dataKey="Outflows"     stroke={ds.orange}   fill="url(#sa)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </Card>
@@ -445,7 +444,7 @@ const DashboardAdvanced: React.FC = () => {
           <Card className="p-6">
             <CardHeader
               icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg>}
-              title="Distribuição por Estado"
+              title="Distribution by Status"
               subtitle="Product percentage by status"
             />
             <ResponsiveContainer width="100%" height={260}>
@@ -469,8 +468,8 @@ const DashboardAdvanced: React.FC = () => {
           <Card className="p-6">
             <CardHeader
               icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>}
-              title="Tempo Médio por Estado"
-              subtitle="Duração média em cada fase (horas)"
+              title="Average Time by Status"
+              subtitle="Average duration in each phase (hours)"
             />
             {stats.avgTimeInStatus.length === 0 ? (
               <div className="flex items-center justify-center h-48">
@@ -510,8 +509,8 @@ const DashboardAdvanced: React.FC = () => {
           <Card className="p-6">
             <CardHeader
               icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>}
-              title="Taxa de Rejeição por Fornecedor"
-              subtitle="Fornecedores com maior taxa de produtos rejeitados"
+              title="Rejection Rate by Supplier"
+              subtitle="Suppliers with highest rejection rate"
             />
             <div className="space-y-3">
               {stats.rejectionRateBySupplier.map((s, i) => {
@@ -539,9 +538,9 @@ const DashboardAdvanced: React.FC = () => {
                         </span>
                       </div>
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="text-xs" style={{ color: ds.textMuted }}>{s.totalProducts} produtos</span>
+                        <span className="text-xs" style={{ color: ds.textMuted }}>{s.totalProducts} products</span>
                         <span style={{ color: ds.border }}>·</span>
-                        <span className="text-xs" style={{ color: ds.danger }}>{s.rejectedProducts} rejeitados</span>
+                        <span className="text-xs" style={{ color: ds.danger }}>{s.rejectedProducts} rejected</span>
                       </div>
                       <div className="h-1 rounded-full overflow-hidden" style={{ background: ds.border }}>
                         <div
@@ -563,13 +562,13 @@ const DashboardAdvanced: React.FC = () => {
             <CardHeader
               icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>}
               title="Transportes"
-              subtitle="Visão geral das expedições"
+              subtitle="Shipments overview"
             />
             <div className="grid grid-cols-3 gap-3">
               {[
                 { label: 'Total',      value: stats.transportStats.total,     color: ds.accent },
                 { label: 'Ativos',     value: stats.transportStats.active,    color: ds.success },
-                { label: 'Concluídos', value: stats.transportStats.completed, color: ds.textMuted },
+                { label: 'Completed', value: stats.transportStats.completed, color: ds.textMuted },
               ].map(s => (
                 <div key={s.label} className="rounded-xl p-4 text-center" style={{ background: ds.bg, border: `1px solid ${ds.border}` }}>
                   <p className="text-2xl font-bold mb-1" style={{ color: s.color, fontFamily: "'DM Mono', monospace" }}>
@@ -584,7 +583,7 @@ const DashboardAdvanced: React.FC = () => {
           <Card className="p-6">
             <CardHeader
               icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>}
-              title="Veículos"
+              title="Vehicles"
               subtitle="Frota registada"
             />
             <div className="flex items-center justify-center h-[calc(100%-80px)]">
@@ -592,7 +591,7 @@ const DashboardAdvanced: React.FC = () => {
                 <p className="text-6xl font-bold" style={{ color: ds.textPrimary, fontFamily: "'DM Mono', monospace" }}>
                   {stats.vehicleStats.total}
                 </p>
-                <p className="text-sm mt-2" style={{ color: ds.textMuted }}>veículos registados</p>
+                <p className="text-sm mt-2" style={{ color: ds.textMuted }}>vehicles registered</p>
               </div>
             </div>
           </Card>
@@ -602,8 +601,8 @@ const DashboardAdvanced: React.FC = () => {
         <Card className="p-6">
           <CardHeader
             icon={<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>}
-            title="Top 5 Fornecedores"
-            subtitle="Por volume de produtos fornecidos"
+            title="Top 5 Suppliers"
+            subtitle="By volume of products supplied"
             action={
               <button onClick={() => navigate('/fornecedores')}
                 className="text-xs font-semibold transition-colors"
@@ -655,15 +654,15 @@ const DashboardAdvanced: React.FC = () => {
           style={{ background: ds.bgCard, border: `1px solid ${ds.border}` }}
         >
           <p className="text-xs font-semibold uppercase tracking-wider mb-5" style={{ color: ds.textMuted }}>
-            Resumo do Período
+            Period Summary
           </p>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             {[
               { label: 'Recebidos',      value: stats.summary.received,  pct: stats.percentages.received,  color: ds.accent },
               { label: 'Em Análise',     value: stats.summary.inAnalysis,                                  color: ds.warning },
               { label: 'Armazenados',    value: stats.summary.inStorage, pct: stats.percentages.inStorage, color: ds.purple },
-              { label: 'Entregues',      value: stats.summary.delivered, pct: stats.percentages.delivered, color: ds.success },
-              { label: 'Rejeitados',     value: stats.summary.rejected,  pct: stats.percentages.rejected,  color: ds.danger  },
+              { label: 'Delivered',      value: stats.summary.delivered, pct: stats.percentages.delivered, color: ds.success },
+              { label: 'Rejected',       value: stats.summary.rejected,  pct: stats.percentages.rejected,  color: ds.danger  },
             ].map(s => (
               <div key={s.label} className="text-center">
                 <p className="text-3xl font-bold mb-1" style={{ color: s.color, fontFamily: "'DM Mono', monospace" }}>

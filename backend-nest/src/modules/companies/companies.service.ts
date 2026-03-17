@@ -1,4 +1,8 @@
-﻿import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+﻿import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { CompanyRepository } from '../../database/repositories/company.repository';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
@@ -8,12 +12,16 @@ export class CompaniesService {
   constructor(private companyRepository: CompanyRepository) {}
 
   async create(createCompanyDto: CreateCompanyDto) {
-    const existingNif = await this.companyRepository.findByNif(createCompanyDto.nif);
+    const existingNif = await this.companyRepository.findByNif(
+      createCompanyDto.nif,
+    );
     if (existingNif) {
       throw new ConflictException('NIF is already in use');
     }
 
-    const existingEmail = await this.companyRepository.findByEmail(createCompanyDto.email);
+    const existingEmail = await this.companyRepository.findByEmail(
+      createCompanyDto.email,
+    );
     if (existingEmail) {
       throw new ConflictException('Email is already in use');
     }

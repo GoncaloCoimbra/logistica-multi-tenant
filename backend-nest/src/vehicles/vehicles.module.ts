@@ -9,11 +9,3 @@ import { VehicleRepository } from '../database/repositories/vehicle.repository';
   exports: [VehiclesService],
 })
 export class VehiclesModule {}
-
-
-
-
-
-
-
-

@@ -127,7 +127,7 @@ describe('UsersService', () => {
   describe('create', () => {
     it('should create a new user', async () => {
       const createDto = {
-        email: 'novo@example.com',
+        email: ' new@example.com',
         name: 'New User',
         password: 'hashed-password',
       };
@@ -467,7 +467,7 @@ Ver [.github/workflows/ci.yml](./.github/workflows/ci.yml):
 
 - [ ] Cada feature tem testes unitários
 - [ ] Cada bug fix inclui teste de regressão
-- [ ] Cobertura ≥ 80% em código novo
+- [ ] Cobertura ≥ 80% em código  new
 - [ ] E2E testa fluxos críticos (auth, CRUD)
 - [ ] Mocks para dependências externas
 - [ ] Testes rodam em CI antes de merge

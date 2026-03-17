@@ -8,7 +8,7 @@ Código ativo e produtivo da API NestJS com Prisma, Swagger e design modular.
 # Instalar dependências (na raiz)
 npm install
 
-# Configurar .env
+# Configure .env
 cp .env.example .env
 
 # Rodar migrações
@@ -102,7 +102,7 @@ NODE_ENV=development
 
 - [ARCHITECTURE.md](../docs/ARCHITECTURE.md) - Decisões de design
 - [CONTRIBUTING.md](../CONTRIBUTING.md) - Como contribuir
-- [DEPLOYMENT.md](../docs/DEPLOYMENT.md) - Deploy em produção
+- [DEPLOYMENT.md](../docs/DEPLOYMENT.md) - Deploy to production
 
 ---
 

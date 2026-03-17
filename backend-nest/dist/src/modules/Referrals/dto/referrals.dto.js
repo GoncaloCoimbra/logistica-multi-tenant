@@ -30,7 +30,10 @@ class ReferralResponseDto {
 }
 exports.ReferralResponseDto = ReferralResponseDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'ID único da referência', example: 'uuid-da-referencia' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'ID único da referência',
+        example: 'uuid-da-referencia',
+    }),
     __metadata("design:type", String)
 ], ReferralResponseDto.prototype, "id", void 0);
 __decorate([
@@ -38,7 +41,10 @@ __decorate([
     __metadata("design:type", String)
 ], ReferralResponseDto.prototype, "clientName", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Informações de contacto', example: 'alpha@example.com | +351 912 345 678' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Informações de contacto',
+        example: 'alpha@example.com | +351 912 345 678',
+    }),
     __metadata("design:type", String)
 ], ReferralResponseDto.prototype, "contactInfo", void 0);
 __decorate([
@@ -49,14 +55,14 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Status da referência',
         enum: client_1.ReferralStatus,
-        example: client_1.ReferralStatus.NEW
+        example: client_1.ReferralStatus.NEW,
     }),
     __metadata("design:type", String)
 ], ReferralResponseDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Tipo de projeto',
-        example: 'FREIGHT'
+        example: 'FREIGHT',
     }),
     __metadata("design:type", String)
 ], ReferralResponseDto.prototype, "projectType", void 0);
@@ -65,15 +71,25 @@ __decorate([
     __metadata("design:type", Number)
 ], ReferralResponseDto.prototype, "estimatedValue", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Data da referência', example: '2026-01-07T00:00:00.000Z' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Data da referência',
+        example: '2026-01-07T00:00:00.000Z',
+    }),
     __metadata("design:type", Date)
 ], ReferralResponseDto.prototype, "referralDate", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Notas adicionais', example: 'Cliente potencial', nullable: true }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Notas adicionais',
+        example: 'Cliente potencial',
+        nullable: true,
+    }),
     __metadata("design:type", Object)
 ], ReferralResponseDto.prototype, "notes", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Nome de quem referenciou', example: 'João Silva' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Nome de quem referenciou',
+        example: 'João Silva',
+    }),
     __metadata("design:type", String)
 ], ReferralResponseDto.prototype, "referredBy", void 0);
 __decorate([
@@ -81,11 +97,17 @@ __decorate([
     __metadata("design:type", Object)
 ], ReferralResponseDto.prototype, "commission", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Data de criação', example: '2026-01-06T10:00:00.000Z' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Data de criação',
+        example: '2026-01-06T10:00:00.000Z',
+    }),
     __metadata("design:type", Date)
 ], ReferralResponseDto.prototype, "createdAt", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Data da última atualização', example: '2026-01-06T10:00:00.000Z' }),
+    (0, swagger_1.ApiProperty)({
+        description: 'Data da última atualização',
+        example: '2026-01-06T10:00:00.000Z',
+    }),
     __metadata("design:type", Date)
 ], ReferralResponseDto.prototype, "updatedAt", void 0);
 __decorate([

@@ -27,26 +27,26 @@ export declare class AuditLogController {
         }[];
     }>;
     findByEntity(entity: string, entityId: string, user: any): Promise<{
+        data: import("@prisma/client/runtime/library").JsonValue | null;
         id: string;
+        companyId: string;
+        createdAt: Date;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     }[]>;
     findByUser(userId: string, user: any): Promise<{
+        data: import("@prisma/client/runtime/library").JsonValue | null;
         id: string;
+        companyId: string;
+        createdAt: Date;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     }[]>;
     deleteLog(id: string, user: any): Promise<{
         success: boolean;
@@ -61,15 +61,15 @@ export declare class AuditLogController {
                 role: import(".prisma/client").$Enums.Role;
             };
         } & {
+            data: import("@prisma/client/runtime/library").JsonValue | null;
             id: string;
+            companyId: string;
+            createdAt: Date;
+            userId: string;
             action: string;
             entity: string;
             entityId: string | null;
             ipAddress: string | null;
-            userId: string;
-            companyId: string;
-            data: import("@prisma/client/runtime/library").JsonValue | null;
-            createdAt: Date;
         })[];
         pagination: {
             currentPage: number;

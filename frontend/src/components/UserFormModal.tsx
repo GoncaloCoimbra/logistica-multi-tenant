@@ -142,10 +142,10 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
           )}
 
           <div className="space-y-4">
-            {/* Nome */}
+            {/* Name */}
             <div>
               <label className="block text-sm font-medium text-white mb-1">
-                Nome Completo *
+                Name Completo *
               </label>
               <input
                 type="text"
@@ -170,7 +170,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
                 onChange={handleChange}
                 required
                 className={theme.inputs.base}
-                placeholder="exemplo@empresa.com"
+                placeholder="exemplo@company.com"
               />
             </div>
 
@@ -230,7 +230,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
               />
             </div>
 
-            {/* Estado Ativo */}
+            {/* Estado Active */}
             {user && (
               <div className="flex items-center">
                 <input
@@ -242,7 +242,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ user, onClose, onSuccess 
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
                 <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900">
-                  Utilizador ativo
+                  Utilizador active
                 </label>
               </div>
             )}

@@ -14,8 +14,12 @@ import { UsersModule } from '../users/users.module';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService): Promise<JwtModuleOptions> => ({
-        secret: configService.get<string>('JWT_SECRET') || 'your-secret-key-change-in-production',
+      useFactory: async (
+        configService: ConfigService,
+      ): Promise<JwtModuleOptions> => ({
+        secret:
+          configService.get<string>('JWT_SECRET') ||
+          'your-secret-key-change-in-production',
         signOptions: {
           expiresIn: configService.get('JWT_EXPIRES_IN') || '7d',
         },
@@ -28,14 +32,3 @@ import { UsersModule } from '../users/users.module';
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}
-
-
-
-
-
-
-
-
-
-
-

@@ -65,18 +65,18 @@ npm version major          # 0.1.0 → 1.0.0
 git push origin --tags
 ```
 
-## Próximas Versões Planejadas
+## Next Planned Versions
 
 ### v0.2.0 (Testing and Documentation)
-- [ ] Cobertura de testes ≥ 80% (unitários e e2e)
+- [ ] Test coverage ≥ 80% (unit and e2e)
 - [ ] Documentation completely updated
-- [ ] Storybook para componentes React
+- [ ] Storybook for React components
 - [ ] Testes de acessibilidade
 
-### v0.3.0 (Observabilidade e Segurança)
+### v0.3.0 (Observability and Security)
 - [ ] Logging estruturado com Pino
 - [ ] Prometheus metrics + Grafana dashboard
-- [ ] Sentry para error tracking
+- [ ] Sentry for error tracking
 - [ ] Rate-limiting e proteção CSRF
 
 ### v1.0.0 (Production)

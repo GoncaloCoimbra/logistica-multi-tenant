@@ -252,8 +252,8 @@
 ### frontend/ (3 files)
 ```
 ./frontend/README.md (updated)
-./frontend/.prettierrc (novo)
-./frontend/.eslintrc.json (novo)
+./frontend/.prettierrc ( new)
+./frontend/.eslintrc.json ( new)
 ./frontend/package.json (updated)
 ```
 

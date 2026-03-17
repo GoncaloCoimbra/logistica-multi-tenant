@@ -13,7 +13,13 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiConsumes,
+} from '@nestjs/swagger';
 import { AuthService } from '../auth.service';
 import { LoginDto } from '../dto/login.dto';
 import { RegisterDto } from '../dto/register.dto';
@@ -39,13 +45,13 @@ type MulterFile = {
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  //  REGISTER 
+  //  REGISTER
   @Public()
   @Post('register')
-  @ApiOperation({ summary: 'Registar novo utilizador' })
+  @ApiOperation({ summary: 'Registar  new utilizador' })
   @ApiResponse({
     status: 201,
-    description: 'Utilizador registado com sucesso',
+    description: 'Utilizador registado com success',
     type: AuthResponseDto,
   })
   @ApiResponse({ status: 409, description: 'Email já está em uso' })
@@ -53,14 +59,14 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  //  LOGIN 
+  //  LOGIN
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login de utilizador' })
   @ApiResponse({
     status: 200,
-    description: 'Login efetuado com sucesso',
+    description: 'Login efetuado com success',
     type: AuthResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
@@ -68,18 +74,20 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
-  //  REFRESH TOKEN 
+  //  REFRESH TOKEN
   @Public()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Renovar access token' })
   @ApiResponse({
     status: 200,
-    description: 'Token renovado com sucesso',
+    description: 'Token renovado com success',
     type: AuthResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Refresh token inválido' })
-  async refreshToken(@Body() refreshTokenDto: RefreshTokenDto): Promise<AuthResponseDto> {
+  async refreshToken(
+    @Body() refreshTokenDto: RefreshTokenDto,
+  ): Promise<AuthResponseDto> {
     return this.authService.refreshToken(refreshTokenDto.refreshToken);
   }
 
@@ -92,23 +100,23 @@ export class AuthController {
     return this.authService.revokeRefreshToken(refreshToken);
   }
 
-  //  GET PROFILE 
+  //  GET PROFILE
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Obter dados do utilizador autenticado' })
+  @ApiOperation({ summary: 'Get dados do utilizador autenticado' })
   @ApiResponse({ status: 200, description: 'Dados do utilizador' })
   @ApiResponse({ status: 401, description: 'Não autenticado' })
   async getProfile(@CurrentUser() user: any) {
     return user;
   }
 
-  //  UPDATE PROFILE 
+  //  UPDATE PROFILE
   @Put('profile')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Atualizar perfil do utilizador' })
-  @ApiResponse({ status: 200, description: 'Perfil atualizado com sucesso' })
+  @ApiOperation({ summary: 'Update perfil do utilizador' })
+  @ApiResponse({ status: 200, description: 'Perfil atualizado com success' })
   @ApiResponse({ status: 409, description: 'Email já está em uso' })
   async updateProfile(
     @CurrentUser() user: any,
@@ -117,12 +125,12 @@ export class AuthController {
     return this.authService.updateProfile(user.id, updateProfileDto);
   }
 
-  //  CHANGE PASSWORD 
+  //  CHANGE PASSWORD
   @Put('change-password')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Alterar password' })
-  @ApiResponse({ status: 200, description: 'Password alterada com sucesso' })
+  @ApiResponse({ status: 200, description: 'Password alterada com success' })
   @ApiResponse({ status: 400, description: 'Password atual incorreta' })
   async changePassword(
     @CurrentUser() user: any,
@@ -131,14 +139,14 @@ export class AuthController {
     return this.authService.changePassword(user.id, changePasswordDto);
   }
 
-  //  UPLOAD AVATAR 
+  //  UPLOAD AVATAR
   @Post('avatar')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('avatar'))
   @ApiBearerAuth()
-  @ApiConsumes('multipart/form-data')
+  @ApiConsumes('multipart/form-date')
   @ApiOperation({ summary: 'Fazer upload do avatar' })
-  @ApiResponse({ status: 200, description: 'Avatar atualizado com sucesso' })
+  @ApiResponse({ status: 200, description: 'Avatar atualizado com success' })
   @ApiResponse({ status: 400, description: 'Ficheiro inválido' })
   async uploadAvatar(
     @CurrentUser() user: any,
@@ -148,12 +156,12 @@ export class AuthController {
       throw new BadRequestException('Nenhum ficheiro enviado');
     }
 
-    // Validar tipo
+    // Validate tipo
     if (!file.mimetype.startsWith('image/')) {
       throw new BadRequestException('O ficheiro deve ser uma imagem');
     }
 
-    // Validar tamanho (5MB)
+    // Validate tamanho (5MB)
     if (file.size > 5 * 1024 * 1024) {
       throw new BadRequestException('A imagem deve ter no máximo 5MB');
     }
@@ -161,12 +169,12 @@ export class AuthController {
     return this.authService.uploadAvatar(user.id, file);
   }
 
-  //  REMOVE AVATAR 
+  //  REMOVE AVATAR
   @Delete('avatar')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Remover avatar' })
-  @ApiResponse({ status: 200, description: 'Avatar removido com sucesso' })
+  @ApiOperation({ summary: 'Remove avatar' })
+  @ApiResponse({ status: 200, description: 'Avatar removido com success' })
   async removeAvatar(@CurrentUser() user: any) {
     return this.authService.removeAvatar(user.id);
   }

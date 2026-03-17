@@ -34,86 +34,94 @@ export class VehiclesController {
 
   @Post()
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Criar novo veículo' })
+  @ApiOperation({ summary: 'Create new vehicle' })
   async create(@Body() createVehicleDto: CreateVehicleDto, @Request() req) {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    this.logger.log(`📥 POST /vehicles - User: ${req.user.email}, Role: ${req.user.role}`);
+    this.logger.log(
+      `📥 POST /vehicles - User: ${req.user.email}, Role: ${req.user.role}`,
+    );
     this.logger.log(`🏢 CompanyId: ${req.user.companyId || 'SUPER_ADMIN'}`);
-    
+
     const companyId = createVehicleDto.companyId || req.user.companyId;
-    
+
     if (!companyId) {
-      this.logger.error(` CompanyId não encontrado!`);
-      throw new BadRequestException('CompanyId obrigatório');
+      this.logger.error(` CompanyId not found!`);
+      throw new BadRequestException('CompanyId is required');
     }
-    
-    this.logger.log(`Validação passou, criando veículo...`);
-    
-    const result = await this.vehiclesService.create(createVehicleDto, companyId);
-    
-    this.logger.log(`Veículo criado com sucesso: ${result.id}`);
+
+    this.logger.log(`Validation passed, creating vehicle...`);
+
+    const result = await this.vehiclesService.create(
+      createVehicleDto,
+      companyId,
+    );
+
+    this.logger.log(`Vehicle created successfully: ${result.id}`);
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    
+
     return result;
   }
 
   @Get()
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Listar veículos' })
+  @ApiOperation({ summary: 'List vehicles' })
   async findAll(@Request() req, @Query() filters?: any) {
-    this.logger.log(`📥 GET /vehicles - User: ${req.user.email} (${req.user.role})`);
-    
-    const companyId = req.user.role === Role.SUPER_ADMIN 
-      ? filters?.companyId 
-      : req.user.companyId;
-    
+    this.logger.log(
+      `📥 GET /vehicles - User: ${req.user.email} (${req.user.role})`,
+    );
+
+    const companyId =
+      req.user.role === Role.SUPER_ADMIN
+        ? filters?.companyId
+        : req.user.companyId;
+
     this.logger.log(`🏢 CompanyId: ${companyId || 'TODAS'}`);
-    
+
     return this.vehiclesService.findAll(companyId, filters);
   }
 
   @Get('available')
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Listar veículos disponíveis' })
-  async findAvailable(@Request() req, @Query('companyId') queryCompanyId?: string) {
+  @ApiOperation({ summary: 'List available vehicles' })
+  async findAvailable(
+    @Request() req,
+    @Query('companyId') queryCompanyId?: string,
+  ) {
     this.logger.log(`📥 GET /vehicles/available - User: ${req.user.email}`);
-    
-    const companyId = req.user.role === Role.SUPER_ADMIN 
-      ? queryCompanyId 
-      : req.user.companyId;
-    
+
+    const companyId =
+      req.user.role === Role.SUPER_ADMIN ? queryCompanyId : req.user.companyId;
+
     return this.vehiclesService.findAvailable(companyId);
   }
 
   @Get('stats')
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Estatísticas de veículos' })
+  @ApiOperation({ summary: 'Vehicle statistics' })
   async getStats(@Request() req, @Query('companyId') queryCompanyId?: string) {
     this.logger.log(`📥 GET /vehicles/stats - User: ${req.user.email}`);
-    
-    const companyId = req.user.role === Role.SUPER_ADMIN 
-      ? queryCompanyId 
-      : req.user.companyId;
-    
+
+    const companyId =
+      req.user.role === Role.SUPER_ADMIN ? queryCompanyId : req.user.companyId;
+
     return this.vehiclesService.getStats(companyId);
   }
 
   @Get(':id')
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Obter veículo por ID' })
+  @ApiOperation({ summary: 'Get vehicle by ID' })
   async findOne(@Param('id') id: string, @Request() req) {
     this.logger.log(`📥 GET /vehicles/${id} - User: ${req.user.email}`);
-    
-    const companyId = req.user.role === Role.SUPER_ADMIN 
-      ? undefined 
-      : req.user.companyId;
-    
+
+    const companyId =
+      req.user.role === Role.SUPER_ADMIN ? undefined : req.user.companyId;
+
     return this.vehiclesService.findOne(id, companyId);
   }
 
   @Patch(':id')
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Atualizar veículo' })
+  @ApiOperation({ summary: 'Update vehicle' })
   async update(
     @Param('id') id: string,
     @Body() updateVehicleDto: UpdateVehicleDto,
@@ -122,60 +130,61 @@ export class VehiclesController {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
     this.logger.log(`📥 PATCH /vehicles/${id} - User: ${req.user.email}`);
     this.logger.log(`🏢 CompanyId do user: ${req.user.companyId}`);
-    
-    const companyId = req.user.role === Role.SUPER_ADMIN 
-      ? undefined 
-      : req.user.companyId;
-    
-    const result = await this.vehiclesService.update(id, updateVehicleDto, companyId);
-    
-    this.logger.log(`Veículo ${id} atualizado com sucesso`);
+
+    const companyId =
+      req.user.role === Role.SUPER_ADMIN ? undefined : req.user.companyId;
+
+    const result = await this.vehiclesService.update(
+      id,
+      updateVehicleDto,
+      companyId,
+    );
+
+    this.logger.log(`Vehicle ${id} updated successfully`);
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    
+
     return result;
   }
 
   @Patch(':id/status')
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Atualizar status do veículo' })
+  @ApiOperation({ summary: 'Update vehicle status' })
   async updateStatus(
     @Param('id') id: string,
     @Body() body: { status: string },
     @Request() req,
   ) {
     this.logger.log(`📥 PATCH /vehicles/${id}/status - Status: ${body.status}`);
-    
+
     if (!Object.values(VehicleStatus).includes(body.status as VehicleStatus)) {
       throw new BadRequestException(
-        `Status inválido. Valores: ${Object.values(VehicleStatus).join(', ')}`
+        `Invalid status. Valid values: ${Object.values(VehicleStatus).join(', ')}`,
       );
     }
-    
+
     const status = body.status as VehicleStatus;
-    const companyId = req.user.role === Role.SUPER_ADMIN 
-      ? undefined 
-      : req.user.companyId;
-    
+    const companyId =
+      req.user.role === Role.SUPER_ADMIN ? undefined : req.user.companyId;
+
     return this.vehiclesService.updateStatus(id, status, companyId);
   }
 
   @Delete(':id')
   @Roles(Role.ADMIN, Role.OPERATOR, Role.SUPER_ADMIN)
-  @ApiOperation({ summary: 'Eliminar veículo' })
+  @ApiOperation({ summary: 'Delete vehicle' })
   async remove(@Param('id') id: string, @Request() req) {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
     this.logger.log(`📥 DELETE /vehicles/${id} - User: ${req.user.email}`);
     this.logger.log(`🏢 CompanyId do user: ${req.user.companyId}`);
-    
-    const companyId = req.user.role === Role.SUPER_ADMIN 
-      ? undefined 
-      : req.user.companyId;
-    
+
+    const companyId =
+      req.user.role === Role.SUPER_ADMIN ? undefined : req.user.companyId;
+
     const result = await this.vehiclesService.remove(id, companyId);
-    
-    this.logger.log(`Veículo ${id} eliminado com sucesso`);
+
+    this.logger.log(`Vehicle ${id} deleted successfully`);
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    
+
     return result;
   }
 }

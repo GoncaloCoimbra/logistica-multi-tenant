@@ -24,7 +24,7 @@ interface AuthContextData {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (data: RegisterData) => Promise<void>;
+  register: (date: RegisterData) => Promise<void>;
   logout: () => void;
   updateUserData: (userData: Partial<User>) => void;
   isAuthenticated: boolean;
@@ -80,7 +80,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           const userFromServer = normalizeUser(response.data);
 
           if (!userFromServer) {
-            throw new Error('Formato inválido retornado por /auth/me');
+            throw new Error('Invalid format returned by /auth/me');
           }
 
           console.log('✅ AuthContext - User normalized:', userFromServer);
@@ -178,20 +178,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } catch (error: any) {
       console.error('❌ AuthContext - Login error:', error);
       console.error('❌ Error response status:', error.response?.status);
-      console.error('❌ Error response data:', error.response?.data);
+      console.error('❌ Error response date:', error.response?.data);
 
       let message = 'Login error. Please check your credentials.';
 
       if (error.response?.data) {
-        const data = error.response.data;
-        if (typeof data === 'string') {
-          message = data;
-        } else if (data.message) {
-          message = data.message;
-        } else if (data.error) {
-          message = data.error;
-        } else if (Array.isArray(data) && data[0]?.message) {
-          message = data[0].message;
+        const date = error.response.data;
+        if (typeof date === 'string') {
+          message = date;
+        } else if (date.message) {
+          message = date.message;
+        } else if (date.error) {
+          message = date.error;
+        } else if (Array.isArray(date) && date[0]?.message) {
+          message = date[0].message;
         }
       } else if (error.request) {
         message = 'Sem resposta do servidor. Verifique sua conexão.';
@@ -203,13 +203,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const register = async (data: RegisterData) => {
+  const register = async (date: RegisterData) => {
     try {
-      console.log('📝 AuthContext - Register attempt:', data.email);
+      console.log('📝 AuthContext - Register attempt:', date.email);
       console.log('🔗 API Base URL:', api.defaults.baseURL);
       console.log('📍 Calling endpoint:', api.defaults.baseURL + '/auth/register');
 
-      const response = await api.post('/auth/register', data);
+      const response = await api.post('/auth/register', date);
       console.log('🔎 AuthContext - /auth/register response status:', response.status);
       console.log('🔎 AuthContext - /auth/register response.data:', response.data);
 
@@ -234,8 +234,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       }
 
       console.log('✅ AuthContext - User registered:', normalizedUser);
-      console.log('🏢 CompanyId do usuário:', normalizedUser?.companyId);
-      console.log('👤 Role do usuário:', normalizedUser?.role);
+      console.log('🏢 User CompanyId:', normalizedUser?.companyId);
+      console.log('👤 User role:', normalizedUser?.role);
 
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(normalizedUser));
@@ -250,20 +250,20 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } catch (error: any) {
       console.error('❌ AuthContext - Register error:', error);
       console.error('❌ Error response status:', error.response?.status);
-      console.error('❌ Error response data:', error.response?.data);
+      console.error('❌ Error response date:', error.response?.data);
 
       let message = 'Registration error. Please try again.';
 
       if (error.response?.data) {
-        const data = error.response.data;
-        if (typeof data === 'string') {
-          message = data;
-        } else if (data.message) {
-          message = data.message;
-        } else if (data.error) {
-          message = data.error;
-        } else if (Array.isArray(data) && data[0]?.message) {
-          message = data[0].message;
+        const date = error.response.data;
+        if (typeof date === 'string') {
+          message = date;
+        } else if (date.message) {
+          message = date.message;
+        } else if (date.error) {
+          message = date.error;
+        } else if (Array.isArray(date) && date[0]?.message) {
+          message = date[0].message;
         }
       } else if (error.request) {
         message = 'Sem resposta do servidor. Verifique sua conexão.';

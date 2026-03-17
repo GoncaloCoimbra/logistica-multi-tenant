@@ -38,7 +38,7 @@ const PERIODS = [
   { value: '7d',  label: '7 dias'  },
   { value: '30d', label: '30 dias' },
   { value: '90d', label: '90 dias' },
-  { value: '1y',  label: '1 ano'   },
+  { value: '1y',  label: '1 year'   },
 ];
 
 const inputClass = `w-full rounded-xl px-3 py-2.5 text-sm transition-all duration-200 outline-none
@@ -158,7 +158,7 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
                   className="text-xs px-2.5 py-1 rounded-full"
                   style={{ background: `${ds.accent}15`, color: ds.accent, border: `1px solid ${ds.accent}30` }}
                 >
-                  {new Date(filters.startDate).toLocaleDateString('pt-PT')} – {new Date(filters.endDate).toLocaleDateString('pt-PT')}
+                  {new Date(filters.startDate).toLocaleDateString('en-GB')} – {new Date(filters.endDate).toLocaleDateString('en-GB')}
                 </span>
               )}
             </div>
@@ -187,7 +187,7 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
           {/* Period */}
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: ds.textMuted }}>
-              Período
+              Period
             </p>
             <div className="grid grid-cols-4 gap-2">
               {PERIODS.map(p => {
@@ -240,7 +240,7 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
                 style={{ background: ds.bg, border: `1px solid ${ds.border}` }}
               >
                 <div>
-                  <label className="block text-xs mb-1.5" style={{ color: ds.textMuted }}>Data inicial</label>
+                  <label className="block text-xs mb-1.5" style={{ color: ds.textMuted }}>Date inicial</label>
                   <input
                     type="date"
                     value={filters.startDate || ''}
@@ -250,7 +250,7 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="block text-xs mb-1.5" style={{ color: ds.textMuted }}>Data final</label>
+                  <label className="block text-xs mb-1.5" style={{ color: ds.textMuted }}>Date final</label>
                   <input
                     type="date"
                     value={filters.endDate || ''}
@@ -267,7 +267,7 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
           {/* Supplier */}
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: ds.textMuted }}>
-              Fornecedor
+              Supplier
             </p>
             <select
               value={filters.supplierId || 'all'}
@@ -276,10 +276,10 @@ const DashboardFilters: React.FC<DashboardFiltersProps> = ({
               className={inputClass}
               style={{ background: ds.bgInput }}
             >
-              <option value="all" style={{ background: ds.bgCard }}>Todos os fornecedores</option>
+              <option value="all" style={{ background: ds.bgCard }}>All suppliers</option>
               {availableSuppliers.map(s => (
                 <option key={s.id} value={s.id} style={{ background: ds.bgCard }}>
-                  {s.name} — {s.productCount} produto{s.productCount !== 1 ? 's' : ''}
+                  {s.name} — {s.productCount} product{s.productCount !== 1 ? 's' : ''}
                 </option>
               ))}
             </select>

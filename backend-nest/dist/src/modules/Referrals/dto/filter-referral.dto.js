@@ -26,9 +26,9 @@ class FilterReferralDto {
 exports.FilterReferralDto = FilterReferralDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Filtrar por status',
+        description: 'Filter por status',
         enum: client_1.ReferralStatus,
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsEnum)(client_1.ReferralStatus),
     (0, class_validator_1.IsOptional)(),
@@ -36,9 +36,9 @@ __decorate([
 ], FilterReferralDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Filtrar por tipo de projeto',
+        description: 'Filter por tipo de projeto',
         example: 'FREIGHT',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -46,9 +46,9 @@ __decorate([
 ], FilterReferralDto.prototype, "projectType", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Filtrar por fonte',
+        description: 'Filter por fonte',
         example: 'Website',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -56,9 +56,9 @@ __decorate([
 ], FilterReferralDto.prototype, "referralSource", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Filtrar por quem referenciou',
+        description: 'Filter por quem referenciou',
         example: 'João Silva',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -66,9 +66,9 @@ __decorate([
 ], FilterReferralDto.prototype, "referredBy", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Data de referência antes de',
+        description: 'Date de referência antes de',
         example: '2026-01-31',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsDateString)(),
     (0, class_validator_1.IsOptional)(),
@@ -76,9 +76,9 @@ __decorate([
 ], FilterReferralDto.prototype, "referralDateBefore", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Data de referência depois de',
+        description: 'Date de referência depois de',
         example: '2026-01-01',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsDateString)(),
     (0, class_validator_1.IsOptional)(),
@@ -86,9 +86,9 @@ __decorate([
 ], FilterReferralDto.prototype, "referralDateAfter", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Buscar no nome do cliente ou notas',
-        example: 'empresa',
-        required: false
+        description: 'Search no name do cliente ou notas',
+        example: 'company',
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -96,9 +96,9 @@ __decorate([
 ], FilterReferralDto.prototype, "search", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'ID da empresa (apenas SUPER_ADMIN)',
-        example: 'uuid-da-empresa',
-        required: false
+        description: 'ID da company (apenas SUPER_ADMIN)',
+        example: 'uuid-da-company',
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),

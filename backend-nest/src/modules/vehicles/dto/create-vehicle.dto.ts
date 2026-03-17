@@ -1,61 +1,72 @@
 ﻿// src/modules/vehicles/dto/create-vehicle.dto.ts
-import { IsNotEmpty, IsString, IsNumber, IsOptional, IsInt, IsEnum, Min, Max } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsInt,
+  IsEnum,
+  Min,
+  Max,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type, Transform } from 'class-transformer';
 import { VehicleStatus } from '@prisma/client';
 
 export class CreateVehicleDto {
   @ApiProperty({ example: 'AB-12-CD' })
-  @IsNotEmpty({ message: 'Matrícula é obrigatória' })
+  @IsNotEmpty({ message: 'License plate is required' })
   @IsString()
   @Transform(({ value }) => value?.trim().toUpperCase())
   licensePlate: string;
 
   @ApiProperty({ example: 'Sprinter 415' })
-  @IsNotEmpty({ message: 'Modelo é obrigatório' })
+  @IsNotEmpty({ message: 'Model is required' })
   @IsString()
   @Transform(({ value }) => value?.trim())
   model: string;
 
   @ApiProperty({ example: 'Mercedes-Benz' })
-  @IsNotEmpty({ message: 'Marca é obrigatória' })
+  @IsNotEmpty({ message: 'Brand is required' })
   @IsString()
   @Transform(({ value }) => value?.trim())
   brand: string;
 
-  @ApiProperty({ 
-    example: 'truck', 
-    description: 'Tipo de veículo: truck, Carrinha, car, etc'
+  @ApiProperty({
+    example: 'truck',
+    description: 'Vehicle type: truck, van, car, etc',
   })
-  @IsNotEmpty({ message: 'Tipo é obrigatório' })
+  @IsNotEmpty({ message: 'Type is required' })
   @IsString()
   @Transform(({ value }) => value?.trim())
   type: string;
 
-  @ApiProperty({ example: 3500, description: 'Capacidade em kg' })
-  @IsNotEmpty({ message: 'Capacidade é obrigatória' })
+  @ApiProperty({ example: 3500, description: 'Capacity in kg' })
+  @IsNotEmpty({ message: 'Capacity is required' })
   @Type(() => Number)
-  @IsNumber({}, { message: 'Capacidade deve ser um número' })
-  @Min(1, { message: 'Capacidade deve ser maior que 0' })
+  @IsNumber({}, { message: 'Capacity must be a number' })
+  @Min(1, { message: 'Capacity must be greater than 0' })
   capacity: number;
 
   @ApiProperty({ example: 2023 })
-  @IsNotEmpty({ message: 'Ano é obrigatório' })
+  @IsNotEmpty({ message: 'Year is required' })
   @Type(() => Number)
-  @IsInt({ message: 'Ano deve ser um número inteiro' })
-  @Min(1900, { message: 'Ano deve ser no mínimo 1900' })
-  @Max(new Date().getFullYear() + 1, { message: `Ano deve ser no máximo ${new Date().getFullYear() + 1}` })
+  @IsInt({ message: 'Year must be an integer' })
+  @Min(1900, { message: 'Year must be at least 1900' })
+  @Max(new Date().getFullYear() + 1, {
+    message: `Year must be at most ${new Date().getFullYear() + 1}`,
+  })
   year: number;
 
-  @ApiProperty({ 
-    example: 'available', 
+  @ApiProperty({
+    example: 'available',
     enum: VehicleStatus,
-    description: 'Status do veículo',
-    required: false
+    description: 'Vehicle status',
+    required: false,
   })
   @IsOptional()
   @IsEnum(VehicleStatus, {
-    message: `Status deve ser: ${Object.values(VehicleStatus).join(', ')}`
+    message: `Status must be one of: ${Object.values(VehicleStatus).join(', ')}`,
   })
   status?: VehicleStatus;
 

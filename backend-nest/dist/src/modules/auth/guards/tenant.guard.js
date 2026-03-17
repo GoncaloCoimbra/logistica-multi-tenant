@@ -20,42 +20,43 @@ let TenantGuard = TenantGuard_1 = class TenantGuard {
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         this.logger.log(` TenantGuard - ${method} ${url}`);
         if (!user) {
-            this.logger.error(' Utilizador não autenticado');
+            this.logger.error(' Unauthenticated user');
             throw new common_1.ForbiddenException('Utilizador não autenticado');
         }
         this.logger.log(`👤 User: ${user.email} | Role: ${user.role}`);
         if (user.role === client_1.Role.SUPER_ADMIN) {
-            this.logger.log('⭐ SUPER_ADMIN detectado - acesso total permitido');
-            this.logger.log(`   🌍 Pode aceder a TODAS as empresas`);
+            this.logger.log('⭐ SUPER_ADMIN detectado - access total permitido');
+            this.logger.log(`   🌐 Can access ALL companies`);
             request.companyId = user.companyId || null;
             request.userId = user.id;
             this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
             return true;
         }
         if (!user.companyId) {
-            this.logger.error(` User ${user.email} (${user.role}) sem empresa associada`);
+            this.logger.error(` User ${user.email} (${user.role}) without associated company`);
             this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-            throw new common_1.ForbiddenException('Utilizador sem empresa associada');
+            throw new common_1.ForbiddenException('User without associated company');
         }
         this.logger.log(`🏢 User companyId: ${user.companyId}`);
         if (['POST', 'PATCH', 'PUT'].includes(method) && request.body) {
             if (request.body.companyId && request.body.companyId !== user.companyId) {
-                this.logger.error(` User ${user.email} tentou manipular empresa ${request.body.companyId}`);
-                this.logger.error(`   🏢 Empresa do user: ${user.companyId}`);
+                this.logger.error(` User ${user.email} tried to manipulate company ${request.body.companyId}`);
+                this.logger.error(`   🏢 User company: ${user.companyId}`);
                 this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-                throw new common_1.ForbiddenException('Não pode manipular dados de outra empresa');
+                throw new common_1.ForbiddenException('Não pode manipular dados de outra company');
             }
-            this.logger.debug(` Validação de tenant OK`);
+            this.logger.debug(` Validation de tenant OK`);
         }
-        if (request.params?.companyId && request.params.companyId !== user.companyId) {
-            this.logger.error(` User ${user.email} tentou aceder empresa ${request.params.companyId}`);
-            this.logger.error(`   🏢 Empresa do user: ${user.companyId}`);
+        if (request.params?.companyId &&
+            request.params.companyId !== user.companyId) {
+            this.logger.error(` User ${user.email} tried to access company ${request.params.companyId}`);
+            this.logger.error(`   🏢 Company do user: ${user.companyId}`);
             this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-            throw new common_1.ForbiddenException('Não pode aceder dados de outra empresa');
+            throw new common_1.ForbiddenException('Não pode aceder dados de outra company');
         }
         request.companyId = user.companyId;
         request.userId = user.id;
-        this.logger.log(` Tenant OK - ${user.email} | Empresa: ${user.companyId}`);
+        this.logger.log(` Tenant OK - ${user.email} | Company: ${user.companyId}`);
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         return true;
     }

@@ -7,10 +7,10 @@ export declare class ReportsController {
         data: ({
             company: {
                 id: string;
-                createdAt: Date;
                 email: string;
                 name: string;
                 isActive: boolean;
+                createdAt: Date;
                 updatedAt: Date;
                 nif: string;
                 phone: string | null;
@@ -18,10 +18,10 @@ export declare class ReportsController {
             } | null;
             supplier: {
                 id: string;
-                companyId: string;
-                createdAt: Date;
                 email: string | null;
                 name: string;
+                companyId: string;
+                createdAt: Date;
                 updatedAt: Date;
                 nif: string;
                 phone: string | null;
@@ -34,15 +34,15 @@ export declare class ReportsController {
             companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            quantity: number;
-            internalCode: string;
             description: string;
+            internalCode: string;
+            quantity: number;
             unit: string;
             totalWeight: number | null;
             totalVolume: number | null;
             currentLocation: string | null;
-            status: import(".prisma/client").$Enums.ProductStatus;
             supplierId: string;
+            status: import(".prisma/client").$Enums.ProductStatus;
         })[];
         generatedAt: Date;
     }>;
@@ -54,9 +54,9 @@ export declare class ReportsController {
                 companyId: string;
                 createdAt: Date;
                 updatedAt: Date;
+                type: string;
                 status: import(".prisma/client").$Enums.VehicleStatus;
                 licensePlate: string;
-                type: string;
                 model: string;
                 brand: string;
                 capacity: number;

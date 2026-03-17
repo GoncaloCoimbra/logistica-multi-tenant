@@ -4,9 +4,9 @@ const HelpCenter: React.FC = () => {
   const [query, setQuery] = useState('');
 
   const articles = [
-    { id: 1, title: 'Como configurar o rastreamento em tempo real', tags: ['rastreamento', 'gps'] },
-    { id: 2, title: 'Gerenciamento de múltiplos tenants', tags: ['tenants', 'multi-tenant'] },
-    { id: 3, title: 'Melhores práticas para otimização de rotas', tags: ['rotas', 'otimização'] },
+    { id: 1, title: 'How to set up real-time tracking', tags: ['tracking', 'gps'] },
+    { id: 2, title: 'Managing multiple tenants', tags: ['tenants', 'multi-tenant'] },
+    { id: 3, title: 'Best practices for route optimization', tags: ['routes', 'optimization'] },
   ];
 
   const filtered = useMemo(() => {
@@ -16,58 +16,58 @@ const HelpCenter: React.FC = () => {
   }, [query]);
 
   const openTicket = () => {
-    window.location.href = 'mailto:suporte@exemplo.com?subject=Suporte%20Logistica%20Multi-Tenant';
+    window.location.href = 'mailto:support@example.com?subject=Support%20Logistics%20Multi-Tenant';
   };
 
   return (
     <div className="max-w-5xl mx-auto p-8">
       <header className="mb-6">
-        <h1 className="text-3xl font-extrabold text-white">Centro de Ajuda</h1>
-        <p className="text-gray-400 mt-2">Artigos, FAQs e formas de contato para suporte.</p>
+        <h1 className="text-3xl font-extrabold text-white">Help Center</h1>
+        <p className="text-gray-400 mt-2">Articles, FAQs and ways to contact support.</p>
       </header>
 
       <div className="bg-gray-900 p-6 rounded-lg grid gap-6 md:grid-cols-2">
         <div>
-          <label className="text-sm text-gray-400">Pesquisar artigos</label>
+          <label className="text-sm text-gray-400">Search articles</label>
           <div className="mt-2 flex">
             <input
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Buscar por palavra-chave ou endpoint"
+              placeholder="Search by keyword or endpoint"
               className="flex-1 p-3 rounded-l bg-gray-800 text-gray-100 focus:outline-none"
             />
             <button
               onClick={() => { /* mantemos para acessibilidade, busca já reativa */ }}
               className="bg-blue-600 px-4 rounded-r"
-            >Pesquisar</button>
+            >Search</button>
           </div>
 
-          <h3 className="text-lg font-semibold text-white mt-6">Artigos</h3>
+          <h3 className="text-lg font-semibold text-white mt-6">Articles</h3>
           <ul className="mt-3 space-y-3 text-gray-300">
             {filtered.map(a => (
               <li key={a.id} className="py-2 border-b border-gray-800">{a.title}</li>
             ))}
-            {filtered.length === 0 && <li className="text-sm text-gray-500">Nenhum artigo encontrado.</li>}
+            {filtered.length === 0 && <li className="text-sm text-gray-500">No articles found.</li>}
           </ul>
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold text-white">FAQ rápido</h3>
+          <h3 className="text-lg font-semibold text-white">Quick FAQ</h3>
           <dl className="mt-3 space-y-4 text-gray-300">
             <div>
-              <dt className="font-medium text-white">Como obtenho um token?</dt>
-              <dd className="text-sm">Use <span className="font-mono">POST /auth/login</span> com suas credenciais.</dd>
+              <dt className="font-medium text-white">How do I get a token?</dt>
+              <dd className="text-sm">Use <span className="font-mono">POST /auth/login</span> with your credentials.</dd>
             </div>
             <div>
-              <dt className="font-medium text-white">Posso simular uma rota?</dt>
-              <dd className="text-sm">Sim — vá até a lista de transportes e clique em <em>Simular</em> para abrir o rastreamento.</dd>
+              <dt className="font-medium text-white">Can I simulate a route?</dt>
+              <dd className="text-sm">Yes — go to the transports list and click <em>Simulate</em> to open tracking.</dd>
             </div>
           </dl>
 
           <div className="mt-6 bg-gray-800 p-4 rounded">
-            <h4 className="text-sm text-white font-semibold">Precisa de ajuda direta?</h4>
-            <p className="text-gray-400 text-sm mt-2">Abra um ticket para suporte técnico ou envie um e-mail para <span className="font-mono">suporte@exemplo.com</span>.</p>
-            <button onClick={openTicket} className="mt-4 bg-green-600 px-4 py-2 rounded">Abrir ticket</button>
+            <h4 className="text-sm text-white font-semibold">Need direct help?</h4>
+            <p className="text-gray-400 text-sm mt-2">Open a ticket for technical support or send an email to <span className="font-mono">support@example.com</span>.</p>
+            <button onClick={openTicket} className="mt-4 bg-green-600 px-4 py-2 rounded">Open Ticket</button>
           </div>
         </div>
       </div>

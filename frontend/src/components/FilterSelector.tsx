@@ -20,11 +20,11 @@ interface FilterSelectorProps {
 // Helper functions FORA do componente
 function getTypeLabel(type: string): string {
   const labels: Record<string, string> = {
-    supplier: 'Fornecedor',
-    product: 'Produto',
-    vehicle: 'Veículo',
-    transport: 'Transporte',
-    status: 'Estado',
+    supplier: 'Supplier',
+    product: 'Product',
+    vehicle: 'Vehicle',
+    transport: 'Transport',
+    status: 'Status',
   };
   return labels[type] || type;
 }
@@ -51,7 +51,7 @@ function renderItemDetails(item: any, type: string) {
     return <div className="text-sm text-slate-400 mt-1">NIF: {item.nif}</div>;
   }
   if (type === 'product' && item.supplier) {
-    return <div className="text-sm text-slate-400 mt-1">Fornecedor: {item.supplier.name}</div>;
+    return <div className="text-sm text-slate-400 mt-1">Supplier: {item.supplier.name}</div>;
   }
   if (type === 'vehicle' && item.brand) {
     return <div className="text-sm text-slate-400 mt-1">{item.brand} - {item.year}</div>;
@@ -115,13 +115,13 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({
         case 'status':
           // Para status, criamos opções estáticas
           setItems([
-            { id: 'PENDING', name: 'Pendente' },
+            { id: 'PENDING', name: 'Pending' },
             { id: 'IN_TRANSIT', name: 'Em Trânsito' },
-            { id: 'DELIVERED', name: 'Entregue' },
-            { id: 'CANCELLED', name: 'Cancelado' },
+            { id: 'DELIVERED', name: 'Delivered' },
+            { id: 'CANCELLED', name: 'Cancelled' },
             { id: 'available', name: 'Disponível' },
             { id: 'in_use', name: 'Em Uso' },
-            { id: 'maintenance', name: 'Manutenção' },
+            { id: 'maintenance', name: 'Maintenance' },
           ]);
           setLoading(false);
           return;
@@ -130,7 +130,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({
       const response = await api.get(endpoint, { params });
       setItems(response.data);
     } catch (error) {
-      console.error(`Erro ao carregar ${type}:`, error);
+      console.error(`Error loading ${type}:`, error);
     } finally {
       setLoading(false);
     }
@@ -197,7 +197,7 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-amber-500" />
                 <input
                   type="text"
-                  placeholder={placeholder || `Pesquisar ${getTypeLabel(type)}...`}
+                  placeholder={placeholder || `Search ${getTypeLabel(type)}...`}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 bg-slate-700/50 border border-amber-500/30 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
@@ -211,11 +211,11 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({
               {loading ? (
                 <div className="p-8 text-center text-slate-400">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto mb-2"></div>
-                  <p>A carregar...</p>
+                  <p>Loading...</p>
                 </div>
               ) : filteredItems.length === 0 ? (
                 <div className="p-8 text-center text-slate-400">
-                  <p>Nenhum resultado encontrado</p>
+                  <p>No results found</p>
                 </div>
               ) : (
                 <div className="divide-y divide-amber-500/10">
@@ -279,11 +279,11 @@ const FilterSelector: React.FC<FilterSelectorProps> = ({
               {loading ? (
                 <div className="p-8 text-center text-slate-400">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto mb-2"></div>
-                  <p>A carregar...</p>
+                  <p>Loading...</p>
                 </div>
               ) : filteredItems.length === 0 ? (
                 <div className="p-8 text-center text-slate-400">
-                  <p>Nenhum resultado encontrado</p>
+                  <p>No results found</p>
                 </div>
               ) : (
                 <div className="divide-y divide-amber-500/10">

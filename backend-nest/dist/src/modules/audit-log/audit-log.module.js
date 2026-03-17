@@ -20,10 +20,7 @@ exports.AuditLogModule = AuditLogModule = __decorate([
     (0, common_1.Module)({
         imports: [database_module_1.DatabaseModule],
         controllers: [audit_log_controller_1.AuditLogController],
-        providers: [
-            audit_log_service_1.AuditLogService,
-            audit_log_repository_1.AuditLogRepository,
-        ],
+        providers: [audit_log_service_1.AuditLogService, audit_log_repository_1.AuditLogRepository],
         exports: [audit_log_service_1.AuditLogService],
     })
 ], AuditLogModule);

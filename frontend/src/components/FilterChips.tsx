@@ -37,13 +37,13 @@ const FilterChips: React.FC<FilterChipsProps> = ({ filters, onRemove, onClearAll
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
           </svg>
-          Filtros Ativos ({filters.length})
+          Active Filters ({filters.length})
         </h3>
         <button
           onClick={onClearAll}
           className="text-xs text-red-400 hover:text-red-300 font-semibold hover:bg-red-900/30 px-3 py-1.5 rounded-lg transition-all border border-red-500/30 hover:border-red-500"
         >
-          ✕ Limpar Todos
+          ✕ Clear All
         </button>
       </div>
 
@@ -58,7 +58,7 @@ const FilterChips: React.FC<FilterChipsProps> = ({ filters, onRemove, onClearAll
             <button
               onClick={() => onRemove(filter.key)}
               className="ml-1 hover:bg-slate-700/20 rounded-full p-0.5 transition-all"
-              title={`Remover filtro ${filter.label}`}
+              title={`Remove filter ${filter.label}`}
             >
               <X className="w-4 h-4" />
             </button>
@@ -68,7 +68,7 @@ const FilterChips: React.FC<FilterChipsProps> = ({ filters, onRemove, onClearAll
 
       <div className="mt-3 pt-3 border-t border-amber-500/20">
         <p className="text-xs text-slate-400">
-          💡 <span className="font-semibold">Dica:</span> Clique no ✕ para remover um filtro específico ou use "Limpar Todos" para resetar.
+          💡 <span className="font-semibold">Tip:</span> Click ✕ to remove a specific filter or use "Clear All" to reset.
         </p>
       </div>
     </div>

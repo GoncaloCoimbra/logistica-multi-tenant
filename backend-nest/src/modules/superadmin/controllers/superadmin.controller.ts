@@ -1,16 +1,17 @@
-﻿import { 
-  Controller, 
-  Get, 
-  Post, 
-  Patch, 
-  Delete, 
-  Body, 
-  Param 
+﻿import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
 } from '@nestjs/common';
 import { SuperadminService } from '../superadmin.service';
 
 @Controller('superadmin')
-export class SuperAdminController {  // ← Mudei aqui de SuperadminController para SuperAdminController
+export class SuperAdminController {
+  // ← Mudei aqui de SuperadminController para SuperAdminController
   constructor(private readonly superadminService: SuperadminService) {}
 
   @Get('stats')

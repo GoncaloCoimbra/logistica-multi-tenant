@@ -1,27 +1,30 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
-  Delete, 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
   UseGuards,
   Request,
   Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { 
-  ApiTags, 
-  ApiOperation, 
-  ApiResponse, 
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
   ApiBearerAuth,
   ApiQuery,
 } from '@nestjs/swagger';
 import { ReferralsService } from './referrals.service';
 import { CreateReferralDto } from './dto/create-referral.dto';
-import { UpdateReferralDto, UpdateReferralStatusDto } from './dto/update-referral.dto';
+import {
+  UpdateReferralDto,
+  UpdateReferralStatusDto,
+} from './dto/update-referral.dto';
 import { FilterReferralDto } from './dto/filter-referral.dto';
 import { ReferralResponseDto, ReferralStatsDto } from './dto/referrals.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -34,11 +37,11 @@ export class ReferralsController {
   constructor(private readonly referralsService: ReferralsService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Criar nova referência' })
-  @ApiResponse({ 
-    status: 201, 
-    description: 'Referência criada com sucesso',
-    type: ReferralResponseDto 
+  @ApiOperation({ summary: 'Create nova referência' })
+  @ApiResponse({
+    status: 201,
+    description: 'Referência criada com success',
+    type: ReferralResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
   @ApiResponse({ status: 401, description: 'Não autorizado' })
@@ -55,11 +58,13 @@ export class ReferralsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todas as referências com filtros opcionais' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiOperation({
+    summary: 'Listar todas as referências com filtros opcionais',
+  })
+  @ApiResponse({
+    status: 200,
     description: 'Lista de referências',
-    type: [ReferralResponseDto] 
+    type: [ReferralResponseDto],
   })
   async findAll(
     @Query() filterDto: FilterReferralDto,
@@ -74,12 +79,16 @@ export class ReferralsController {
   }
 
   @Get('stats')
-  @ApiOperation({ summary: 'Obter estatísticas das referências' })
-  @ApiQuery({ name: 'companyId', required: false, description: 'ID da empresa (apenas SUPER_ADMIN)' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiOperation({ summary: 'Get estatísticas das referências' })
+  @ApiQuery({
+    name: 'companyId',
+    required: false,
+    description: 'ID da company (apenas SUPER_ADMIN)',
+  })
+  @ApiResponse({
+    status: 200,
     description: 'Estatísticas das referências',
-    type: ReferralStatsDto 
+    type: ReferralStatsDto,
   })
   async getStats(
     @Query('companyId') companyId: string,
@@ -94,11 +103,11 @@ export class ReferralsController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar referência por ID' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiOperation({ summary: 'Search referência por ID' })
+  @ApiResponse({
+    status: 200,
     description: 'Referência encontrada',
-    type: ReferralResponseDto 
+    type: ReferralResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Referência não encontrada' })
   @ApiResponse({ status: 403, description: 'Sem permissão' })
@@ -115,11 +124,11 @@ export class ReferralsController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Atualizar referência' })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Referência atualizada com sucesso',
-    type: ReferralResponseDto 
+  @ApiOperation({ summary: 'Update referência' })
+  @ApiResponse({
+    status: 200,
+    description: 'Referência atualizada com success',
+    type: ReferralResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Referência não encontrada' })
   @ApiResponse({ status: 403, description: 'Sem permissão' })
@@ -138,11 +147,11 @@ export class ReferralsController {
   }
 
   @Patch(':id/status')
-  @ApiOperation({ summary: 'Atualizar status da referência' })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Status atualizado com sucesso',
-    type: ReferralResponseDto 
+  @ApiOperation({ summary: 'Update status da referência' })
+  @ApiResponse({
+    status: 200,
+    description: 'Status atualizado com success',
+    type: ReferralResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Referência não encontrada' })
   @ApiResponse({ status: 403, description: 'Sem permissão' })
@@ -163,13 +172,10 @@ export class ReferralsController {
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Excluir referência' })
-  @ApiResponse({ status: 200, description: 'Referência excluída com sucesso' })
+  @ApiResponse({ status: 200, description: 'Referência excluída com success' })
   @ApiResponse({ status: 404, description: 'Referência não encontrada' })
   @ApiResponse({ status: 403, description: 'Sem permissão' })
-  async remove(
-    @Param('id') id: string,
-    @Request() req: any,
-  ) {
+  async remove(@Param('id') id: string, @Request() req: any) {
     return this.referralsService.remove(
       id,
       req.user.id,

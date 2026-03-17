@@ -16,8 +16,10 @@ export class DashboardService {
    */
   async getStats(companyId?: string) {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    this.logger.log(` Getting stats for company: ${companyId || 'ALL (SUPER_ADMIN)'}`);
-    
+    this.logger.log(
+      ` Getting stats for company: ${companyId || 'ALL (SUPER_ADMIN)'}`,
+    );
+
     // Cria where apenas se companyId existir
     const where: any = {};
     if (companyId) {
@@ -27,9 +29,8 @@ export class DashboardService {
     this.logger.log(` Where query: ${JSON.stringify(where)}`);
 
     try {
-      
       // 1. CONTAGENS BÁSICAS (para os cards principais)
-      
+
       const [
         totalProducts,
         totalSuppliers,
@@ -42,92 +43,91 @@ export class DashboardService {
         this.prisma.supplier.count({ where }),
         this.prisma.vehicle.count({ where }),
         this.prisma.transport.count({ where }),
-        this.prisma.vehicle.count({ 
-          where: { ...where, status: 'available' } 
+        this.prisma.vehicle.count({
+          where: { ...where, status: 'available' },
         }),
-        this.prisma.product.count({ 
-          where: { ...where, status: ProductStatus.IN_STORAGE } 
+        this.prisma.product.count({
+          where: { ...where, status: ProductStatus.IN_STORAGE },
         }),
       ]);
 
-      
-      // 2. PRODUTOS POR STATUS (para gráfico de pizza)
-      
+      // 2. PRODUCTS BY STATUS (for pie chart)
+
       const productsByStatusRaw = await this.prisma.product.groupBy({
         by: ['status'],
         where,
         _count: true,
       });
 
-      const productsByStatus = productsByStatusRaw.map(p => ({
+      const productsByStatus = productsByStatusRaw.map((p) => ({
         status: p.status,
         count: p._count,
       }));
 
-      
       // 3. SUMMARY DETALHADO (para cards e gráfico de barras)
-      
+
       // Os status disponíveis no Prisma são:
       // RECEIVED, IN_ANALYSIS, IN_STORAGE, APPROVED, DISPATCHED
-      
+
       const summary = {
         received: await this.prisma.product.count({
-          where: { ...where, status: ProductStatus.RECEIVED }
+          where: { ...where, status: ProductStatus.RECEIVED },
         }),
         inAnalysis: await this.prisma.product.count({
-          where: { ...where, status: ProductStatus.IN_ANALYSIS }
+          where: { ...where, status: ProductStatus.IN_ANALYSIS },
         }),
         inStorage: productsInStorage,
         delivered: await this.prisma.product.count({
-          where: { ...where, status: ProductStatus.DISPATCHED } // DISPATCHED = entregue
+          where: { ...where, status: ProductStatus.DISPATCHED }, // DISPATCHED = entregue
         }),
-        rejected: 0, // REJECTED não existe - deixar como 0 ou criar lógica customizada
+        rejected: 0, // REJECTED não existe - deixar como 0 ou create lógica customizada
       };
 
-      
       // 4. PERCENTAGENS (para mostrar nos cards)
-      
+
       const percentages = {
-        received: totalProducts > 0 
-          ? ((summary.received / totalProducts) * 100).toFixed(1)
-          : '0',
-        inStorage: totalProducts > 0 
-          ? ((summary.inStorage / totalProducts) * 100).toFixed(1)
-          : '0',
-        delivered: totalProducts > 0 
-          ? ((summary.delivered / totalProducts) * 100).toFixed(1)
-          : '0',
-        rejected: totalProducts > 0 
-          ? ((summary.rejected / totalProducts) * 100).toFixed(1)
-          : '0',
+        received:
+          totalProducts > 0
+            ? ((summary.received / totalProducts) * 100).toFixed(1)
+            : '0',
+        inStorage:
+          totalProducts > 0
+            ? ((summary.inStorage / totalProducts) * 100).toFixed(1)
+            : '0',
+        delivered:
+          totalProducts > 0
+            ? ((summary.delivered / totalProducts) * 100).toFixed(1)
+            : '0',
+        rejected:
+          totalProducts > 0
+            ? ((summary.rejected / totalProducts) * 100).toFixed(1)
+            : '0',
       };
 
-      
       // 5. TOP 5 FORNECEDORES (para a seção inferior)
-      
+
       const suppliersWithProducts = await this.prisma.supplier.findMany({
         where,
         include: {
           products: {
             select: { id: true },
-            where: companyId ? { companyId } : {}, // Filtra produtos pela empresa
+            where: companyId ? { companyId } : {}, // Filter products by company
           },
         },
       });
 
       const topSuppliers = suppliersWithProducts
-        .map(s => ({
+        .map((s) => ({
           id: s.id,
           name: s.name,
           productCount: s.products.length,
         }))
-        .filter(s => s.productCount > 0) // Remove fornecedores sem produtos
+        .filter((s) => s.productCount > 0) // Remove suppliers without products
         .sort((a, b) => b.productCount - a.productCount)
         .slice(0, 5);
 
-      
       // 6. MOVIMENTAÇÕES RECENTES (Last 30 days)
-      
+
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -140,9 +140,8 @@ export class DashboardService {
         },
       });
 
-      
       // 7. MONTA RESPOSTA COMPLETA
-      
+
       const result = {
         totalProducts,
         totalSuppliers,
@@ -157,9 +156,8 @@ export class DashboardService {
         recentMovements,
       };
 
-      
       // 8. LOGS DE DEBUG
-      
+
       this.logger.log(`Stats computed successfully:`);
       this.logger.log(`    Total Products: ${totalProducts}`);
       this.logger.log(`   🏢 Total Suppliers: ${totalSuppliers}`);
@@ -167,18 +165,21 @@ export class DashboardService {
       this.logger.log(`   🚚 Total Transports: ${totalTransports}`);
       this.logger.log(`   Vehicles Available: ${vehiclesAvailable}`);
       this.logger.log(`    Products In Storage: ${productsInStorage}`);
-      this.logger.log(`    Products by Status: ${productsByStatus.length} categories`);
+      this.logger.log(
+        `    Products by Status: ${productsByStatus.length} categories`,
+      );
       this.logger.log(`    Summary - Received: ${summary.received}`);
       this.logger.log(`    Summary - In Analysis: ${summary.inAnalysis}`);
       this.logger.log(`    Summary - In Storage: ${summary.inStorage}`);
-      this.logger.log(`    Summary - Delivered (Dispatched): ${summary.delivered}`);
+      this.logger.log(
+        `    Summary - Delivered (Dispatched): ${summary.delivered}`,
+      );
       this.logger.log(`    Summary - Rejected: ${summary.rejected}`);
       this.logger.log(`   🔝 Top Suppliers: ${topSuppliers.length}`);
       this.logger.log(`   🔄 Recent Movements (30d): ${recentMovements}`);
       this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
       return result;
-
     } catch (error) {
       this.logger.error(` Error computing stats: ${error.message}`);
       this.logger.error(` Stack: ${error.stack}`);
@@ -187,29 +188,31 @@ export class DashboardService {
   }
 
   /**
-   * Visão geral do dashboard com filtros
+   * Dashboard overview with filters
    */
   async getOverview(companyId?: string, filters?: DashboardFiltersDto) {
     this.logger.log(` Getting overview for company: ${companyId || 'ALL'}`);
-    
+
     const where: any = {};
     if (companyId) {
       where.companyId = companyId;
     }
 
     return {
-      message: 'Visão geral do dashboard',
+      message: 'Dashboard overview',
       companyId: companyId || 'ALL',
       filters,
     };
   }
 
   /**
-   * Produtos agrupados por status
+   * Products grouped by status
    */
   async getProductsByStatus(companyId?: string) {
-    this.logger.log(` Getting products by status for company: ${companyId || 'ALL'}`);
-    
+    this.logger.log(
+      ` Getting products by status for company: ${companyId || 'ALL'}`,
+    );
+
     const where: any = {};
     if (companyId) {
       where.companyId = companyId;
@@ -221,7 +224,7 @@ export class DashboardService {
       _count: true,
     });
 
-    return products.map(p => ({
+    return products.map((p) => ({
       status: p.status,
       count: p._count,
     }));
@@ -231,8 +234,10 @@ export class DashboardService {
    * Transportes agrupados por status
    */
   async getTransportsByStatus(companyId?: string) {
-    this.logger.log(` Getting transports by status for company: ${companyId || 'ALL'}`);
-    
+    this.logger.log(
+      ` Getting transports by status for company: ${companyId || 'ALL'}`,
+    );
+
     const where: any = {};
     if (companyId) {
       where.companyId = companyId;
@@ -244,7 +249,7 @@ export class DashboardService {
       _count: true,
     });
 
-    return transports.map(t => ({
+    return transports.map((t) => ({
       status: t.status,
       count: t._count,
     }));
@@ -254,8 +259,10 @@ export class DashboardService {
    * Atividade recente (últimos 10 logs)
    */
   async getRecentActivity(companyId?: string) {
-    this.logger.log(` Getting recent activity for company: ${companyId || 'ALL'}`);
-    
+    this.logger.log(
+      ` Getting recent activity for company: ${companyId || 'ALL'}`,
+    );
+
     const where: any = {};
     if (companyId) {
       where.companyId = companyId;
@@ -267,9 +274,9 @@ export class DashboardService {
       take: 10,
       include: {
         user: {
-          select: { 
-            name: true, 
-            email: true 
+          select: {
+            name: true,
+            email: true,
           },
         },
       },
@@ -282,26 +289,29 @@ export class DashboardService {
    * Estatísticas mensais
    */
   async getMonthlyStats(companyId?: string) {
-    this.logger.log(` Getting monthly stats for company: ${companyId || 'ALL'}`);
-    
+    this.logger.log(
+      ` Getting monthly stats for company: ${companyId || 'ALL'}`,
+    );
+
     const where: any = {};
     if (companyId) {
       where.companyId = companyId;
     }
-    
+
     return {
       message: 'Estatísticas mensais',
-      companyId: companyId || 'ALL',
-      data: [],
+      companyId: companyId || 'ALL', data: [],
     };
   }
 
   /**
-   * Top fornecedores (com mais produtos)
+   * Top suppliers (with most products)
    */
   async getTopSuppliers(companyId?: string) {
-    this.logger.log(` Getting top suppliers for company: ${companyId || 'ALL'}`);
-    
+    this.logger.log(
+      ` Getting top suppliers for company: ${companyId || 'ALL'}`,
+    );
+
     const where: any = {};
     if (companyId) {
       where.companyId = companyId;
@@ -318,13 +328,13 @@ export class DashboardService {
     });
 
     return suppliers
-      .map(s => ({
+      .map((s) => ({
         id: s.id,
         name: s.name,
         nif: s.nif,
         productCount: s.products.length,
       }))
-      .filter(s => s.productCount > 0)
+      .filter((s) => s.productCount > 0)
       .sort((a, b) => b.productCount - a.productCount)
       .slice(0, 5);
   }

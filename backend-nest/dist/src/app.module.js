@@ -44,7 +44,7 @@ exports.AppModule = AppModule = __decorate([
         imports: [
             config_1.ConfigModule.forRoot({
                 isGlobal: true,
-                envFilePath: '.env'
+                envFilePath: '.env',
             }),
             database_module_1.DatabaseModule,
             auth_module_1.AuthModule,
@@ -69,27 +69,27 @@ exports.AppModule = AppModule = __decorate([
             app_service_1.AppService,
             {
                 provide: core_1.APP_GUARD,
-                useClass: jwt_auth_guard_1.JwtAuthGuard
+                useClass: jwt_auth_guard_1.JwtAuthGuard,
             },
             {
                 provide: core_1.APP_GUARD,
-                useClass: roles_guard_1.RolesGuard
+                useClass: roles_guard_1.RolesGuard,
             },
             {
                 provide: core_1.APP_FILTER,
-                useClass: http_exception_filter_1.HttpExceptionFilter
+                useClass: http_exception_filter_1.HttpExceptionFilter,
             },
             {
                 provide: core_1.APP_INTERCEPTOR,
-                useClass: logging_interceptor_1.LoggingInterceptor
+                useClass: logging_interceptor_1.LoggingInterceptor,
             },
             {
                 provide: core_1.APP_INTERCEPTOR,
-                useClass: audit_log_interceptor_1.AuditLogInterceptor
+                useClass: audit_log_interceptor_1.AuditLogInterceptor,
             },
             {
                 provide: core_1.APP_INTERCEPTOR,
-                useClass: tenant_interceptor_1.TenantInterceptor
+                useClass: tenant_interceptor_1.TenantInterceptor,
             },
             tenant_context_service_1.TenantContextService,
         ],

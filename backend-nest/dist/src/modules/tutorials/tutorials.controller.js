@@ -67,7 +67,7 @@ __decorate([
 __decorate([
     (0, public_decorator_1.Public)(),
     (0, common_1.Get)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Obter detalhes de um tutorial específico' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get detalhes de um tutorial específico' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

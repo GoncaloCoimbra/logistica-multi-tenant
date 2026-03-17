@@ -11,7 +11,7 @@ const TutorialDetail: React.FC = () => {
   if (error) {
     return (
       <div className="max-w-4xl mx-auto p-8">
-        <div className="bg-red-900 text-red-100 p-4 rounded">Erro: {error}</div>
+        <div className="bg-red-900 text-red-100 p-4 rounded">Error: {error}</div>
       </div>
     );
   }

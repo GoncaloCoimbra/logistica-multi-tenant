@@ -35,19 +35,19 @@ let SuppliersController = SuppliersController_1 = class SuppliersController {
             this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
             this.logger.log(`📥 POST /suppliers`);
             this.logger.log(`👤 User: ${req.user?.email} (${req.user?.role})`);
-            this.logger.log(`🏢 CompanyId: ${req.user?.companyId || 'SUPER_ADMIN - sem empresa'}`);
+            this.logger.log(`🏢 CompanyId: ${req.user?.companyId || 'SUPER_ADMIN - sem company'}`);
             const companyId = createSupplierDto.companyId || req.user.companyId;
             if (!companyId) {
                 this.logger.error(' CompanyId não encontrado');
                 throw new common_1.HttpException('CompanyId obrigatório', common_1.HttpStatus.BAD_REQUEST);
             }
             const result = await this.suppliersService.create(createSupplierDto, companyId);
-            this.logger.log(` Fornecedor criado: ${result.id}`);
+            this.logger.log(` Supplier created: ${result.id}`);
             this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
             return result;
         }
         catch (error) {
-            this.logger.error(` Erro ao criar fornecedor:`, error.message);
+            this.logger.error(` Error creating supplier:`, error.message);
             throw error;
         }
     }
@@ -71,45 +71,35 @@ let SuppliersController = SuppliersController_1 = class SuppliersController {
             return result;
         }
         catch (error) {
-            this.logger.error(` ERRO no GET /suppliers`);
+            this.logger.error(` ERROR in GET /suppliers`);
             this.logger.error(`Message: ${error.message}`);
             throw error;
         }
     }
     findByVehicle(vehicleId, req) {
         this.logger.log(`📥 GET /suppliers/by-vehicle/${vehicleId}`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? undefined : req.user.companyId;
         return this.suppliersService.findByVehicle(vehicleId, companyId);
     }
     findOne(id, req) {
         this.logger.log(`📥 GET /suppliers/${id}`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? undefined : req.user.companyId;
         return this.suppliersService.findOne(id, companyId);
     }
     findWithProducts(id, req) {
         this.logger.log(`📥 GET /suppliers/${id}/products`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? undefined : req.user.companyId;
         return this.suppliersService.findWithProducts(id, companyId);
     }
     async update(id, updateSupplierDto, req) {
         this.logger.log(`📥 PATCH /suppliers/${id}`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? undefined : req.user.companyId;
         return this.suppliersService.update(id, updateSupplierDto, companyId);
     }
     remove(id, req) {
         this.logger.log(`🗑️ DELETE /suppliers/${id}`);
         this.logger.log(`👤 User: ${req.user.email} (${req.user.role})`);
-        const companyId = req.user.role === client_1.Role.SUPER_ADMIN
-            ? undefined
-            : req.user.companyId;
+        const companyId = req.user.role === client_1.Role.SUPER_ADMIN ? undefined : req.user.companyId;
         return this.suppliersService.remove(id, companyId);
     }
 };
@@ -117,7 +107,7 @@ exports.SuppliersController = SuppliersController;
 __decorate([
     (0, common_1.Post)(),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Criar novo fornecedor' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Create  new supplier' }),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -127,9 +117,17 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Listar todos os fornecedores' }),
-    (0, swagger_1.ApiQuery)({ name: 'search', required: false, description: 'Buscar por nome ou NIF' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'Filtrar por empresa (SUPER_ADMIN)' }),
+    (0, swagger_1.ApiOperation)({ summary: 'List all suppliers' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'search',
+        required: false,
+        description: 'Search by name or NIF',
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'Filter por company (SUPER_ADMIN)',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('search')),
     __param(2, (0, common_1.Query)('companyId')),
@@ -140,7 +138,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)('by-vehicle/:vehicleId'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Buscar fornecedores por veículo' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Search suppliers by vehicle' }),
     __param(0, (0, common_1.Param)('vehicleId')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -150,7 +148,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Obter fornecedor por ID' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get supplier by ID' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -160,7 +158,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id/products'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Obter fornecedor com produtos' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get supplier with products' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -170,7 +168,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar fornecedor' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update supplier' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Request)()),
@@ -181,7 +179,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Eliminar fornecedor' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete supplier' }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),

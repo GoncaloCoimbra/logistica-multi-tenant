@@ -27,10 +27,10 @@ export declare class SuperAdminController {
         };
     } & {
         id: string;
-        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
+        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -45,22 +45,22 @@ export declare class SuperAdminController {
         };
         users: {
             id: string;
-            companyId: string | null;
-            createdAt: Date;
             email: string;
             name: string;
             password: string;
             role: import(".prisma/client").$Enums.Role;
             isActive: boolean;
             avatarUrl: string | null;
+            companyId: string | null;
+            createdAt: Date;
             updatedAt: Date;
         }[];
     } & {
         id: string;
-        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
+        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -82,10 +82,10 @@ export declare class SuperAdminController {
     }>;
     createCompany(data: any): Promise<{
         id: string;
-        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
+        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -93,10 +93,10 @@ export declare class SuperAdminController {
     }>;
     updateCompany(id: string, data: any): Promise<{
         id: string;
-        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
+        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -104,10 +104,10 @@ export declare class SuperAdminController {
     }>;
     toggleCompanyStatus(id: string, isActive: boolean): Promise<{
         id: string;
-        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
+        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -115,10 +115,10 @@ export declare class SuperAdminController {
     }>;
     deleteCompany(id: string): Promise<{
         id: string;
-        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
+        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;

@@ -11,7 +11,7 @@ export interface FilterValue {
 export const useFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Obter todos os filtros ativos
+  // Get todos os filtros ativos
   const activeFilters = useMemo(() => {
     const filters: FilterValue[] = [];
     
@@ -36,7 +36,7 @@ export const useFilters = () => {
     setSearchParams(newParams);
   }, [searchParams, setSearchParams]);
 
-  // Remover filtro específico
+  // Remove filtro específico
   const removeFilter = useCallback((key: string) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.delete(key);
@@ -48,10 +48,10 @@ export const useFilters = () => {
     setSearchParams(new URLSearchParams());
   }, [setSearchParams]);
 
-  // Verificar se tem filtros ativos
+  // Check se tem filtros ativos
   const hasFilters = activeFilters.length > 0;
 
-  // Obter valor de filtro específico
+  // Get valor de filtro específico
   const getFilter = useCallback((key: string) => {
     return searchParams.get(key) || '';
   }, [searchParams]);

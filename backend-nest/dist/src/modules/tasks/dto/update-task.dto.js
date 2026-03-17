@@ -25,8 +25,8 @@ exports.UpdateTaskDto = UpdateTaskDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Título da tarefa',
-        example: 'Implementar novo recurso',
-        required: false
+        example: 'Implementar  new recurso',
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -36,7 +36,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         description: 'Descrição da tarefa',
         example: 'Implementar sistema de notificações',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -47,7 +47,7 @@ __decorate([
         description: 'Status da tarefa',
         enum: client_1.TaskStatus,
         example: client_1.TaskStatus.IN_PROGRESS,
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsEnum)(client_1.TaskStatus),
     (0, class_validator_1.IsOptional)(),
@@ -55,10 +55,10 @@ __decorate([
 ], UpdateTaskDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Prioridade da tarefa',
+        description: 'Priority da tarefa',
         enum: client_1.TaskPriority,
         example: client_1.TaskPriority.HIGH,
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsEnum)(client_1.TaskPriority),
     (0, class_validator_1.IsOptional)(),
@@ -66,9 +66,9 @@ __decorate([
 ], UpdateTaskDto.prototype, "priority", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Data de vencimento',
+        description: 'Date de vencimento',
         example: '2026-01-20T00:00:00.000Z',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsDateString)(),
     (0, class_validator_1.IsOptional)(),
@@ -76,9 +76,9 @@ __decorate([
 ], UpdateTaskDto.prototype, "dueDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Nome do responsável',
+        description: 'Name do responsável',
         example: 'Maria Santos',
-        required: false
+        required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -90,9 +90,9 @@ class UpdateTaskStatusDto {
 exports.UpdateTaskStatusDto = UpdateTaskStatusDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Novo status da tarefa',
+        description: ' new status da tarefa',
         enum: client_1.TaskStatus,
-        example: client_1.TaskStatus.COMPLETED
+        example: client_1.TaskStatus.COMPLETED,
     }),
     (0, class_validator_1.IsEnum)(client_1.TaskStatus),
     __metadata("design:type", String)

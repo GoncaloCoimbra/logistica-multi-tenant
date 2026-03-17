@@ -1,43 +1,43 @@
 /**
- * Extrai mensagem de erro de forma segura
+ * Extrai mensagem de error de forma segura
  * Converte erros de qualquer tipo em string
  */
 export function getErrorMessage(error: any, defaultMessage?: string): string {
-  const fallback = defaultMessage || 'Erro desconhecido. Tente novamente.';
+  const fallback = defaultMessage || 'Error desconhecido. Tente novamente.';
   
   // Se for string, retorna direto
   if (typeof error === 'string') {
     return error;
   }
 
-  // Se for erro de axios response
+  // Se for error de axios response
   if (error?.response?.data) {
-    const data = error.response.data;
+    const date = error.response.data;
     
     // Tentar várias possibilidades comuns
-    if (typeof data === 'string') {
-      return data;
+    if (typeof date === 'string') {
+      return date;
     }
     
-    if (data.message && typeof data.message === 'string') {
-      return data.message;
+    if (date.message && typeof date.message === 'string') {
+      return date.message;
     }
     
-    if (data.error && typeof data.error === 'string') {
-      return data.error;
+    if (date.error && typeof date.error === 'string') {
+      return date.error;
     }
     
-    if (data.error?.message && typeof data.error.message === 'string') {
-      return data.error.message;
+    if (date.error?.message && typeof date.error.message === 'string') {
+      return date.error.message;
     }
     
     // Se for array de erros
-    if (Array.isArray(data) && data[0]?.message) {
-      return data[0].message;
+    if (Array.isArray(date) && date[0]?.message) {
+      return date[0].message;
     }
   }
 
-  // Se for erro padrão de JavaScript
+  // Se for error padrão de JavaScript
   if (error?.message && typeof error.message === 'string') {
     return error.message;
   }
@@ -47,11 +47,11 @@ export function getErrorMessage(error: any, defaultMessage?: string): string {
 }
 
 /**
- * Log de erro para debug
+ * Log de error para debug
  */
 export function logError(context: string, error: any): void {
   console.error(` [${context}]`, error);
   if (error?.response?.data) {
-    console.error('📥 Response data:', error.response.data);
+    console.error('📥 Response date:', error.response.data);
   }
 }

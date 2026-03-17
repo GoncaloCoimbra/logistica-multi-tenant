@@ -10,16 +10,16 @@ This document describes all environment variables needed for different environme
 |----------|------|-----------|---------|
 | `NODE_ENV` | string | Ambiente (development, test, production) | `development` |
 | `DATABASE_URL` | string | Connection string PostgreSQL | `postgresql://user:pass@localhost:5432/logistica_dev` |
-| `JWT_SECRET` | string | Chave secreta para assinar JWT | `seu-secret-muito-longo-minimo-32-chars` |
-| `CORS_ORIGIN` | string | URL frontend (para CORS) | `http://localhost:3001` ou `https://seu-dominio.com` |
+| `JWT_SECRET` | string | Secret key for signing JWT | `your-very-long-secret-minimum-32-chars` |
+| `CORS_ORIGIN` | string | Frontend URL (for CORS) | `http://localhost:3001` or `https://your-domain.com` |
 
 ### Opcionais mas Recomendadas
 
 | Variável | Tipo | Padrão | Descrição |
 |----------|------|--------|-----------|
-| `PORT` | number | 3000 | Porta do servidor |
-| `LOG_LEVEL` | string | info | Nível de logging (debug, info, warn, error) |
-| `SENTRY_DSN` | string | - | URL Sentry para error tracking |
+| `PORT` | number | 3000 | Server port |
+| `LOG_LEVEL` | string | info | Logging level (debug, info, warn, error) |
+| `SENTRY_DSN` | string | - | Sentry URL for error tracking |
 | `REDIS_URL` | string | - | URL Redis para cache/sessionss (optional) |
 | `MAX_FILE_SIZE` | string | 10mb | Tamanho máximo de uploads |
 | `JWT_EXPIRY` | string | 24h | JWT token expiration time |
@@ -63,7 +63,7 @@ JWT_EXPIRY=16h
 |----------|------|--------|-----------|
 | `REACT_APP_ENV` | string | development | Ambiente (development, staging, production) |
 | `REACT_APP_LOG_LEVEL` | string | info | Nível de console logging |
-| `REACT_APP_SENTRY_DSN` | string | - | Sentry para frontend errors |
+| `REACT_APP_SENTRY_DSN` | string | - | Sentry for frontend errors |
 
 ### Exemplo de `.env.local` (Desenvolvimento)
 
@@ -206,7 +206,7 @@ Production:
 - [ ] Todas as variáveis definidas via Vault/Secrets Manager
 - [ ] `NODE_ENV=production`
 - [ ] `LOG_LEVEL=warn` ou superior
-- [ ] `SENTRY_DSN` configurado para error tracking
+- [ ] `SENTRY_DSN` configured for error tracking
 - [ ] Database usa managed service (RDS, Cloud SQL, etc.)
 - [ ] JWT_SECRET is rotated regularly (policy)
 

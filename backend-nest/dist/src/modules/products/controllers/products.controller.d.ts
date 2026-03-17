@@ -9,11 +9,11 @@ export declare class ProductsController {
     create(createProductDto: CreateProductDto, user: any): Promise<{
         supplier: {
             id: string;
-            companyId: string;
             createdAt: Date;
+            updatedAt: Date;
+            companyId: string;
             email: string | null;
             name: string;
-            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -22,12 +22,12 @@ export declare class ProductsController {
         };
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
+        companyId: string;
         internalCode: string;
         description: string;
+        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -43,12 +43,12 @@ export declare class ProductsController {
         };
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
+        companyId: string;
         internalCode: string;
         description: string;
+        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -63,11 +63,11 @@ export declare class ProductsController {
     findOne(id: string, user: any): Promise<{
         supplier: {
             id: string;
-            companyId: string;
             createdAt: Date;
+            updatedAt: Date;
+            companyId: string;
             email: string | null;
             name: string;
-            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -76,12 +76,12 @@ export declare class ProductsController {
         };
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
+        companyId: string;
         internalCode: string;
         description: string;
+        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -92,11 +92,11 @@ export declare class ProductsController {
     findWithMovements(id: string, user: any): Promise<{
         supplier: {
             id: string;
-            companyId: string;
             createdAt: Date;
+            updatedAt: Date;
+            companyId: string;
             email: string | null;
             name: string;
-            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -111,23 +111,23 @@ export declare class ProductsController {
             };
         } & {
             id: string;
-            userId: string;
             createdAt: Date;
+            userId: string;
+            quantity: number;
             productId: string;
             previousStatus: import(".prisma/client").$Enums.ProductStatus;
             newStatus: import(".prisma/client").$Enums.ProductStatus;
-            quantity: number;
             location: string;
             reason: string | null;
         })[];
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
+        companyId: string;
         internalCode: string;
         description: string;
+        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -138,11 +138,11 @@ export declare class ProductsController {
     update(id: string, updateProductDto: UpdateProductDto, user: any): Promise<{
         supplier: {
             id: string;
-            companyId: string;
             createdAt: Date;
+            updatedAt: Date;
+            companyId: string;
             email: string | null;
             name: string;
-            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -151,12 +151,12 @@ export declare class ProductsController {
         };
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
+        companyId: string;
         internalCode: string;
         description: string;
+        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -167,11 +167,11 @@ export declare class ProductsController {
     updateStatus(id: string, updateStatusDto: UpdateProductStatusDto, user: any): Promise<{
         supplier: {
             id: string;
-            companyId: string;
             createdAt: Date;
+            updatedAt: Date;
+            companyId: string;
             email: string | null;
             name: string;
-            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -180,12 +180,12 @@ export declare class ProductsController {
         };
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
+        companyId: string;
         internalCode: string;
         description: string;
+        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -195,12 +195,12 @@ export declare class ProductsController {
     }>;
     remove(id: string, user: any): Promise<{
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        quantity: number;
+        companyId: string;
         internalCode: string;
         description: string;
+        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;

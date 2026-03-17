@@ -1,6 +1,6 @@
-import { 
-  Injectable, 
-  ConflictException, 
+import {
+  Injectable,
+  ConflictException,
   BadRequestException,
   Logger,
   InternalServerErrorException,
@@ -32,92 +32,84 @@ export class RegistrationService {
 
   async registerCompanyAndUser(data: RegisterCompanyDto) {
     this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    this.logger.log('📝 Iniciando registro de empresa + usuário');
-    this.logger.log(`🏢 Empresa: ${data.companyName}`);
-    this.logger.log(`👤 Usuário: ${data.userName} (${data.userEmail})`);
-    
-    // Log para verificar se Prisma está conectado
+    this.logger.log('📝 Starting company + user registration');
+    this.logger.log(`🏢 Company: ${data.companyName}`);
+    this.logger.log(`👤 User: ${data.userName} (${data.userEmail})`);
+
+    // Log to check if Prisma is connected
     try {
       await this.prisma.$queryRaw`SELECT 1`;
-      this.logger.log(' Prisma conectado com sucesso');
+      this.logger.log('✓ Prisma connected successfully');
     } catch (err: any) {
-      this.logger.error(' ERRO: Prisma não está conectado!');
+      this.logger.error('❌ ERROR: Prisma is not connected!');
       this.logger.error('Error:', err.message);
-      throw new InternalServerErrorException('Erro de conexão com banco de dados');
+      throw new InternalServerErrorException('Database connection error');
     }
 
-    
-    // 1. VALIDAÇÕES
-    
-    this.logger.log('🔍 Validando dados...');
+    // 1. VALIDATIONS
+
+    this.logger.log('🔍 Validating data...');
 
     if (!data.companyName || !data.companyNif || !data.companyEmail) {
-      throw new BadRequestException('Dados da empresa incompletos');
+      throw new BadRequestException('Company data incomplete');
     }
 
     if (!data.userName || !data.userEmail || !data.userPassword) {
-      throw new BadRequestException('Dados do usuário incompletos');
+      throw new BadRequestException('User data incomplete');
     }
 
     if (data.userPassword.length < 6) {
-      throw new BadRequestException('Password deve ter no mínimo 6 caracteres');
+      throw new BadRequestException('Password must be at least 6 characters');
     }
 
-    
-    // 2. VERIFICAR SE EMPRESA JÁ EXISTE
-    
-    this.logger.log('🔍 Verificando se empresa já existe...');
+    // 2. CHECK IF COMPANY ALREADY EXISTS
+
+    this.logger.log('🔍 Checking if company already exists...');
 
     const existingCompany = await this.prisma.company.findFirst({
       where: {
-        OR: [
-          { nif: data.companyNif },
-          { email: data.companyEmail },
-        ],
+        OR: [{ nif: data.companyNif }, { email: data.companyEmail }],
       },
     });
 
     if (existingCompany) {
       if (existingCompany.nif === data.companyNif) {
-        this.logger.error(` NIF ${data.companyNif} já está em uso`);
-        throw new ConflictException('Já existe uma empresa com este NIF');
+        this.logger.error(`❌ NIF ${data.companyNif} is already in use`);
+        throw new ConflictException('A company with this NIF already exists');
       }
       if (existingCompany.email === data.companyEmail) {
-        this.logger.error(` Email ${data.companyEmail} já está em uso`);
-        throw new ConflictException('Já existe uma empresa com este email');
+        this.logger.error(`❌ Email ${data.companyEmail} is already in use`);
+        throw new ConflictException('A company with this email already exists');
       }
     }
 
-    
-    // 3. VERIFICAR SE USUÁRIO JÁ EXISTE
-    
-    this.logger.log('🔍 Verificando se usuário já existe...');
+    // 3. CHECK IF USER ALREADY EXISTS
+
+    this.logger.log('🔍 Checking if user already exists...');
 
     const existingUser = await this.prisma.user.findUnique({
       where: { email: data.userEmail },
     });
 
     if (existingUser) {
-      this.logger.error(` Email de usuário ${data.userEmail} já está em uso`);
-      throw new ConflictException('Este email já está em uso');
+      this.logger.error(`❌ User email ${data.userEmail} is already in use`);
+      throw new ConflictException('This email is already in use');
     }
 
-    
-    // 4. HASH DA PASSWORD
-    
-    this.logger.log('🔒 Gerando hash da password...');
+    // 4. HASH PASSWORD
+
+    this.logger.log('🔒 Generating password hash...');
     const hashedPassword = await bcrypt.hash(data.userPassword, 10);
 
     try {
-      
-      // 5. CRIAR EMPRESA E USUÁRIO (TRANSAÇÃO)
-      
-      this.logger.log('🔄 Iniciando transação...');
+      // 5. CREATE COMPANY AND USER (TRANSACTION)
+
+      this.logger.log('🔄 Starting transaction...');
       const result = await this.prisma.$transaction(async (tx) => {
-        this.logger.log('📍 DENTRO DA TRANSAÇÃO - iniciou');
-        
-        // 5.1 Criar a empresa
-        this.logger.log(' Criando empresa...');
+        this.logger.log('📍 INSIDE TRANSACTION - started');
+
+        // 5.1 Create company
+        this.logger.log('📍 Creating company...');
         const company = await tx.company.create({
           data: {
             name: data.companyName,
@@ -129,10 +121,10 @@ export class RegistrationService {
           },
         });
 
-        this.logger.log(` Empresa criada: ${company.id} - ${company.name}`);
+        this.logger.log(`✓ Company created: ${company.id} - ${company.name}`);
 
-        // 5.2 Criar o usuário ADMIN
-        this.logger.log('👤 Criando usuário administrador...');
+        // 5.2 Create ADMIN user
+        this.logger.log('👤 Creating admin user...');
         const user = await tx.user.create({
           data: {
             name: data.userName,
@@ -144,60 +136,61 @@ export class RegistrationService {
           },
         });
 
-        this.logger.log(` Usuário criado: ${user.id} - ${user.name} (ADMIN)`);
-        this.logger.log(`   Email armazenado: ${user.email}`);
+        this.logger.log(`✓ User created: ${user.id} - ${user.name} (ADMIN)`);
+        this.logger.log(`   Email stored: ${user.email}`);
         this.logger.log(`   isActive: ${user.isActive}`);
 
-        // 5.3 Criar Configurations padrão
-        this.logger.log('⚙️ Criando Configurations padrão...');
+        // 5.3 Create default Settings
+        this.logger.log('⚙️ Creating default Settings...');
         await tx.settings.create({
           data: {
             companyId: company.id,
-            taxRate: 0.23, // IVA padrão PT
+            taxRate: 0.23, // Default IVA PT
           },
         });
 
-        this.logger.log(' Configurations criadas');
-        this.logger.log('📍 DENTRO DA TRANSAÇÃO - finalizando...');
+        this.logger.log('✓ Settings created');
+        this.logger.log('📍 INSIDE TRANSACTION - finalizing...');
 
         return { company, user };
       });
-      
-      this.logger.log('📍 TRANSAÇÃO CONCLUÍDA COM SUCESSO');
 
-      
-      // 6. VERIFICAR QUE O USUÁRIO FOI CRIADO
-      
-      this.logger.log('🔍 Verificando se usuário foi realmente criado no banco...');
+      this.logger.log('📍 TRANSACTION COMPLETED SUCCESSFULLY');
+
+      // 6. VERIFY USER WAS CREATED
+
+      this.logger.log('🔍 Verifying if user was really created in database...');
       const userInDb = await this.prisma.user.findUnique({
         where: { email: result.user.email },
       });
-      
-      if (!userInDb) {
-        this.logger.error(' CRÍTICO: Usuário NÃO foi encontrado no banco após transação!');
-        this.logger.error(` Email procurado: ${result.user.email}`);
-        throw new InternalServerErrorException('Falha na verificação: usuário não foi criado');
-      }
-      
-      this.logger.log(' Verificação OK - usuário existe no banco de dados');
 
-      
-      // 7. GERAR TOKENS JWT
-      
-      this.logger.log('🔑 Gerando tokens JWT...');
+      if (!userInDb) {
+        this.logger.error(
+          '❌ CRITICAL: User NOT found in database after transaction!',
+        );
+        this.logger.error(`   Email searched: ${result.user.email}`);
+        throw new InternalServerErrorException(
+          'Verification failed: user was not created',
+        );
+      }
+
+      this.logger.log('✓ Verification OK - user exists in database');
+
+      // 7. GENERATE JWT TOKENS
+
+      this.logger.log('🔑 Generating JWT tokens...');
       const tokens = await this.generateTokens(
         result.user.id,
         result.user.email,
         result.user.role,
       );
 
-      this.logger.log(' Tokens gerados com sucesso');
-      this.logger.log(' REGISTRO COMPLETO!');
+      this.logger.log('✓ Tokens generated successfully');
+      this.logger.log('✓ REGISTRATION COMPLETE!');
       this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
-      
-      // 8. RETORNAR RESPOSTA
-      
+      // 8. RETURN RESPONSE
+
       const responseData = {
         token: tokens.token,
         refreshToken: tokens.refreshToken,
@@ -211,31 +204,30 @@ export class RegistrationService {
           isActive: result.user.isActive,
         },
       };
-      
-      this.logger.log('📤 Respondendo ao cliente com:');
+
+      this.logger.log('📤 Responding to client with:');
       this.logger.log(`   - Token: ${tokens.token.substring(0, 20)}...`);
       this.logger.log(`   - User Email: ${responseData.user.email}`);
       this.logger.log(`   - User ID: ${responseData.user.id}`);
       this.logger.log(`   - Company ID: ${responseData.user.companyId}`);
-      
+
       return responseData;
     } catch (error) {
-      this.logger.error(' Erro ao criar empresa e usuário:', error.message);
+      this.logger.error('❌ Error creating company and user:', error.message);
       this.logger.error(error.stack);
       throw new InternalServerErrorException(
-        'Erro ao processar registro. Tente novamente.',
+        'Error processing registration. Please try again.',
       );
     }
   }
 
-  
   // MÉTODO AUXILIAR: GERAR TOKENS
-  
+
   private async generateTokens(userId: string, email: string, role: Role) {
-    const payload = { 
-      sub: userId, 
-      email, 
-      role 
+    const payload = {
+      sub: userId,
+      email,
+      role,
     };
 
     const token = await this.jwtService.signAsync(payload, {

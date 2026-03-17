@@ -22,22 +22,21 @@ let ReferralsService = class ReferralsService {
         let companyId = userCompanyId;
         if (userRole === 'SUPER_ADMIN') {
             if (!createReferralDto.companyId) {
-                throw new common_1.BadRequestException('SUPER_ADMIN deve especificar o ID da empresa');
+                throw new common_1.BadRequestException('SUPER_ADMIN deve especificar o ID da company');
             }
             companyId = createReferralDto.companyId;
             const companyExists = await this.prisma.company.findUnique({
                 where: { id: companyId },
             });
             if (!companyExists) {
-                throw new common_1.NotFoundException('Empresa não encontrada');
+                throw new common_1.NotFoundException('Company não encontrada');
             }
         }
         const referralDate = new Date(createReferralDto.referralDate);
         const commission = createReferralDto.commission !== undefined
             ? createReferralDto.commission
             : createReferralDto.estimatedValue * 0.05;
-        const referral = await this.prisma.referral.create({
-            data: {
+        const referral = await this.prisma.referral.create({ data: {
                 clientName: createReferralDto.clientName,
                 contactInfo: createReferralDto.contactInfo,
                 referralSource: createReferralDto.referralSource || '',
@@ -98,9 +97,7 @@ let ReferralsService = class ReferralsService {
         }
         const referrals = await this.prisma.referral.findMany({
             where,
-            orderBy: [
-                { referralDate: 'desc' },
-            ],
+            orderBy: [{ referralDate: 'desc' }],
         });
         return referrals;
     }
@@ -150,16 +147,14 @@ let ReferralsService = class ReferralsService {
             updateData.commission = updateReferralDto.commission;
         }
         const updatedReferral = await this.prisma.referral.update({
-            where: { id },
-            data: updateData,
+            where: { id }, data: updateData,
         });
         return updatedReferral;
     }
     async updateStatus(id, updateStatusDto, userId, userRole, userCompanyId) {
         const referral = await this.findOne(id, userId, userRole, userCompanyId);
         const updatedReferral = await this.prisma.referral.update({
-            where: { id },
-            data: {
+            where: { id }, data: {
                 status: updateStatusDto.status,
             },
         });
@@ -170,7 +165,7 @@ let ReferralsService = class ReferralsService {
         await this.prisma.referral.delete({
             where: { id },
         });
-        return { message: 'Referência excluída com sucesso' };
+        return { message: 'Referência excluída com success' };
     }
     async getStats(userId, userRole, userCompanyId, companyId) {
         const where = {};
@@ -180,12 +175,20 @@ let ReferralsService = class ReferralsService {
         else if (userRole !== 'SUPER_ADMIN') {
             where.companyId = userCompanyId;
         }
-        const [total, newReferrals, contacted, converted, lost,] = await Promise.all([
+        const [total, newReferrals, contacted, converted, lost] = await Promise.all([
             this.prisma.referral.count({ where }),
-            this.prisma.referral.count({ where: { ...where, status: client_1.ReferralStatus.NEW } }),
-            this.prisma.referral.count({ where: { ...where, status: client_1.ReferralStatus.CONTACTED } }),
-            this.prisma.referral.count({ where: { ...where, status: client_1.ReferralStatus.CONVERTED } }),
-            this.prisma.referral.count({ where: { ...where, status: client_1.ReferralStatus.LOST } }),
+            this.prisma.referral.count({
+                where: { ...where, status: client_1.ReferralStatus.NEW },
+            }),
+            this.prisma.referral.count({
+                where: { ...where, status: client_1.ReferralStatus.CONTACTED },
+            }),
+            this.prisma.referral.count({
+                where: { ...where, status: client_1.ReferralStatus.CONVERTED },
+            }),
+            this.prisma.referral.count({
+                where: { ...where, status: client_1.ReferralStatus.LOST },
+            }),
         ]);
         const allReferrals = await this.prisma.referral.findMany({
             where,

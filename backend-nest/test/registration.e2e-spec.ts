@@ -70,7 +70,11 @@ describeOrSkip('Registration e2e', () => {
       .send({ newStatus: 'IN_ANALYSIS' });
 
     expect(changeStatus.status).toBe(200);
-    expect(changeStatus.body.status || changeStatus.body.product?.status || changeStatus.body.product?.status).toBeTruthy();
+    expect(
+      changeStatus.body.status ||
+        changeStatus.body.product?.status ||
+        changeStatus.body.product?.status,
+    ).toBeTruthy();
 
     // Check movements
     const movements = await request(server)
@@ -79,6 +83,8 @@ describeOrSkip('Registration e2e', () => {
 
     expect(movements.status).toBe(200);
     expect(Array.isArray(movements.body)).toBe(true);
-    expect(movements.body.some((m: any) => m.newStatus === 'IN_ANALYSIS')).toBe(true);
+    expect(movements.body.some((m: any) => m.newStatus === 'IN_ANALYSIS')).toBe(
+      true,
+    );
   }, 30000);
 });

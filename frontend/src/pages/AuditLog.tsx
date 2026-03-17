@@ -69,7 +69,7 @@ const AuditLog: React.FC = () => {
       setTotalPages(logsRes.data.pagination?.totalPages || 1);
       setStats(statsRes.data || null);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('Error loading date:', error);
       // Set default values on error
       setLogs([]);
       setStats(null);
@@ -109,13 +109,13 @@ const AuditLog: React.FC = () => {
       let errorMsg = 'Error clearing history. Please try again later.';
       
       if (error.response?.data) {
-        const data = error.response.data;
-        if (typeof data.message === 'string') {
-          errorMsg = data.message;
-        } else if (typeof data.error === 'string') {
-          errorMsg = data.error;
-        } else if (typeof data === 'string') {
-          errorMsg = data;
+        const date = error.response.data;
+        if (typeof date.message === 'string') {
+          errorMsg = date.message;
+        } else if (typeof date.error === 'string') {
+          errorMsg = date.error;
+        } else if (typeof date === 'string') {
+          errorMsg = date;
         }
       } else if (typeof error.message === 'string') {
         errorMsg = error.message;

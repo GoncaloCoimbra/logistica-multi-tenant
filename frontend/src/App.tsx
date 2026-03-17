@@ -133,11 +133,11 @@ function App() {
 
               {/* Products - English & Portuguese */}
               <Route path="products" element={<ProductList />} />
-              <Route path="produtos" element={<ProductList />} />
+              <Route path="products" element={<ProductList />} />
               <Route path="products/new" element={<NewProduct />} />
-              <Route path="produtos/novo" element={<NewProduct />} />
+              <Route path="products/ new" element={<NewProduct />} />
               <Route path="products/:id" element={<ProductDetails />} />
-              <Route path="produtos/:id" element={<ProductDetails />} />
+              <Route path="products/:id" element={<ProductDetails />} />
 
               {/* Suppliers - English & Portuguese */}
               <Route path="suppliers" element={<SupplierList />} />
@@ -178,6 +178,7 @@ function App() {
               <Route path="status" element={<SystemStatus />} />
 
               {/* GPS Tracking and Route Optimization */}
+              <Route path="tracking" element={<LiveTrackingRouteOptimization />} />
               <Route path="rastreamento" element={<LiveTrackingRouteOptimization />} />
 
               {/* Tasks - English & Portuguese - only Operator and Admin */}

@@ -1,45 +1,51 @@
 ﻿// src/modules/notifications/notifications.service.ts
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class NotificationsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: {
+  async create(date: {
     title: string;
     message: string;
     companyId: string;
     userId: string;
   }) {
     try {
-      console.log('📨 [SVC-1] Criando notificação:', data);
+      console.log('📨 [SVC-1] Creating notification:', date);
 
       const user = await this.prisma.user.findUnique({
-        where: { id: data.userId },
+        where: { id: date.userId },
         select: { id: true, companyId: true, name: true },
       });
 
-      console.log('📨 [SVC-2] User encontrado:', user);
+      console.log('📨 [SVC-2] User found:', user);
 
       if (!user) {
-        console.error(' [SVC-3] User não encontrado:', data.userId);
-        throw new NotFoundException(`Utilizador com ID ${data.userId} não encontrado`);
+        console.error(' [SVC-3] User not found:', date.userId);
+        throw new NotFoundException(`User with ID ${date.userId} not found`);
       }
 
-      if (user.companyId !== data.companyId) {
-        console.error(' [SVC-4] CompanyId mismatch:', { user: user.companyId, req: data.companyId });
-        throw new ForbiddenException('Utilizador não pertence a esta empresa');
+      if (user.companyId !== date.companyId) {
+        console.error(' [SVC-4] CompanyId mismatch:', {
+          user: user.companyId,
+          req: date.companyId,
+        });
+        throw new ForbiddenException('User does not belong to this company');
       }
 
-      console.log('📨 [SVC-5] Criando notificação na DB...');
+      console.log('📨 [SVC-5] Creating notification in DB...');
 
-      const notification = await this.prisma.notification.create({
-        data: {
-          title: data.title,
-          content: data.message,
-          companyId: data.companyId,
-          userId: data.userId,
+      const notification = await this.prisma.notification.create({ data: {
+          title: date.title,
+          content: date.message,
+          companyId: date.companyId,
+          userId: date.userId,
           isRead: false,
         },
         include: {
@@ -59,10 +65,10 @@ export class NotificationsService {
         },
       });
 
-      console.log('✅ [SVC-6] Notificação criada:', notification.id);
+      console.log('✅ [SVC-6] Notification created:', notification.id);
       return notification;
     } catch (error: any) {
-      console.error(' [SVC-ERROR] Erro:', error.message, error?.meta);
+      console.error(' [SVC-ERROR] Error:', error.message, error?.meta);
       throw error;
     }
   }
@@ -94,8 +100,8 @@ export class NotificationsService {
         orderBy: { createdAt: 'desc' },
       });
 
-      // Transformar para o formato que o frontend espera
-      const formattedNotifications = notifications.map(n => ({
+      // Transform to the format that frontend expects
+      const formattedNotifications = notifications.map((n) => ({
         id: n.id,
         type: 'info' as const,
         title: n.title,
@@ -107,8 +113,8 @@ export class NotificationsService {
         read: n.isRead,
       }));
 
-      // Calcular contadores por prioridade
-      const unreadCount = formattedNotifications.filter(n => !n.read).length;
+      // Calcular contadores por priority
+      const unreadCount = formattedNotifications.filter((n) => !n.read).length;
 
       return {
         total: unreadCount,
@@ -129,8 +135,8 @@ export class NotificationsService {
       console.log('🔍 Finding unread notifications for companyId:', companyId);
 
       // Se companyId for null/undefined (SUPER_ADMIN), retorna TODAS não lidas
-      const whereClause = companyId 
-        ? { companyId, isRead: false } 
+      const whereClause = companyId
+        ? { companyId, isRead: false }
         : { isRead: false };
 
       return await this.prisma.notification.findMany({
@@ -169,8 +175,7 @@ export class NotificationsService {
       }
 
       return await this.prisma.notification.update({
-        where: { id },
-        data: { isRead: true },
+        where: { id }, data: { isRead: true },
         include: {
           company: {
             select: {
@@ -195,14 +200,13 @@ export class NotificationsService {
 
   async markAllAsRead(companyId: string | null | undefined) {
     try {
-      // Se companyId for null/undefined (SUPER_ADMIN), marca TODAS como lidas
-      const whereClause = companyId 
-        ? { companyId, isRead: false } 
+      // Se companyId for null/undefined (SUPER_ADMIN), brand TODAS como lidas
+      const whereClause = companyId
+        ? { companyId, isRead: false }
         : { isRead: false };
 
       return await this.prisma.notification.updateMany({
-        where: whereClause,
-        data: { isRead: true },
+        where: whereClause, data: { isRead: true },
       });
     } catch (error) {
       console.error('Error marking all notifications as read:', error);
@@ -232,8 +236,8 @@ export class NotificationsService {
   async countUnread(companyId: string | null | undefined) {
     try {
       // Se companyId for null/undefined (SUPER_ADMIN), conta TODAS não lidas
-      const whereClause = companyId 
-        ? { companyId, isRead: false } 
+      const whereClause = companyId
+        ? { companyId, isRead: false }
         : { isRead: false };
 
       return await this.prisma.notification.count({
@@ -244,10 +248,6 @@ export class NotificationsService {
       throw error;
     }
   }
-
-  // =========
-  // ✅ NOVOS MÉTODOS PARA SISTEMA ARRIVED
-  // =========
 
   /**
    * 🚚 Notifies when transport arrives at destination (status ARRIVED)
@@ -277,7 +277,7 @@ export class NotificationsService {
       }
 
       // Create notification for each operator
-      const notifications = operators.map(operator => ({
+      const notifications = operators.map((operator) => ({
         title: '🚚 Transport Arrived at Destination',
         content: `Transport ${transportCode} arrived from ${origin} to ${destination}. Awaiting physical verification of products.`,
         companyId,
@@ -285,8 +285,7 @@ export class NotificationsService {
         isRead: false,
       }));
 
-      await this.prisma.notification.createMany({
-        data: notifications,
+      await this.prisma.notification.createMany({ data: notifications,
       });
 
       console.log(`✅ [ARRIVED] ${notifications.length} notifications created`);
@@ -305,7 +304,9 @@ export class NotificationsService {
     receivedBy: string,
   ): Promise<void> {
     try {
-      console.log(`📧 [DELIVERED] Notifying transport delivery ${transportCode}`);
+      console.log(
+        `📧 [DELIVERED] Notifying transport delivery ${transportCode}`,
+      );
 
       // Find company admins
       const admins = await this.prisma.user.findMany({
@@ -323,7 +324,7 @@ export class NotificationsService {
       }
 
       // Create notification for each admin
-      const notifications = admins.map(admin => ({
+      const notifications = admins.map((admin) => ({
         title: '✅ Transport Delivered',
         content: `Transport ${transportCode} was verified and delivered by ${receivedBy}.`,
         companyId,
@@ -331,19 +332,20 @@ export class NotificationsService {
         isRead: false,
       }));
 
-      await this.prisma.notification.createMany({
-        data: notifications,
+      await this.prisma.notification.createMany({ data: notifications,
       });
 
-      console.log(`✅ [DELIVERED] ${notifications.length} notificações criadas`);
+      console.log(
+        `✅ [DELIVERED] ${notifications.length} notificações criadas`,
+      );
     } catch (error: any) {
-      console.error(` [DELIVERED] Erro ao notificar entrega:`, error.message);
-      // Não lança erro para não quebrar o fluxo principal
+      console.error(` [DELIVERED] Error notifying delivery:`, error.message);
+      // Does not throw error to avoid breaking main flow
     }
   }
 
   /**
-   * ⚠️ Notifica erro ou alerta relacionado a transporte
+   * ⚠️ Notifies error or alert related to transport
    */
   async notifyTransportError(
     companyId: string,
@@ -351,9 +353,9 @@ export class NotificationsService {
     message: string,
   ): Promise<void> {
     try {
-      console.log(`📧 [ERROR] Notificando erro: ${title}`);
+      console.log(`📧 [ERROR] Notifying error: ${title}`);
 
-      // Busca admins da empresa
+      // Search for company admins
       const admins = await this.prisma.user.findMany({
         where: {
           companyId,
@@ -364,12 +366,12 @@ export class NotificationsService {
       });
 
       if (admins.length === 0) {
-        console.warn(`⚠️ [ERROR] Nenhum admin encontrado para empresa ${companyId}`);
+        console.warn(`⚠️ [ERROR] No admin found for company ${companyId}`);
         return;
       }
 
       // Cria notificação para cada admin
-      const notifications = admins.map(admin => ({
+      const notifications = admins.map((admin) => ({
         title: `⚠️ ${title}`,
         content: message,
         companyId,
@@ -377,13 +379,14 @@ export class NotificationsService {
         isRead: false,
       }));
 
-      await this.prisma.notification.createMany({
-        data: notifications,
+      await this.prisma.notification.createMany({ data: notifications,
       });
 
-      console.log(` [ERROR] ${notifications.length} notificações de erro criadas`);
+      console.log(
+        ` [ERROR] ${notifications.length} error notifications created`,
+      );
     } catch (error: any) {
-      console.error(` [ERROR] Erro ao notificar erro:`, error.message);
+      console.error(` [ERROR] Error notifying error:`, error.message);
     }
   }
 }

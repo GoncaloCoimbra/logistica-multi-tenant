@@ -19,8 +19,8 @@ class CreateNotificationDto {
 exports.CreateNotificationDto = CreateNotificationDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 'Nova movimentação de produto',
-        description: 'Título da notificação'
+        example: 'New product movement',
+        description: 'Notification title',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -28,8 +28,8 @@ __decorate([
 ], CreateNotificationDto.prototype, "title", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 'O produto XYZ foi movido para o armazém A',
-        description: 'Conteúdo da notificação'
+        example: 'Product XYZ was moved to warehouse A',
+        description: 'Notification content',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
@@ -42,7 +42,7 @@ exports.MarkAsReadDto = MarkAsReadDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '123e4567-e89b-12d3-a456-426614174000',
-        description: 'ID da notificação'
+        description: 'Notification ID',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),

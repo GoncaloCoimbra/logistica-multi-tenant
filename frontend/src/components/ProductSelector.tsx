@@ -122,16 +122,16 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
     if (quantity < 0) return;
     
     if (quantity > maxQuantity) {
-      alert(`Quantidade máxima disponível: ${maxQuantity}`);
+      alert(`Quantity máxima disponível: ${maxQuantity}`);
       return;
     }
 
     if (quantity === 0) {
-      // Remove produto
+      // Remove product
       setSelectedProducts(selectedProducts.filter((p) => p.productId !== productId));
-      console.log(`🗑️ Produto ${productId} removido da seleção`);
+      console.log(`🗑️ product ${productId} removido da seleção`);
     } else {
-      // Atualiza ou adiciona produto
+      // Atualiza ou adiciona product
       const product = products.find((p) => p.id === productId);
       const existing = selectedProducts.find((p) => p.productId === productId);
 
@@ -141,13 +141,13 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
             p.productId === productId ? { ...p, quantity } : p
           )
         );
-        console.log(`📝 Quantidade atualizada: ${productId} = ${quantity}`);
+        console.log(`📝 Quantity atualizada: ${productId} = ${quantity}`);
       } else {
         setSelectedProducts([
           ...selectedProducts,
           { productId, quantity, product },
         ]);
-        console.log(`➕ Produto adicionado: ${product?.internalCode} (${quantity} un)`);
+        console.log(`➕ product adicionado: ${product?.internalCode} (${quantity} un)`);
       }
     }
   };
@@ -164,12 +164,12 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
       return;
     }
 
-    console.log(' [ProductSelector] Confirmando seleção:', selectedProducts.map(p => ({
+    console.log(' [ProductSelector] Confirming seleção:', selectedProducts.map(p => ({
       code: p.product?.internalCode,
       qty: p.quantity
     })));
 
-    //  CORREÇÃO: Enviar apenas productId e quantity (sem o objeto product completo)
+    //  CORREÇÃO: Send apenas productId e quantity (sem o objeto product completo)
     const cleanedProducts = selectedProducts.map(p => ({
       productId: p.productId,
       quantity: p.quantity
@@ -279,7 +279,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                     onClick={loadProducts}
                     className="mt-4 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors font-semibold"
                   >
-                    Recarregar
+                    Reload
                   </button>
                 )}
               </div>
@@ -327,7 +327,7 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                         {/* Quantity Input */}
                         <div className="flex flex-col items-end gap-2">
                           <label className="text-xs text-slate-400 font-medium">
-                            Quantidade
+                            Quantity
                           </label>
                           <div className="flex items-center gap-2">
                             <button

@@ -39,10 +39,10 @@ const SuperAdminProfile: React.FC = () => {
     try {
       const response = await api.put('/auth/profile', { name, email });
       updateUserData(response.data.user);
-      setProfileSuccess('Perfil atualizado com sucesso!');
+      setProfileSuccess('Perfil atualizado com success!');
       setTimeout(() => setProfileSuccess(''), 3000);
     } catch (error: any) {
-      setProfileError(error.response?.data?.error || 'Erro ao atualizar perfil');
+      setProfileError(error.response?.data?.error || 'Error ao update perfil');
     } finally {
       setProfileLoading(false);
     }
@@ -70,13 +70,13 @@ const SuperAdminProfile: React.FC = () => {
         currentPassword, 
         newPassword 
       });
-      setPasswordSuccess('Password alterada com sucesso!');
+      setPasswordSuccess('Password alterada com success!');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setTimeout(() => setPasswordSuccess(''), 3000);
     } catch (error: any) {
-      setPasswordError(error.response?.data?.error || 'Erro ao alterar password');
+      setPasswordError(error.response?.data?.error || 'Error ao alterar password');
     } finally {
       setPasswordLoading(false);
     }
@@ -114,15 +114,15 @@ const SuperAdminProfile: React.FC = () => {
       formData.append('avatar', file);
 
       const response = await api.post('/auth/avatar', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-date' }
       });
 
       updateUserData(response.data.user);
-      setProfileSuccess('Avatar atualizado com sucesso!');
+      setProfileSuccess('Avatar atualizado com success!');
       setAvatarPreview(null);
       setTimeout(() => setProfileSuccess(''), 3000);
     } catch (error: any) {
-      setProfileError(error.response?.data?.error || 'Erro ao fazer upload');
+      setProfileError(error.response?.data?.error || 'Error ao fazer upload');
       setAvatarPreview(null);
     } finally {
       setAvatarLoading(false);
@@ -130,16 +130,16 @@ const SuperAdminProfile: React.FC = () => {
   };
 
   const handleRemoveAvatar = async () => {
-    if (!window.confirm('Tem certeza que deseja remover o avatar?')) return;
+    if (!window.confirm('Tem certeza que deseja remove o avatar?')) return;
 
     setAvatarLoading(true);
     try {
       await api.delete('/auth/avatar');
       updateUserData({ avatarUrl: undefined });
-      setProfileSuccess('Avatar removido com sucesso!');
+      setProfileSuccess('Avatar removido com success!');
       setTimeout(() => setProfileSuccess(''), 3000);
     } catch (error: any) {
-      setProfileError(error.response?.data?.error || 'Erro ao remover avatar');
+      setProfileError(error.response?.data?.error || 'Error ao remove avatar');
     } finally {
       setAvatarLoading(false);
     }
@@ -279,7 +279,7 @@ const SuperAdminProfile: React.FC = () => {
                     disabled={avatarLoading}
                     className="px-4 py-2 bg-red-900/30 text-red-400 rounded-lg hover:bg-red-900/50 transition-colors text-sm font-medium disabled:opacity-50 border border-red-700/30"
                   >
-                    Remover Foto
+                    Remove Foto
                   </button>
                 )}
               </div>
@@ -331,7 +331,7 @@ const SuperAdminProfile: React.FC = () => {
                   <div className="space-y-6">
                     <div>
                       <label className="block text-sm font-medium text-slate-300 mb-2">
-                        Nome Completo
+                        Name Completo
                       </label>
                       <input
                         type="text"

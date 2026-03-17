@@ -12,12 +12,12 @@ export declare class SuppliersController {
     findWithProducts(id: string, req: any): Promise<{
         products: {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            quantity: number;
+            companyId: string;
             internalCode: string;
             description: string;
+            quantity: number;
             unit: string;
             totalWeight: number | null;
             totalVolume: number | null;

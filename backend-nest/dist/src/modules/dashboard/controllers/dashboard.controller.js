@@ -32,57 +32,43 @@ let DashboardController = DashboardController_1 = class DashboardController {
     getStats(req, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /dashboard/stats - User: ${user.email} (${user.role})`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.dashboardService.getStats(companyId);
     }
     getOverview(req, filters, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /dashboard/overview - User: ${user.email} (${user.role})`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.dashboardService.getOverview(companyId, filters);
     }
     getProductsByStatus(req, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /dashboard/products-by-status - User: ${user.email}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.dashboardService.getProductsByStatus(companyId);
     }
     getTransportsByStatus(req, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /dashboard/transports-by-status - User: ${user.email}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.dashboardService.getTransportsByStatus(companyId);
     }
     getRecentActivity(req, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /dashboard/recent-activity - User: ${user.email}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.dashboardService.getRecentActivity(companyId);
     }
     getMonthlyStats(req, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /dashboard/monthly-stats - User: ${user.email}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.dashboardService.getMonthlyStats(companyId);
     }
     getTopSuppliers(req, queryCompanyId) {
         const user = req.user;
         this.logger.log(`📥 GET /dashboard/top-suppliers - User: ${user.email}`);
-        const companyId = user.role === client_1.Role.SUPER_ADMIN
-            ? queryCompanyId
-            : user.companyId;
+        const companyId = user.role === client_1.Role.SUPER_ADMIN ? queryCompanyId : user.companyId;
         return this.dashboardService.getTopSuppliers(companyId);
     }
 };
@@ -91,7 +77,11 @@ __decorate([
     (0, common_1.Get)('stats'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Estatísticas do dashboard' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'Filtrar por empresa (SUPER_ADMIN)' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'Filter por company (SUPER_ADMIN)',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('companyId')),
     __metadata("design:type", Function),
@@ -101,8 +91,12 @@ __decorate([
 __decorate([
     (0, common_1.Get)('overview'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Visão geral do dashboard' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'Filtrar por empresa (SUPER_ADMIN)' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Dashboard overview' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'Filter por company (SUPER_ADMIN)',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)()),
     __param(2, (0, common_1.Query)('companyId')),
@@ -113,8 +107,12 @@ __decorate([
 __decorate([
     (0, common_1.Get)('products-by-status'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Produtos por estado' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'Filtrar por empresa (SUPER_ADMIN)' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Products by status' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'Filter por company (SUPER_ADMIN)',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('companyId')),
     __metadata("design:type", Function),
@@ -124,8 +122,12 @@ __decorate([
 __decorate([
     (0, common_1.Get)('transports-by-status'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
-    (0, swagger_1.ApiOperation)({ summary: 'Transportes por estado' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'Filtrar por empresa (SUPER_ADMIN)' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Transports by status' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'Filter por company (SUPER_ADMIN)',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('companyId')),
     __metadata("design:type", Function),
@@ -136,7 +138,11 @@ __decorate([
     (0, common_1.Get)('recent-activity'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Atividade recente' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'Filtrar por empresa (SUPER_ADMIN)' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'Filter por company (SUPER_ADMIN)',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('companyId')),
     __metadata("design:type", Function),
@@ -147,7 +153,11 @@ __decorate([
     (0, common_1.Get)('monthly-stats'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Estatísticas mensais' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'Filtrar por empresa (SUPER_ADMIN)' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'Filter por company (SUPER_ADMIN)',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('companyId')),
     __metadata("design:type", Function),
@@ -158,7 +168,11 @@ __decorate([
     (0, common_1.Get)('top-suppliers'),
     (0, roles_decorator_1.Roles)(client_1.Role.ADMIN, client_1.Role.OPERATOR, client_1.Role.SUPER_ADMIN),
     (0, swagger_1.ApiOperation)({ summary: 'Top fornecedores' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'Filtrar por empresa (SUPER_ADMIN)' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'Filter por company (SUPER_ADMIN)',
+    }),
     __param(0, (0, common_1.Request)()),
     __param(1, (0, common_1.Query)('companyId')),
     __metadata("design:type", Function),

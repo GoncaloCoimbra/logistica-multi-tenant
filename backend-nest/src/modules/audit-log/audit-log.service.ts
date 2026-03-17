@@ -6,7 +6,10 @@ import { FilterAuditLogDto } from './dto/filter-audit-log.dto';
 export class AuditLogService {
   constructor(private auditLogRepository: AuditLogRepository) {}
 
-  async findAll(companyId: string, filters?: FilterAuditLogDto & { page?: number; limit?: number }) {
+  async findAll(
+    companyId: string,
+    filters?: FilterAuditLogDto & { page?: number; limit?: number },
+  ) {
     const page = filters?.page || 1;
     const limit = filters?.limit || 50;
     const skip = (page - 1) * limit;
@@ -56,22 +59,24 @@ export class AuditLogService {
     const totalActions = await this.auditLogRepository.count({ companyId });
 
     // Ações por tipo
-    const actionsByTypeRaw = await this.auditLogRepository.getActionStats(companyId);
-    const actionsByType = actionsByTypeRaw.map(item => ({
+    const actionsByTypeRaw =
+      await this.auditLogRepository.getActionStats(companyId);
+    const actionsByType = actionsByTypeRaw.map((item) => ({
       action: item.action,
       count: item._count,
     }));
 
     // Ações por entidade
-    const actionsByEntityRaw = await this.auditLogRepository.getEntityStats(companyId);
-    const actionsByEntity = actionsByEntityRaw.map(item => ({
+    const actionsByEntityRaw =
+      await this.auditLogRepository.getEntityStats(companyId);
+    const actionsByEntity = actionsByEntityRaw.map((item) => ({
       entity: item.entity,
       count: item._count,
     }));
 
     // Top usuários
     const topUsersRaw = await this.auditLogRepository.getTopUsers(companyId);
-    const topUsers = topUsersRaw.map(item => ({
+    const topUsers = topUsersRaw.map((item) => ({
       userId: item.userId,
       userName: item.user?.name || 'Desconhecido',
       userEmail: item.user?.email || 'N/A',
@@ -107,19 +112,25 @@ export class AuditLogService {
   }
 
   async clearAllLogs(companyId: string): Promise<number> {
-    // Deleta todos os logs da empresa via repositório
+    // Deletes all logs from the company via repository
     try {
-      const deletedCount = await this.auditLogRepository.deleteAllByCompany(companyId);
-      console.log(`[AuditLog] Deleted ${deletedCount} logs for company ${companyId}`);
+      const deletedCount =
+        await this.auditLogRepository.deleteAllByCompany(companyId);
+      console.log(
+        `[AuditLog] Deleted ${deletedCount} logs for company ${companyId}`,
+      );
       return deletedCount;
     } catch (error) {
-      console.error(`[AuditLog] Error clearing logs for company ${companyId}:`, error);
+      console.error(
+        `[AuditLog] Error clearing logs for company ${companyId}:`,
+        error,
+      );
       throw error;
     }
   }
 
   async deleteLog(id: string, companyId: string): Promise<boolean> {
-    // Verificar que o log pertence à empresa antes de deletar
+    // Verify that the log belongs to the company before deleting
     const log = await this.auditLogRepository.findById(id);
     if (!log || log.companyId !== companyId) {
       return false;

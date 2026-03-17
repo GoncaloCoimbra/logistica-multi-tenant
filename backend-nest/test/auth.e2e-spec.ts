@@ -20,7 +20,9 @@ describeOrSkip('Auth e2e: refresh/revoke', () => {
 
   afterAll(async () => {
     if (userCompanyId) {
-      await prisma.company.delete({ where: { id: userCompanyId } }).catch(() => {});
+      await prisma.company
+        .delete({ where: { id: userCompanyId } })
+        .catch(() => {});
     }
     await prisma.$disconnect();
     await app.close();
@@ -106,10 +108,14 @@ describeOrSkip('Multi-tenant isolation', () => {
 
   afterAll(async () => {
     if (company1Id) {
-      await prisma.company.delete({ where: { id: company1Id } }).catch(() => {});
+      await prisma.company
+        .delete({ where: { id: company1Id } })
+        .catch(() => {});
     }
     if (company2Id) {
-      await prisma.company.delete({ where: { id: company2Id } }).catch(() => {});
+      await prisma.company
+        .delete({ where: { id: company2Id } })
+        .catch(() => {});
     }
     await prisma.$disconnect();
     await app.close();

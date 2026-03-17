@@ -61,22 +61,21 @@ let AuthService = AuthService_1 = class AuthService {
     }
     async register(registerDto) {
         const { email, password, name, role, companyId } = registerDto;
-        this.logger.log(`🔵 Iniciando registro para: ${email}`);
+        this.logger.log(`🔵 Starting registration for: ${email}`);
         const existingUser = await this.prisma.user.findUnique({
             where: { email },
         });
         if (existingUser) {
-            this.logger.warn(` Email já existe: ${email}`);
-            throw new common_1.ConflictException('Email já está em uso');
+            this.logger.warn(` Email already exists: ${email}`);
+            throw new common_1.ConflictException('Email is already in use');
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const result = await this.prisma.$transaction(async (tx) => {
             let finalCompanyId = companyId;
             if (!companyId && role !== client_1.Role.SUPER_ADMIN) {
-                this.logger.log(` Criando empresa padrão para: ${name}`);
-                const company = await tx.company.create({
-                    data: {
-                        name: `Empresa de ${name}`,
+                this.logger.log(` Creating default company for: ${name}`);
+                const company = await tx.company.create({ data: {
+                        name: `${name}'s Company`,
                         nif: `TEMP-${Date.now()}`,
                         email: email,
                         phone: null,
@@ -85,10 +84,9 @@ let AuthService = AuthService_1 = class AuthService {
                     },
                 });
                 finalCompanyId = company.id;
-                this.logger.log(` Empresa criada com ID: ${company.id}`);
+                this.logger.log(` Company created with ID: ${company.id}`);
             }
-            const user = await tx.user.create({
-                data: {
+            const user = await tx.user.create({ data: {
                     name,
                     email,
                     password: hashedPassword,
@@ -96,7 +94,7 @@ let AuthService = AuthService_1 = class AuthService {
                     companyId: finalCompanyId ?? undefined,
                 },
             });
-            this.logger.log(` Usuário criado com ID: ${user.id}`);
+            this.logger.log(` User created with ID: ${user.id}`);
             return user;
         });
         const savedUser = await this.prisma.user.findUnique({
@@ -104,11 +102,11 @@ let AuthService = AuthService_1 = class AuthService {
             include: { company: true },
         });
         if (!savedUser) {
-            this.logger.error(` ERRO CRÍTICO: Usuário não foi encontrado após criação: ${email}`);
-            throw new Error('Erro ao criar usuário');
+            this.logger.error(` CRITICAL ERROR: User not found after creation: ${email}`);
+            throw new Error('Error creating user');
         }
-        this.logger.log(`🔍 Usuário confirmado no banco: ${savedUser.id}`);
-        this.logger.log(`🏢 Empresa associada: ${savedUser.companyId || 'Nenhuma'}`);
+        this.logger.log(`🔍 User confirmed in database: ${savedUser.id}`);
+        this.logger.log(`🏢 Associated company: ${savedUser.companyId || 'None'}`);
         const tokens = await this.generateTokens(savedUser.id, savedUser.email, savedUser.role);
         return {
             ...tokens,
@@ -117,26 +115,26 @@ let AuthService = AuthService_1 = class AuthService {
     }
     async login(loginDto) {
         const { email, password } = loginDto;
-        this.logger.log(`🔵 Tentativa de login para: ${email}`);
+        this.logger.log(`🔵 Login attempt for: ${email}`);
         const user = await this.prisma.user.findUnique({
             where: { email },
             include: { company: true },
         });
         if (!user) {
-            this.logger.warn(` LOGIN FALHADO: Email "${email}" não encontrado`);
-            throw new common_1.UnauthorizedException('Credenciais inválidas');
+            this.logger.warn(` LOGIN FAILED: Email "${email}" not found`);
+            throw new common_1.UnauthorizedException('Invalid credentials');
         }
-        this.logger.log(`🔍 Usuário encontrado: ${user.id} | Role: ${user.role} | Ativo: ${user.isActive}`);
+        this.logger.log(`🔍 User found: ${user.id} | Role: ${user.role} | Active: ${user.isActive}`);
         if (!user.isActive) {
-            this.logger.warn(` LOGIN FALHADO: Utilizador "${email}" está inativo`);
-            throw new common_1.UnauthorizedException('Utilizador inativo');
+            this.logger.warn(` LOGIN FAILED: User "${email}" is inactive`);
+            throw new common_1.UnauthorizedException('User inactive');
         }
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) {
-            this.logger.warn(` LOGIN FALHADO: Password incorreta para "${email}"`);
-            throw new common_1.UnauthorizedException('Credenciais inválidas');
+            this.logger.warn(` LOGIN FAILED: Incorrect password for "${email}"`);
+            throw new common_1.UnauthorizedException('Invalid credentials');
         }
-        this.logger.log(` LOGIN SUCESSO: ${email} | Company: ${user.companyId || 'Nenhuma'}`);
+        this.logger.log(` LOGIN SUCCESS: ${email} | Company: ${user.companyId || 'None'}`);
         const tokens = await this.generateTokens(user.id, user.email, user.role);
         return {
             ...tokens,
@@ -162,17 +160,16 @@ let AuthService = AuthService_1 = class AuthService {
                 },
             });
             if (existingUser) {
-                throw new common_1.ConflictException('Este email já está em uso');
+                throw new common_1.ConflictException('This email is already in use');
             }
         }
         const updatedUser = await this.prisma.user.update({
-            where: { id: userId },
-            data: {
+            where: { id: userId }, data: {
                 ...(name && { name }),
                 ...(email && { email }),
             },
         });
-        this.logger.log(`Perfil atualizado: ${updatedUser.email}`);
+        this.logger.log(`Profile updated: ${updatedUser.email}`);
         return { user: this.formatUser(updatedUser) };
     }
     async changePassword(userId, changePasswordDto) {
@@ -181,23 +178,22 @@ let AuthService = AuthService_1 = class AuthService {
             where: { id: userId },
         });
         if (!user) {
-            throw new common_1.UnauthorizedException('Utilizador não encontrado');
+            throw new common_1.UnauthorizedException('User not found');
         }
         const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
         if (!isPasswordValid) {
-            throw new common_1.BadRequestException('Password atual incorreta');
+            throw new common_1.BadRequestException('Current password incorrect');
         }
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         await this.prisma.user.update({
-            where: { id: userId },
-            data: { password: hashedPassword },
+            where: { id: userId }, data: { password: hashedPassword },
         });
-        this.logger.log(`Password alterada: ${user.email}`);
-        return { message: 'Password alterada com sucesso' };
+        this.logger.log(`Password changed: ${user.email}`);
+        return { message: 'Password changed successfully' };
     }
     async uploadAvatar(userId, file) {
         if (!file) {
-            throw new common_1.BadRequestException('Nenhum ficheiro enviado');
+            throw new common_1.BadRequestException('No file uploaded');
         }
         const uploadDir = path.join(process.cwd(), 'uploads', 'avatars');
         if (!fs.existsSync(uploadDir)) {
@@ -207,9 +203,9 @@ let AuthService = AuthService_1 = class AuthService {
         const fileName = `${userId}-${Date.now()}${fileExt}`;
         const filePath = path.join(uploadDir, fileName);
         fs.writeFileSync(filePath, file.buffer);
-        const user = await this.prisma.user.findUnique({
+        const user = (await this.prisma.user.findUnique({
             where: { id: userId },
-        });
+        }));
         if (user?.avatarUrl) {
             const oldAvatarPath = path.join(process.cwd(), user.avatarUrl);
             if (fs.existsSync(oldAvatarPath)) {
@@ -218,10 +214,9 @@ let AuthService = AuthService_1 = class AuthService {
         }
         const avatarUrl = `/uploads/avatars/${fileName}`;
         const updatedUser = await this.prisma.user.update({
-            where: { id: userId },
-            data: { avatarUrl },
+            where: { id: userId }, data: { avatarUrl },
         });
-        this.logger.log(`Avatar atualizado: ${updatedUser.email}`);
+        this.logger.log(`Avatar updated: ${updatedUser.email}`);
         return { user: this.formatUser(updatedUser) };
     }
     async refreshToken(refreshToken) {
@@ -241,8 +236,7 @@ let AuthService = AuthService_1 = class AuthService {
                 if (await bcrypt.compare(refreshToken, t.tokenHash)) {
                     validToken = true;
                     await this.prisma.refreshToken.update({
-                        where: { id: t.id },
-                        data: { revoked: true },
+                        where: { id: t.id }, data: { revoked: true },
                     });
                     break;
                 }
@@ -255,7 +249,7 @@ let AuthService = AuthService_1 = class AuthService {
                 include: { company: true },
             });
             if (!user || !user.isActive) {
-                throw new common_1.UnauthorizedException('Utilizador não encontrado ou inativo');
+                throw new common_1.UnauthorizedException('User not found ou inactive');
             }
             const newTokens = await this.generateTokens(user.id, user.email, user.role);
             return {
@@ -264,14 +258,14 @@ let AuthService = AuthService_1 = class AuthService {
             };
         }
         catch (error) {
-            this.logger.error('Erro ao renovar token:', error.message);
-            throw new common_1.UnauthorizedException('Token de refresh inválido');
+            this.logger.error('Error renewing token:', error.message);
+            throw new common_1.UnauthorizedException('Invalid refresh token');
         }
     }
     async removeAvatar(userId) {
-        const user = await this.prisma.user.findUnique({
+        const user = (await this.prisma.user.findUnique({
             where: { id: userId },
-        });
+        }));
         if (user?.avatarUrl) {
             const avatarPath = path.join(process.cwd(), user.avatarUrl);
             if (fs.existsSync(avatarPath)) {
@@ -279,10 +273,9 @@ let AuthService = AuthService_1 = class AuthService {
             }
         }
         const updatedUser = await this.prisma.user.update({
-            where: { id: userId },
-            data: { avatarUrl: null },
+            where: { id: userId }, data: { avatarUrl: null },
         });
-        this.logger.log(`Avatar removido: ${updatedUser.email}`);
+        this.logger.log(`Avatar removed: ${updatedUser.email}`);
         return { user: this.formatUser(updatedUser) };
     }
     async generateTokens(userId, email, role) {
@@ -298,8 +291,7 @@ let AuthService = AuthService_1 = class AuthService {
         try {
             const hash = await bcrypt.hash(refreshToken, 10);
             const expiresAt = new Date(Date.now() + 30 * 24 * 3600 * 1000);
-            await this.prisma.refreshToken.create({
-                data: {
+            await this.prisma.refreshToken.create({ data: {
                     tokenHash: hash,
                     userId,
                     expiresAt,
@@ -307,15 +299,19 @@ let AuthService = AuthService_1 = class AuthService {
             });
         }
         catch (err) {
-            this.logger.error('Erro ao gravar refresh token', err?.message || err);
+            this.logger.error('Error saving refresh token', err?.message || err);
         }
         return { token, refreshToken };
     }
     async revokeRefreshToken(refreshToken) {
-        const tokens = await this.prisma.refreshToken.findMany({ where: { revoked: false } });
+        const tokens = await this.prisma.refreshToken.findMany({
+            where: { revoked: false },
+        });
         for (const t of tokens) {
             if (await bcrypt.compare(refreshToken, t.tokenHash)) {
-                await this.prisma.refreshToken.update({ where: { id: t.id }, data: { revoked: true } });
+                await this.prisma.refreshToken.update({
+                    where: { id: t.id }, data: { revoked: true },
+                });
                 return { revoked: true };
             }
         }

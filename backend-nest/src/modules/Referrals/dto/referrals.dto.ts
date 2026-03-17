@@ -2,50 +2,72 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ReferralStatus } from '@prisma/client';
 
 export class ReferralResponseDto {
-  @ApiProperty({ description: 'ID único da referência', example: 'uuid-da-referencia' })
+  @ApiProperty({
+    description: 'ID único da referência',
+    example: 'uuid-da-referencia',
+  })
   id: string;
 
   @ApiProperty({ description: 'Nome do cliente', example: 'Empresa Alpha' })
   clientName: string;
 
-  @ApiProperty({ description: 'Informações de contacto', example: 'alpha@example.com | +351 912 345 678' })
+  @ApiProperty({
+    description: 'Informações de contacto',
+    example: 'alpha@example.com | +351 912 345 678',
+  })
   contactInfo: string;
 
   @ApiProperty({ description: 'Fonte da referência', example: 'Website' })
   referralSource: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Status da referência',
     enum: ReferralStatus,
-    example: ReferralStatus.NEW 
+    example: ReferralStatus.NEW,
   })
   status: ReferralStatus;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Tipo de projeto',
-    example: 'FREIGHT'
+    example: 'FREIGHT',
   })
   projectType: string; // ← MUDAR PARA STRING
 
   @ApiProperty({ description: 'Valor estimado', example: 1200 })
   estimatedValue: number;
 
-  @ApiProperty({ description: 'Data da referência', example: '2026-01-07T00:00:00.000Z' })
+  @ApiProperty({
+    description: 'Data da referência',
+    example: '2026-01-07T00:00:00.000Z',
+  })
   referralDate: Date;
 
-  @ApiProperty({ description: 'Notas adicionais', example: 'Cliente potencial', nullable: true })
+  @ApiProperty({
+    description: 'Notas adicionais',
+    example: 'Cliente potencial',
+    nullable: true,
+  })
   notes: string | null;
 
-  @ApiProperty({ description: 'Nome de quem referenciou', example: 'João Silva' })
+  @ApiProperty({
+    description: 'Nome de quem referenciou',
+    example: 'João Silva',
+  })
   referredBy: string;
 
   @ApiProperty({ description: 'Comissão', example: 60, nullable: true })
   commission: number | null;
 
-  @ApiProperty({ description: 'Data de criação', example: '2026-01-06T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Data de criação',
+    example: '2026-01-06T10:00:00.000Z',
+  })
   createdAt: Date;
 
-  @ApiProperty({ description: 'Data da última atualização', example: '2026-01-06T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Data da última atualização',
+    example: '2026-01-06T10:00:00.000Z',
+  })
   updatedAt: Date;
 
   @ApiProperty({ description: 'ID da empresa', example: 'uuid-da-empresa' })

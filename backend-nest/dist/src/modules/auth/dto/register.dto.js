@@ -24,45 +24,45 @@ exports.RegisterDto = RegisterDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'João Silva',
-        description: 'Nome completo do utilizador',
+        description: 'User full name',
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Nome é obrigatório' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Name is required' }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "name", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'joao@example.com',
-        description: 'Email do utilizador',
+        description: 'User email',
     }),
-    (0, class_validator_1.IsEmail)({}, { message: 'Email inválido' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Email é obrigatório' }),
+    (0, class_validator_1.IsEmail)({}, { message: 'Invalid email' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Email is required' }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "email", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'password123',
-        description: 'Password do utilizador',
+        description: 'User password',
         minLength: 6,
     }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Password é obrigatória' }),
-    (0, class_validator_1.MinLength)(6, { message: 'Password deve ter no mínimo 6 caracteres' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Password is required' }),
+    (0, class_validator_1.MinLength)(6, { message: 'Password must be at least 6 characters' }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'OPERATOR',
-        description: 'Role do utilizador',
+        description: 'User role',
         enum: client_1.Role,
         required: false,
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(client_1.Role, { message: 'Role inválida' }),
+    (0, class_validator_1.IsEnum)(client_1.Role, { message: 'Invalid role' }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "role", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '123e4567-e89b-12d3-a456-426614173000',
-        description: 'ID da empresa (apenas para ADMIN criar utilizadores)',
+        description: 'Company ID (only for ADMIN to create users)',
         required: false,
     }),
     (0, class_validator_1.IsOptional)(),

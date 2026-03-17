@@ -27,25 +27,25 @@ class CreateProductDto {
 exports.CreateProductDto = CreateProductDto;
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 'PROD-001' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Código interno é obrigatório' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Internal code is required' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "internalCode", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Produto de teste' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Descrição é obrigatória' }),
+    (0, swagger_1.ApiProperty)({ example: 'Test product' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Description is required' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "description", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 100 }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Quantidade é obrigatória' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Quantity is required' }),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "quantity", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 'kg' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Unidade é obrigatória' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Unit is required' }),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "unit", void 0);
@@ -62,15 +62,15 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "totalVolume", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Armazém A', required: false }),
+    (0, swagger_1.ApiProperty)({ example: 'Warehouse A', required: false }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "currentLocation", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'ID do fornecedor', required: true }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Fornecedor é obrigatório' }),
-    (0, class_validator_1.IsUUID)('4', { message: 'ID do fornecedor inválido' }),
+    (0, swagger_1.ApiProperty)({ description: 'Supplier ID', required: true }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Supplier is required' }),
+    (0, class_validator_1.IsUUID)('4', { message: 'Invalid supplier ID' }),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "supplierId", void 0);
 __decorate([
@@ -78,10 +78,10 @@ __decorate([
         enum: client_1.ProductStatus,
         example: client_1.ProductStatus.RECEIVED,
         required: false,
-        description: 'Status do produto (padrão: RECEIVED)'
+        description: 'Product status (default: RECEIVED)',
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(client_1.ProductStatus, { message: 'Status inválido' }),
+    (0, class_validator_1.IsEnum)(client_1.ProductStatus, { message: 'Invalid status' }),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "status", void 0);
 //# sourceMappingURL=create-product.dto.js.map

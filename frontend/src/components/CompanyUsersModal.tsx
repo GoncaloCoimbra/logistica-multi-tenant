@@ -48,8 +48,8 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
         throw new Error('Error loading users');
       }
 
-      const data = await response.json();
-      setUsers(data);
+      const date = await response.json();
+      setUsers(date);
     } catch (err: any) {
       setError(err.message || 'Error loading users');
     } finally {
@@ -153,7 +153,7 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
                 <tbody>
                   {filteredUsers.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="no-data">
+                      <td colSpan={6} className="no-date">
                         No users found
                       </td>
                     </tr>
@@ -169,7 +169,7 @@ const CompanyUsersModal: React.FC<CompanyUsersModalProps> = ({
                         </td>
                         <td>
                           <span className={`status-badge ${user.isActive ? 'active' : 'inactive'}`}>
-                            {user.isActive ? 'Ativo' : 'Inativo'}
+                            {user.isActive ? 'Active' : 'Inactive'}
                           </span>
                         </td>
                         <td>{new Date(user.createdAt).toLocaleDateString('pt-BR')}</td>

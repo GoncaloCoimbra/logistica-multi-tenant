@@ -1,4 +1,10 @@
-import { IsString, IsOptional, IsEnum, IsNumber, IsDateString } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsEnum,
+  IsNumber,
+  IsDateString,
+} from 'class-validator';
 import { ReferralStatus } from '@prisma/client'; // ← MUDAR PARA PRISMA
 
 export class UpdateReferralDto {
@@ -20,7 +26,7 @@ export class UpdateReferralDto {
 
   @IsOptional()
   @IsString()
-  projectType?: string; 
+  projectType?: string;
 
   @IsOptional()
   @IsNumber()

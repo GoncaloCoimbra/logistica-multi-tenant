@@ -126,15 +126,15 @@ let AuditLogRepository = class AuditLogRepository extends base_repository_1.Base
             },
             take: 10,
         });
-        const userIds = result.map(r => r.userId);
+        const userIds = result.map((r) => r.userId);
         const users = await this.prisma.user.findMany({
             where: { id: { in: userIds } },
             select: { id: true, name: true, email: true },
         });
-        return result.map(r => ({
+        return result.map((r) => ({
             userId: r.userId,
             _count: r._count,
-            user: users.find(u => u.id === r.userId),
+            user: users.find((u) => u.id === r.userId),
         }));
     }
     async deleteAllByCompany(companyId) {

@@ -31,17 +31,24 @@ export class ProductsController {
 
   @Post()
   @Roles(Role.ADMIN, Role.OPERATOR)
-  @ApiOperation({ summary: 'Criar novo produto' })
+  @ApiOperation({ summary: 'Create  new product' })
   create(@Body() createProductDto: CreateProductDto, @CurrentUser() user: any) {
     console.log('🔍 [CONTROLLER] Body recebido:', createProductDto);
-    console.log('🔍 [CONTROLLER] User:', { id: user.id, companyId: user.companyId });
-    
-    return this.productsService.create(createProductDto, user.companyId, user.id);
+    console.log('🔍 [CONTROLLER] User:', {
+      id: user.id,
+      companyId: user.companyId,
+    });
+
+    return this.productsService.create(
+      createProductDto,
+      user.companyId,
+      user.id,
+    );
   }
 
   @Get()
   @Roles(Role.ADMIN, Role.OPERATOR)
-  @ApiOperation({ summary: 'Listar todos os produtos' })
+  @ApiOperation({ summary: 'Listar todos os products' })
   findAll(@CurrentUser() user: any, @Query() filters: FilterProductDto) {
     return this.productsService.findAll(user.companyId, filters);
   }
@@ -55,43 +62,53 @@ export class ProductsController {
 
   @Get(':id')
   @Roles(Role.ADMIN, Role.OPERATOR)
-  @ApiOperation({ summary: 'Obter produto por ID' })
+  @ApiOperation({ summary: 'Get product por ID' })
   findOne(@Param('id') id: string, @CurrentUser() user: any) {
     return this.productsService.findOne(id, user.companyId);
   }
 
   @Get(':id/movements')
   @Roles(Role.ADMIN, Role.OPERATOR)
-  @ApiOperation({ summary: 'Obter histórico de movimentos' })
+  @ApiOperation({ summary: 'Get histórico de movimentos' })
   findWithMovements(@Param('id') id: string, @CurrentUser() user: any) {
     return this.productsService.findWithMovements(id, user.companyId);
   }
 
   @Patch(':id')
   @Roles(Role.ADMIN, Role.OPERATOR)
-  @ApiOperation({ summary: 'Atualizar produto' })
+  @ApiOperation({ summary: 'Update product' })
   update(
     @Param('id') id: string,
     @Body() updateProductDto: UpdateProductDto,
     @CurrentUser() user: any,
   ) {
-    return this.productsService.update(id, updateProductDto, user.companyId, user.id);
+    return this.productsService.update(
+      id,
+      updateProductDto,
+      user.companyId,
+      user.id,
+    );
   }
 
   @Patch(':id/status')
   @Roles(Role.ADMIN, Role.OPERATOR)
-  @ApiOperation({ summary: 'Atualizar estado do produto' })
+  @ApiOperation({ summary: 'Update estado do product' })
   updateStatus(
     @Param('id') id: string,
     @Body() updateStatusDto: UpdateProductStatusDto,
     @CurrentUser() user: any,
   ) {
-    return this.productsService.updateStatus(id, updateStatusDto, user.companyId, user.id);
+    return this.productsService.updateStatus(
+      id,
+      updateStatusDto,
+      user.companyId,
+      user.id,
+    );
   }
 
   @Delete(':id')
   @Roles(Role.ADMIN)
-  @ApiOperation({ summary: 'Eliminar produto' })
+  @ApiOperation({ summary: 'Delete product' })
   remove(@Param('id') id: string, @CurrentUser() user: any) {
     return this.productsService.remove(id, user.companyId, user.id);
   }

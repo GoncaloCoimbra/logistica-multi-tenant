@@ -49,7 +49,8 @@ export class CompaniesController {
   @Get('public')
   @ApiOperation({
     summary: 'List active companies (public - for registration)',
-    description: 'Public endpoint returning basic company list for operator registration',
+    description:
+      'Public endpoint returning basic company list for operator registration',
   })
   async findPublic() {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
@@ -65,7 +66,9 @@ export class CompaniesController {
         nif: company.nif,
       }));
 
-    this.logger.log(`✅ ${publicCompanies.length} active companies returned (public)`);
+    this.logger.log(
+      `✅ ${publicCompanies.length} active companies returned (public)`,
+    );
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
     return publicCompanies;
@@ -103,7 +106,9 @@ export class CompaniesController {
   @ApiOperation({ summary: 'List companies' })
   async findAll(@Request() req) {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    this.logger.log(`GET /companies - User: ${req.user.email} (${req.user.role})`);
+    this.logger.log(
+      `GET /companies - User: ${req.user.email} (${req.user.role})`,
+    );
 
     if (req.user.role === Role.SUPER_ADMIN) {
       this.logger.log(`SUPER_ADMIN - Returning ALL companies`);
@@ -136,7 +141,9 @@ export class CompaniesController {
   @ApiOperation({ summary: 'Get current company info (ADMIN, OPERATOR)' })
   async getCompanyInfo(@Request() req) {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    this.logger.log(`GET /companies/info - User: ${req.user.email} (${req.user.role})`);
+    this.logger.log(
+      `GET /companies/info - User: ${req.user.email} (${req.user.role})`,
+    );
 
     if (!req.user.companyId) {
       this.logger.error(`❌ User has no companyId`);
@@ -164,10 +171,14 @@ export class CompaniesController {
   @ApiOperation({ summary: 'Get company by ID' })
   async findOne(@Param('id') id: string, @Request() req) {
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-    this.logger.log(`GET /companies/${id} - User: ${req.user.email} (${req.user.role})`);
+    this.logger.log(
+      `GET /companies/${id} - User: ${req.user.email} (${req.user.role})`,
+    );
 
     if (req.user.role === Role.ADMIN && req.user.companyId !== id) {
-      this.logger.error(`❌ ADMIN ${req.user.email} tried to access company ${id}`);
+      this.logger.error(
+        `❌ ADMIN ${req.user.email} tried to access company ${id}`,
+      );
       this.logger.error(`   ADMIN's company: ${req.user.companyId}`);
       this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
       throw new BadRequestException('Cannot access data from another company');

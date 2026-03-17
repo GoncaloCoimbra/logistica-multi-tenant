@@ -25,9 +25,9 @@ class FilterTaskDto {
 exports.FilterTaskDto = FilterTaskDto;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        description: 'Filtrar por status da tarefa',
+        description: 'Filter por status da tarefa',
         enum: create_task_dto_1.TaskStatus,
-        example: create_task_dto_1.TaskStatus.PENDING
+        example: create_task_dto_1.TaskStatus.PENDING,
     }),
     (0, class_validator_1.IsEnum)(create_task_dto_1.TaskStatus),
     (0, class_validator_1.IsOptional)(),
@@ -35,9 +35,9 @@ __decorate([
 ], FilterTaskDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        description: 'Filtrar por prioridade da tarefa',
+        description: 'Filter por priority da tarefa',
         enum: create_task_dto_1.TaskPriority,
-        example: create_task_dto_1.TaskPriority.HIGH
+        example: create_task_dto_1.TaskPriority.HIGH,
     }),
     (0, class_validator_1.IsEnum)(create_task_dto_1.TaskPriority),
     (0, class_validator_1.IsOptional)(),
@@ -45,8 +45,8 @@ __decorate([
 ], FilterTaskDto.prototype, "priority", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        description: 'Filtrar por ID da empresa (apenas SUPER_ADMIN)',
-        example: 'uuid-da-empresa'
+        description: 'Filter por ID da company (apenas SUPER_ADMIN)',
+        example: 'uuid-da-company',
     }),
     (0, class_validator_1.IsUUID)('4'),
     (0, class_validator_1.IsOptional)(),
@@ -54,8 +54,8 @@ __decorate([
 ], FilterTaskDto.prototype, "companyId", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        description: 'Filtrar por responsável',
-        example: 'João Silva'
+        description: 'Filter por responsável',
+        example: 'João Silva',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
@@ -63,8 +63,8 @@ __decorate([
 ], FilterTaskDto.prototype, "assignedTo", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        description: 'Filtrar tarefas com vencimento até esta data',
-        example: '2026-01-31'
+        description: 'Filter tarefas com vencimento até esta date',
+        example: '2026-01-31',
     }),
     (0, class_validator_1.IsDateString)(),
     (0, class_validator_1.IsOptional)(),
@@ -72,8 +72,8 @@ __decorate([
 ], FilterTaskDto.prototype, "dueDateBefore", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        description: 'Filtrar tarefas com vencimento após esta data',
-        example: '2026-01-01'
+        description: 'Filter tarefas com vencimento após esta date',
+        example: '2026-01-01',
     }),
     (0, class_validator_1.IsDateString)(),
     (0, class_validator_1.IsOptional)(),
@@ -81,8 +81,8 @@ __decorate([
 ], FilterTaskDto.prototype, "dueDateAfter", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
-        description: 'Buscar por texto no título ou descrição',
-        example: 'implementar'
+        description: 'Search por texto no título ou descrição',
+        example: 'implementar',
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),

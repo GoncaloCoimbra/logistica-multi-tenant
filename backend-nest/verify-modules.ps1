@@ -43,7 +43,7 @@ if ($allGood) {
     Write-Host "  4. Aceder ao Swagger: http://localhost:3000/api/docs
 " -ForegroundColor White
 } else {
-    Write-Host "  ALGUNS MÓDULOS NÃO FORAM CRIADOS" -ForegroundColor Red
+    Write-Host "  SOME MODULES WERE NOT CREATED" -ForegroundColor Red
     Write-Host "Execute o script novamente ou crie manualmente
 " -ForegroundColor Yellow
 }

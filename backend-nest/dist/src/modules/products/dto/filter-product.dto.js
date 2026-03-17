@@ -30,37 +30,40 @@ __decorate([
     __metadata("design:type", String)
 ], FilterProductDto.prototype, "status", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ required: false, description: 'ID do fornecedor' }),
+    (0, swagger_1.ApiProperty)({ required: false, description: 'Supplier ID' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsUUID)(),
     __metadata("design:type", String)
 ], FilterProductDto.prototype, "supplierId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ required: false, description: 'Busca por código ou descrição' }),
+    (0, swagger_1.ApiProperty)({
+        required: false,
+        description: 'Search by code or description',
+    }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], FilterProductDto.prototype, "search", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ required: false, description: 'Nome do fornecedor' }),
+    (0, swagger_1.ApiProperty)({ required: false, description: 'Supplier name' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], FilterProductDto.prototype, "supplier", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ required: false, description: 'Localização atual do produto' }),
+    (0, swagger_1.ApiProperty)({ required: false, description: 'Current product location' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], FilterProductDto.prototype, "location", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ required: false, description: 'Data inicial (YYYY-MM-DD)' }),
+    (0, swagger_1.ApiProperty)({ required: false, description: 'Start date (YYYY-MM-DD)' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)
 ], FilterProductDto.prototype, "dateFrom", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ required: false, description: 'Data final (YYYY-MM-DD)' }),
+    (0, swagger_1.ApiProperty)({ required: false, description: 'End date (YYYY-MM-DD)' }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDateString)(),
     __metadata("design:type", String)

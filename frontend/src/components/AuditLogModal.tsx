@@ -148,7 +148,7 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
                 <option value="user">User</option>
                 <option value="supplier">Supplier</option>
                 <option value="vehicle">Vehicle</option>
-                <option value="transport">Transporte</option>
+                <option value="transport">Transport</option>
               </select>
 
               <input
@@ -171,7 +171,7 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
                 onClick={handleApplyFilters}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors"
               >
-                Filtrar
+                Filter
               </button>
               <button
                 onClick={handleClearFilters}
@@ -190,7 +190,7 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
                   <svg className="w-8 h-8 animate-spin mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
-                  Carregando...
+                  Loading...
                 </div>
               </div>
             ) : logs.length === 0 ? (
@@ -225,7 +225,7 @@ export const AuditLogModal: React.FC<AuditLogModalProps> = ({ isOpen, onClose })
                             <span className="font-medium">Utilizador:</span> {log.user?.name || log.userId}
                           </p>
                           <p className="text-xs text-slate-400 mt-1">
-                            {new Date(log.createdAt).toLocaleString('pt-PT')}
+                            {new Date(log.createdAt).toLocaleString('en-GB')}
                           </p>
                           {log.ipAddress && (
                             <p className="text-xs text-slate-400 mt-1">IP: {log.ipAddress}</p>

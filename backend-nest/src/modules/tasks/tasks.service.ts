@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto, UpdateTaskStatusDto } from './dto/update-task.dto';
@@ -12,32 +17,38 @@ export class TasksService {
   /**
    * Cria uma nova tarefa
    */
-  async create(createTaskDto: CreateTaskDto, userId: string, userRole: string, userCompanyId: string) {
-    // Verifica se SUPER_ADMIN está criando para uma empresa específica
+  async create(
+    createTaskDto: CreateTaskDto,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
+    // Verifica se SUPER_ADMIN está criando para uma company específica
     let companyId = userCompanyId;
-    
+
     if (userRole === 'SUPER_ADMIN') {
       if (!createTaskDto.companyId) {
-        throw new BadRequestException('SUPER_ADMIN deve especificar o ID da empresa');
+        throw new BadRequestException(
+          'SUPER_ADMIN deve especificar o ID da company',
+        );
       }
       companyId = createTaskDto.companyId;
-      
-      // Verifica se a empresa existe
+
+      // Verifica se a company existe
       const companyExists = await this.prisma.company.findUnique({
         where: { id: companyId },
       });
-      
+
       if (!companyExists) {
-        throw new NotFoundException('Empresa não encontrada');
+        throw new NotFoundException('Company não encontrada');
       }
     }
 
-    // Converte a data para ISO string
+    // Converte a date para ISO string
     const dueDate = new Date(createTaskDto.dueDate);
-    
+
     // Cria a tarefa
-    const task = await this.prisma.task.create({
-      data: {
+    const task = await this.prisma.task.create({ data: {
         title: createTaskDto.title,
         description: createTaskDto.description,
         status: 'PENDING',
@@ -55,16 +66,21 @@ export class TasksService {
   /**
    * Lista todas as tarefas com filtros opcionais
    */
-  async findAll(filterDto: FilterTaskDto, userId: string, userRole: string, userCompanyId: string) {
+  async findAll(
+    filterDto: FilterTaskDto,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const where: any = {};
 
-    // SUPER_ADMIN pode ver todas as tarefas ou filtrar por empresa
+    // SUPER_ADMIN pode ver todas as tarefas ou filter por company
     if (userRole === 'SUPER_ADMIN') {
       if (filterDto.companyId) {
         where.companyId = filterDto.companyId;
       }
     } else {
-      // Outros usuários só veem tarefas da própria empresa
+      // Outros usuários só veem tarefas da própria company
       where.companyId = userCompanyId;
     }
 
@@ -103,10 +119,7 @@ export class TasksService {
 
     const tasks = await this.prisma.task.findMany({
       where,
-      orderBy: [
-        { priority: 'desc' },
-        { dueDate: 'asc' },
-      ],
+      orderBy: [{ priority: 'desc' }, { dueDate: 'asc' }],
     });
 
     return tasks;
@@ -115,7 +128,12 @@ export class TasksService {
   /**
    * Busca uma tarefa por ID
    */
-  async findOne(id: string, userId: string, userRole: string, userCompanyId: string) {
+  async findOne(
+    id: string,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const task = await this.prisma.task.findUnique({
       where: { id },
     });
@@ -126,7 +144,9 @@ export class TasksService {
 
     // Verifica permissões
     if (userRole !== 'SUPER_ADMIN' && task.companyId !== userCompanyId) {
-      throw new ForbiddenException('Você não tem permissão para visualizar esta tarefa');
+      throw new ForbiddenException(
+        'Você não tem permissão para visualizar esta tarefa',
+      );
     }
 
     return task;
@@ -135,7 +155,13 @@ export class TasksService {
   /**
    * Atualiza uma tarefa
    */
-  async update(id: string, updateTaskDto: UpdateTaskDto, userId: string, userRole: string, userCompanyId: string) {
+  async update(
+    id: string,
+    updateTaskDto: UpdateTaskDto,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const task = await this.findOne(id, userId, userRole, userCompanyId);
 
     const updateData: any = {};
@@ -165,8 +191,7 @@ export class TasksService {
     }
 
     const updatedTask = await this.prisma.task.update({
-      where: { id },
-      data: updateData,
+      where: { id }, data: updateData,
     });
 
     return updatedTask;
@@ -175,12 +200,17 @@ export class TasksService {
   /**
    * Atualiza apenas o status de uma tarefa
    */
-  async updateStatus(id: string, updateStatusDto: UpdateTaskStatusDto, userId: string, userRole: string, userCompanyId: string) {
+  async updateStatus(
+    id: string,
+    updateStatusDto: UpdateTaskStatusDto,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const task = await this.findOne(id, userId, userRole, userCompanyId);
 
     const updatedTask = await this.prisma.task.update({
-      where: { id },
-      data: {
+      where: { id }, data: {
         status: updateStatusDto.status,
       },
     });
@@ -191,20 +221,30 @@ export class TasksService {
   /**
    * Remove uma tarefa
    */
-  async remove(id: string, userId: string, userRole: string, userCompanyId: string) {
+  async remove(
+    id: string,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const task = await this.findOne(id, userId, userRole, userCompanyId);
 
     await this.prisma.task.delete({
       where: { id },
     });
 
-    return { message: 'Tarefa excluída com sucesso' };
+    return { message: 'Tarefa excluída com success' };
   }
 
   /**
    * Obtém estatísticas das tarefas
    */
-  async getStats(userId: string, userRole: string, userCompanyId: string, companyId?: string): Promise<TaskStatsDto> {
+  async getStats(
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+    companyId?: string,
+  ): Promise<TaskStatsDto> {
     const where: any = {};
 
     if (userRole === 'SUPER_ADMIN' && companyId) {
@@ -213,29 +253,22 @@ export class TasksService {
       where.companyId = userCompanyId;
     }
 
-    const [
-      total,
-      pending,
-      inProgress,
-      completed,
-      cancelled,
-      urgent,
-      overdue,
-    ] = await Promise.all([
-      this.prisma.task.count({ where }),
-      this.prisma.task.count({ where: { ...where, status: 'PENDING' } }),
-      this.prisma.task.count({ where: { ...where, status: 'IN_PROGRESS' } }),
-      this.prisma.task.count({ where: { ...where, status: 'COMPLETED' } }),
-      this.prisma.task.count({ where: { ...where, status: 'CANCELLED' } }),
-      this.prisma.task.count({ where: { ...where, priority: 'URGENT' } }),
-      this.prisma.task.count({
-        where: {
-          ...where,
-          dueDate: { lt: new Date() },
-          status: { not: 'COMPLETED' },
-        },
-      }),
-    ]);
+    const [total, pending, inProgress, completed, cancelled, urgent, overdue] =
+      await Promise.all([
+        this.prisma.task.count({ where }),
+        this.prisma.task.count({ where: { ...where, status: 'PENDING' } }),
+        this.prisma.task.count({ where: { ...where, status: 'IN_PROGRESS' } }),
+        this.prisma.task.count({ where: { ...where, status: 'COMPLETED' } }),
+        this.prisma.task.count({ where: { ...where, status: 'CANCELLED' } }),
+        this.prisma.task.count({ where: { ...where, priority: 'URGENT' } }),
+        this.prisma.task.count({
+          where: {
+            ...where,
+            dueDate: { lt: new Date() },
+            status: { not: 'COMPLETED' },
+          },
+        }),
+      ]);
 
     return {
       total,

@@ -14,8 +14,8 @@ import { TenantGuard } from './guards/tenant.guard';
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'default-secret-key',
       signOptions: {
-          expiresIn: '7d',
-        } as any,
+        expiresIn: '7d',
+      } as any,
     }),
   ],
   controllers: [AuthController],
@@ -23,11 +23,3 @@ import { TenantGuard } from './guards/tenant.guard';
   exports: [AuthService, JwtAuthGuard, RolesGuard, TenantGuard],
 })
 export class AuthModule {}
-
-
-
-
-
-
-
-

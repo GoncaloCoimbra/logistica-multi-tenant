@@ -5,42 +5,64 @@ export class TaskResponseDto {
   @ApiProperty({ description: 'ID único da tarefa', example: 'uuid-da-tarefa' })
   id: string;
 
-  @ApiProperty({ description: 'Título da tarefa', example: 'Implementar novo recurso' })
+  @ApiProperty({
+    description: 'Título da tarefa',
+    example: 'Implementar  new recurso',
+  })
   title: string;
 
-  @ApiProperty({ description: 'Descrição da tarefa', example: 'Implementar sistema de notificações' })
+  @ApiProperty({
+    description: 'Descrição da tarefa',
+    example: 'Implementar sistema de notificações',
+  })
   description: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Status da tarefa',
     enum: TaskStatus,
-    example: TaskStatus.PENDING 
+    example: TaskStatus.PENDING,
   })
   status: TaskStatus;
 
-  @ApiProperty({ 
-    description: 'Prioridade da tarefa',
+  @ApiProperty({
+    description: 'Priority da tarefa',
     enum: TaskPriority,
-    example: TaskPriority.MEDIUM 
+    example: TaskPriority.MEDIUM,
   })
   priority: TaskPriority;
 
-  @ApiProperty({ description: 'Data de vencimento', example: '2026-01-15T00:00:00.000Z' })
+  @ApiProperty({
+    description: 'Date de vencimento',
+    example: '2026-01-15T00:00:00.000Z',
+  })
   dueDate: Date;
 
-  @ApiProperty({ description: 'Nome do responsável', example: 'João Silva', nullable: true })
+  @ApiProperty({
+    description: 'Name do responsável',
+    example: 'João Silva',
+    nullable: true,
+  })
   assignedTo: string | null;
 
-  @ApiProperty({ description: 'Data de criação', example: '2026-01-06T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Date de criação',
+    example: '2026-01-06T10:00:00.000Z',
+  })
   createdAt: Date;
 
-  @ApiProperty({ description: 'Data da última atualização', example: '2026-01-06T10:00:00.000Z' })
+  @ApiProperty({
+    description: 'Date da última atualização',
+    example: '2026-01-06T10:00:00.000Z',
+  })
   updatedAt: Date;
 
-  @ApiProperty({ description: 'ID da empresa', example: 'uuid-da-empresa' })
+  @ApiProperty({ description: 'Company ID', example: 'uuid-company' })
   companyId: string;
 
-  @ApiProperty({ description: 'ID do usuário que criou a tarefa', example: 'uuid-do-usuario' })
+  @ApiProperty({
+    description: 'ID of the user who created the task',
+    example: 'uuid-user',
+  })
   createdById: string;
 }
 

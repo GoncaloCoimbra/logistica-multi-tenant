@@ -1,45 +1,51 @@
-﻿import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsEnum } from 'class-validator';
+﻿import {
+  IsEmail,
+  IsNotEmpty,
+  MinLength,
+  IsOptional,
+  IsEnum,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '@prisma/client';
 
 export class RegisterDto {
   @ApiProperty({
     example: 'João Silva',
-    description: 'Nome completo do utilizador',
+    description: 'User full name',
   })
-  @IsNotEmpty({ message: 'Nome é obrigatório' })
+  @IsNotEmpty({ message: 'Name is required' })
   name: string;
 
   @ApiProperty({
     example: 'joao@example.com',
-    description: 'Email do utilizador',
+    description: 'User email',
   })
-  @IsEmail({}, { message: 'Email inválido' })
-  @IsNotEmpty({ message: 'Email é obrigatório' })
+  @IsEmail({}, { message: 'Invalid email' })
+  @IsNotEmpty({ message: 'Email is required' })
   email: string;
 
   @ApiProperty({
     example: 'password123',
-    description: 'Password do utilizador',
+    description: 'User password',
     minLength: 6,
   })
-  @IsNotEmpty({ message: 'Password é obrigatória' })
-  @MinLength(6, { message: 'Password deve ter no mínimo 6 caracteres' })
+  @IsNotEmpty({ message: 'Password is required' })
+  @MinLength(6, { message: 'Password must be at least 6 characters' })
   password: string;
 
   @ApiProperty({
     example: 'OPERATOR',
-    description: 'Role do utilizador',
+    description: 'User role',
     enum: Role,
     required: false,
   })
   @IsOptional()
-  @IsEnum(Role, { message: 'Role inválida' })
+  @IsEnum(Role, { message: 'Invalid role' })
   role?: Role;
 
   @ApiProperty({
     example: '123e4567-e89b-12d3-a456-426614173000',
-    description: 'ID da empresa (apenas para ADMIN criar utilizadores)',
+    description: 'Company ID (only for ADMIN to create users)',
     required: false,
   })
   @IsOptional()

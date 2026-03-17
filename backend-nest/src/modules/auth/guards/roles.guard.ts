@@ -1,4 +1,9 @@
-﻿import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
+﻿import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Role } from '@prisma/client';
 import { ROLES_KEY } from '../decorators/roles.decorator';
@@ -23,7 +28,6 @@ export class RolesGuard implements CanActivate {
       throw new ForbiddenException('Utilizador não autenticado');
     }
 
-    
     if (user.role === Role.SUPER_ADMIN) {
       return true;
     }

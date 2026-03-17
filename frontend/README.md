@@ -469,7 +469,7 @@ npm start
 # Frontend
 cd frontend
 npm run build
-# Serve a pasta build/ com nginx ou outro servidor
+# Serve the build/ folder with nginx or another server
 ```
 
 ### Acesso
@@ -523,7 +523,7 @@ logistica-multi-tenant/
 │   ├── public/
 │   ├── src/
 │   │   ├── api/
-│   │   │   └── api.ts            # Cliente Axios
+│   │   │   └── config.ts        # Axios client
 │   │   ├── components/           # Componentes React
 │   │   │   ├── CompanyModal.tsx
 │   │   │   ├── EditGlobalUserModal.tsx
@@ -644,11 +644,11 @@ In Preparation → In Expedition → Delivered
 
 | Método | Endpoint | Descrição | Auth |
 |--------|----------|-----------|------|
-| GET | `/api/products` | Lista produtos |  |
-| GET | `/api/products/:id` | Detalhes de um produto |  |
-| POST | `/api/products` | Criar produto |  |
-| PUT | `/api/products/:id` | Atualizar produto |  |
-| DELETE | `/api/products/:id` | Eliminar produto |  Admin |
+| GET | `/api/products` | Lista products |  |
+| GET | `/api/products/:id` | Detalhes de um product |  |
+| POST | `/api/products` | Criar product |  |
+| PUT | `/api/products/:id` | Atualizar product |  |
+| DELETE | `/api/products/:id` | Eliminar product |  Admin |
 | POST | `/api/products/:id/transition` | Alterar estado |  |
 | GET | `/api/products/:id/history` | Histórico de movimentações |  |
 
@@ -888,12 +888,12 @@ This project is under the MIT license. See the [LICENSE](LICENSE) file for more 
 
 ## 👥 Community
 
-Este projeto foi desenvolvido para a comunidade [**Commit PT**]
-Junta-te à comunidade para:
-- Tirar dúvidas sobre o projeto
-- Partilhar melhorias
-- Colaborar com outros developers
-- Mostrar o teu portfolio
+This project was developed for the [**Commit PT**] community
+Join the community to:
+- Get help with project questions
+- Share improvements
+- Collaborate with other developers
+- Showcase your portfolio
 
 ---
 

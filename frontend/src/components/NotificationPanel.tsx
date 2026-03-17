@@ -340,7 +340,7 @@ const NotificationPanel: React.FC = () => {
             {notifications.notifications.length > 0 && (
               <div className="p-3 border-t-2 border-amber-500/20 bg-gradient-to-r from-slate-900 to-black">
                 <button
-                  onClick={() => { navigate('/produtos'); setIsOpen(false); }}
+                  onClick={() => { navigate('/products'); setIsOpen(false); }}
                   className="w-full text-sm text-amber-400 hover:text-amber-300 font-bold text-center hover:bg-amber-900/20 py-2 rounded-xl transition-colors"
                 >
                   View all products →

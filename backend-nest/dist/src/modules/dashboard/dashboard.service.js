@@ -35,10 +35,10 @@ let DashboardService = DashboardService_1 = class DashboardService {
                 this.prisma.vehicle.count({ where }),
                 this.prisma.transport.count({ where }),
                 this.prisma.vehicle.count({
-                    where: { ...where, status: 'available' }
+                    where: { ...where, status: 'available' },
                 }),
                 this.prisma.product.count({
-                    where: { ...where, status: client_1.ProductStatus.IN_STORAGE }
+                    where: { ...where, status: client_1.ProductStatus.IN_STORAGE },
                 }),
             ]);
             const productsByStatusRaw = await this.prisma.product.groupBy({
@@ -46,20 +46,20 @@ let DashboardService = DashboardService_1 = class DashboardService {
                 where,
                 _count: true,
             });
-            const productsByStatus = productsByStatusRaw.map(p => ({
+            const productsByStatus = productsByStatusRaw.map((p) => ({
                 status: p.status,
                 count: p._count,
             }));
             const summary = {
                 received: await this.prisma.product.count({
-                    where: { ...where, status: client_1.ProductStatus.RECEIVED }
+                    where: { ...where, status: client_1.ProductStatus.RECEIVED },
                 }),
                 inAnalysis: await this.prisma.product.count({
-                    where: { ...where, status: client_1.ProductStatus.IN_ANALYSIS }
+                    where: { ...where, status: client_1.ProductStatus.IN_ANALYSIS },
                 }),
                 inStorage: productsInStorage,
                 delivered: await this.prisma.product.count({
-                    where: { ...where, status: client_1.ProductStatus.DISPATCHED }
+                    where: { ...where, status: client_1.ProductStatus.DISPATCHED },
                 }),
                 rejected: 0,
             };
@@ -87,12 +87,12 @@ let DashboardService = DashboardService_1 = class DashboardService {
                 },
             });
             const topSuppliers = suppliersWithProducts
-                .map(s => ({
+                .map((s) => ({
                 id: s.id,
                 name: s.name,
                 productCount: s.products.length,
             }))
-                .filter(s => s.productCount > 0)
+                .filter((s) => s.productCount > 0)
                 .sort((a, b) => b.productCount - a.productCount)
                 .slice(0, 5);
             const thirtyDaysAgo = new Date();
@@ -149,7 +149,7 @@ let DashboardService = DashboardService_1 = class DashboardService {
             where.companyId = companyId;
         }
         return {
-            message: 'Visão geral do dashboard',
+            message: 'Dashboard overview',
             companyId: companyId || 'ALL',
             filters,
         };
@@ -165,7 +165,7 @@ let DashboardService = DashboardService_1 = class DashboardService {
             where,
             _count: true,
         });
-        return products.map(p => ({
+        return products.map((p) => ({
             status: p.status,
             count: p._count,
         }));
@@ -181,7 +181,7 @@ let DashboardService = DashboardService_1 = class DashboardService {
             where,
             _count: true,
         });
-        return transports.map(t => ({
+        return transports.map((t) => ({
             status: t.status,
             count: t._count,
         }));
@@ -200,7 +200,7 @@ let DashboardService = DashboardService_1 = class DashboardService {
                 user: {
                     select: {
                         name: true,
-                        email: true
+                        email: true,
                     },
                 },
             },
@@ -215,8 +215,7 @@ let DashboardService = DashboardService_1 = class DashboardService {
         }
         return {
             message: 'Estatísticas mensais',
-            companyId: companyId || 'ALL',
-            data: [],
+            companyId: companyId || 'ALL', data: [],
         };
     }
     async getTopSuppliers(companyId) {
@@ -235,13 +234,13 @@ let DashboardService = DashboardService_1 = class DashboardService {
             },
         });
         return suppliers
-            .map(s => ({
+            .map((s) => ({
             id: s.id,
             name: s.name,
             nif: s.nif,
             productCount: s.products.length,
         }))
-            .filter(s => s.productCount > 0)
+            .filter((s) => s.productCount > 0)
             .sort((a, b) => b.productCount - a.productCount)
             .slice(0, 5);
     }

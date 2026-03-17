@@ -51,11 +51,11 @@ let TasksController = class TasksController {
 exports.TasksController = TasksController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Criar nova tarefa' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Create nova tarefa' }),
     (0, swagger_1.ApiResponse)({
         status: 201,
-        description: 'Tarefa criada com sucesso',
-        type: tasks_dto_1.TaskResponseDto
+        description: 'Tarefa criada com success',
+        type: tasks_dto_1.TaskResponseDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Dados inválidos' }),
     (0, swagger_1.ApiResponse)({ status: 401, description: 'Não autorizado' }),
@@ -71,7 +71,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'Lista de tarefas',
-        type: [tasks_dto_1.TaskResponseDto]
+        type: [tasks_dto_1.TaskResponseDto],
     }),
     __param(0, (0, common_1.Query)()),
     __param(1, (0, common_1.Request)()),
@@ -81,12 +81,16 @@ __decorate([
 ], TasksController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('stats'),
-    (0, swagger_1.ApiOperation)({ summary: 'Obter estatísticas das tarefas' }),
-    (0, swagger_1.ApiQuery)({ name: 'companyId', required: false, description: 'ID da empresa (apenas SUPER_ADMIN)' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get estatísticas das tarefas' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'companyId',
+        required: false,
+        description: 'ID da company (apenas SUPER_ADMIN)',
+    }),
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'Estatísticas das tarefas',
-        type: tasks_dto_1.TaskStatsDto
+        type: tasks_dto_1.TaskStatsDto,
     }),
     __param(0, (0, common_1.Query)('companyId')),
     __param(1, (0, common_1.Request)()),
@@ -96,11 +100,11 @@ __decorate([
 ], TasksController.prototype, "getStats", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Buscar tarefa por ID' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Search tarefa por ID' }),
     (0, swagger_1.ApiResponse)({
         status: 200,
         description: 'Tarefa encontrada',
-        type: tasks_dto_1.TaskResponseDto
+        type: tasks_dto_1.TaskResponseDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Tarefa não encontrada' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Sem permissão' }),
@@ -112,11 +116,11 @@ __decorate([
 ], TasksController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar tarefa' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update tarefa' }),
     (0, swagger_1.ApiResponse)({
         status: 200,
-        description: 'Tarefa atualizada com sucesso',
-        type: tasks_dto_1.TaskResponseDto
+        description: 'Tarefa atualizada com success',
+        type: tasks_dto_1.TaskResponseDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Tarefa não encontrada' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Sem permissão' }),
@@ -129,11 +133,11 @@ __decorate([
 ], TasksController.prototype, "update", null);
 __decorate([
     (0, common_1.Patch)(':id/status'),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar status da tarefa' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update status da tarefa' }),
     (0, swagger_1.ApiResponse)({
         status: 200,
-        description: 'Status atualizado com sucesso',
-        type: tasks_dto_1.TaskResponseDto
+        description: 'Status atualizado com success',
+        type: tasks_dto_1.TaskResponseDto,
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Tarefa não encontrada' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Sem permissão' }),
@@ -148,7 +152,7 @@ __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOperation)({ summary: 'Excluir tarefa' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Tarefa excluída com sucesso' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Tarefa excluída com success' }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Tarefa não encontrada' }),
     (0, swagger_1.ApiResponse)({ status: 403, description: 'Sem permissão' }),
     __param(0, (0, common_1.Param)('id')),

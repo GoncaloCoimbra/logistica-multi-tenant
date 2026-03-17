@@ -59,17 +59,17 @@ let AuditLogService = class AuditLogService {
     async getActionStats(companyId) {
         const totalActions = await this.auditLogRepository.count({ companyId });
         const actionsByTypeRaw = await this.auditLogRepository.getActionStats(companyId);
-        const actionsByType = actionsByTypeRaw.map(item => ({
+        const actionsByType = actionsByTypeRaw.map((item) => ({
             action: item.action,
             count: item._count,
         }));
         const actionsByEntityRaw = await this.auditLogRepository.getEntityStats(companyId);
-        const actionsByEntity = actionsByEntityRaw.map(item => ({
+        const actionsByEntity = actionsByEntityRaw.map((item) => ({
             entity: item.entity,
             count: item._count,
         }));
         const topUsersRaw = await this.auditLogRepository.getTopUsers(companyId);
-        const topUsers = topUsersRaw.map(item => ({
+        const topUsers = topUsersRaw.map((item) => ({
             userId: item.userId,
             userName: item.user?.name || 'Desconhecido',
             userEmail: item.user?.email || 'N/A',

@@ -1,21 +1,21 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Body, 
-  Patch, 
-  Param, 
-  Delete, 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
   UseGuards,
   Request,
   Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { 
-  ApiTags, 
-  ApiOperation, 
-  ApiResponse, 
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
   ApiBearerAuth,
   ApiQuery,
 } from '@nestjs/swagger';
@@ -34,11 +34,11 @@ export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Criar nova tarefa' })
-  @ApiResponse({ 
-    status: 201, 
-    description: 'Tarefa criada com sucesso',
-    type: TaskResponseDto 
+  @ApiOperation({ summary: 'Create nova tarefa' })
+  @ApiResponse({
+    status: 201,
+    description: 'Tarefa criada com success',
+    type: TaskResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
   @ApiResponse({ status: 401, description: 'Não autorizado' })
@@ -56,10 +56,10 @@ export class TasksController {
 
   @Get()
   @ApiOperation({ summary: 'Listar todas as tarefas com filtros opcionais' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Lista de tarefas',
-    type: [TaskResponseDto] 
+    type: [TaskResponseDto],
   })
   async findAll(
     @Query() filterDto: FilterTaskDto,
@@ -74,12 +74,16 @@ export class TasksController {
   }
 
   @Get('stats')
-  @ApiOperation({ summary: 'Obter estatísticas das tarefas' })
-  @ApiQuery({ name: 'companyId', required: false, description: 'ID da empresa (apenas SUPER_ADMIN)' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiOperation({ summary: 'Get estatísticas das tarefas' })
+  @ApiQuery({
+    name: 'companyId',
+    required: false,
+    description: 'ID da company (apenas SUPER_ADMIN)',
+  })
+  @ApiResponse({
+    status: 200,
     description: 'Estatísticas das tarefas',
-    type: TaskStatsDto 
+    type: TaskStatsDto,
   })
   async getStats(
     @Query('companyId') companyId: string,
@@ -94,11 +98,11 @@ export class TasksController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar tarefa por ID' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiOperation({ summary: 'Search tarefa por ID' })
+  @ApiResponse({
+    status: 200,
     description: 'Tarefa encontrada',
-    type: TaskResponseDto 
+    type: TaskResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
   @ApiResponse({ status: 403, description: 'Sem permissão' })
@@ -115,11 +119,11 @@ export class TasksController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Atualizar tarefa' })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Tarefa atualizada com sucesso',
-    type: TaskResponseDto 
+  @ApiOperation({ summary: 'Update tarefa' })
+  @ApiResponse({
+    status: 200,
+    description: 'Tarefa atualizada com success',
+    type: TaskResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
   @ApiResponse({ status: 403, description: 'Sem permissão' })
@@ -138,11 +142,11 @@ export class TasksController {
   }
 
   @Patch(':id/status')
-  @ApiOperation({ summary: 'Atualizar status da tarefa' })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Status atualizado com sucesso',
-    type: TaskResponseDto 
+  @ApiOperation({ summary: 'Update status da tarefa' })
+  @ApiResponse({
+    status: 200,
+    description: 'Status atualizado com success',
+    type: TaskResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
   @ApiResponse({ status: 403, description: 'Sem permissão' })
@@ -163,13 +167,10 @@ export class TasksController {
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Excluir tarefa' })
-  @ApiResponse({ status: 200, description: 'Tarefa excluída com sucesso' })
+  @ApiResponse({ status: 200, description: 'Tarefa excluída com success' })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
   @ApiResponse({ status: 403, description: 'Sem permissão' })
-  async remove(
-    @Param('id') id: string,
-    @Request() req: any,
-  ) {
+  async remove(@Param('id') id: string, @Request() req: any) {
     return this.tasksService.remove(
       id,
       req.user.id,

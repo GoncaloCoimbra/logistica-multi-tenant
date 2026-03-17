@@ -3,7 +3,7 @@
   CanActivate,
   ExecutionContext,
   ForbiddenException,
-  Logger
+  Logger,
 } from '@nestjs/common';
 import { Role } from '@prisma/client';
 
@@ -41,9 +41,11 @@ export class TenantGuard implements CanActivate {
       // Validate if trying to manipulate data from another company
       if (request.body.companyId && request.body.companyId !== user.companyId) {
         this.logger.error(
-          ` User ${user.email} tried to manipulate company ${request.body.companyId}`
+          ` User ${user.email} tried to manipulate company ${request.body.companyId}`,
         );
-        throw new ForbiddenException('Cannot manipulate data from another company');
+        throw new ForbiddenException(
+          'Cannot manipulate data from another company',
+        );
       }
 
       // Force user's companyId
@@ -52,9 +54,12 @@ export class TenantGuard implements CanActivate {
     }
 
     // Validate companyId in params (GET/DELETE with :companyId in route)
-    if (request.params?.companyId && request.params.companyId !== user.companyId) {
+    if (
+      request.params?.companyId &&
+      request.params.companyId !== user.companyId
+    ) {
       this.logger.error(
-        ` User ${user.email} tried to access company ${request.params.companyId}`
+        ` User ${user.email} tried to access company ${request.params.companyId}`,
       );
       throw new ForbiddenException('Cannot access data from another company');
     }

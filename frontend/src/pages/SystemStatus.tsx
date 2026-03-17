@@ -3,23 +3,23 @@ import React from 'react';
 const SystemStatus: React.FC = () => {
   const services = [
     { name: 'API', status: 'operational' },
-    { name: 'Banco de Dados', status: 'degraded' },
-    { name: 'Worker de rotas', status: 'operational' },
-    { name: 'Serviço de mapas', status: 'maintenance' },
+    { name: 'Database', status: 'degraded' },
+    { name: 'Route Worker', status: 'operational' },
+    { name: 'Map Service', status: 'maintenance' },
   ];
 
   const badge = (s: string) => {
-    if (s === 'operational') return <span className="px-2 py-1 text-xs bg-green-600 rounded">Operacional</span>;
-    if (s === 'degraded') return <span className="px-2 py-1 text-xs bg-yellow-500 rounded">Degradado</span>;
-    if (s === 'maintenance') return <span className="px-2 py-1 text-xs bg-red-600 rounded">Manutenção</span>;
-    return <span className="px-2 py-1 text-xs bg-gray-600 rounded">Desconhecido</span>;
+    if (s === 'operational') return <span className="px-2 py-1 text-xs bg-green-600 rounded">Operational</span>;
+    if (s === 'degraded') return <span className="px-2 py-1 text-xs bg-yellow-500 rounded">Degraded</span>;
+    if (s === 'maintenance') return <span className="px-2 py-1 text-xs bg-red-600 rounded">Maintenance</span>;
+    return <span className="px-2 py-1 text-xs bg-gray-600 rounded">Unknown</span>;
   };
 
   return (
     <div className="max-w-4xl mx-auto p-8">
       <header>
-        <h1 className="text-3xl font-extrabold text-white">Status do Sistema</h1>
-        <p className="text-gray-400 mt-2">Visão geral da disponibilidade dos componentes principais.</p>
+        <h1 className="text-3xl font-extrabold text-white">System Status</h1>
+        <p className="text-gray-400 mt-2">Overview of availability of main components.</p>
       </header>
 
       <main className="mt-6 bg-gray-900 p-6 rounded-lg">
@@ -28,7 +28,7 @@ const SystemStatus: React.FC = () => {
             <div key={s.name} className="flex items-center justify-between bg-gray-800 p-3 rounded">
               <div>
                 <div className="text-white font-medium">{s.name}</div>
-                <div className="text-sm text-gray-400">Última verificação: há 2 minutos</div>
+                <div className="text-sm text-gray-400">Last check: 2 minutes ago</div>
               </div>
               <div>{badge(s.status)}</div>
             </div>
@@ -37,7 +37,7 @@ const SystemStatus: React.FC = () => {
       </main>
 
       <section className="mt-6 text-gray-400 text-sm">
-        <p>Se houver interrupções, verificaremos automaticamente e publicaremos atualizações nesta página. Para suporte imediato, abra um ticket.</p>
+        <p>If there are interruptions, we will automatically check and publish updates on this page. For immediate support, open a ticket.</p>
       </section>
     </div>
   );

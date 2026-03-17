@@ -24,7 +24,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         enum: client_1.TransportStatus,
         required: false,
-        description: 'Filtrar por status do transporte'
+        description: 'Filter por status do transport',
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(client_1.TransportStatus),
@@ -34,7 +34,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         example: '2025-01-01',
         required: false,
-        description: 'Data inicial (YYYY-MM-DD)'
+        description: 'Date inicial (YYYY-MM-DD)',
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDateString)(),
@@ -44,7 +44,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         example: '2025-12-31',
         required: false,
-        description: 'Data final (YYYY-MM-DD)'
+        description: 'Date final (YYYY-MM-DD)',
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsDateString)(),
@@ -54,7 +54,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
         required: false,
-        description: 'Filtrar por ID do veículo (UUID)'
+        description: 'Filter por ID do veículo (UUID)',
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsUUID)('4', { message: 'VehicleId deve ser um UUID válido' }),

@@ -59,7 +59,7 @@ let AuditLogInterceptor = AuditLogInterceptor_1 = class AuditLogInterceptor {
                     userId: user.id,
                     companyId: user.companyId,
                     ipAddress: ipAddress ? String(ipAddress) : undefined,
-                    metadata: {
+                    metadate: {
                         method,
                         url,
                         body: this.sanitizeBody(body),
@@ -71,18 +71,25 @@ let AuditLogInterceptor = AuditLogInterceptor_1 = class AuditLogInterceptor {
                 this.logger.error(` [AUDIT ERROR] Could not register audit: ${error.message}`, error.stack);
             }
         }), (0, operators_1.catchError)((error) => {
-            const errorDetail = error?.response || (typeof error?.getResponse === 'function' ? error.getResponse() : undefined) || error?.message || 'Unknown error';
+            const errorDetail = error?.response ||
+                (typeof error?.getResponse === 'function'
+                    ? error.getResponse()
+                    : undefined) ||
+                error?.message ||
+                'Unknown error';
             try {
-                console.log(' [INTERCEPTOR] Erro na requisição (detalhes):', JSON.stringify(errorDetail));
+                console.log(' [INTERCEPTOR] Error na requisição (detalhes):', JSON.stringify(errorDetail));
             }
             catch (e) {
-                console.log(' [INTERCEPTOR] Erro na requisição (detalhes):', errorDetail);
+                console.log(' [INTERCEPTOR] Error na requisição (detalhes):', errorDetail);
             }
             try {
                 if (user) {
                     const { entity, action } = this.extractEntityAndAction(method, url);
                     if (entity) {
-                        const errMsg = (typeof errorDetail === 'string') ? errorDetail : (errorDetail?.message || JSON.stringify(errorDetail));
+                        const errMsg = typeof errorDetail === 'string'
+                            ? errorDetail
+                            : errorDetail?.message || JSON.stringify(errorDetail);
                         this.logger.warn(`⚠️ [AUDIT] ${action} ${entity} falhou - ${errMsg}`);
                     }
                 }
@@ -100,12 +107,24 @@ let AuditLogInterceptor = AuditLogInterceptor_1 = class AuditLogInterceptor {
             if (response.id) {
                 return String(response.id);
             }
-            if (response.data && typeof response.data === 'object' && response.data.id) {
+            if (response.data &&
+                typeof response.data === 'object' &&
+                response.data.id) {
                 return String(response.data.id);
             }
-            const possibleKeys = ['product', 'user', 'vehicle', 'transport', 'supplier', 'company', 'setting'];
+            const possibleKeys = [
+                'product',
+                'user',
+                'vehicle',
+                'transport',
+                'supplier',
+                'company',
+                'setting',
+            ];
             for (const key of possibleKeys) {
-                if (response[key] && typeof response[key] === 'object' && response[key].id) {
+                if (response[key] &&
+                    typeof response[key] === 'object' &&
+                    response[key].id) {
                     return String(response[key].id);
                 }
             }

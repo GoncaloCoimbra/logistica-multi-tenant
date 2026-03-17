@@ -99,31 +99,31 @@
       └─ Update status → new notification
 
 
- O QUE VOCÊ CONSEGUE FAZER AGORA
+ WHAT YOU CAN DO NOW
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  ✓ Ver histórico de todas ações: GET /api/audit-logs
-  ✓ Ver notificações: GET /api/notifications
-  ✓ Receber notificação ao criar produto
-  ✓ Receber notificação ao atualizar status
-  ✓ Marcar notificação como lida
-  ✓ Deletar notificação
-  ✓ Contar notificações não lidas
-  ✓ Filtrar histórico por usuário/entidade
-  ✓ Ver estatísticas de atividade
+  ✓ View history of all actions: GET /api/audit-logs
+  ✓ View notifications: GET /api/notifications
+  ✓ Receive notification when creating product
+  ✓ Receive notification when updating status
+  ✓ Mark notification as read
+  ✓ Delete notification
+  ✓ Count unread notifications
+  ✓ Filter history by user/entity
+  ✓ View activity statistics
 
 
-⭐ FICHEIROS MAIS IMPORTANTES
+⭐ MOST IMPORTANT FILES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   ⭐⭐⭐ START_HERE.txt
-        └─ Leia isto PRIMEIRO (2 min)
+        └─ Read this FIRST (2 min)
 
   ⭐⭐⭐ START_HERE.txt
-        └─ Overview visual + quick test
+        └─ Visual overview + quick test
 
-  ⭐⭐ README_HISTORICO_NOTIFICACOES.md
-      └─ Resumo executivo (5 min)
+  ⭐⭐ README_AUDITLOG_NOTIFICATIONS.md
+      └─ Executive summary (5 min)
 
   ⭐ TESTING.md
     └─ How to test manually (essential)
@@ -132,71 +132,71 @@
  CREATED DATA
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  Histórico (AuditLog):
-  ├─ Tabela: AuditLog
-  ├─ Registra: action, entity, entityId, userId, companyId, ip, timestamp
-  └─ Acesso: GET /api/audit-logs
+  History (AuditLog):
+  ├─ Table: AuditLog
+  ├─ Records: action, entity, entityId, userId, companyId, ip, timestamp
+  └─ Access: GET /api/audit-logs
 
-  Notificações:
-  ├─ Tabela: Notification
-  ├─ Armazena: title, content, isRead, userId, companyId, timestamp
-  └─ Acesso: GET /api/notifications
-
-
-🎯 ENDPOINTS PRINCIPAIS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  HISTÓRICO:
-  GET  /api/audit-logs              → Listar
-  GET  /api/audit-logs/entity/:...  → Por entidade
-  GET  /api/audit-logs/user/:...    → Por usuário
-
-  NOTIFICAÇÕES:
-  GET  /api/notifications           → Listar
-  GET  /api/notifications/unread    → Não lidas
-  PATCH /api/notifications/:id/read → Marcar lida
-  DELETE /api/notifications/:id     → Deletar
-
-  PRODUTOS (Dispara notificações):
-  POST /api/products                → Cria + notificação
-  PUT  /api/products/:id/status     → Atualiza + notificação
+  Notifications:
+  ├─ Table: Notification
+  ├─ Stores: title, content, isRead, userId, companyId, timestamp
+  └─ Access: GET /api/notifications
 
 
-💡 DICAS IMPORTANTES
+🎯 MAIN ENDPOINTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  HISTORY:
+  GET  /api/audit-logs              → List
+  GET  /api/audit-logs/entity/:...  → By entity
+  GET  /api/audit-logs/user/:...    → By user
+
+  NOTIFICATIONS:
+  GET  /api/notifications           → List
+  GET  /api/notifications/unread    → Unread
+  PATCH /api/notifications/:id/read → Mark read
+  DELETE /api/notifications/:id     → Delete
+
+  PRODUCTS (Triggers notifications):
+  POST /api/products                → Create + notification
+  PUT  /api/products/:id/status     → Update + notification
+
+
+💡 IMPORTANT TIPS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   1. History was already working from the beginning
-  2. Notificações agora disparam automaticamente
-  3. Todos os dados são persistidos no PostgreSQL
-  4. Use Prisma Studio para visualizar: npx prisma studio
-  5. Verifique logs do servidor para debugging
-  6. Todos endpoints requerem token JWT
+  2. Notifications now trigger automatically
+  3. All data is persisted in PostgreSQL
+  4. Use Prisma Studio to view: npx prisma studio
+  5. Check server logs for debugging
+  6. All endpoints require JWT token
 
 
 🔮 NEXT FEATURES (OPTIONAL)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  FASE 2 (2-3 semanas):
-  ├─ Notificações para Transports
-  ├─ Alertas de Estoque Baixo
-  └─ Notificações de Usuários
+  PHASE 2 (2-3 weeks):
+  ├─ Notifications for Transports
+  ├─ Low Stock Alerts
+  └─ User Notifications
 
-  Ver: ROADMAP_FUNCIONALIDADES.md
+  See: ROADMAP_FEATURES.md
 
 
-✨ QUALIDADE DA SOLUÇÃO
+✨ SOLUTION QUALITY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-   Código testado e validado
+   Tested and validated code
    Complete documentation (11 files)
    Automated test scripts
    Ready for production
-   Sem breaking changes
-   Seguro e auditável
+   No breaking changes
+   Secure and auditable
    LGPD/GDPR compliant
 
 
-🎓 ESTRUTURA DE FICHEIROS
+🎓 DIRECTORY STRUCTURE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   logistica-multi-tenant/

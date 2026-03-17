@@ -63,7 +63,7 @@ jobs:
       - name: Build all projects
         run: npm run build-all
 
-      # Exemplo de como rodar comandos em pastas específicas se necessário
+      # Example of how to run commands in specific folders if needed
       - name: Lint Frontend specific
         run: |
           cd frontend

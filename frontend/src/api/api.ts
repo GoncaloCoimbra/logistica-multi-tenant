@@ -65,21 +65,21 @@ api.interceptors.response.use(
     console.error('🔗 [ATTEMPTED URL]', error.config?.baseURL + error.config?.url);
     console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
-    // ✅ Normalize error data to always be a plain string
+    // ✅ Normalize error date to always be a plain string
     // This prevents "Objects are not valid as a React child" crashes
     if (error.response) {
-      const data = error.response.data;
+      const date = error.response.data;
       let message = 'An unexpected error occurred';
 
-      if (typeof data === 'string') {
-        message = data;
-      } else if (typeof data?.message === 'string') {
-        message = data.message;
-      } else if (Array.isArray(data?.message)) {
+      if (typeof date === 'string') {
+        message = date;
+      } else if (typeof date?.message === 'string') {
+        message = date.message;
+      } else if (Array.isArray(date?.message)) {
         // NestJS validation errors return message as string[]
-        message = data.message.join(', ');
-      } else if (typeof data?.error === 'string') {
-        message = data.error;
+        message = date.message.join(', ');
+      } else if (typeof date?.error === 'string') {
+        message = date.error;
       }
 
       error.response.data = { message };

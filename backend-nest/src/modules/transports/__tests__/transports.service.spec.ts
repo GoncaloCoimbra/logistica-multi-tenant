@@ -229,7 +229,7 @@ describe('TransportsService', () => {
       };
 
       (prismaService.transport.findFirst as jest.Mock).mockResolvedValue(
-        mockTransport
+        mockTransport,
       );
 
       // Act

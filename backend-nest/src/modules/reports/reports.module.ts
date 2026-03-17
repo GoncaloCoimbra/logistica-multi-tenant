@@ -8,8 +8,3 @@ import { ReportsController } from './controllers/reports.controller';
   exports: [ReportsService],
 })
 export class ReportsModule {}
-
-
-
-
-

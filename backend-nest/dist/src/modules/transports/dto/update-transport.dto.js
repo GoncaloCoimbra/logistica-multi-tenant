@@ -30,18 +30,18 @@ exports.UpdateTransportDto = UpdateTransportDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        description: 'ID do veículo (UUID)',
-        required: false
+        description: 'Vehicle ID (UUID)',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsUUID)('4', { message: 'VehicleId inválido' }),
+    (0, class_validator_1.IsUUID)('4', { message: 'Invalid VehicleId' }),
     __metadata("design:type", String)
 ], UpdateTransportDto.prototype, "vehicleId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'Lisboa',
-        description: 'Cidade/Local de origem',
-        required: false
+        description: 'City/Origin location',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -50,8 +50,8 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'Porto',
-        description: 'Cidade/Local de destino',
-        required: false
+        description: 'City/Destination location',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -60,38 +60,38 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '2025-12-01',
-        description: 'Data de partida (YYYY-MM-DD)',
-        required: false
+        description: 'Departure date (YYYY-MM-DD)',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDateString)({}, { message: 'Data de partida inválida' }),
+    (0, class_validator_1.IsDateString)({}, { message: 'Date de partida inválida' }),
     __metadata("design:type", String)
 ], UpdateTransportDto.prototype, "departureDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '2025-12-05',
-        description: 'Data estimada de chegada (YYYY-MM-DD)',
-        required: false
+        description: 'Estimated arrival date (YYYY-MM-DD)',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDateString)({}, { message: 'Data de chegada inválida' }),
+    (0, class_validator_1.IsDateString)({}, { message: 'Invalid arrival date' }),
     __metadata("design:type", String)
 ], UpdateTransportDto.prototype, "estimatedArrival", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 1500.50,
-        description: 'Peso total da carga em kg',
-        required: false
+        example: 1500.5,
+        description: 'Total load weight in kg',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)({}, { message: 'Peso deve ser um número' }),
+    (0, class_validator_1.IsNumber)({}, { message: 'Weight must be a number' }),
     __metadata("design:type", Number)
 ], UpdateTransportDto.prototype, "totalWeight", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 'Carga frágil - manusear com cuidado',
-        description: 'Observações sobre o transporte',
-        required: false
+        example: 'Load frágil - manusear com cuidado',
+        description: 'Notes about transport',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -102,32 +102,32 @@ __decorate([
         enum: client_1.TransportStatus,
         example: client_1.TransportStatus.IN_TRANSIT,
         required: false,
-        description: `Status do transporte:
-    - PENDING: Aguardando partida
-    - IN_TRANSIT: Em trânsito
-    - ARRIVED: Chegou ao destino (automático na data estimada)
-    - DELIVERED: Entregue após conferência (produtos mudam para APPROVED automaticamente)
-    - CANCELED: Cancelado (produtos voltam ao stock automaticamente)`
+        description: `Transport status:
+    - PENDING: Awaiting departure
+    - IN_TRANSIT: In transit
+    - ARRIVED: Arrived at destination (automatic on estimated date)
+    - DELIVERED: Delivered after verification (products automatically change to APPROVED)
+    - CANCELED: Canceled (products automatically return to stock)`,
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(client_1.TransportStatus, { message: 'Status inválido' }),
+    (0, class_validator_1.IsEnum)(client_1.TransportStatus, { message: 'Invalid status' }),
     __metadata("design:type", String)
 ], UpdateTransportDto.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: '2025-12-05T14:30:00Z',
-        description: 'Data/hora real de chegada (preenchido ao conferir entrega)',
-        required: false
+        description: 'Actual arrival date/time (filled in when verifying delivery)',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDateString)({}, { message: 'Data de chegada real inválida' }),
+    (0, class_validator_1.IsDateString)({}, { message: 'Invalid actual arrival date' }),
     __metadata("design:type", String)
 ], UpdateTransportDto.prototype, "actualArrival", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'João Silva',
-        description: 'Nome de quem recebeu fisicamente a carga',
-        required: false
+        description: 'Name of person who physically received the load',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
@@ -135,9 +135,9 @@ __decorate([
 ], UpdateTransportDto.prototype, "receivedBy", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        example: 'Carga recebida em perfeitas condições. 2 paletes verificadas.',
-        description: 'Observações sobre o recebimento',
-        required: false
+        example: 'Load received in perfect condition. 2 pallets verified.',
+        description: 'Notes about receipt',
+        required: false,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),

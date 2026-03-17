@@ -1,4 +1,10 @@
-﻿import { IsEnum, IsNotEmpty, IsOptional, IsString, IsNumber } from 'class-validator';
+﻿import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsNumber,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { ProductStatus } from '@prisma/client';
 

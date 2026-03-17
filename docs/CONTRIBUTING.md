@@ -438,12 +438,12 @@ Thank you for contributing! 🚀
 **Last Updated**: February 27, 2026  
 **Version**: 1.0.0
 
-## Decisão: Backend
+## Backend Decision
 
-- **Código ativo**: `backend-nest` (NestJS).
+- **Active Code**: `backend-nest` (NestJS).
 - **Legacy Code**: `backend` (Express) – **do not modify** except for documented migration purposes.
 
-## Estrutura de Projetos
+## Project Structure
 
 ```
 backend-nest/          # NestJS + Prisma + Swagger
@@ -454,7 +454,7 @@ backend-nest/          # NestJS + Prisma + Swagger
 │  └─ main.ts
 ├─ prisma/
 ├─ test/              # E2E tests
-├─ jest.config.js     # Config para unitários
+├─ jest.config.js     # Config for unit tests
 └─ package.json
 
 frontend/              # React + Vite

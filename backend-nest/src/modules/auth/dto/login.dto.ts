@@ -4,22 +4,22 @@ import { ApiProperty } from '@nestjs/swagger';
 export class LoginDto {
   @ApiProperty({
     example: 'admin@logistica.com',
-    description: 'Email do utilizador registado no sistema',
+    description: 'User email registered in the system',
     type: String,
   })
-  @IsEmail({}, { message: 'Email inválido. Por favor, insira um email válido.' })
-  @IsNotEmpty({ message: 'Email é obrigatório' })
+  @IsEmail({}, { message: 'Invalid email. Please enter a valid email.' })
+  @IsNotEmpty({ message: 'Email is required' })
   email: string;
 
   @ApiProperty({
     example: 'admin123',
-    description: 'Password do utilizador (mínimo 6 caracteres)',
+    description: 'User password (minimum 6 characters)',
     minLength: 6,
     maxLength: 128,
     type: String,
   })
-  @IsNotEmpty({ message: 'Password é obrigatória' })
-  @MinLength(6, { message: 'Password deve ter no mínimo 6 caracteres' })
-  @MaxLength(128, { message: 'Password não pode exceder 128 caracteres' })
+  @IsNotEmpty({ message: 'Password is required' })
+  @MinLength(6, { message: 'Password must be at least 6 characters long' })
+  @MaxLength(128, { message: 'Password cannot exceed 128 characters' })
   password: string;
 }

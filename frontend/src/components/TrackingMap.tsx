@@ -77,10 +77,10 @@ const RouteMarkers = ({ route }: { route: TrackingRoute }) => {
       <Marker position={[startLoc.lat, startLoc.lng]} icon={startIcon}>
         <Popup>
           <div className="text-sm font-semibold">
-            Início: {route.name}
+            Start: {route.name}
             {startLoc.timestamp && (
               <div className="text-xs text-gray-600">
-                {new Date(startLoc.timestamp).toLocaleTimeString('pt-PT')}
+                {new Date(startLoc.timestamp).toLocaleTimeString('en-GB')}
               </div>
             )}
           </div>
@@ -90,10 +90,10 @@ const RouteMarkers = ({ route }: { route: TrackingRoute }) => {
       <Marker position={[endLoc.lat, endLoc.lng]} icon={endIcon}>
         <Popup>
           <div className="text-sm font-semibold">
-            Fim: {route.name}
+            End: {route.name}
             {endLoc.timestamp && (
               <div className="text-xs text-gray-600">
-                {new Date(endLoc.timestamp).toLocaleTimeString('pt-PT')}
+                {new Date(endLoc.timestamp).toLocaleTimeString('en-GB')}
               </div>
             )}
           </div>
@@ -162,7 +162,7 @@ const TrackingMap: React.FC<TrackingMapProps> = ({
   if (!hasValidLocations) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-slate-900 rounded-lg border border-slate-700">
-        <p className="text-slate-400">Nenhuma rota disponível para visualizar</p>
+        <p className="text-slate-400">Nenhuma route disponível para visualizar</p>
       </div>
     );
   }

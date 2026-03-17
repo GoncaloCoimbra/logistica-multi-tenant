@@ -25,21 +25,21 @@ let RegistrationController = RegistrationController_1 = class RegistrationContro
     async register(dto) {
         this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         this.logger.log('📨 Requisição de registro recebida');
-        this.logger.log(`🏢 Empresa: ${dto.companyName}`);
-        this.logger.log(`📧 Email Empresa: ${dto.companyEmail}`);
+        this.logger.log(`🏢 Company: ${dto.companyName}`);
+        this.logger.log(`📧 Email Company: ${dto.companyEmail}`);
         this.logger.log(`🆔 NIF: ${dto.companyNif}`);
         this.logger.log(`👤 Usuário: ${dto.userName}`);
         this.logger.log(`📧 Email Usuário: ${dto.userEmail}`);
         try {
             const result = await this.registrationService.registerCompanyAndUser(dto);
-            this.logger.log(' Registro completado com sucesso!');
+            this.logger.log(' Registro completado com success!');
             this.logger.log(`👤 User ID: ${result.user.id}`);
             this.logger.log(`🏢 Company ID: ${result.user.companyId}`);
             this.logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             return result;
         }
         catch (error) {
-            this.logger.error(' Erro no registro:', error.message);
+            this.logger.error(' Error no registro:', error.message);
             this.logger.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             throw error;
         }

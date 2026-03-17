@@ -48,8 +48,7 @@ let TransportRepository = class TransportRepository extends base_repository_1.Ba
     }
     async updateStatus(id, status) {
         return this.prisma.transport.update({
-            where: { id },
-            data: { status },
+            where: { id }, data: { status },
         });
     }
 };

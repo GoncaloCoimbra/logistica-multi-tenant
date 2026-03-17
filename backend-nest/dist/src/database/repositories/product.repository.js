@@ -48,8 +48,7 @@ let ProductRepository = class ProductRepository extends base_repository_1.BaseRe
     }
     async updateStatus(id, status) {
         return this.prisma.product.update({
-            where: { id },
-            data: { status },
+            where: { id }, data: { status },
         });
     }
     async countByStatus(companyId, status) {

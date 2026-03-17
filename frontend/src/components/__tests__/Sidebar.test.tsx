@@ -20,7 +20,7 @@ describe('Sidebar component', () => {
     );
 
     expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
-    expect(screen.getByText(/Produtos/i)).toBeInTheDocument();
+    expect(screen.getByText(/products/i)).toBeInTheDocument();
     expect(screen.getByText(/Fornecedores/i)).toBeInTheDocument();
   });
 

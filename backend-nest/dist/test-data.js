@@ -57,7 +57,7 @@ async function main() {
         });
         console.log(' Last 5 movements:');
         movements.forEach((mov, idx) => {
-            console.log(`  ${idx + 1}. Produto ${mov.product.internalCode}: ${mov.previousStatus} → ${mov.newStatus} at ${mov.createdAt}`);
+            console.log(`  ${idx + 1}. product ${mov.product.internalCode}: ${mov.previousStatus} → ${mov.newStatus} at ${mov.createdAt}`);
         });
     }
     else {

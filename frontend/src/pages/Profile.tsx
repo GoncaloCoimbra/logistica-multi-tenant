@@ -115,7 +115,7 @@ const Profile: React.FC = () => {
       formData.append('avatar', file);
 
       const response = await api.post('/auth/avatar', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-date' }
       });
 
       updateUserData(response.data.user);

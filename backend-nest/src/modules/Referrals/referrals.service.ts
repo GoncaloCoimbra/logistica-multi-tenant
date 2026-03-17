@@ -1,8 +1,16 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { ReferralStatus } from '@prisma/client'; // ← MUDAR PARA PRISMA
 import { CreateReferralDto } from './dto/create-referral.dto';
-import { UpdateReferralDto, UpdateReferralStatusDto } from './dto/update-referral.dto';
+import {
+  UpdateReferralDto,
+  UpdateReferralStatusDto,
+} from './dto/update-referral.dto';
 import { FilterReferralDto } from './dto/filter-referral.dto';
 import { ReferralStatsDto } from './dto/referrals.dto';
 @Injectable()
@@ -12,37 +20,44 @@ export class ReferralsService {
   /**
    * Cria uma nova referência
    */
-  async create(createReferralDto: CreateReferralDto, userId: string, userRole: string, userCompanyId: string) {
-    // Verifica se SUPER_ADMIN está criando para uma empresa específica
+  async create(
+    createReferralDto: CreateReferralDto,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
+    // Verifica se SUPER_ADMIN está criando para uma company específica
     let companyId = userCompanyId;
-    
+
     if (userRole === 'SUPER_ADMIN') {
       if (!createReferralDto.companyId) {
-        throw new BadRequestException('SUPER_ADMIN deve especificar o ID da empresa');
+        throw new BadRequestException(
+          'SUPER_ADMIN deve especificar o ID da company',
+        );
       }
       companyId = createReferralDto.companyId;
-      
-      // Verifica se a empresa existe
+
+      // Verifica se a company existe
       const companyExists = await this.prisma.company.findUnique({
         where: { id: companyId },
       });
-      
+
       if (!companyExists) {
-        throw new NotFoundException('Empresa não encontrada');
+        throw new NotFoundException('Company não encontrada');
       }
     }
 
-    // Converte a data para ISO string
+    // Converte a date para ISO string
     const referralDate = new Date(createReferralDto.referralDate);
-    
+
     // Calcula comissão se não fornecida (5% do valor estimado)
-    const commission = createReferralDto.commission !== undefined 
-      ? createReferralDto.commission 
-      : createReferralDto.estimatedValue * 0.05;
+    const commission =
+      createReferralDto.commission !== undefined
+        ? createReferralDto.commission
+        : createReferralDto.estimatedValue * 0.05;
 
     // Cria a referência
-    const referral = await this.prisma.referral.create({
-      data: {
+    const referral = await this.prisma.referral.create({ data: {
         clientName: createReferralDto.clientName,
         contactInfo: createReferralDto.contactInfo,
         referralSource: createReferralDto.referralSource || '',
@@ -63,16 +78,21 @@ export class ReferralsService {
   /**
    * Lista todas as referências com filtros opcionais
    */
-  async findAll(filterDto: FilterReferralDto, userId: string, userRole: string, userCompanyId: string) {
+  async findAll(
+    filterDto: FilterReferralDto,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const where: any = {};
 
-    // SUPER_ADMIN pode ver todas as referências ou filtrar por empresa
+    // SUPER_ADMIN pode ver todas as referências ou filter por company
     if (userRole === 'SUPER_ADMIN') {
       if (filterDto.companyId) {
         where.companyId = filterDto.companyId;
       }
     } else {
-      // Outros usuários só veem referências da própria empresa
+      // Outros usuários só veem referências da própria company
       where.companyId = userCompanyId;
     }
 
@@ -118,9 +138,7 @@ export class ReferralsService {
 
     const referrals = await this.prisma.referral.findMany({
       where,
-      orderBy: [
-        { referralDate: 'desc' },
-      ],
+      orderBy: [{ referralDate: 'desc' }],
     });
 
     return referrals;
@@ -129,7 +147,12 @@ export class ReferralsService {
   /**
    * Busca uma referência por ID
    */
-  async findOne(id: string, userId: string, userRole: string, userCompanyId: string) {
+  async findOne(
+    id: string,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const referral = await this.prisma.referral.findUnique({
       where: { id },
     });
@@ -140,7 +163,9 @@ export class ReferralsService {
 
     // Verifica permissões
     if (userRole !== 'SUPER_ADMIN' && referral.companyId !== userCompanyId) {
-      throw new ForbiddenException('Você não tem permissão para visualizar esta referência');
+      throw new ForbiddenException(
+        'Você não tem permissão para visualizar esta referência',
+      );
     }
 
     return referral;
@@ -149,7 +174,13 @@ export class ReferralsService {
   /**
    * Atualiza uma referência
    */
-  async update(id: string, updateReferralDto: UpdateReferralDto, userId: string, userRole: string, userCompanyId: string) {
+  async update(
+    id: string,
+    updateReferralDto: UpdateReferralDto,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const referral = await this.findOne(id, userId, userRole, userCompanyId);
 
     const updateData: any = {};
@@ -185,17 +216,16 @@ export class ReferralsService {
     if (updateReferralDto.notes !== undefined) {
       updateData.notes = updateReferralDto.notes || null;
     }
-if (updateReferralDto.referredBy !== undefined) {
-  updateData.referredBy = updateReferralDto.referredBy;
-}
+    if (updateReferralDto.referredBy !== undefined) {
+      updateData.referredBy = updateReferralDto.referredBy;
+    }
 
     if (updateReferralDto.commission !== undefined) {
       updateData.commission = updateReferralDto.commission;
     }
 
     const updatedReferral = await this.prisma.referral.update({
-      where: { id },
-      data: updateData,
+      where: { id }, data: updateData,
     });
 
     return updatedReferral;
@@ -204,12 +234,17 @@ if (updateReferralDto.referredBy !== undefined) {
   /**
    * Atualiza apenas o status de uma referência
    */
-  async updateStatus(id: string, updateStatusDto: UpdateReferralStatusDto, userId: string, userRole: string, userCompanyId: string) {
+  async updateStatus(
+    id: string,
+    updateStatusDto: UpdateReferralStatusDto,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const referral = await this.findOne(id, userId, userRole, userCompanyId);
 
     const updatedReferral = await this.prisma.referral.update({
-      where: { id },
-      data: {
+      where: { id }, data: {
         status: updateStatusDto.status,
       },
     });
@@ -220,20 +255,30 @@ if (updateReferralDto.referredBy !== undefined) {
   /**
    * Remove uma referência
    */
-  async remove(id: string, userId: string, userRole: string, userCompanyId: string) {
+  async remove(
+    id: string,
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+  ) {
     const referral = await this.findOne(id, userId, userRole, userCompanyId);
 
     await this.prisma.referral.delete({
       where: { id },
     });
 
-    return { message: 'Referência excluída com sucesso' };
+    return { message: 'Referência excluída com success' };
   }
 
   /**
    * Obtém estatísticas das referências
    */
-  async getStats(userId: string, userRole: string, userCompanyId: string, companyId?: string): Promise<ReferralStatsDto> {
+  async getStats(
+    userId: string,
+    userRole: string,
+    userCompanyId: string,
+    companyId?: string,
+  ): Promise<ReferralStatsDto> {
     const where: any = {};
 
     if (userRole === 'SUPER_ADMIN' && companyId) {
@@ -242,19 +287,23 @@ if (updateReferralDto.referredBy !== undefined) {
       where.companyId = userCompanyId;
     }
 
-    const [
-      total,
-      newReferrals,
-      contacted,
-      converted,
-      lost,
-    ] = await Promise.all([
-      this.prisma.referral.count({ where }),
-      this.prisma.referral.count({ where: { ...where, status: ReferralStatus.NEW } }),
-      this.prisma.referral.count({ where: { ...where, status: ReferralStatus.CONTACTED } }),
-      this.prisma.referral.count({ where: { ...where, status: ReferralStatus.CONVERTED } }),
-      this.prisma.referral.count({ where: { ...where, status: ReferralStatus.LOST } }),
-    ]);
+    const [total, newReferrals, contacted, converted, lost] = await Promise.all(
+      [
+        this.prisma.referral.count({ where }),
+        this.prisma.referral.count({
+          where: { ...where, status: ReferralStatus.NEW },
+        }),
+        this.prisma.referral.count({
+          where: { ...where, status: ReferralStatus.CONTACTED },
+        }),
+        this.prisma.referral.count({
+          where: { ...where, status: ReferralStatus.CONVERTED },
+        }),
+        this.prisma.referral.count({
+          where: { ...where, status: ReferralStatus.LOST },
+        }),
+      ],
+    );
 
     // Calcular valores totais
     const allReferrals = await this.prisma.referral.findMany({
@@ -265,8 +314,14 @@ if (updateReferralDto.referredBy !== undefined) {
       },
     });
 
-    const totalEstimatedValue = allReferrals.reduce((sum, ref) => sum + ref.estimatedValue, 0);
-    const totalCommission = allReferrals.reduce((sum, ref) => sum + (ref.commission || 0), 0);
+    const totalEstimatedValue = allReferrals.reduce(
+      (sum, ref) => sum + ref.estimatedValue,
+      0,
+    );
+    const totalCommission = allReferrals.reduce(
+      (sum, ref) => sum + (ref.commission || 0),
+      0,
+    );
     const conversionRate = total > 0 ? (converted / total) * 100 : 0;
 
     return {

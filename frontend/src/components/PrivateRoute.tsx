@@ -34,7 +34,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
       <div className={`min-h-screen flex items-center justify-center ${theme.backgrounds.page}`}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-slate-300 font-medium">A carregar...</p>
+          <p className="text-slate-300 font-medium">Loading...</p>
         </div>
       </div>
     );
@@ -45,9 +45,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     return <Navigate to="/login" replace />;
   }
 
-  //  Verificar se requer Super Admin
+  //  Check se requer Super Admin
   if (requireSuperAdmin && !isSuperAdmin) {
-    console.warn('⚠️ PrivateRoute - Acesso negado: requer Super Admin');
+    console.warn('⚠️ PrivateRoute - Access negado: requer Super Admin');
     console.warn('⚠️ User role:', user.role);
     return (
       <div className={`min-h-screen flex items-center justify-center ${theme.backgrounds.page}`}>
@@ -75,9 +75,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     );
   }
 
-  //  Verificar se requer Admin (Admin ou Super Admin)
+  //  Check se requer Admin (Admin ou Super Admin)
   if (requireAdmin && !isAdmin) {
-    console.warn('⚠️ PrivateRoute - Acesso negado: requer Admin');
+    console.warn('⚠️ PrivateRoute - Access negado: requer Admin');
     return (
       <div className={`min-h-screen flex items-center justify-center ${theme.backgrounds.page}`}>
         <div className={`text-center max-w-md p-8 ${theme.cards.form}`}>
@@ -101,9 +101,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     );
   }
 
-  //  Verificar se requer Operator (Operator ou Admin)
+  //  Check se requer Operator (Operator ou Admin)
   if (requireOperator && !(isOperator || isAdmin)) {
-    console.warn('⚠️ PrivateRoute - Acesso negado: requer Operator ou Admin');
+    console.warn('⚠️ PrivateRoute - Access negado: requer Operator ou Admin');
     return (
       <div className={`min-h-screen flex items-center justify-center ${theme.backgrounds.page}`}>
         <div className={`text-center max-w-md p-8 ${theme.cards.form}`}>

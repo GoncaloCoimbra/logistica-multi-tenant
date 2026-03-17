@@ -38,7 +38,8 @@ let TenantGuard = TenantGuard_1 = class TenantGuard {
             request.body.companyId = user.companyId;
             this.logger.debug(`CompanyId injected: ${user.companyId}`);
         }
-        if (request.params?.companyId && request.params.companyId !== user.companyId) {
+        if (request.params?.companyId &&
+            request.params.companyId !== user.companyId) {
             this.logger.error(` User ${user.email} tried to access company ${request.params.companyId}`);
             throw new common_1.ForbiddenException('Cannot access data from another company');
         }

@@ -45,13 +45,15 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
                         companyId,
                     };
                 }
-                else if (params.action === 'update' || params.action === 'updateMany') {
+                else if (params.action === 'update' ||
+                    params.action === 'updateMany') {
                     params.args.where = {
                         ...params.args.where,
                         companyId,
                     };
                 }
-                else if (params.action === 'delete' || params.action === 'deleteMany') {
+                else if (params.action === 'delete' ||
+                    params.action === 'deleteMany') {
                     params.args.where = {
                         ...params.args.where,
                         companyId,

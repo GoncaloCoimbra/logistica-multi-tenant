@@ -61,7 +61,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               {[
                 { to: '/dashboard',   label: 'Dashboard' },
-                { to: '/produtos',    label: 'Products' },
+                { to: '/products',    label: 'Products' },
                 { to: '/fornecedores',label: 'Suppliers' },
                 { to: '/transportes', label: 'Transports' },
                 { to: '/rastreamento?tab=historico', label: 'History' },

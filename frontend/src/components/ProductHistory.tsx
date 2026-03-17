@@ -110,7 +110,7 @@ export const ProductHistory: React.FC<ProductHistoryProps> = ({ productId }) => 
                 </div>
 
                 <div className="text-sm text-amber-400/70 ml-4 whitespace-nowrap">
-                  {new Date(entry.createdAt).toLocaleString('pt-PT')}
+                  {new Date(entry.createdAt).toLocaleString('en-GB')}
                 </div>
               </div>
             </div>

@@ -10,11 +10,3 @@ import { ProductRepository } from '../database/repositories/product.repository';
   exports: [ProductsService],
 })
 export class ProductsModule {}
-
-
-
-
-
-
-
-
