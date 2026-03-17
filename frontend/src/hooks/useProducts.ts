@@ -45,13 +45,23 @@ export function useProducts(filters?: { status?: string; supplierId?: string; se
   return useQuery({
     queryKey: ['products', filters],
     queryFn: async () => {
-      console.log('[useProducts] Fetching with filters:', filters);
+      // Remove empty/undefined filters to avoid 400 errors
+      const cleanFilters = Object.fromEntries(
+        Object.entries(filters || {}).filter(([_, value]) => value !== '' && value !== undefined && value !== null)
+      );
+      
+      console.log('[useProducts] Clean filters:', cleanFilters);
       try {
-        const response = await apiClient.get<Product[]>('/products', { params: filters });
-        console.log('[useProducts] Response:', response.data);
+        const response = await apiClient.get<Product[]>('/products', { params: cleanFilters });
+        console.log('[useProducts] Success:', response.data);
         return response.data;
       } catch (err: any) {
-        console.error('[useProducts] Error:', err.message, err.response?.data);
+        console.error('[useProducts] Error:', {
+          message: err.message,
+          status: err.response?.status,
+          statusText: err.response?.statusText,
+          errorDetail: err.response?.data,
+        });
         throw err;
       }
     },
