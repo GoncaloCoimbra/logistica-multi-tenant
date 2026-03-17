@@ -110,7 +110,7 @@ const ProductList: React.FC = () => {
       {/* Advanced Filters */}
       <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 p-6 rounded-xl shadow-2xl border border-amber-500/30 mb-6">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-lg font-semibold text-white">🔍 Advanced Filters</h3>
+          <h3 className="text-lg font-semibold text-white">Advanced Filters</h3>
           {activeFilters.length > 0 && (
             <span className="text-sm text-amber-400 font-medium">
               {products.length} result{products.length !== 1 ? 's' : ''} found
@@ -207,12 +207,12 @@ const ProductList: React.FC = () => {
             <table className="min-w-full">
               <thead className="bg-gradient-to-r from-amber-900/30 to-amber-900/20">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Código</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Descrição</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Code</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Description</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Quantity</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Supplier</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Localização</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Location</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-amber-300 uppercase tracking-wider">Reception Date</th>
                 </tr>
               </thead>
