@@ -112,13 +112,13 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 mode: 'insensitive',
             };
         }
-        if (filters?.dataFrom || filters?.dataTo) {
+        if (filters?.dateFrom || filters?.dateTo) {
             where.createdAt = {};
-            if (filters.dataFrom) {
-                where.createdAt.gte = new Date(filters.dataFrom);
+            if (filters.dateFrom) {
+                where.createdAt.gte = new Date(filters.dateFrom);
             }
-            if (filters.dataTo) {
-                const endDate = new Date(filters.dataTo);
+            if (filters.dateTo) {
+                const endDate = new Date(filters.dateTo);
                 endDate.setHours(23, 59, 59, 999);
                 where.createdAt.lte = endDate;
             }

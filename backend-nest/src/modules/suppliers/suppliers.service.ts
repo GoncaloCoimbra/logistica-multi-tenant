@@ -162,7 +162,7 @@ export class SuppliersService {
     vehicleId: string,
     companyId?: string,
   ): Promise<SerializedSupplier[]> {
-    this.logger.log(`🔍 Buscando fornecedores por veículo ${vehicleId}`);
+    this.logger.log(`🔍 Buscando fornecedores por Vehicle ${vehicleId}`);
 
     const where: any = {};
     if (companyId) {

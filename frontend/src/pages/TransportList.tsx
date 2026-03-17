@@ -220,7 +220,7 @@ const TransportList: React.FC = () => {
   };
 
   const getNextFilter = () => {
-    if (!getFilter('vehicle')) return { type: 'vehicle' as const, label: 'Veículo' };
+    if (!getFilter('vehicle')) return { type: 'vehicle' as const, label: 'Vehicle' };
     if (!getFilter('status')) return { type: 'status' as const, label: 'Status' };
     return null;
   };
@@ -570,7 +570,7 @@ const TransportList: React.FC = () => {
             )}
 
             <div>
-              <label className="block text-sm font-medium mb-1 text-amber-200">Veículo *</label>
+              <label className="block text-sm font-medium mb-1 text-amber-200">Vehicle *</label>
               <select
                 required
                 value={formData.vehicleId}
@@ -824,7 +824,7 @@ const TransportList: React.FC = () => {
             <thead className="bg-gradient-to-r from-[#0f172a] to-black">
               <tr>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
-                  Veículo
+                  Vehicle
                 </th>
                 <th className="bg-gradient-to-r from-[#0f172a] to-black px-8 py-4 text-left text-xs font-black text-amber-400 uppercase tracking-widest border-b-2 border-amber-500/30">
                   Route
@@ -955,7 +955,7 @@ const TransportList: React.FC = () => {
             vehicleId: getFilter('vehicle') || '',
             status: getFilter('status') || '',
           }}
-          placeholder={`Pesquisar ${currentFilterType === 'vehicle' ? 'veículos' : 'estados'}...`}
+          placeholder={`Pesquisar ${currentFilterType === 'vehicle' ? 'Vehicles' : 'estados'}...`}
         />
       )}
 

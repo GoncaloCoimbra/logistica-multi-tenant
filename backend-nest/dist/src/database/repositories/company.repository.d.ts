@@ -9,26 +9,26 @@ export declare class CompanyRepository extends BaseRepository<Company> {
             companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
-            internalCode: string;
             quantity: number;
+            internalCode: string;
+            description: string;
             unit: string;
             totalWeight: number | null;
             totalVolume: number | null;
             currentLocation: string | null;
-            supplierId: string;
             status: import(".prisma/client").$Enums.ProductStatus;
+            supplierId: string;
         }[];
         users: {
             id: string;
+            companyId: string | null;
+            createdAt: Date;
             email: string;
             name: string;
             password: string;
             role: import(".prisma/client").$Enums.Role;
             isActive: boolean;
             avatarUrl: string | null;
-            companyId: string | null;
-            createdAt: Date;
             updatedAt: Date;
         }[];
         vehicles: {
@@ -36,9 +36,9 @@ export declare class CompanyRepository extends BaseRepository<Company> {
             companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            type: string;
             status: import(".prisma/client").$Enums.VehicleStatus;
             licensePlate: string;
+            type: string;
             model: string;
             brand: string;
             capacity: number;
@@ -46,10 +46,10 @@ export declare class CompanyRepository extends BaseRepository<Company> {
         }[];
     } & {
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -58,10 +58,10 @@ export declare class CompanyRepository extends BaseRepository<Company> {
     findByTenant(tenant: string): Promise<Company | null>;
     findByNif(nif: string): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -69,10 +69,10 @@ export declare class CompanyRepository extends BaseRepository<Company> {
     } | null>;
     findByEmail(email: string): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -86,10 +86,10 @@ export declare class CompanyRepository extends BaseRepository<Company> {
         };
     } & {
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;

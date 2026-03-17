@@ -19,19 +19,21 @@ export declare class TransportsController {
             isActive: boolean;
         };
         vehicle: {
+            type: string;
+            status: import(".prisma/client").$Enums.VehicleStatus;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            status: import(".prisma/client").$Enums.VehicleStatus;
             companyId: string;
             licensePlate: string;
-            type: string;
             model: string;
             brand: string;
             capacity: number;
             year: number;
         };
     } & {
+        status: import(".prisma/client").$Enums.TransportStatus;
+        vehicleId: string;
         id: string;
         internalCode: string;
         origin: string;
@@ -45,8 +47,6 @@ export declare class TransportsController {
         notes: string | null;
         createdAt: Date;
         updatedAt: Date;
-        status: import(".prisma/client").$Enums.TransportStatus;
-        vehicleId: string;
         companyId: string;
     }>;
     findAll(req: any, filters: FilterTransportDto, queryCompanyId?: string): Promise<({
@@ -62,13 +62,13 @@ export declare class TransportsController {
             isActive: boolean;
         };
         vehicle: {
+            type: string;
+            status: import(".prisma/client").$Enums.VehicleStatus;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            status: import(".prisma/client").$Enums.VehicleStatus;
             companyId: string;
             licensePlate: string;
-            type: string;
             model: string;
             brand: string;
             capacity: number;
@@ -90,15 +90,15 @@ export declare class TransportsController {
                     state: string | null;
                 };
             } & {
+                description: string;
+                status: import(".prisma/client").$Enums.ProductStatus;
                 id: string;
                 internalCode: string;
                 totalWeight: number | null;
                 createdAt: Date;
                 updatedAt: Date;
-                status: import(".prisma/client").$Enums.ProductStatus;
                 companyId: string;
                 quantity: number;
-                description: string;
                 unit: string;
                 totalVolume: number | null;
                 currentLocation: string | null;
@@ -112,6 +112,8 @@ export declare class TransportsController {
             quantity: number;
         })[];
     } & {
+        status: import(".prisma/client").$Enums.TransportStatus;
+        vehicleId: string;
         id: string;
         internalCode: string;
         origin: string;
@@ -125,8 +127,6 @@ export declare class TransportsController {
         notes: string | null;
         createdAt: Date;
         updatedAt: Date;
-        status: import(".prisma/client").$Enums.TransportStatus;
-        vehicleId: string;
         companyId: string;
     })[]>;
     findPending(req: any, queryCompanyId?: string): Promise<({
@@ -142,13 +142,13 @@ export declare class TransportsController {
             isActive: boolean;
         };
         vehicle: {
+            type: string;
+            status: import(".prisma/client").$Enums.VehicleStatus;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            status: import(".prisma/client").$Enums.VehicleStatus;
             companyId: string;
             licensePlate: string;
-            type: string;
             model: string;
             brand: string;
             capacity: number;
@@ -156,15 +156,15 @@ export declare class TransportsController {
         };
         products: ({
             product: {
+                description: string;
+                status: import(".prisma/client").$Enums.ProductStatus;
                 id: string;
                 internalCode: string;
                 totalWeight: number | null;
                 createdAt: Date;
                 updatedAt: Date;
-                status: import(".prisma/client").$Enums.ProductStatus;
                 companyId: string;
                 quantity: number;
-                description: string;
                 unit: string;
                 totalVolume: number | null;
                 currentLocation: string | null;
@@ -178,6 +178,8 @@ export declare class TransportsController {
             quantity: number;
         })[];
     } & {
+        status: import(".prisma/client").$Enums.TransportStatus;
+        vehicleId: string;
         id: string;
         internalCode: string;
         origin: string;
@@ -191,8 +193,6 @@ export declare class TransportsController {
         notes: string | null;
         createdAt: Date;
         updatedAt: Date;
-        status: import(".prisma/client").$Enums.TransportStatus;
-        vehicleId: string;
         companyId: string;
     })[]>;
     findInTransit(req: any, queryCompanyId?: string): Promise<({
@@ -208,13 +208,13 @@ export declare class TransportsController {
             isActive: boolean;
         };
         vehicle: {
+            type: string;
+            status: import(".prisma/client").$Enums.VehicleStatus;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            status: import(".prisma/client").$Enums.VehicleStatus;
             companyId: string;
             licensePlate: string;
-            type: string;
             model: string;
             brand: string;
             capacity: number;
@@ -222,15 +222,15 @@ export declare class TransportsController {
         };
         products: ({
             product: {
+                description: string;
+                status: import(".prisma/client").$Enums.ProductStatus;
                 id: string;
                 internalCode: string;
                 totalWeight: number | null;
                 createdAt: Date;
                 updatedAt: Date;
-                status: import(".prisma/client").$Enums.ProductStatus;
                 companyId: string;
                 quantity: number;
-                description: string;
                 unit: string;
                 totalVolume: number | null;
                 currentLocation: string | null;
@@ -244,6 +244,8 @@ export declare class TransportsController {
             quantity: number;
         })[];
     } & {
+        status: import(".prisma/client").$Enums.TransportStatus;
+        vehicleId: string;
         id: string;
         internalCode: string;
         origin: string;
@@ -257,8 +259,6 @@ export declare class TransportsController {
         notes: string | null;
         createdAt: Date;
         updatedAt: Date;
-        status: import(".prisma/client").$Enums.TransportStatus;
-        vehicleId: string;
         companyId: string;
     })[]>;
     findOne(id: string, req: any): Promise<{
@@ -274,13 +274,13 @@ export declare class TransportsController {
             isActive: boolean;
         };
         vehicle: {
+            type: string;
+            status: import(".prisma/client").$Enums.VehicleStatus;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            status: import(".prisma/client").$Enums.VehicleStatus;
             companyId: string;
             licensePlate: string;
-            type: string;
             model: string;
             brand: string;
             capacity: number;
@@ -302,15 +302,15 @@ export declare class TransportsController {
                     state: string | null;
                 };
             } & {
+                description: string;
+                status: import(".prisma/client").$Enums.ProductStatus;
                 id: string;
                 internalCode: string;
                 totalWeight: number | null;
                 createdAt: Date;
                 updatedAt: Date;
-                status: import(".prisma/client").$Enums.ProductStatus;
                 companyId: string;
                 quantity: number;
-                description: string;
                 unit: string;
                 totalVolume: number | null;
                 currentLocation: string | null;
@@ -324,6 +324,8 @@ export declare class TransportsController {
             quantity: number;
         })[];
     } & {
+        status: import(".prisma/client").$Enums.TransportStatus;
+        vehicleId: string;
         id: string;
         internalCode: string;
         origin: string;
@@ -337,8 +339,6 @@ export declare class TransportsController {
         notes: string | null;
         createdAt: Date;
         updatedAt: Date;
-        status: import(".prisma/client").$Enums.TransportStatus;
-        vehicleId: string;
         companyId: string;
     }>;
     update(id: string, updateTransportDto: UpdateTransportDto, req: any): Promise<{
@@ -354,13 +354,13 @@ export declare class TransportsController {
             isActive: boolean;
         };
         vehicle: {
+            type: string;
+            status: import(".prisma/client").$Enums.VehicleStatus;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            status: import(".prisma/client").$Enums.VehicleStatus;
             companyId: string;
             licensePlate: string;
-            type: string;
             model: string;
             brand: string;
             capacity: number;
@@ -368,15 +368,15 @@ export declare class TransportsController {
         };
         products: ({
             product: {
+                description: string;
+                status: import(".prisma/client").$Enums.ProductStatus;
                 id: string;
                 internalCode: string;
                 totalWeight: number | null;
                 createdAt: Date;
                 updatedAt: Date;
-                status: import(".prisma/client").$Enums.ProductStatus;
                 companyId: string;
                 quantity: number;
-                description: string;
                 unit: string;
                 totalVolume: number | null;
                 currentLocation: string | null;
@@ -390,6 +390,8 @@ export declare class TransportsController {
             quantity: number;
         })[];
     } & {
+        status: import(".prisma/client").$Enums.TransportStatus;
+        vehicleId: string;
         id: string;
         internalCode: string;
         origin: string;
@@ -403,8 +405,6 @@ export declare class TransportsController {
         notes: string | null;
         createdAt: Date;
         updatedAt: Date;
-        status: import(".prisma/client").$Enums.TransportStatus;
-        vehicleId: string;
         companyId: string;
     }>;
     updateStatus(id: string, body: {
@@ -422,13 +422,13 @@ export declare class TransportsController {
             isActive: boolean;
         };
         vehicle: {
+            type: string;
+            status: import(".prisma/client").$Enums.VehicleStatus;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            status: import(".prisma/client").$Enums.VehicleStatus;
             companyId: string;
             licensePlate: string;
-            type: string;
             model: string;
             brand: string;
             capacity: number;
@@ -436,15 +436,15 @@ export declare class TransportsController {
         };
         products: ({
             product: {
+                description: string;
+                status: import(".prisma/client").$Enums.ProductStatus;
                 id: string;
                 internalCode: string;
                 totalWeight: number | null;
                 createdAt: Date;
                 updatedAt: Date;
-                status: import(".prisma/client").$Enums.ProductStatus;
                 companyId: string;
                 quantity: number;
-                description: string;
                 unit: string;
                 totalVolume: number | null;
                 currentLocation: string | null;
@@ -458,6 +458,8 @@ export declare class TransportsController {
             quantity: number;
         })[];
     } & {
+        status: import(".prisma/client").$Enums.TransportStatus;
+        vehicleId: string;
         id: string;
         internalCode: string;
         origin: string;
@@ -471,8 +473,6 @@ export declare class TransportsController {
         notes: string | null;
         createdAt: Date;
         updatedAt: Date;
-        status: import(".prisma/client").$Enums.TransportStatus;
-        vehicleId: string;
         companyId: string;
     }>;
     remove(id: string, req: any, force?: string): Promise<{
@@ -504,13 +504,13 @@ export declare class TransportsController {
             speed: number;
         }[];
         vehicle: {
+            type: string;
+            status: import(".prisma/client").$Enums.VehicleStatus;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            status: import(".prisma/client").$Enums.VehicleStatus;
             companyId: string;
             licensePlate: string;
-            type: string;
             model: string;
             brand: string;
             capacity: number;

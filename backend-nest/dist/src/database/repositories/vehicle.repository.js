@@ -49,13 +49,13 @@ let VehicleRepository = class VehicleRepository {
         const where = companyId ? { companyId } : {};
         return this.prisma.vehicle.findMany({ where });
     }
-    async create(date) {
-        return this.prisma.vehicle.create({ date });
+    async create(data) {
+        return this.prisma.vehicle.create({ data });
     }
     async update(id, data) {
         return this.prisma.vehicle.update({
             where: { id },
-            date,
+            data,
         });
     }
     async updateStatus(id, status) {

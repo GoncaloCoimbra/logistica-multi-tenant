@@ -11,18 +11,18 @@ export declare class SuppliersController {
     findOne(id: string, req: any): Promise<import("../interfaces/supplier.interface").SerializedSupplier>;
     findWithProducts(id: string, req: any): Promise<{
         products: {
+            description: string;
+            status: import(".prisma/client").$Enums.ProductStatus;
             id: string;
+            internalCode: string;
+            totalWeight: number | null;
             createdAt: Date;
             updatedAt: Date;
             companyId: string;
-            internalCode: string;
-            description: string;
             quantity: number;
             unit: string;
-            totalWeight: number | null;
             totalVolume: number | null;
             currentLocation: string | null;
-            status: import(".prisma/client").$Enums.ProductStatus;
             supplierId: string;
         }[];
         id: string;

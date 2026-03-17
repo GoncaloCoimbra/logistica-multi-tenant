@@ -24,13 +24,13 @@ export declare class NotificationsController {
         };
     } & {
         id: string;
+        userId: string;
+        companyId: string;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
         content: string;
         isRead: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        companyId: string;
-        userId: string;
     }>;
     test(user: UserPayload): Promise<{
         message: string;
@@ -72,13 +72,13 @@ export declare class NotificationsController {
         };
     } & {
         id: string;
+        userId: string;
+        companyId: string;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
         content: string;
         isRead: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        companyId: string;
-        userId: string;
     })[]>;
     countUnread(user: UserPayload): Promise<{
         count: number;
@@ -95,13 +95,13 @@ export declare class NotificationsController {
         };
     } & {
         id: string;
+        userId: string;
+        companyId: string;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
         content: string;
         isRead: boolean;
-        createdAt: Date;
-        updatedAt: Date;
-        companyId: string;
-        userId: string;
     }>;
     markAllAsRead(user: UserPayload): Promise<import(".prisma/client").Prisma.BatchPayload>;
     markAllAsReadAlias(user: UserPayload): Promise<import(".prisma/client").Prisma.BatchPayload>;

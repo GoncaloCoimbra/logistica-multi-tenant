@@ -8,9 +8,9 @@ export declare class ReferralsService {
     constructor(prisma: PrismaService);
     create(createReferralDto: CreateReferralDto, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.ReferralStatus;
         notes: string | null;
         clientName: string;
@@ -24,9 +24,9 @@ export declare class ReferralsService {
     }>;
     findAll(filterDto: FilterReferralDto, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.ReferralStatus;
         notes: string | null;
         clientName: string;
@@ -40,9 +40,9 @@ export declare class ReferralsService {
     }[]>;
     findOne(id: string, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.ReferralStatus;
         notes: string | null;
         clientName: string;
@@ -56,9 +56,9 @@ export declare class ReferralsService {
     }>;
     update(id: string, updateReferralDto: UpdateReferralDto, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.ReferralStatus;
         notes: string | null;
         clientName: string;
@@ -72,9 +72,9 @@ export declare class ReferralsService {
     }>;
     updateStatus(id: string, updateStatusDto: UpdateReferralStatusDto, userId: string, userRole: string, userCompanyId: string): Promise<{
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.ReferralStatus;
         notes: string | null;
         clientName: string;

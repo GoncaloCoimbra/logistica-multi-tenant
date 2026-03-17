@@ -6,10 +6,10 @@ export declare class CompaniesService {
     constructor(companyRepository: CompanyRepository);
     create(createCompanyDto: CreateCompanyDto): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -17,10 +17,10 @@ export declare class CompaniesService {
     }>;
     findAll(): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -28,10 +28,10 @@ export declare class CompaniesService {
     }[]>;
     findOne(id: string): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -43,26 +43,26 @@ export declare class CompaniesService {
             companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
-            internalCode: string;
             quantity: number;
+            internalCode: string;
+            description: string;
             unit: string;
             totalWeight: number | null;
             totalVolume: number | null;
             currentLocation: string | null;
-            supplierId: string;
             status: import(".prisma/client").$Enums.ProductStatus;
+            supplierId: string;
         }[];
         users: {
             id: string;
+            companyId: string | null;
+            createdAt: Date;
             email: string;
             name: string;
             password: string;
             role: import(".prisma/client").$Enums.Role;
             isActive: boolean;
             avatarUrl: string | null;
-            companyId: string | null;
-            createdAt: Date;
             updatedAt: Date;
         }[];
         vehicles: {
@@ -70,9 +70,9 @@ export declare class CompaniesService {
             companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            type: string;
             status: import(".prisma/client").$Enums.VehicleStatus;
             licensePlate: string;
+            type: string;
             model: string;
             brand: string;
             capacity: number;
@@ -80,10 +80,10 @@ export declare class CompaniesService {
         }[];
     } & {
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -97,10 +97,10 @@ export declare class CompaniesService {
         };
     } & {
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -108,10 +108,10 @@ export declare class CompaniesService {
     }>;
     update(id: string, updateCompanyDto: UpdateCompanyDto): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;

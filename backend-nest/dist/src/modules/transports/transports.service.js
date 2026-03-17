@@ -271,7 +271,7 @@ let TransportsService = TransportsService_1 = class TransportsService {
             await tx.vehicle.update({
                 where: { id: date.vehicleId }, data: { status: client_1.VehicleStatus.in_use },
             });
-            this.logger.log(`🚗 Veículo ${vehicle.licensePlate} → IN_USE (bloqueado)`);
+            this.logger.log(`🚗 Vehicle ${vehicle.licensePlate} → IN_USE (bloqueado)`);
             return newTransport;
         });
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
@@ -279,7 +279,7 @@ let TransportsService = TransportsService_1 = class TransportsService {
         this.logger.log(`   🆔 ID: ${transport.id}`);
         this.logger.log(`   🔢 Código: ${transport.internalCode}`);
         this.logger.log(`   📦 products: ${date.products?.length || 0}`);
-        this.logger.log(`   🚗 Veículo: ${transport.vehicle.licensePlate} → IN_USE`);
+        this.logger.log(`   🚗 Vehicle: ${transport.vehicle.licensePlate} → IN_USE`);
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         return transport;
     }
@@ -454,7 +454,7 @@ let TransportsService = TransportsService_1 = class TransportsService {
                 await tx.vehicle.update({
                     where: { id: transport.vehicleId }, data: { status: client_1.VehicleStatus.available },
                 });
-                this.logger.log(`🚗 Veículo ${updatedTransport.vehicle.licensePlate} → AVAILABLE (liberado)`);
+                this.logger.log(`🚗 Vehicle ${updatedTransport.vehicle.licensePlate} → AVAILABLE (liberado)`);
                 if (data.receivedBy) {
                     this.logger.log(`👤 Recebido por: ${data.receivedBy}`);
                 }
@@ -511,7 +511,7 @@ let TransportsService = TransportsService_1 = class TransportsService {
                 await tx.vehicle.update({
                     where: { id: transport.vehicleId }, data: { status: client_1.VehicleStatus.available },
                 });
-                this.logger.log(`🚗 Veículo ${updatedTransport.vehicle.licensePlate} → AVAILABLE (liberado)`);
+                this.logger.log(`🚗 Vehicle ${updatedTransport.vehicle.licensePlate} → AVAILABLE (liberado)`);
                 const notificationUserId = userId || 'system';
                 try {
                     await this.notificationsService.create({
@@ -620,7 +620,7 @@ let TransportsService = TransportsService_1 = class TransportsService {
                     await tx.vehicle.update({
                         where: { id: transport.vehicleId }, data: { status: client_1.VehicleStatus.available },
                     });
-                    this.logger.log(`🚗 Veículo ${transport.vehicle.licensePlate} → AVAILABLE (liberado)`);
+                    this.logger.log(`🚗 Vehicle ${transport.vehicle.licensePlate} → AVAILABLE (liberado)`);
                     await tx.transportProduct.deleteMany({
                         where: { transportId: id },
                     });
@@ -633,7 +633,7 @@ let TransportsService = TransportsService_1 = class TransportsService {
                 this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
                 this.logger.log(`✅ Transport "${transport.internalCode}" eliminado`);
                 this.logger.log(`   📦 ${transport.products.length} product(s) devolvido(s) ao stock`);
-                this.logger.log(`   🚗 Veículo liberado`);
+                this.logger.log(`   🚗 Vehicle liberado`);
                 this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
                 return {
                     message: `✅ Transport "${transport.internalCode}" eliminado com success`,
@@ -650,7 +650,7 @@ let TransportsService = TransportsService_1 = class TransportsService {
                         await tx.vehicle.update({
                             where: { id: transport.vehicleId }, data: { status: client_1.VehicleStatus.available },
                         });
-                        this.logger.log(`🚗 Veículo ${transport.vehicle.licensePlate} → AVAILABLE (liberado)`);
+                        this.logger.log(`🚗 Vehicle ${transport.vehicle.licensePlate} → AVAILABLE (liberado)`);
                     }
                     await tx.transportProduct.deleteMany({
                         where: { transportId: id },

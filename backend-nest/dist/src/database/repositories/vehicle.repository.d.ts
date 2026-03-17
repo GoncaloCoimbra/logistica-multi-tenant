@@ -10,7 +10,7 @@ export declare class VehicleRepository {
     findByCompanyId(companyId: string): Promise<Vehicle[]>;
     findByLicensePlate(licensePlate: string): Promise<Vehicle | null>;
     findAvailable(companyId?: string): Promise<Vehicle[]>;
-    create(date: Prisma.VehicleCreateInput): Promise<Vehicle>;
+    create(data: Prisma.VehicleCreateInput): Promise<Vehicle>;
     update(id: string, data: Prisma.VehicleUpdateInput): Promise<Vehicle>;
     updateStatus(id: string, status: any): Promise<Vehicle>;
     delete(id: string): Promise<Vehicle>;

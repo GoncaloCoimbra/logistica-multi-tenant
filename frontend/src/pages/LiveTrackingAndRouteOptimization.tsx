@@ -103,7 +103,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'tracking' | 'routes' | 'geofencing' | 'history' | 'analytics'>('tracking');
   const location = useLocation();
   const [viewMode, setViewMode] = useState<'map' | 'list' | 'grid'>('map');
-  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+  const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
   // selectedRoute tracking handled via URL parameters
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [statistics, setStatistics] = useState({
@@ -136,6 +136,11 @@ const LiveTrackingRouteOptimization: React.FC = () => {
   const [selectedTrackingRoute, setSelectedTrackingRoute] = useState<string | undefined>();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+  const selectedVehicle = React.useMemo(() => 
+    vehicles.find(v => String(v.id) === String(selectedVehicleId)),
+    [vehicles, selectedVehicleId]
+  );
 
   useEffect(() => {
     const loadLiveData = async () => {
@@ -189,11 +194,11 @@ const LiveTrackingRouteOptimization: React.FC = () => {
 
   useEffect(() => {
     // When list arrives from backend, escolhe o primeiro automaticamente
-    if (!selectedVehicle && vehicles.length > 0) {
-      setSelectedVehicle(String(vehicles[0].id));
+    if (!selectedVehicleId && vehicles.length > 0) {
+      setSelectedVehicleId(String(vehicles[0].id));
       console.log('🚗 Default vehicle selected:', vehicles[0].id);
     }
-  }, [vehicles, selectedVehicle]);
+  }, [vehicles, selectedVehicleId]);
 
   // Switch tab based on query string (útil para links de footer/sidebar)
   useEffect(() => {
@@ -207,7 +212,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
     if (veh && vehicles.length > 0) {
       const match = vehicles.find(v => String(v.id) === String(veh));
       if (match) {
-        setSelectedVehicle(String(match.id));
+        setSelectedVehicleId(String(match.id));
         console.log('🚗 Vehicle selected via query:', match.id);
       }
     }
@@ -280,7 +285,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
     if (vehicleId && vehicles.length > 0) {
       const vehicleMatch = vehicles.find(v => String(v.id) === String(vehicleId));
       if (vehicleMatch) {
-        setSelectedVehicle(String(vehicleMatch.id));
+        setSelectedVehicleId(String(vehicleMatch.id));
         console.log('🚗 Vehicle selected via transport:', vehicleMatch.id);
       }
     }
@@ -545,7 +550,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-emerald-300">Total Savings</p>
-                <p className="text-2xl font-bold text-white">{statistics.combustivelEconomizado}L</p>
+                <p className="text-2xl font-bold text-white">{statistics.fuelSaved}L</p>
                 <p className="text-xs text-emerald-400/70 mt-1">Fuel saved</p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
@@ -558,7 +563,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-blue-300">Time Saved</p>
-                <p className="text-2xl font-bold text-white">{statistics.tempoEconomizado}h</p>
+                <p className="text-2xl font-bold text-white">{statistics.timeSaved}h</p>
                 <p className="text-xs text-blue-400/70 mt-1">Optimized hours</p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
@@ -652,7 +657,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                ))}}
+                ))}
               </div>
             </div>
           </div>
@@ -740,8 +745,8 @@ const LiveTrackingRouteOptimization: React.FC = () => {
                     </select>
 
                     <select
-                      value={selectedVehicle || ''}
-                      onChange={(e) => setSelectedVehicle(e.target.value || null)}
+                      value={selectedVehicleId || ''}
+                      onChange={(e) => setSelectedVehicleId(e.target.value || null)}
                       disabled={vehicles.length === 0}
                       className="px-4 py-2 bg-slate-800 border-2 border-purple-500/30 rounded-lg text-white focus:border-purple-500 focus:outline-none disabled:opacity-50"
                     >
@@ -889,7 +894,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
                   )}
 
                   {/* Selected Vehicle Details */}
-                  {selectedVehicle && (
+                  {selectedVehicleId && selectedVehicle && (
                     <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm rounded-xl p-6 border-2 border-blue-500/30">
                       <div className="flex justify-between items-start mb-6">
                         <div>
@@ -897,7 +902,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
                           <p className="text-sm text-slate-400">Complete real-time analysis</p>
                         </div>
                         <button
-                          onClick={() => setSelectedVehicle(null)}
+                          onClick={() => setSelectedVehicleId(null)}
                           className="w-8 h-8 bg-slate-700 hover:bg-slate-600 rounded-lg flex items-center justify-center text-slate-300 hover:text-white transition-colors"
                         >
                           ✕
@@ -1208,7 +1213,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
                                   <div className="flex items-center justify-between mb-2">
                                     <div className="flex items-center gap-2">
                                       <div className={`w-2 h-2 rounded-full ${stop.completed ? 'bg-emerald-500' : 'bg-blue-500'}`}></div>
-                                      <span className="text-sm font-medium text-white">{stop.tipo.toUpperCase()}</span>
+                                      <span className="text-sm font-medium text-white">{stop.type.toUpperCase()}</span>
                                     </div>
                                     <span className="text-xs text-slate-400">{stop.estimatedTime} min</span>
                                   </div>
@@ -1270,7 +1275,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
                       <div key={geofence.id} className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-xl p-4 border border-slate-700">
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-start gap-3">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${getGeofenceColor(geofence.tipo)}`}>
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${getGeofenceColor(geofence.type)}`}>
                               <span className="text-xs font-bold text-white">{getGeofenceTypeLabel(geofence.type).slice(0, 3)}</span>
                             </div>
                             <div>
@@ -1279,7 +1284,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="text-sm font-bold text-white">{geofence.raio}m</p>
+                            <p className="text-sm font-bold text-white">{geofence.radius}m</p>
                             <p className="text-xs text-slate-400">radius</p>
                           </div>
                         </div>
@@ -1490,7 +1495,7 @@ const LiveTrackingRouteOptimization: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                      ))}}
+                      ))}
                     </div>
                   </div>
                 </div>

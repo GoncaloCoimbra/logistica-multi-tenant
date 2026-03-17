@@ -12,11 +12,11 @@ export declare class ProductsService {
     create(createProductDto: CreateProductDto, companyId: string, userId: string): Promise<{
         supplier: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             companyId: string;
+            createdAt: Date;
             email: string | null;
             name: string;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -25,12 +25,12 @@ export declare class ProductsService {
         };
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
+        quantity: number;
         internalCode: string;
         description: string;
-        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -46,12 +46,12 @@ export declare class ProductsService {
         };
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
+        quantity: number;
         internalCode: string;
         description: string;
-        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -62,11 +62,11 @@ export declare class ProductsService {
     findOne(id: string, companyId: string): Promise<{
         supplier: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             companyId: string;
+            createdAt: Date;
             email: string | null;
             name: string;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -75,12 +75,12 @@ export declare class ProductsService {
         };
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
+        quantity: number;
         internalCode: string;
         description: string;
-        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -95,11 +95,11 @@ export declare class ProductsService {
     findWithMovements(id: string, companyId: string): Promise<{
         supplier: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             companyId: string;
+            createdAt: Date;
             email: string | null;
             name: string;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -114,23 +114,23 @@ export declare class ProductsService {
             };
         } & {
             id: string;
-            createdAt: Date;
             userId: string;
-            quantity: number;
+            createdAt: Date;
             productId: string;
             previousStatus: import(".prisma/client").$Enums.ProductStatus;
             newStatus: import(".prisma/client").$Enums.ProductStatus;
+            quantity: number;
             location: string;
             reason: string | null;
         })[];
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
+        quantity: number;
         internalCode: string;
         description: string;
-        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -141,11 +141,11 @@ export declare class ProductsService {
     update(id: string, updateProductDto: UpdateProductDto, companyId: string, userId: string): Promise<{
         supplier: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             companyId: string;
+            createdAt: Date;
             email: string | null;
             name: string;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -154,12 +154,12 @@ export declare class ProductsService {
         };
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
+        quantity: number;
         internalCode: string;
         description: string;
-        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -170,11 +170,11 @@ export declare class ProductsService {
     updateStatus(id: string, statusDto: UpdateProductStatusDto, companyId: string, userId: string): Promise<{
         supplier: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             companyId: string;
+            createdAt: Date;
             email: string | null;
             name: string;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
@@ -183,12 +183,12 @@ export declare class ProductsService {
         };
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
+        quantity: number;
         internalCode: string;
         description: string;
-        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;
@@ -198,12 +198,12 @@ export declare class ProductsService {
     }>;
     remove(id: string, companyId: string, userId: string): Promise<{
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
+        quantity: number;
         internalCode: string;
         description: string;
-        quantity: number;
         unit: string;
         totalWeight: number | null;
         totalVolume: number | null;

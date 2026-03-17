@@ -46,14 +46,14 @@ export class VehicleRepository {
     return this.prisma.vehicle.findMany({ where });
   }
 
-  async create(date: Prisma.VehicleCreateInput): Promise<Vehicle> {
-    return this.prisma.vehicle.create({ date });
+  async create(data: Prisma.VehicleCreateInput): Promise<Vehicle> {
+    return this.prisma.vehicle.create({ data });
   }
 
   async update(id: string, data: Prisma.VehicleUpdateInput): Promise<Vehicle> {
     return this.prisma.vehicle.update({
       where: { id },
-      date,
+      data,
     });
   }
 

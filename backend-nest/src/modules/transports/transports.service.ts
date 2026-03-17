@@ -386,7 +386,7 @@ export class TransportsService {
       });
 
       this.logger.log(
-        `🚗 Veículo ${vehicle.licensePlate} → IN_USE (bloqueado)`,
+        `🚗 Vehicle ${vehicle.licensePlate} → IN_USE (bloqueado)`,
       );
 
       return newTransport;
@@ -398,7 +398,7 @@ export class TransportsService {
     this.logger.log(`   🔢 Código: ${transport.internalCode}`);
     this.logger.log(`   📦 products: ${date.products?.length || 0}`);
     this.logger.log(
-      `   🚗 Veículo: ${transport.vehicle.licensePlate} → IN_USE`,
+      `   🚗 Vehicle: ${transport.vehicle.licensePlate} → IN_USE`,
     );
     this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
@@ -622,7 +622,7 @@ export class TransportsService {
         });
 
         this.logger.log(
-          `🚗 Veículo ${updatedTransport.vehicle.licensePlate} → AVAILABLE (liberado)`,
+          `🚗 Vehicle ${updatedTransport.vehicle.licensePlate} → AVAILABLE (liberado)`,
         );
 
         if (data.receivedBy) {
@@ -703,7 +703,7 @@ export class TransportsService {
         });
 
         this.logger.log(
-          `🚗 Veículo ${updatedTransport.vehicle.licensePlate} → AVAILABLE (liberado)`,
+          `🚗 Vehicle ${updatedTransport.vehicle.licensePlate} → AVAILABLE (liberado)`,
         );
 
         // CORREÇÃO AQUI: Usando userId fornecido ou 'system' como fallback
@@ -860,7 +860,7 @@ export class TransportsService {
           });
 
           this.logger.log(
-            `🚗 Veículo ${transport.vehicle.licensePlate} → AVAILABLE (liberado)`,
+            `🚗 Vehicle ${transport.vehicle.licensePlate} → AVAILABLE (liberado)`,
           );
 
           await tx.transportProduct.deleteMany({
@@ -881,7 +881,7 @@ export class TransportsService {
         this.logger.log(
           `   📦 ${transport.products.length} product(s) devolvido(s) ao stock`,
         );
-        this.logger.log(`   🚗 Veículo liberado`);
+        this.logger.log(`   🚗 Vehicle liberado`);
         this.logger.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
         return {
@@ -906,7 +906,7 @@ export class TransportsService {
               where: { id: transport.vehicleId }, data: { status: VehicleStatus.available },
             });
             this.logger.log(
-              `🚗 Veículo ${transport.vehicle.licensePlate} → AVAILABLE (liberado)`,
+              `🚗 Vehicle ${transport.vehicle.licensePlate} → AVAILABLE (liberado)`,
             );
           }
 
@@ -990,7 +990,7 @@ export class TransportsService {
   }
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // 🗺️ MAPEAMENTO DE CIDADES PARA COORDENADAS GPS
+  // 🗺️ CITY TO GPS COORDINATES MAPPING
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   private readonly citiesCoordinates: Record<

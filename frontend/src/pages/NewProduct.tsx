@@ -123,28 +123,28 @@ const NewProduct: React.FC = () => {
 
     try {
       await createProductMutation.mutateAsync(payload);
-      alert(" product criado com success!");
+      alert("✅ Product created successfully!");
       navigate("/products");
     } catch (error: any) {
-      console.error(" Error creating product:", error);
+      console.error("❌ Error creating product:", error);
       
       if (error.response) {
-        const { status, date } = error.response;
+        const { status, data } = error.response;
 
         if (status === 400) {
-          if (Array.isArray(date.message)) {
-            setApiError(date.message.join(', '));
-          } else if (typeof date.message === 'object') {
-            setApiError(JSON.stringify(date.message));
+          if (Array.isArray(data.message)) {
+            setApiError(data.message.join(', '));
+          } else if (typeof data.message === 'object') {
+            setApiError(JSON.stringify(data.message));
           } else {
-            setApiError(date.message || date.error || "Invalid date");
+            setApiError(data.message || data.error || "Invalid request");
           }
         } else if (status === 404) {
           setApiError("Supplier not found.");
         } else if (status === 409) {
           setApiError("A product with this internal code already exists.");
         } else {
-          setApiError(date.message || date.error || `Server error (${status})`);
+          setApiError(data.message || data.error || `Server error (${status})`);
         }
       } else if (error.request) {
         setApiError("No server response. Check your connection.");
@@ -201,7 +201,7 @@ const NewProduct: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Informações Básicas</h3>
+                  <h3 className="text-lg font-semibold text-white">Basic Information</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -233,7 +233,7 @@ const NewProduct: React.FC = () => {
 
                   <div>
                     <label htmlFor="unit" className="block text-sm font-medium text-amber-300 mb-2">
-                      Unidade <span className="text-red-400">*</span>
+                      Unit <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="unit"
@@ -260,13 +260,13 @@ const NewProduct: React.FC = () => {
 
                   <div className="md:col-span-2">
                     <label htmlFor="description" className="block text-sm font-medium text-amber-300 mb-2">
-                      Descrição <span className="text-red-400">*</span>
+                      Description <span className="text-red-400">*</span>
                     </label>
                     <input
                       id="description"
                       name="description"
                       type="text"
-                      placeholder="Descrição detalhada do product"
+                      placeholder="Detailed product description"
                       value={formData.description}
                       onChange={handleChange}
                       className={`w-full px-4 py-3 bg-[#1e293b]/50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white placeholder-amber-300/50 ${
@@ -295,7 +295,7 @@ const NewProduct: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Quantidades e Medidas</h3>
+                  <h3 className="text-lg font-semibold text-white">Quantities and Measurements</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
@@ -434,13 +434,13 @@ const NewProduct: React.FC = () => {
 
                   <div>
                     <label htmlFor="currentLocation" className="block text-sm font-medium text-amber-300 mb-2">
-                      Localização Atual
+                      Current Location
                     </label>
                     <input
                       id="currentLocation"
                       name="currentLocation"
                       type="text"
-                      placeholder="Ex: Corredor A, Prateleira 3"
+                      placeholder="Ex: Aisle A, Shelf 3"
                       value={formData.currentLocation}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white placeholder-amber-300/50"
@@ -457,12 +457,12 @@ const NewProduct: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Status do product</h3>
+                  <h3 className="text-lg font-semibold text-white">Product Status</h3>
                 </div>
                 <div className="grid grid-cols-1 gap-6">
                   <div>
                     <label htmlFor="status" className="block text-sm font-medium text-amber-300 mb-2">
-                      Estado Atual <span className="text-red-400">*</span>
+                      Current Status <span className="text-red-400">*</span>
                     </label>
                     <select
                       id="status"
@@ -477,10 +477,10 @@ const NewProduct: React.FC = () => {
                       required
                     >
                       <option value="RECEIVED" className="bg-[#1e293b]">📦 Received</option>
-                      <option value="IN_ANALYSIS" className="bg-[#1e293b]">🔍 Em Análise</option>
-                      <option value="IN_STORAGE" className="bg-[#1e293b]">🏢 Armazenado</option>
-                      <option value="APPROVED" className="bg-[#1e293b]"> ✅ Aprovado</option>
-                      <option value="DISPATCHED" className="bg-[#1e293b]">🚛 Expedido</option>
+                      <option value="IN_ANALYSIS" className="bg-[#1e293b]">🔍 Under Analysis</option>
+                      <option value="IN_STORAGE" className="bg-[#1e293b]">🏢 In Storage</option>
+                      <option value="APPROVED" className="bg-[#1e293b]">✅ Approved</option>
+                      <option value="DISPATCHED" className="bg-[#1e293b]">🚛 Dispatched</option>
                     </select>
                     {errors.status && (
                       <p className="text-red-400 text-xs mt-2 flex items-center gap-1">
@@ -508,25 +508,25 @@ const NewProduct: React.FC = () => {
                       <li className="flex items-start gap-2">
                         <span className="text-blue-400 mt-0.5">🔍</span>
                         <div>
-                          <strong>Em Análise:</strong> product sendo inspecionado/verificado
+                          <strong>Under Analysis:</strong> Product being inspected/verified
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-purple-400 mt-0.5">🏢</span>
                         <div>
-                          <strong>Armazenado:</strong> product guardado no armazém
+                          <strong>In Storage:</strong> Product stored in warehouse
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-emerald-400 mt-0.5"></span>
+                        <span className="text-emerald-400 mt-0.5">✅</span>
                         <div>
-                          <strong>Aprovado:</strong> product pronto para ser usado/expedido
+                          <strong>Approved:</strong> Product ready to be used/dispatched
                         </div>
                       </li>
                       <li className="flex items-start gap-2">
                         <span className="text-amber-400 mt-0.5">🚛</span>
                         <div>
-                          <strong>Expedido:</strong> product saiu para transport/entrega
+                          <strong>Dispatched:</strong> Product sent for transport/delivery
                         </div>
                       </li>
                     </ul>

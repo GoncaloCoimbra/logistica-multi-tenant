@@ -162,7 +162,7 @@ const TrackingMap: React.FC<TrackingMapProps> = ({
   if (!hasValidLocations) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-slate-900 rounded-lg border border-slate-700">
-        <p className="text-slate-400">Nenhuma route disponível para visualizar</p>
+        <p className="text-slate-400">No routes available for tracking</p>
       </div>
     );
   }

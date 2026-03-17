@@ -321,9 +321,9 @@ const VehicleList: React.FC = () => {
 
   const getTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
-      truck: 'Caminhão',
-      Carrinha: 'Carrinha',
-      car: 'Carro',
+      truck: 'Truck',
+      Carrinha: 'Van',
+      car: 'Car',
     };
     return labels[type] || type;
   };

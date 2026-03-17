@@ -59,7 +59,7 @@ let AuditLogInterceptor = AuditLogInterceptor_1 = class AuditLogInterceptor {
                     userId: user.id,
                     companyId: user.companyId,
                     ipAddress: ipAddress ? String(ipAddress) : undefined,
-                    metadate: {
+                    metadata: {
                         method,
                         url,
                         body: this.sanitizeBody(body),

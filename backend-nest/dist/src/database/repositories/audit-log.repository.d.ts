@@ -11,30 +11,30 @@ export declare class AuditLogRepository extends BaseRepository<AuditLog> {
             role: import(".prisma/client").$Enums.Role;
         };
     } & {
-        data: import("@prisma/client/runtime/library").JsonValue | null;
         id: string;
-        companyId: string;
-        createdAt: Date;
-        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
+        userId: string;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        createdAt: Date;
     })[]>;
     count(where: any): Promise<number>;
     findByUser(userId: string): Promise<AuditLog[]>;
     findByEntity(entityType: string, entityId: string): Promise<AuditLog[]>;
     findByCompany(companyId: string): Promise<AuditLog[]>;
     createLog(data: any): Promise<{
-        data: import("@prisma/client/runtime/library").JsonValue | null;
         id: string;
-        companyId: string;
-        createdAt: Date;
-        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
+        userId: string;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        createdAt: Date;
     }>;
     getActionStats(companyId: string): Promise<(import(".prisma/client").Prisma.PickEnumerable<import(".prisma/client").Prisma.AuditLogGroupByOutputType, "action"[]> & {
         _count: number;

@@ -9,19 +9,19 @@ export declare class VehiclesController {
         company: {
             id: string;
             createdAt: Date;
-            updatedAt: Date;
             email: string;
             name: string;
             isActive: boolean;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
         };
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -34,37 +34,37 @@ export declare class VehiclesController {
         company: {
             id: string;
             createdAt: Date;
-            updatedAt: Date;
             email: string;
             name: string;
             isActive: boolean;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
         };
         transports: {
             id: string;
+            companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            companyId: string;
             internalCode: string;
             totalWeight: number;
             status: import(".prisma/client").$Enums.TransportStatus;
+            vehicleId: string;
             origin: string;
             destination: string;
             departureDate: Date;
             estimatedArrival: Date;
+            notes: string | null;
             actualArrival: Date | null;
             receivedBy: string | null;
             receivingNotes: string | null;
-            notes: string | null;
-            vehicleId: string;
         }[];
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -77,19 +77,19 @@ export declare class VehiclesController {
         company: {
             id: string;
             createdAt: Date;
-            updatedAt: Date;
             email: string;
             name: string;
             isActive: boolean;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
         };
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -109,37 +109,37 @@ export declare class VehiclesController {
         company: {
             id: string;
             createdAt: Date;
-            updatedAt: Date;
             email: string;
             name: string;
             isActive: boolean;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
         };
         transports: {
             id: string;
+            companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            companyId: string;
             internalCode: string;
             totalWeight: number;
             status: import(".prisma/client").$Enums.TransportStatus;
+            vehicleId: string;
             origin: string;
             destination: string;
             departureDate: Date;
             estimatedArrival: Date;
+            notes: string | null;
             actualArrival: Date | null;
             receivedBy: string | null;
             receivingNotes: string | null;
-            notes: string | null;
-            vehicleId: string;
         }[];
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -152,19 +152,19 @@ export declare class VehiclesController {
         company: {
             id: string;
             createdAt: Date;
-            updatedAt: Date;
             email: string;
             name: string;
             isActive: boolean;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
         };
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -179,19 +179,19 @@ export declare class VehiclesController {
         company: {
             id: string;
             createdAt: Date;
-            updatedAt: Date;
             email: string;
             name: string;
             isActive: boolean;
+            updatedAt: Date;
             nif: string;
             phone: string | null;
             address: string | null;
         };
     } & {
         id: string;
+        companyId: string;
         createdAt: Date;
         updatedAt: Date;
-        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;

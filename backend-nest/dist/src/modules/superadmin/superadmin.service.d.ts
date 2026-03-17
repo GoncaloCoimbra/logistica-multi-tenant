@@ -27,10 +27,10 @@ export declare class SuperadminService {
         };
     } & {
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -38,10 +38,10 @@ export declare class SuperadminService {
     })[]>;
     createCompany(data: any): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -56,22 +56,22 @@ export declare class SuperadminService {
         };
         users: {
             id: string;
+            companyId: string | null;
+            createdAt: Date;
             email: string;
             name: string;
             password: string;
             role: import(".prisma/client").$Enums.Role;
             isActive: boolean;
             avatarUrl: string | null;
-            companyId: string | null;
-            createdAt: Date;
             updatedAt: Date;
         }[];
     } & {
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -79,10 +79,10 @@ export declare class SuperadminService {
     }>;
     updateCompany(id: string, data: any): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -90,10 +90,10 @@ export declare class SuperadminService {
     }>;
     deleteCompany(id: string): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;
@@ -115,10 +115,10 @@ export declare class SuperadminService {
     }>;
     toggleCompanyStatus(id: string, isActive: boolean): Promise<{
         id: string;
+        createdAt: Date;
         email: string;
         name: string;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
         nif: string;
         phone: string | null;

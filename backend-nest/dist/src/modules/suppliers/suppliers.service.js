@@ -126,7 +126,7 @@ let SuppliersService = SuppliersService_1 = class SuppliersService {
         return this.serialize(supplier);
     }
     async findByVehicle(vehicleId, companyId) {
-        this.logger.log(`🔍 Buscando fornecedores por veículo ${vehicleId}`);
+        this.logger.log(`🔍 Buscando fornecedores por Vehicle ${vehicleId}`);
         const where = {};
         if (companyId) {
             where.companyId = companyId;

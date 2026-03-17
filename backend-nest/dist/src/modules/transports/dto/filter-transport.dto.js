@@ -54,7 +54,7 @@ __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
         required: false,
-        description: 'Filter por ID do veículo (UUID)',
+        description: 'Filter por ID do Vehicle (UUID)',
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsUUID)('4', { message: 'VehicleId deve ser um UUID válido' }),

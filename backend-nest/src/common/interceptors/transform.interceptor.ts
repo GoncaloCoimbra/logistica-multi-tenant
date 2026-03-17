@@ -1,4 +1,4 @@
-﻿import {
+import {
   Injectable,
   NestInterceptor,
   ExecutionContext,
@@ -22,8 +22,8 @@ export class TransformInterceptor<T> implements NestInterceptor<
     next: CallHandler,
   ): Observable<Response<T>> {
     return next.handle().pipe(
-      map((date) => ({
-        date,
+      map((data) => ({
+        data,
         statusCode: context.switchToHttp().getResponse().statusCode,
         message: 'Success',
       })),

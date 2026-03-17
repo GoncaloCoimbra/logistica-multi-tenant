@@ -54,15 +54,15 @@ export declare class DashboardController {
             name: string;
         };
     } & {
-        data: import("@prisma/client/runtime/library").JsonValue | null;
         id: string;
-        createdAt: Date;
-        companyId: string;
-        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
+        userId: string;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        createdAt: Date;
     })[]>;
     getMonthlyStats(req: any, queryCompanyId?: string): Promise<{
         message: string;

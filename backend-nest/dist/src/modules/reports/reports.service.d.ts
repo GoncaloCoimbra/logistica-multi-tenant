@@ -7,10 +7,10 @@ export declare class ReportsService {
         data: ({
             company: {
                 id: string;
+                createdAt: Date;
                 email: string;
                 name: string;
                 isActive: boolean;
-                createdAt: Date;
                 updatedAt: Date;
                 nif: string;
                 phone: string | null;
@@ -18,10 +18,10 @@ export declare class ReportsService {
             } | null;
             supplier: {
                 id: string;
-                email: string | null;
-                name: string;
                 companyId: string;
                 createdAt: Date;
+                email: string | null;
+                name: string;
                 updatedAt: Date;
                 nif: string;
                 phone: string | null;
@@ -34,15 +34,15 @@ export declare class ReportsService {
             companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            description: string;
-            internalCode: string;
             quantity: number;
+            internalCode: string;
+            description: string;
             unit: string;
             totalWeight: number | null;
             totalVolume: number | null;
             currentLocation: string | null;
-            supplierId: string;
             status: import(".prisma/client").$Enums.ProductStatus;
+            supplierId: string;
         })[];
         generatedAt: Date;
     }>;
@@ -54,9 +54,9 @@ export declare class ReportsService {
                 companyId: string;
                 createdAt: Date;
                 updatedAt: Date;
-                type: string;
                 status: import(".prisma/client").$Enums.VehicleStatus;
                 licensePlate: string;
+                type: string;
                 model: string;
                 brand: string;
                 capacity: number;
