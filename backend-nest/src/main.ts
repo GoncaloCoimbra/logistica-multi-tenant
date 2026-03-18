@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import * as helmet from 'helmet';
 
 // SERIALIZATION FIX (BigInt/Date)
 
@@ -67,6 +68,33 @@ export async function createApp(): Promise<NestExpressApplication> {
     allowedHeaders: ['Content-Type', 'Authorization', 'x-tenant-id'],
   });
   logger.log('🌐 CORS enabled for:', corsOrigin);
+
+  // SECURITY HEADERS (Helmet)
+
+  app.use(helmet());
+  logger.log('🔒 Security headers configured with Helmet');
+
+  // ADDITIONAL SECURITY HEADERS
+
+  app.use((req, res, next) => {
+    // X-Content-Type-Options: Prevents MIME sniffing
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    // X-Frame-Options: Prevents clickjacking
+    res.setHeader('X-Frame-Options', 'DENY');
+    // X-XSS-Protection: Enables XSS filter in older browsers
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    // Strict-Transport-Security: Enforces HTTPS
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    // Content-Security-Policy: Restricts resource loading
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'",
+    );
+    // Remove X-Powered-By header to prevent fingerprinting
+    res.removeHeader('X-Powered-By');
+    next();
+  });
+  logger.log('🔐 Additional security headers configured');
 
   // SWAGGER / OPENAPI DOCUMENTATION
   const config = new DocumentBuilder()
