@@ -6,12 +6,12 @@ export declare class CompanyRepository extends BaseRepository<Company> {
     findWithUsers(id: string): Promise<({
         products: {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            quantity: number;
+            companyId: string;
             internalCode: string;
             description: string;
+            quantity: number;
             unit: string;
             totalWeight: number | null;
             totalVolume: number | null;
@@ -21,21 +21,21 @@ export declare class CompanyRepository extends BaseRepository<Company> {
         }[];
         users: {
             id: string;
-            companyId: string | null;
-            createdAt: Date;
-            email: string;
             name: string;
+            email: string;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            companyId: string | null;
             password: string;
             role: import(".prisma/client").$Enums.Role;
-            isActive: boolean;
             avatarUrl: string | null;
-            updatedAt: Date;
         }[];
         vehicles: {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
+            companyId: string;
             status: import(".prisma/client").$Enums.VehicleStatus;
             licensePlate: string;
             type: string;
@@ -46,37 +46,37 @@ export declare class CompanyRepository extends BaseRepository<Company> {
         }[];
     } & {
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }) | null>;
     findByTenant(tenant: string): Promise<Company | null>;
     findByNif(nif: string): Promise<{
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     } | null>;
     findByEmail(email: string): Promise<{
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     } | null>;
     findWithStats(id: string): Promise<({
         _count: {
@@ -86,13 +86,13 @@ export declare class CompanyRepository extends BaseRepository<Company> {
         };
     } & {
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }) | null>;
 }

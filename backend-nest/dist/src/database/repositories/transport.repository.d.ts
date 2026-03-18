@@ -7,9 +7,9 @@ export declare class TransportRepository extends BaseRepository<Transport> {
     findByStatus(status: string): Promise<Transport[]>;
     findByCompanyId(companyId: string, filters?: any): Promise<{
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         internalCode: string;
         totalWeight: number;
         status: import(".prisma/client").$Enums.TransportStatus;
@@ -25,9 +25,9 @@ export declare class TransportRepository extends BaseRepository<Transport> {
     }[]>;
     findPending(companyId: string): Promise<{
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         internalCode: string;
         totalWeight: number;
         status: import(".prisma/client").$Enums.TransportStatus;
@@ -43,9 +43,9 @@ export declare class TransportRepository extends BaseRepository<Transport> {
     }[]>;
     findInTransit(companyId: string): Promise<{
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         internalCode: string;
         totalWeight: number;
         status: import(".prisma/client").$Enums.TransportStatus;
@@ -61,9 +61,9 @@ export declare class TransportRepository extends BaseRepository<Transport> {
     }[]>;
     updateStatus(id: string, status: any): Promise<{
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         internalCode: string;
         totalWeight: number;
         status: import(".prisma/client").$Enums.TransportStatus;

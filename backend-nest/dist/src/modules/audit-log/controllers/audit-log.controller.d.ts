@@ -28,25 +28,25 @@ export declare class AuditLogController {
     }>;
     findByEntity(entity: string, entityId: string, user: any): Promise<{
         id: string;
+        createdAt: Date;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     }[]>;
     findByUser(userId: string, user: any): Promise<{
         id: string;
+        createdAt: Date;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     }[]>;
     deleteLog(id: string, user: any): Promise<{
         success: boolean;
@@ -56,20 +56,20 @@ export declare class AuditLogController {
         logs: ({
             user: {
                 id: string;
-                email: string;
                 name: string;
+                email: string;
                 role: import(".prisma/client").$Enums.Role;
             };
         } & {
             id: string;
+            createdAt: Date;
+            companyId: string;
+            data: import("@prisma/client/runtime/library").JsonValue | null;
+            userId: string;
             action: string;
             entity: string;
             entityId: string | null;
             ipAddress: string | null;
-            userId: string;
-            companyId: string;
-            data: import("@prisma/client/runtime/library").JsonValue | null;
-            createdAt: Date;
         })[];
         pagination: {
             currentPage: number;

@@ -13,14 +13,14 @@ export declare class JwtStrategy extends JwtStrategy_base {
         companyId: string | null;
         company: {
             id: string;
-            createdAt: Date;
-            email: string;
             name: string;
-            isActive: boolean;
-            updatedAt: Date;
             nif: string;
+            email: string;
             phone: string | null;
             address: string | null;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         } | null;
     }>;
 }

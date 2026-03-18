@@ -27,77 +27,77 @@ export declare class SuperadminService {
         };
     } & {
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     })[]>;
     createCompany(data: any): Promise<{
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     getCompany(id: string): Promise<{
+        users: {
+            id: string;
+            name: string;
+            email: string;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            companyId: string | null;
+            password: string;
+            role: import(".prisma/client").$Enums.Role;
+            avatarUrl: string | null;
+        }[];
         _count: {
             products: number;
             suppliers: number;
             transports: number;
             vehicles: number;
         };
-        users: {
-            id: string;
-            companyId: string | null;
-            createdAt: Date;
-            email: string;
-            name: string;
-            password: string;
-            role: import(".prisma/client").$Enums.Role;
-            isActive: boolean;
-            avatarUrl: string | null;
-            updatedAt: Date;
-        }[];
     } & {
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     updateCompany(id: string, data: any): Promise<{
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     deleteCompany(id: string): Promise<{
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     getCompanyStats(companyId: string): Promise<{
         company: {
@@ -115,13 +115,13 @@ export declare class SuperadminService {
     }>;
     toggleCompanyStatus(id: string, isActive: boolean): Promise<{
         id: string;
-        createdAt: Date;
-        email: string;
         name: string;
-        isActive: boolean;
-        updatedAt: Date;
         nif: string;
+        email: string;
         phone: string | null;
         address: string | null;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
 }

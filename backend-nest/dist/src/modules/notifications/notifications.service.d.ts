@@ -14,15 +14,15 @@ export declare class NotificationsService {
         };
         user: {
             id: string;
-            email: string;
             name: string;
+            email: string;
         };
     } & {
         id: string;
-        userId: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
+        userId: string;
         title: string;
         content: string;
         isRead: boolean;
@@ -52,15 +52,15 @@ export declare class NotificationsService {
         };
         user: {
             id: string;
-            email: string;
             name: string;
+            email: string;
         };
     } & {
         id: string;
-        userId: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
+        userId: string;
         title: string;
         content: string;
         isRead: boolean;
@@ -72,15 +72,15 @@ export declare class NotificationsService {
         };
         user: {
             id: string;
-            email: string;
             name: string;
+            email: string;
         };
     } & {
         id: string;
-        userId: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
+        userId: string;
         title: string;
         content: string;
         isRead: boolean;
@@ -88,10 +88,10 @@ export declare class NotificationsService {
     markAllAsRead(companyId: string | null | undefined): Promise<import(".prisma/client").Prisma.BatchPayload>;
     delete(id: string): Promise<{
         id: string;
-        userId: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
+        userId: string;
         title: string;
         content: string;
         isRead: boolean;

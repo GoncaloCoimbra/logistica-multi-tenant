@@ -7,36 +7,36 @@ export declare class ReportsService {
         data: ({
             company: {
                 id: string;
-                createdAt: Date;
-                email: string;
                 name: string;
-                isActive: boolean;
-                updatedAt: Date;
                 nif: string;
+                email: string;
                 phone: string | null;
                 address: string | null;
+                isActive: boolean;
+                createdAt: Date;
+                updatedAt: Date;
             } | null;
             supplier: {
                 id: string;
-                companyId: string;
-                createdAt: Date;
-                email: string | null;
                 name: string;
-                updatedAt: Date;
                 nif: string;
+                email: string | null;
                 phone: string | null;
                 address: string | null;
+                createdAt: Date;
+                updatedAt: Date;
                 city: string | null;
                 state: string | null;
+                companyId: string;
             };
         } & {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
-            quantity: number;
+            companyId: string;
             internalCode: string;
             description: string;
+            quantity: number;
             unit: string;
             totalWeight: number | null;
             totalVolume: number | null;
@@ -51,9 +51,9 @@ export declare class ReportsService {
         data: ({
             vehicle: {
                 id: string;
-                companyId: string;
                 createdAt: Date;
                 updatedAt: Date;
+                companyId: string;
                 status: import(".prisma/client").$Enums.VehicleStatus;
                 licensePlate: string;
                 type: string;
@@ -64,9 +64,9 @@ export declare class ReportsService {
             };
         } & {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
+            companyId: string;
             internalCode: string;
             totalWeight: number;
             status: import(".prisma/client").$Enums.TransportStatus;

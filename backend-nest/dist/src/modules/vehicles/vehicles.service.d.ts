@@ -7,20 +7,20 @@ export declare class VehiclesService {
     create(data: any, companyId: string): Promise<{
         company: {
             id: string;
-            createdAt: Date;
-            email: string;
             name: string;
-            isActive: boolean;
-            updatedAt: Date;
             nif: string;
+            email: string;
             phone: string | null;
             address: string | null;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -35,20 +35,20 @@ export declare class VehiclesService {
     }): Promise<({
         company: {
             id: string;
-            createdAt: Date;
-            email: string;
             name: string;
-            isActive: boolean;
-            updatedAt: Date;
             nif: string;
+            email: string;
             phone: string | null;
             address: string | null;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
         transports: {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
+            companyId: string;
             internalCode: string;
             totalWeight: number;
             status: import(".prisma/client").$Enums.TransportStatus;
@@ -64,9 +64,9 @@ export declare class VehiclesService {
         }[];
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -78,20 +78,20 @@ export declare class VehiclesService {
     findAvailable(companyId?: string): Promise<({
         company: {
             id: string;
-            createdAt: Date;
-            email: string;
             name: string;
-            isActive: boolean;
-            updatedAt: Date;
             nif: string;
+            email: string;
             phone: string | null;
             address: string | null;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -103,20 +103,20 @@ export declare class VehiclesService {
     findOne(id: string, companyId?: string): Promise<{
         company: {
             id: string;
-            createdAt: Date;
-            email: string;
             name: string;
-            isActive: boolean;
-            updatedAt: Date;
             nif: string;
+            email: string;
             phone: string | null;
             address: string | null;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
         transports: {
             id: string;
-            companyId: string;
             createdAt: Date;
             updatedAt: Date;
+            companyId: string;
             internalCode: string;
             totalWeight: number;
             status: import(".prisma/client").$Enums.TransportStatus;
@@ -132,9 +132,9 @@ export declare class VehiclesService {
         }[];
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -146,20 +146,20 @@ export declare class VehiclesService {
     update(id: string, data: any, companyId?: string): Promise<{
         company: {
             id: string;
-            createdAt: Date;
-            email: string;
             name: string;
-            isActive: boolean;
-            updatedAt: Date;
             nif: string;
+            email: string;
             phone: string | null;
             address: string | null;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
@@ -171,20 +171,20 @@ export declare class VehiclesService {
     updateStatus(id: string, status: VehicleStatus, companyId?: string): Promise<{
         company: {
             id: string;
-            createdAt: Date;
-            email: string;
             name: string;
-            isActive: boolean;
-            updatedAt: Date;
             nif: string;
+            email: string;
             phone: string | null;
             address: string | null;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
         status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;

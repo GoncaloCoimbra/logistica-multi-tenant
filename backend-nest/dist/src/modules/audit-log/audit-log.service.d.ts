@@ -10,20 +10,20 @@ export declare class AuditLogService {
         logs: ({
             user: {
                 id: string;
-                email: string;
                 name: string;
+                email: string;
                 role: import(".prisma/client").$Enums.Role;
             };
         } & {
             id: string;
+            createdAt: Date;
+            companyId: string;
+            data: import("@prisma/client/runtime/library").JsonValue | null;
+            userId: string;
             action: string;
             entity: string;
             entityId: string | null;
             ipAddress: string | null;
-            userId: string;
-            companyId: string;
-            data: import("@prisma/client/runtime/library").JsonValue | null;
-            createdAt: Date;
         })[];
         totalItems: number;
         totalPages: number;
@@ -31,25 +31,25 @@ export declare class AuditLogService {
     }>;
     findByEntity(entity: string, entityId: string, companyId: string): Promise<{
         id: string;
+        createdAt: Date;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     }[]>;
     findByUser(userId: string, companyId: string): Promise<{
         id: string;
+        createdAt: Date;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     }[]>;
     getActionStats(companyId: string): Promise<{
         totalActions: number;
@@ -78,14 +78,14 @@ export declare class AuditLogService {
         metadata?: any;
     }): Promise<{
         id: string;
+        createdAt: Date;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     }>;
     clearAllLogs(companyId: string): Promise<number>;
     deleteLog(id: string, companyId: string): Promise<boolean>;

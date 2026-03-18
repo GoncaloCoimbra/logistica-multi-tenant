@@ -50,19 +50,19 @@ export declare class DashboardService {
     }[]>;
     getRecentActivity(companyId?: string): Promise<({
         user: {
-            email: string;
             name: string;
+            email: string;
         };
     } & {
         id: string;
+        createdAt: Date;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     })[]>;
     getMonthlyStats(companyId?: string): Promise<{
         message: string;

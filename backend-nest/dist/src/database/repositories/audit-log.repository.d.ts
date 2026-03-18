@@ -6,20 +6,20 @@ export declare class AuditLogRepository extends BaseRepository<AuditLog> {
     findAllWithPagination(where: any, skip: number, take: number): Promise<({
         user: {
             id: string;
-            email: string;
             name: string;
+            email: string;
             role: import(".prisma/client").$Enums.Role;
         };
     } & {
         id: string;
+        createdAt: Date;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     })[]>;
     count(where: any): Promise<number>;
     findByUser(userId: string): Promise<AuditLog[]>;
@@ -27,14 +27,14 @@ export declare class AuditLogRepository extends BaseRepository<AuditLog> {
     findByCompany(companyId: string): Promise<AuditLog[]>;
     createLog(data: any): Promise<{
         id: string;
+        createdAt: Date;
+        companyId: string;
+        data: import("@prisma/client/runtime/library").JsonValue | null;
+        userId: string;
         action: string;
         entity: string;
         entityId: string | null;
         ipAddress: string | null;
-        userId: string;
-        companyId: string;
-        data: import("@prisma/client/runtime/library").JsonValue | null;
-        createdAt: Date;
     }>;
     getActionStats(companyId: string): Promise<(import(".prisma/client").Prisma.PickEnumerable<import(".prisma/client").Prisma.AuditLogGroupByOutputType, "action"[]> & {
         _count: number;
@@ -47,8 +47,8 @@ export declare class AuditLogRepository extends BaseRepository<AuditLog> {
         _count: number;
         user: {
             id: string;
-            email: string;
             name: string;
+            email: string;
         } | undefined;
     }[]>;
     deleteAllByCompany(companyId: string): Promise<number>;

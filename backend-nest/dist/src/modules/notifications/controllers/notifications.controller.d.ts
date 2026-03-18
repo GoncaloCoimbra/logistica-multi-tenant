@@ -19,15 +19,15 @@ export declare class NotificationsController {
         };
         user: {
             id: string;
-            email: string;
             name: string;
+            email: string;
         };
     } & {
         id: string;
-        userId: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
+        userId: string;
         title: string;
         content: string;
         isRead: boolean;
@@ -67,15 +67,15 @@ export declare class NotificationsController {
         };
         user: {
             id: string;
-            email: string;
             name: string;
+            email: string;
         };
     } & {
         id: string;
-        userId: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
+        userId: string;
         title: string;
         content: string;
         isRead: boolean;
@@ -90,15 +90,15 @@ export declare class NotificationsController {
         };
         user: {
             id: string;
-            email: string;
             name: string;
+            email: string;
         };
     } & {
         id: string;
-        userId: string;
-        companyId: string;
         createdAt: Date;
         updatedAt: Date;
+        companyId: string;
+        userId: string;
         title: string;
         content: string;
         isRead: boolean;
