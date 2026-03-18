@@ -1,14 +1,16 @@
-# Multi-Tenant Logistics Management System
+# 📦 Multi-Tenant Logistics Management System
 
-[![Tests](https://github.com/your-org/logistica-multi-tenant/workflows/Run%20Tests/badge.svg)](https://github.com/your-org/logistica-multi-tenant/actions)
-[![Lint & Format](https://github.com/your-org/logistica-multi-tenant/workflows/Lint%20%26%20Format/badge.svg)](https://github.com/your-org/logistica-multi-tenant/actions)
-[![Build Docker Images](https://github.com/your-org/logistica-multi-tenant/workflows/Build%20Docker%20Images/badge.svg)](https://github.com/your-org/logistica-multi-tenant/actions)
-[![codecov](https://codecov.io/gh/your-org/logistica-multi-tenant/branch/develop/graph/badge.svg)](https://codecov.io/gh/your-org/logistica-multi-tenant)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE)
 [![Node.js 18+](https://img.shields.io/badge/Node.js-18%2B-green)](#requirements)
 [![TypeScript](https://img.shields.io/badge/Built%20with-TypeScript-blue)](#)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](#)
+[![NestJS](https://img.shields.io/badge/NestJS-10-E0234E?logo=nestjs)](#)
 
-> A complete logistics management platform built to serve multiple companies with full data isolation, real-time inventory control, and a robust state machine.
+> **Enterprise-grade logistics platform** serving multiple companies with complete data isolation, real-time inventory control, and production-ready architecture.
+
+**🎯 Perfect for:** Supply chain teams | Warehouse management | Multi-company logistics operations | Portfolio projects
+
+**⭐ Key Strengths:** TypeScript everywhere | Multi-tenant security | Professional UI | DevOps-ready
 
 ---
 
@@ -74,7 +76,41 @@ A short demo video showcasing the application in action:
 
 ---
 
-## ✨ Features
+## ⚡ Quick Start (5 minutes)
+
+Want to see it in action? Follow the **[DEMO.md](./DEMO.md)** guide for step-by-step instructions.
+
+**Fastest way to run locally:**
+
+```bash
+# 1. Clone and install
+git clone https://github.com/GoncaloCoimbra/logistica-multi-tenant.git
+cd logistica-multi-tenant && npm install
+
+# 2. Setup environment
+cd backend-nest && cp .env.example .env
+
+# 3. Start everything
+npm run start-all
+
+# 4. Open browser
+http://localhost:3001  # Frontend
+http://localhost:3000/api/docs  # API Docs
+```
+
+**🔐 Login with:**
+- Email: `admin@logistica.com`
+- Or signup at the login page
+
+**🌱 Populate demo data:**
+```bash
+cd backend-nest
+npm run seed:demo
+```
+
+More details in [DEMO.md](./DEMO.md)
+
+---
 
 ### Authentication & Security
 - Multi-tenant system with full data isolation
@@ -122,93 +158,173 @@ A short demo video showcasing the application in action:
 
 ## 🛠️ Tech Stack
 
-### Backend
-| Technology | Version | Description |
-|------------|---------|-------------|
-| **Node.js** | 18+ | JavaScript runtime |
-| **TypeScript** | ^5.0 | Typed JavaScript superset |
-| **NestJS** | latest | Active backend framework |
-| **Express.js** | ^4.18 | *(legacy — see note below)* |
-| **Prisma** | ^5.0 | Modern ORM for Node.js |
-| **PostgreSQL** | 15 | Relational database |
-| **JWT** | — | Stateless authentication |
-| **Zod** | ^3.22 | TypeScript schema validation |
+### Frontend Layer
+| Layer | Technology | Version | Purpose |
+|-------|-----------|---------|---------|
+| **Framework** | React | 18.2+ | UI component library & state management |
+| **Language** | TypeScript | 5.0+ | Type-safe development |
+| **Styling** | TailwindCSS | 3.4+ | Utility-first CSS for responsive design |
+| **Routing** | React Router | 6.x | Client-side SPA navigation |
+| **HTTP Client** | Axios | 1.6+ | REST API integration with interceptors |
+| **Charts** | Recharts | 2.5+ | Business analytics & inventory visualization |
+| **Forms** | React Hook Form | 7.x | Performant form state management |
+| **Build Tool** | Vite | 4.x+ | Next-gen fast dev server & build |
+| **Notifications** | Hot Toast | Latest | Non-intrusive toast notifications |
 
-> **Note:** The `backend` directory (Express) is **deprecated** and kept only for historical reference. All new features and fixes must be implemented in `backend-nest`. The `backend` directory can be removed once all relevant code is migrated.
+### Backend Layer  
+| Layer | Technology | Version | Purpose |
+|-------|-----------|---------|---------|
+| **Runtime** | Node.js | 18+ | JavaScript server runtime |
+| **Framework** | NestJS 10+ | 10.0+ | Enterprise Node.js framework with DI |
+| **Language** | TypeScript | 5.0+ | Type-safe server development |
+| **ORM** | Prisma | 5.0+ | Type-safe database client & migrations |
+| **Validation** | Zod | 3.22+ | Runtime schema validation with TypeScript |
+| **Auth** | JWT + RT | — | Stateless auth with refresh tokens |
+| **API Docs** | Swagger/OpenAPI | 7.0+ | Auto-generated interactive API documentation |
+| **Logging** | Winston | 3.x | Structured application logging |
+| **Testing** | Jest | 29.x | Unit & integration test framework |
 
-### Frontend
-| Technology | Version | Description |
-|------------|---------|-------------|
-| **React** | 18 | UI library |
-| **TypeScript** | ^5.0 | Static typing |
-| **React Router** | v6 | SPA routing |
-| **Tailwind CSS** | ^3.4 | Utility-first CSS framework |
-| **Recharts** | ^2.5 | Charts for React |
-| **Axios** | ^1.6 | HTTP client |
-| **React Hot Toast** | — | Toast notifications |
+### Data Layer
+| Service | Technology | Version | Purpose |
+|---------|-----------|---------|---------|
+| **Database** | PostgreSQL | 15 | Enterprise relational database |
+| **Migrations** | Prisma Migrate | 5.0+ | Type-safe schema versioning |
+| **ORM Adapter** | Prisma Client | 5.0+ | Auto-generated query builder |
 
-### DevOps
-- **Docker** & **Docker Compose**
-- **PostgreSQL 15** (containerised)
-- **Kubernetes** (production-ready manifests in `k8s/`)
+### DevOps & Infrastructure
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| **Containerization** | Docker | Application container images |
+| **Composition** | Docker Compose | Multi-container local dev environment |
+| **Orchestration** | Kubernetes 1.26+ | Production-grade container orchestration |
+| **Reverse Proxy** | Nginx | Load balancing & reverse proxy routing |
+| **CI/CD** | GitHub Actions | Automated testing & deployment pipelines |
+| **Package Manager** | npm 9+ | Monorepo workspaces management |
+
+### Security Frameworks
+- **JWT Authentication** with refresh token rotation
+- **Multi-tenant Isolation** via Guards & Row-Level Filter
+- **Role-Based Access Control (RBAC)** — Admin, Operator, Super Admin
+- **SQL Injection Prevention** via Prisma ORM
+- **Password Hashing** — bcrypt with salt rounds
+
+---
 
 ---
 
 ## 🏗️ Architecture
 
-### Multi-Tenant Pattern
+### System Architecture Diagram
 
 ```
-┌─────────────────────────────────────────┐
-│          Frontend (React SPA)           │
-└──────────────┬──────────────────────────┘
-               │ HTTP/REST API
-┌──────────────▼──────────────────────────┐
-│       Backend (NestJS + TypeScript)     │
-│  ┌────────────────────────────────┐     │
-│  │  Auth Middleware (JWT)         │     │
-│  └────────────┬───────────────────┘     │
-│  ┌────────────▼───────────────────┐     │
-│  │  Multi-Tenant Middleware       │     │
-│  │  (companyId isolation)         │     │
-│  └────────────┬───────────────────┘     │
-│  ┌────────────▼───────────────────┐     │
-│  │  Controllers & Services        │     │
-│  └────────────┬───────────────────┘     │
-└───────────────┼─────────────────────────┘
-                │ Prisma ORM
-┌───────────────▼─────────────────────────┐
-│         PostgreSQL Database             │
-│  ┌──────────────────────────────────┐   │
-│  │ Company 1 Data (isolated)        │   │
-│  ├──────────────────────────────────┤   │
-│  │ Company 2 Data (isolated)        │   │
-│  ├──────────────────────────────────┤   │
-│  │ Company N Data (isolated)        │   │
-│  └──────────────────────────────────┘   │
-└─────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                    Client Layer                                │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │   React 18 SPA (http://localhost:3001)                   │  │
+│  │   • Dashboard (Recharts analytics)                        │  │
+│  │   • Product Management (CRUD)                             │  │
+│  │   • User Management & RBAC                                │  │
+│  │   • Multi-tenant aware (companyId in context)             │  │
+│  └──────────┬───────────────────────────────────────────────┘  │
+│             │ HTTP REST + JSON                                 │
+└─────────────┼────────────────────────────────────────────────────┘
+              │
+┌─────────────▼────────────────────────────────────────────────────┐
+│                    API Gateway Layer                             │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │  NestJS Application (http://localhost:3000)              │   │
+│  │  • Swagger OpenAPI Documentation (/api/docs)             │   │
+│  │  • Global Exception Filters                              │   │
+│  │  • Request/Response Logging                              │   │
+│  └──────────┬───────────────────────────────────────────────┘   │
+└─────────────┼───────────────────────────────────────────────────┘
+              │
+┌─────────────▼────────────────────────────────────────────────────┐
+│                  Security & Auth Layer                            │
+│  ┌────────────────────────────────────────────────────────────┐  │
+│  │  1. JwtAuthGuard          → Validates JWT tokens           │  │
+│  │  2. TenantGuard          → Injects current companyId       │  │
+│  │  3. RolesGuard @Roles()  → Validates user permissions      │  │
+│  │  4. Request Logging      → Tracks all operations           │  │
+│  └────────────┬─────────────────────────────────────────────┘   │
+└───────────────┼──────────────────────────────────────────────────┘
+                │
+┌───────────────▼──────────────────────────────────────────────────┐
+│               Business Logic Layer (Modules)                      │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐              │
+│  │  Products    │ │  Users       │ │  Companies   │              │
+│  │  • CRUD      │ │  • Auth      │ │  • Settings  │              │
+│  │  • Movement  │ │  • Roles     │ │  • License   │              │
+│  │  • Analytics │ │  • Audit Log │ │  • Branding  │              │
+│  └──────────────┘ └──────────────┘ └──────────────┘              │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐              │
+│  │  Transport   │ │  Suppliers   │ │  Notification│              │
+│  │  • Routes    │ │  • Registry  │ │  • Queue     │              │
+│  │  • Vehicles  │ │  • Contacts  │ │  • Alerts    │              │
+│  │  • Tracking  │ │  • History   │ │  • Email     │              │
+│  └──────────────┘ └──────────────┘ └──────────────┘              │
+└───────────┬──────────────────────────────────────────────────────┘
+            │
+┌───────────▼──────────────────────────────────────────────────────┐
+│           Data Access Layer (Prisma ORM)                          │
+│  • Type-safe database queries                                     │
+│  • Automatic migration management                                │
+│  • Connection pooling                                             │
+│  • Query optimization                                             │
+└───────────┬──────────────────────────────────────────────────────┘
+            │ SQL
+┌───────────▼──────────────────────────────────────────────────────┐
+│         PostgreSQL 15 Database                                    │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │            Company Isolation (Row-Level)                    │ │
+│  │ ┌──────────────────┐  ┌──────────────────┐                 │ │
+│  │ │  Company A Data  │  │  Company B Data  │  ...            │ │
+│  │ │ • Users (Tenant) │  │ • Users (Tenant) │                 │ │
+│  │ │ • Products       │  │ • Products       │                 │ │
+│  │ │ • Transports     │  │ • Transports     │                 │ │
+│  │ │ • Suppliers      │  │ • Suppliers      │                 │ │
+│  │ └──────────────────┘  └──────────────────┘                 │ │
+│  │    [Fully Isolated & Secure]                               │ │
+│  └─────────────────────────────────────────────────────────────┘ │
+│  • Shared Tables: Users, Companies, Audit Logs                  │
+│  • Tenant Filters: WHERE company_id = $1 on all queries         │
+└────────────────────────────────────────────────────────────────────┘
 ```
 
-### State Machine
+### Multi-Tenant Isolation Strategy
 
-```mermaid
-stateDiagram-v2
-    [*] --> Received
-    Received --> UnderReview
-    UnderReview --> Approved
-    UnderReview --> Rejected
-    Rejected --> UnderReturn
-    Approved --> InStorage
-    InStorage --> InPreparation
-    InStorage --> InShipment
-    InPreparation --> InShipment
-    InPreparation --> Cancelled
-    InShipment --> Delivered
-    UnderReturn --> Received
-    UnderReturn --> Disposed
-    Cancelled --> InStorage
-    Delivered --> [*]
-    Disposed --> [*]
+| Layer | Isolation Method | Implementation |
+|-------|------------------|-----------------|
+| **Frontend** | Context & State | User company stored in AuthContext |
+| **API Gateway** | Route Guards | TenantGuard extracts companyId from JWT |
+| **Database** | Row-Level Security | WHERE company_id = $userId filters in every query |
+| **Audit** | Automatic Logging | AuditLog tracks user & company for each operation |
+
+### Product State Machine
+
+```
+     ┌─ [Received]
+     │      │
+     ├─────〉[UnderReview] ─────┐
+     │      │                   │
+     │     Rejected             │ Approved
+     │      │                   │
+     │      └─〉[UnderReturn]    └─〉[InStorage]
+     │           │                   │      
+     │           └─ Received        │
+     │                              │  Preparation
+     │                              ├──────────────┐
+     │                              │              │
+     │                        [InPreparation]      │
+     │                              │              │
+     │                              └──〉[InShipment]
+     │                                      │
+     │                                   Delivered
+     │                                      │
+     │                                    [END]
+     │
+     └─ Cancelled ──〉[InStorage] (can be resumed)
+     └─ Disposed ──〉[END]
 ```
 
 ---
@@ -217,101 +333,65 @@ stateDiagram-v2
 
 ### Prerequisites
 
-Make sure you have installed:
-- **Node.js** 18 or higher
-- **npm** or **yarn**
-- **Docker** & **Docker Compose** (optional, but recommended)
-- **PostgreSQL 15** (if not using Docker)
+Before you begin, ensure you have:
+- **Node.js 18+** ([download](https://nodejs.org/))
+- **PostgreSQL 15** ([download](https://www.postgresql.org/)) or Docker
+- **Git** ([download](https://git-scm.com/))
 
-### Installation
+### Installation & Setup
 
-1. **Clone the repository**
+**Step 1: Clone & Install**
 ```bash
-git clone https://github.com/your-org/logistica-multi-tenant.git
+git clone https://github.com/GoncaloCoimbra/logistica-multi-tenant.git
 cd logistica-multi-tenant
+npm install
 ```
 
-2. **Install dependencies**
-
+**Step 2: Configure Environment**
 ```bash
-# Install all workspaces at once
-npm install --workspaces
-
-# Or individually
-cd backend-nest && npm install
-cd frontend && npm install
-```
-
-### Configuration
-
-1. **Environment Variables**
-
-Copy the example files and fill in the values:
-```bash
-cp backend-nest/.env.example backend-nest/.env
-cp frontend/.env.example frontend/.env
-```
-
-Create `backend-nest/.env`:
-```env
-# Environment
-NODE_ENV=development
-
-# Server
-PORT=3000
-
-# Database
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/logistica
-
-# JWT
-JWT_SECRET=your-super-secret-key-minimum-32-random-characters
-JWT_EXPIRES_IN=7d
-
-# CORS (optional)
-CORS_ORIGIN=http://localhost:3000
-```
-
-2. **Database with Docker (Recommended)**
-
-```bash
-# Start PostgreSQL
-docker-compose up -d
-
-# Run migrations
 cd backend-nest
-npx prisma migrate dev
+cp .env.example .env  # Or create .env manually
+```
+
+**Step 3: Database Setup**
+
+**Option A: With Docker (Recommended)**
+```bash
+docker-compose up -d  # Starts PostgreSQL
+npx prisma migrate deploy
 npx prisma generate
 ```
 
-**Without Docker:**
+**Option B: Manual PostgreSQL**
 ```bash
-createdb logistica
-cd backend-nest
-npx prisma migrate dev
+createdb logistica  # Create database
+npx prisma migrate deploy
 npx prisma generate
 ```
 
-3. **Seed the Database (Optional)**
-
+**Step 4: Start Application**
 ```bash
-cd backend-nest
-npm run seed
+# From root directory
+npm run start-all
 ```
 
-This creates:
-- 1 Super Admin
-- 1 Example company
-- 1 Administrator
-- 1 Operator
-- Some test products
+Open:
+- 🖥️ **Frontend:** http://localhost:3001
+- 🔧 **API Docs:** http://localhost:3000/api/docs
+- 📊 **Database Studio:** `npm run prisma:studio` in backend-nest
 
-### Running the Application
-
-**Development mode:**
+### Quick Demo Data
 
 ```bash
-# Terminal 1 — Backend
 cd backend-nest
+npm run seed:demo  # Populates 10+ suppliers & 12 products
+```
+
+---
+
+**👉 For detailed demo walkthrough, see [DEMO.md](./DEMO.md)**
+
+---
 npm run dev
 
 # Terminal 2 — Frontend
@@ -341,35 +421,392 @@ npm run build
 
 ## 📁 Project Structure
 
+### Directory Layout
+
 ```
 logistica-multi-tenant/
-├── backend/              # DEPRECATED — Express legacy (do not use for new features)
-├── backend-nest/         # Active NestJS API
+│
+├── 📂 backend/                      # DEPRECATED — Express (legacy)
+│                                    # ⚠️ Do not add new features here
+│
+├── 📂 backend-nest/                 # ⭐ Active NestJS API & Database
 │   ├── prisma/
-│   │   ├── schema.prisma
-│   │   ├── migrations/
-│   │   └── seed.ts
-│   └── src/
-│       ├── config/
-│       ├── controllers/
-│       ├── middlewares/
-│       ├── routes/
-│       ├── services/
-│       ├── types/
-│       ├── utils/
-│       └── server.ts
-├── frontend/
-│   └── src/
-│       ├── api/
-│       ├── components/
-│       ├── contexts/
-│       ├── pages/
-│       ├── App.tsx
-│       └── index.tsx
-├── k8s/                  # Kubernetes manifests
-├── docker-compose.yml
-└── README.md
+│   │   ├── schema.prisma            # Database schema with models
+│   │   ├── migrations/              # Automatic migration history
+│   │   └── seed.ts                  # Initial seeding script
+│   │
+│   ├── src/
+│   │   ├── auth/                    # Authentication (JWT, Guards)
+│   │   ├── companies/               # Company management & settings
+│   │   ├── common/                  # Common filters, DTOs, exceptions
+│   │   ├── controllers/             # API endpoint handlers
+│   │   ├── database/                # Database connection, transactions
+│   │   ├── modules/                 # Feature modules (Products, Users, etc)
+│   │   ├── products/                # Product CRUD & state machine
+│   │   ├── services/                # Business logic (UserService, etc)
+│   │   ├── transports/              # Logistics & vehicle tracking
+│   │   ├── users/                   # User management & roles
+│   │   ├── vehicles/                # Fleet management
+│   │   ├── suppliers/               # Supplier registry
+│   │   ├── notifications/           # Alert system
+│   │   ├── types/                   # TypeScript interfaces & enums
+│   │   │
+│   │   ├── app.controller.ts        # Root API controller
+│   │   ├── app.module.ts            # Root DI module
+│   │   ├── app.service.ts           # Root service
+│   │   └── main.ts                  # NestJS bootstrap
+│   │
+│   ├── test/
+│   │   ├── app.e2e-spec.ts          # End-to-end tests
+│   │   ├── auth.e2e-spec.ts         # Auth flow tests
+│   │   └── jest-e2e.json            # E2E test config
+│   │
+│   ├── seed-demo-data.ts            # Demo seeding (12 products, 10 suppliers)
+│   ├── Dockerfile                   # Container image definition
+│   ├── package.json                 # Dependencies & scripts
+│   ├── nest-cli.json                # NestJS CLI config
+│   ├── tsconfig.json                # TypeScript base config
+│   ├── tsconfig.build.json          # Build config
+│   └── eslint.config.mjs            # ESLint rules
+│
+├── 📂 frontend/                     # ⭐ React 18 SPA (UI Layer)
+│   ├── src/
+│   │   ├── api/                     # API client & Axios config
+│   │   ├── components/              # Reusable UI components
+│   │   │   ├── UserManagementTable
+│   │   │   ├── ProductCard
+│   │   │   └── ...
+│   │   │
+│   │   ├── contexts/                # React Context (Auth, Tenant)
+│   │   ├── hooks/                   # Custom React hooks
+│   │   │   ├── useAuth              # Authentication state
+│   │   │   ├── useProducts          # Product data fetching
+│   │   │   └── ...
+│   │   │
+│   │   ├── layouts/                 # Page layouts (Sidebar, Header)
+│   │   ├── pages/                   # Route pages
+│   │   │   ├── Dashboard
+│   │   │   ├── ProductList
+│   │   │   ├── UserManagement
+│   │   │   ├── Login
+│   │   │   └── ...
+│   │   │
+│   │   ├── lib/                     # Utility functions, constants
+│   │   ├── App.tsx                  # Main App component
+│   │   └── index.tsx                # React DOM render
+│   │
+│   ├── Dockerfile                   # Nginx container for production
+│   ├── package.json                 # Dependencies & scripts
+│   ├── tailwind.config.js           # Tailwind CSS configuration
+│   ├── tsconfig.json                # TypeScript config
+│   └── vite.config.ts               # Vite build config
+│
+├── 📂 k8s/                          # Kubernetes manifests (production)
+│   ├── namespace.yaml               # K8s namespace
+│   ├── configmap.yaml               # Environment & config
+│   ├── secrets.yaml                 # Encrypted secrets
+│   ├── postgres.yaml                # PostgreSQL StatefulSet
+│   ├── backend.yaml                 # NestJS API Deployment
+│   ├── frontend.yaml                # React SPA Deployment
+│   ├── ingress.yaml                 # Nginx Ingress routing
+│   └── hpa.yaml                     # Horizontal Pod Autoscaler
+│
+├── 📂 docs/                         # Documentation
+│   ├── ARCHITECTURE.md              # System design deep-dive
+│   ├── DEPLOYMENT.md                # Production deployment guide
+│   ├── SECURITY.md                  # Security best practices
+│   ├── API.md                       # Full API reference
+│   ├── TESTING.md                   # Testing strategy
+│   └── ROADMAP.md                   # Feature roadmap
+│
+├── docker-compose.yml               # Local dev environment setup
+├── package.json                     # Root monorepo config
+├── .gitignore
+├── .env.example                     # Environment template
+├── DEMO.md                          # Demo guide & walkthroughs
+├── README.md                        # This file
+└── LICENSE                          # MIT License
 ```
+
+### Key Directories Explained
+
+**`backend-nest/src/`** — Core API Logic
+- **auth/** : JWT token generation, refresh logic, login/register endpoints
+- **modules/** : Feature-specific business logic organized by domain
+- **common/** : Shared Guards (TenantGuard, RolesGuard), Filters, DTOs, Exceptions
+- **database/** : Prisma interactions, transactions, connection management
+
+**`frontend/src/`** — React Application Structure
+- **api/** : Axios instance with interceptors, error handling, API calls
+- **contexts/** : AuthContext (user, company), TenantContext
+- **hooks/** : useAuth(), useProducts(), useAsync() custom React hooks
+- **pages/** : Full-page components (routed via React Router)
+- **components/** : Reusable UI components (tables, forms, cards, modals)
+
+---
+
+## 💻 Development Guide
+
+### Code Example Walkthrough
+
+#### Example 1: Creating a Product (Backend)
+
+**Service Layer** (`backend-nest/src/products/products.service.ts`):
+```typescript
+@Injectable()
+export class ProductsService {
+  constructor(private prisma: PrismaService) {}
+
+  async create(input: CreateProductDto, companyId: string) {
+    // Validate supplier exists in this company
+    const supplier = await this.prisma.supplier.findFirst({
+      where: { id: input.supplierId, companyId }
+    });
+    if (!supplier) throw new BadRequestException('Supplier not found');
+
+    // Create product with initial state
+    return this.prisma.product.create({
+      data: {
+        code: input.code,
+        description: input.description,
+        quantity: input.quantity,
+        companyId,
+        supplierId: input.supplierId,
+        state: 'RECEIVED',  // Initial state
+        location: input.location || 'Warehouse A'
+      }
+    });
+  }
+
+  // Multi-tenant isolation: only fetch products for this company
+  async findByCompany(companyId: string) {
+    return this.prisma.product.findMany({
+      where: { companyId },
+      include: { supplier: true }
+    });
+  }
+}
+```
+
+**Controller Layer** (`backend-nest/src/controllers/products.controller.ts`):
+```typescript
+@Controller('api/products')
+@UseGuards(JwtAuthGuard, RolesGuard, TenantGuard)
+export class ProductsController {
+  constructor(private service: ProductsService) {}
+
+  @Post()
+  @Roles('ADMIN', 'OPERATOR')
+  async create(
+    @Body() input: CreateProductDto,
+    @Req() req: any  // Contains companyId injected by TenantGuard
+  ) {
+    const product = await this.service.create(input, req.user.companyId);
+    this.logger.log(`Product created: ${product.code}`, 'ProductsController');
+    return product;
+  }
+
+  @Get()
+  async list(@Req() req: any) {
+    const products = await this.service.findByCompany(req.user.companyId);
+    return { data: products, count: products.length };
+  }
+}
+```
+
+#### Example 2: Listing Products (Frontend)
+
+**Hook** (`frontend/src/hooks/useProducts.ts`):
+```typescript
+export const useProducts = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get('/api/products');
+      setProducts(response.data.data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  return { products, loading, error, refetch: fetchProducts };
+};
+```
+
+**Component** (`frontend/src/pages/ProductList.tsx`):
+```tsx
+export const ProductList = () => {
+  const { products, loading, error } = useProducts();
+  const { user } = useAuth();
+
+  if (loading) return <p>Carregando produtos...</p>;
+  if (error) return <Alert type="error">{error}</Alert>;
+
+  return (
+    <div>
+      <h1>Lista de Produtos</h1>
+      <button>Novo Produto</button>
+      <table>
+        <tbody>
+          {products.map(p => (
+            <tr key={p.id}>
+              <td>{p.code}</td>
+              <td>{p.state}</td>
+              <td>{p.quantity}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+```
+
+### Before You Code
+
+1. **Read Requirements** — Understand scope and edge cases
+2. **Plan Schema** — Draw database relationships, include `companyId` for isolation
+3. **Draw States** — All valid transitions and permissions
+4. **Sketch UI** — Filters, tables, forms, error states
+5. **Test Plan** — Happy path, error cases, edge cases
+
+### Essential Commands
+
+```bash
+# Database
+npx prisma studio           # Open Prisma GUI
+npx prisma migrate dev      # Create a new migration
+npx prisma db seed          # Run seed script
+
+# Testing
+npm test                    # Run unit/integration tests
+npm run test:e2e           # Run end-to-end tests
+npm run test:cov           # Code coverage report
+
+# Code Quality
+npm run lint               # ESLint
+npm run format             # Prettier
+npm run build              # Production build
+
+# Demo
+npm run seed:demo          # Populate demo data
+npm run start-all          # Both servers + hot-reload
+```
+
+### Best Practices Checklist
+
+- ✅ Always validate with Zod before processing
+- ✅ Always filter by `companyId` in multi-tenant queries
+- ✅ Use Prisma transactions for complex operations
+- ✅ Log important operations (created, updated, deleted)
+- ✅ Write tests for critical business logic
+- ✅ Never hardcode secrets — use environment variables
+- ✅ Handle errors gracefully and return meaningful messages
+- ✅ Implement proper pagination for large datasets
+- ✅ Use proper HTTP status codes (201 for create, 204 for delete, etc)
+- ✅ Add JSDoc comments to public functions
+
+---
+
+## 🧪 Testing Strategy
+
+### Unit Tests (Backend)
+
+Test individual services, guards, and utilities in isolation with mocked dependencies:
+
+```bash
+# Run unit tests
+npm test
+
+# With coverage
+npm run test:cov
+```
+
+Example (`backend-nest/src/products/products.service.spec.ts`):
+```typescript
+describe('ProductsService', () => {
+  let service: ProductsService;
+  let prisma: PrismaService;
+
+  beforeEach(() => {
+    const module = Test.createTestingModule({
+      providers: [
+        ProductsService,
+        { provide: PrismaService, useValue: { product: { create: jest.fn() } } }
+      ]
+    }).compile();
+    service = module.get(ProductsService);
+    prisma = module.get(PrismaService);
+  });
+
+  it('should create a product', async () => {
+    jest.spyOn(prisma.product, 'create').mockResolvedValue({
+      id: '1', code: 'TEST-001', state: 'RECEIVED', companyId: 'co1'
+    });
+
+    const result = await service.create({ code: 'TEST-001' }, 'co1');
+    expect(result.state).toBe('RECEIVED');
+    expect(prisma.product.create).toHaveBeenCalled();
+  });
+});
+```
+
+### E2E Tests (Full Flow)
+
+Test complete API flows with real database and HTTP requests:
+
+```bash
+npm run test:e2e
+```
+
+Example (`backend-nest/test/products.e2e-spec.ts`):
+```typescript
+describe('Products E2E', () => {
+  let app: INestApplication;
+
+  beforeAll(async () => {
+    const module = await Test.createTestingModule({
+      imports: [AppModule]
+    }).compile();
+    app = module.createNestApplication();
+    await app.init();
+  });
+
+  it('should create and list products', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/api/products')
+      .set('Authorization', 'Bearer ' + token)
+      .send({ code: 'TEST-001', quantity: 10 });
+
+    expect(res.status).toBe(201);
+    expect(res.body.code).toBe('TEST-001');
+  });
+});
+```
+
+### Frontend Tests
+
+Test React components with React Testing Library:
+
+```bash
+npm test
+```
+
+### Coverage Goals
+
+- Unit Tests: >80% critical logic (services, calculations, validations)
+- E2E Tests: Happy path flows + error scenarios
+- Overall: >70% for production readiness
 
 ---
 
@@ -606,7 +1043,231 @@ cd backend-nest && npx prisma studio
 
 ---
 
-## ✅ Improvements Needed to Reach 10/10
+## 🚨 Troubleshooting
+
+### Database Issues
+
+**Problem: "Database connection refused"**
+```
+Error: connect ECONNREFUSED 127.0.0.1:5432
+```
+**Solution:**
+```bash
+# Check if PostgreSQL is running
+docker-compose ps
+
+# If not running, start it
+docker-compose up -d
+
+# Verify DATABASE_URL in .env is correct:
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/logistica
+```
+
+**Problem: "Prisma migrations pending"**
+```
+Error: The database schema is not in sync with the Prisma schema.
+```
+**Solution:**
+```bash
+cd backend-nest
+npx prisma migrate deploy  # Apply pending migrations
+npx prisma generate       # Regenerate Prisma client
+```
+
+**Problem: "No database named 'logistica'"**
+```bash
+# Manual PostgreSQL (without Docker)
+createdb logistica
+
+# Then run migrations
+npx prisma migrate deploy
+```
+
+---
+
+### Backend Issues
+
+**Problem: "Port 3000 already in use"**
+```bash
+# Find & kill process using port 3000
+lsof -i :3000        # macOS/Linux
+netstat -ano | findstr :3000  # Windows
+
+# Then kill the process
+kill -9 <PID>        # macOS/Linux
+taskkill /PID <PID> /F  # Windows
+```
+
+**Problem: "Cannot find module '@nestjs/core'"**
+```bash
+cd backend-nest
+npm install
+npm run build
+```
+
+**Problem: "Swagger docs not loading at /api/docs"**
+- Ensure backend is running: `npm run start`
+- Check firewall allows localhost:3000
+- Try clearing browser cache (Ctrl+Shift+Delete)
+
+---
+
+### Frontend Issues
+
+**Problem: "Frontend stuck on 'Loading...' at 3001"**
+```bash
+# Check if backend is running
+curl http://localhost:3000/api/docs
+
+# Check browser console for CORS errors
+# If CORS error, verify CORS_ORIGIN in backend .env
+
+# Try hard refresh or clear cache
+Ctrl+Shift+R (Windows/Linux) or Cmd+Shift+R (Mac)
+```
+
+**Problem: "Cannot find module 'react'"**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+**Problem: "Vite dev server port 3001 already in use"**
+```bash
+# Kill process
+lsof -i :3001
+kill -9 <PID>
+
+# Or specify different port in vite.config.ts:
+export default {
+  server: {
+    port: 3002  // Change to available port
+  }
+}
+```
+
+---
+
+### Authentication Issues
+
+**Problem: "401 Unauthorized — Invalid token"**
+- Token expired? Login again
+- Browser local storage cleared? Login again
+- Check JWT_SECRET matches between frontend & backend
+
+**Problem: "Cannot login — server error"**
+```bash
+# Check backend logs for details
+npm run dev  # See console output
+
+# Verify user exists in database
+npx prisma studio  # Browse Users table
+```
+
+**Problem: "No login credentials after seed"**
+```bash
+# Run the seed script again
+cd backend-nest
+npm run seed
+# Or for demo data:
+npm run seed:demo
+
+# Check the output for created credentials
+# Look for "Created user: admin@logistica.com"
+```
+
+---
+
+### Performance Issues
+
+**Problem: "API calls very slow"**
+1. Check database connection: `npx prisma studio`
+2. Look for N+1 query problems in logs
+3. Ensure indexes exist: `npx prisma db execute -- "CREATE INDEX idx_products_company ON products(company_id);"`
+
+**Problem: "Frontend freezes after clicking buttons"**
+- Open DevTools Network tab & check for hanging requests
+- Look for errors in browser console
+- Check if backend API is responding: `curl http://localhost:3000/api/products`
+
+---
+
+### Docker Issues
+
+**Problem: "docker-compose up fails with error"**
+```bash
+# Remove old containers and volumes
+docker-compose down -v
+
+# Rebuild and start fresh
+docker-compose up --build
+
+# Check logs
+docker-compose logs postgres
+docker-compose logs backend-nest
+```
+
+---
+
+### Git & Deployment Issues
+
+**Problem: "Cannot push to GitHub"**
+```bash
+# Check remote URL is correct
+git remote -v
+
+# Fix if wrong
+git remote set-url origin https://github.com/YOUR-USERNAME/logistica-multi-tenant.git
+
+# Push
+git push origin main
+```
+
+**Problem: "Kubernetes pods failing to start"**
+```bash
+# Check pod logs
+kubectl logs -n logistica pod/backend-nest-xxx
+
+# Check events
+kubectl describe pod -n logistica backend-nest-xxx
+
+# Ensure secrets created
+kubectl create secret generic app-secrets -n logistica \
+  --from-literal=database-url=postgresql://...
+```
+
+---
+
+### Getting Help
+
+1. **Check Existing Issues** → [GitHub Issues](https://github.com/GoncaloCoimbra/logistica-multi-tenant/issues)
+2. **Search Error Message** → Copy exact error into Google/Stack Overflow
+3. **Check Logs** → `npm run dev` shows detailed error messages
+4. **Reset Everything** → `docker-compose down && rm -rf node_modules && npm install`
+
+---
+
+## 🔗 Useful Resources
+
+### Documentation
+- [DEMO.md](./DEMO.md) — Complete demo walkthrough
+- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) — Detailed system design
+- [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) — Production deployment guide
+
+### Official Documentation  
+- [NestJS Docs](https://docs.nestjs.com/)
+- [Prisma Docs](https://www.prisma.io/docs/)
+- [React Docs](https://react.dev/)
+- [TailwindCSS Docs](https://tailwindcss.com/docs)
+- [PostgreSQL Docs](https://www.postgresql.org/docs/)
+
+### Community
+- [NestJS Discord](https://discord.gg/G7Qnnhy)
+- [Prisma Community](https://www.prisma.io/community)
+- [React Community](https://react.dev/community)
+
+---
 
 ### Code Structure (currently 8/10)
 1. Remove the deprecated `backend` (Express) directory after full migration to `backend-nest`.
