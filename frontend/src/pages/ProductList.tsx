@@ -90,7 +90,7 @@ const ProductList: React.FC = () => {
       <div className="p-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b] min-h-screen">
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
-          <span className="ml-3 text-amber-300">Loading products...</span>
+          <span className="ml-3 text-amber-300">Carregando produtos...</span>
         </div>
       </div>
     );
@@ -107,16 +107,16 @@ const ProductList: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
-              <h2 className="text-xl font-bold text-red-300">Error Loading Products</h2>
+              <h2 className="text-xl font-bold text-red-300">Algo deu errado</h2>
             </div>
             <p className="text-red-200/80 text-sm mb-4">
-              {(error as any)?.message || 'Failed to load products. Please check your connection and try again.'}
+              {(error as any)?.message || 'Não foi possível carregar os produtos. Verifique sua conexão e tente novamente.'}
             </p>
             <button
               onClick={() => window.location.reload()}
               className="w-full px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition-all"
             >
-              Reload Page
+              Tentar Novamente
             </button>
           </div>
         </div>
@@ -127,12 +127,12 @@ const ProductList: React.FC = () => {
   return (
     <div className="p-8 bg-gradient-to-br from-[#0f172a] to-[#1e293b] min-h-screen text-amber-100">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-white">Products List</h1>
+        <h1 className="text-3xl font-bold text-white">Lista de Produtos</h1>
         <button
           onClick={() => navigate('/products/ new')}
           className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-6 py-2 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all border border-amber-500/30 shadow-lg font-medium"
         >
-          New Product
+         + Novo Produto
         </button>
       </div>
 
