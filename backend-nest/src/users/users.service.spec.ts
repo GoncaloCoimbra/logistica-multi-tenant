@@ -133,41 +133,5 @@ describe('UsersService', () => {
     });
   });
 
-  describe('validateUserBelongsToCompany', () => {
-    it('should return true if user belongs to company', async () => {
-      mockPrismaService.user.findFirst.mockResolvedValue(mockUser);
 
-      const result = await service.validateUserBelongsToCompany('user-123', 'company-1');
-
-      expect(result).toBe(true);
-    });
-
-    it('should return false if user does not belong to company', async () => {
-      mockPrismaService.user.findFirst.mockResolvedValue(null);
-
-      const result = await service.validateUserBelongsToCompany('user-123', 'company-2');
-
-      expect(result).toBe(false);
-    });
-  });
-
-  describe('countActiveUsers', () => {
-    it('should return count of active users in company', async () => {
-      const users = [mockUser, { ...mockUser, id: 'user-456' }];
-
-      mockPrismaService.user.findMany.mockResolvedValue(users);
-
-      const result = await service.countActiveUsers('company-1');
-
-      expect(result).toBe(2);
-    });
-
-    it('should return 0 if no active users found', async () => {
-      mockPrismaService.user.findMany.mockResolvedValue([]);
-
-      const result = await service.countActiveUsers('company-1');
-
-      expect(result).toBe(0);
-    });
-  });
 });

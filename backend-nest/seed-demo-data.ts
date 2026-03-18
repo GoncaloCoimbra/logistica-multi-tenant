@@ -166,9 +166,14 @@ async function main() {
 
     for (const template of productsToCreate) {
       const supplier = suppliers[Math.floor(Math.random() * suppliers.length)];
-      const status = ['RECEIVED', 'STORED', 'IN_TRANSIT', 'DELIVERED'][
-        Math.floor(Math.random() * 4)
+      const productStatuses: Array<'RECEIVED' | 'IN_ANALYSIS' | 'IN_STORAGE' | 'APPROVED' | 'DISPATCHED'> = [
+        'RECEIVED',
+        'IN_ANALYSIS',
+        'IN_STORAGE',
+        'APPROVED',
+        'DISPATCHED',
       ];
+      const status = productStatuses[Math.floor(Math.random() * productStatuses.length)];
 
       const product = await prisma.product.create({
         data: {
@@ -181,36 +186,42 @@ async function main() {
           currentLocation: ['Warehouse A', 'Warehouse B', 'Loading Dock', 'Customs'][
             Math.floor(Math.random() * 4)
           ],
-          status,
+          status: status,
           supplierId: supplier.id,
           companyId: company.id,
         },
       });
 
       // Create 2-3 movements for each product
-      const movements = [];
-      let previousStatus = 'RECEIVED';
+      const movements: Array<{ from: 'RECEIVED' | 'IN_ANALYSIS' | 'IN_STORAGE' | 'APPROVED' | 'DISPATCHED'; to: 'RECEIVED' | 'IN_ANALYSIS' | 'IN_STORAGE' | 'APPROVED' | 'DISPATCHED' }> = [];
+      let previousStatus: 'RECEIVED' | 'IN_ANALYSIS' | 'IN_STORAGE' | 'APPROVED' | 'DISPATCHED' =
+        'RECEIVED';
 
-      for (let i = 0; i < 3; i++) {
-        const statuses = ['RECEIVED', 'STORED', 'IN_TRANSIT', 'DELIVERED'];
-        const newStatus =
-          statuses[(statuses.indexOf(previousStatus) + 1) % statuses.length];
+      for (let i = 0; i < 2; i++) {
+        const statusTransitions: Array<'RECEIVED' | 'IN_ANALYSIS' | 'IN_STORAGE' | 'APPROVED' | 'DISPATCHED'> = [
+          'RECEIVED',
+          'IN_ANALYSIS',
+          'APPROVED',
+          'IN_STORAGE',
+          'DISPATCHED',
+        ];
+        const newStatus = statusTransitions[(i + 1) % statusTransitions.length];
 
         const createdAt = new Date();
-        createdAt.setDate(createdAt.getDate() - (3 - i));
+        createdAt.setDate(createdAt.getDate() - (2 - i));
 
         await prisma.productMovement.create({
           data: {
             productId: product.id,
-            previousStatus,
-            newStatus,
+            previousStatus: previousStatus,
+            newStatus: newStatus,
             quantity: product.quantity,
-            location: ['Warehouse A', 'Warehouse B', 'In Transit', 'Customs'][i],
+            location: ['Warehouse A', 'Warehouse B', 'Loading Dock', 'Customs'][i % 4],
             reason: [
               'Product received from supplier',
-              'Moved to storage location',
+              'Moved to analysis',
+              'Product approved for storage',
               'Dispatched for delivery',
-              'Delivery completed',
             ][i],
             userId: adminUser.id,
             createdAt,
