@@ -69,8 +69,20 @@ api.interceptors.response.use(
     // This prevents "Objects are not valid as a React child" crashes
     if (error.response) {
       const date = error.response.data;
-      let message = `Server error (${status}): Please try again or contact support`;
+      let message: string;
 
+      // Get custom message based on status code
+      const statusMessages: { [key: number]: string } = {
+        400: 'Oops! Dados inválidos. Verifique o formulário e tente novamente.',
+        401: 'Sua sessão expirou. Faça login novamente para continuar.',
+        403: 'Você não tem permissão para acessar este recurso.',
+        404: 'Recurso não encontrado. Pode ter sido deletado ou a URL está incorreta.',
+        409: 'Conflito detectado. Tente atualizar a página e tentar novamente.',
+        500: 'Erro interno do servidor. Nossa equipe foi notificada.',
+        503: 'Servidor em manutenção. Tente novamente em alguns momentos.',
+      };
+
+      // Try to use provided error message first
       if (typeof date === 'string') {
         message = date;
       } else if (typeof date?.message === 'string') {
@@ -80,6 +92,9 @@ api.interceptors.response.use(
         message = date.message.join(', ');
       } else if (typeof date?.error === 'string') {
         message = date.error;
+      } else {
+        // Fall back to status code message
+        message = statusMessages[status] || `❌ Erro do servidor (${status}). Tente novamente ou contate o suporte.`;
       }
 
       error.response.data = { message };
