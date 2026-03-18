@@ -1,8 +1,8 @@
-# 🎮 Como Usar a Demo no Portfolio
+# 🎮 How to Use the Demo for Portfolio Review
 
-## Acesso Rápido (Para Revisores de Portfolio)
+## Quick Access (For Portfolio Reviewers)
 
-A demo foi projetada para funcionar **sem fricção** - como os demos de jogos. Qualquer pessoa pode testar o app em segundos:
+The demo is designed to work **friction-free** — like game demos. Anyone can test the app in seconds:
 
 ### 1️⃣ **Start the Application** (Clone & Run)
 
@@ -95,8 +95,8 @@ The demo account has instant access to:
 - Real-time tracking simulation
 
 ### **Live Dashboard**
-- Puerto rico de realtime status updates
-- Portuguese language UI (customer's preference)
+- Real-time status updates and metrics
+- Multi-language UI support (Portuguese and English)
 
 ---
 
