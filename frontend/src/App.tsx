@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { queryClient } from './lib/react-query';
 import { AuthProvider } from './contexts/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
+import DemoBadge from './components/DemoBadge';
 import './styles/leaflet.css';
 
 // Layout
@@ -76,7 +77,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ErrorBoundary>
-        <BrowserRouter>
+          <DemoBadge />
+          <BrowserRouter>
           <Routes>
 
             {/* ===================

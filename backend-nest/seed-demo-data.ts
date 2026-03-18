@@ -31,6 +31,27 @@ async function main() {
 
     console.log(`✅ Admin user: ${adminUser.name}`);
 
+    // 2.5 Create or verify demo user for portfolio testing
+    let demoUser = await prisma.user.findFirst({
+      where: { email: 'demo@logistica.com', companyId: company.id },
+    });
+
+    if (!demoUser) {
+      demoUser = await prisma.user.create({
+        data: {
+          name: 'Demo User',
+          email: 'demo@logistica.com',
+          password: 'demo123',
+          role: 'OPERATOR',
+          isActive: true,
+          companyId: company.id,
+        },
+      });
+      console.log(`✅ Created demo user: demo@logistica.com`);
+    } else {
+      console.log(`✅ Demo user already exists: demo@logistica.com`);
+    }
+
     // 3. Create suppliers (10 different ones)
     const supplierNames = [
       'Supplier Alpha Ltd',

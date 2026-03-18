@@ -39,8 +39,9 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
 
-  const { login, user, isAuthenticated } = useAuth();
+  const { login, demoLogin, user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => { injectFonts(); }, []);
@@ -62,6 +63,18 @@ const Login: React.FC = () => {
       const msg = err?.message || err?.toString?.() || 'Unknown error while logging in';
       setError(typeof msg === 'string' ? msg : 'Internal error. Please try again.');
       setLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    setError('');
+    setDemoLoading(true);
+    try {
+      await demoLogin();
+    } catch (err: any) {
+      const msg = err?.message || err?.toString?.() || 'Failed to start demo';
+      setError(typeof msg === 'string' ? msg : 'Internal error. Please try again.');
+      setDemoLoading(false);
     }
   };
 
@@ -218,6 +231,36 @@ const Login: React.FC = () => {
               ) : 'Sign In'}
             </button>
           </form>
+
+          {/* Demo Button */}
+          <button
+            type="button"
+            disabled={demoLoading}
+            onClick={handleDemoLogin}
+            className="w-full font-semibold py-3 rounded-xl transition-all duration-200 active:scale-[0.98] mt-3 text-sm"
+            style={{
+              background: demoLoading ? `${ds.success}80` : ds.success,
+              color: 'white',
+              cursor: demoLoading ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {demoLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
+                Loading Demo...
+              </span>
+            ) : (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                </svg>
+                Try Demo
+              </span>
+            )}
+          </button>
 
           {/* Divider */}
           <div className="my-8 flex items-center gap-4">

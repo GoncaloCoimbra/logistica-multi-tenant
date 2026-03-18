@@ -25,12 +25,14 @@ interface AuthContextData {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (date: RegisterData) => Promise<void>;
+  demoLogin: () => Promise<void>;
   logout: () => void;
   updateUserData: (userData: Partial<User>) => void;
   isAuthenticated: boolean;
   isSuperAdmin: boolean;
   isAdmin: boolean;
   isOperator: boolean;
+  isDemo: boolean;
 }
 
 const AuthContext = createContext<AuthContextData | null>(null);
@@ -38,6 +40,7 @@ const AuthContext = createContext<AuthContextData | null>(null);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isDemo, setIsDemo] = useState(false);
   const hasLoadedRef = useRef(false);
 
   // normalize user object (strip wrappers)
@@ -58,16 +61,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const loadUser = async () => {
       const token = localStorage.getItem('token');
       const storedUser = localStorage.getItem('user');
+      const storedIsDemo = localStorage.getItem('isDemo') === 'true';
 
       console.log('🔄 AuthContext - Loading user...', {
         hasToken: !!token,
         hasStoredUser: !!storedUser,
+        isDemo: storedIsDemo,
       });
 
       if (token && storedUser) {
         try {
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
+          setIsDemo(storedIsDemo);
           api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
           console.log('✅ AuthContext - Stored user:', parsedUser);
@@ -203,6 +209,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const demoLogin = async () => {
+    try {
+      console.log('🎮 AuthContext - Demo login starting...');
+      await login('demo@logistica.com', 'demo123');
+      setIsDemo(true);
+      localStorage.setItem('isDemo', 'true');
+      console.log('✅ AuthContext - Demo mode activated');
+    } catch (error: any) {
+      console.error('❌ AuthContext - Demo login failed:', error);
+      setIsDemo(false);
+      localStorage.removeItem('isDemo');
+      throw new Error('Failedto load demo account. Please try again.');
+    }
+  };
+
   const register = async (date: RegisterData) => {
     try {
       console.log('📝 AuthContext - Register attempt:', date.email);
@@ -279,8 +300,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     console.log('🚪 AuthContext - Logout');
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('isDemo');
     delete api.defaults.headers.common['Authorization'];
     setUser(null);
+    setIsDemo(false);
     window.location.href = '/login';
   };
 
@@ -303,12 +326,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loading,
         login,
         register,
+        demoLogin,
         logout,
         updateUserData,
         isAuthenticated: !!user,
         isSuperAdmin,
         isAdmin,
         isOperator,
+        isDemo,
       }}
     >
       {children}
