@@ -8,6 +8,18 @@
 
 > **Enterprise-grade logistics platform** serving multiple companies with complete data isolation, real-time inventory control, and production-ready architecture.
 
+---
+
+## 🎮 **Try the Demo Now** 
+
+[![Try Demo](https://img.shields.io/badge/🎮%20TRY%20DEMO%20NOW-34D399?style=for-the-badge&labelColor=1F2937)](./DEMO_GUIDE.md)
+
+**No signup needed!** One-click access to a fully populated demo with 12 products, 10 suppliers, and real workflows. Perfect for interviews and portfolio reviews.
+
+**[See DEMO_GUIDE.md](./DEMO_GUIDE.md)** for step-by-step instructions.
+
+---
+
 **🎯 Perfect for:** Supply chain teams | Warehouse management | Multi-company logistics operations | Portfolio projects
 
 **⭐ Key Strengths:** TypeScript everywhere | Multi-tenant security | Professional UI | DevOps-ready
