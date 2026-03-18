@@ -12,7 +12,11 @@
 
 ## 🎮 **Try the Demo Now** 
 
-[![Try Demo](https://img.shields.io/badge/🎮%20TRY%20DEMO%20NOW-34D399?style=for-the-badge&labelColor=1F2937)](./DEMO_GUIDE.md)
+### **Online Demo (Live)** 🌟
+[![Try Live Demo](https://img.shields.io/badge/🌐%20LIVE%20DEMO%20ONLINE-34D399?style=for-the-badge&labelColor=1F2937)](./DEPLOYMENT_RAILWAY.md)
+
+### **Local Demo** (Clone & Run)
+[![Try Local Demo](https://img.shields.io/badge/💻%20LOCAL%20DEMO%20GUIDE-4F85F6?style=for-the-badge&labelColor=1F2937)](./DEMO_GUIDE.md)
 
 **No signup needed!** One-click access to a fully populated demo with 12 products, 10 suppliers, and real workflows. Perfect for interviews and portfolio reviews.
 
