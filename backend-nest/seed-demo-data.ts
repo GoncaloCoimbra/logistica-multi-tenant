@@ -45,7 +45,7 @@ async function main() {
       'Premium Select Wholesale',
     ];
 
-    const suppliers = [];
+    const suppliers: Array<{ id: string; name: string; companyId: string }> = [];
     for (const name of supplierNames) {
       let supplier = await prisma.supplier.findFirst({
         where: { name, companyId: company.id },
@@ -63,7 +63,7 @@ async function main() {
           },
         });
       }
-      suppliers.push(supplier);
+      suppliers.push(supplier as { id: string; name: string; companyId: string });
     }
 
     console.log(`✅ Created/Found ${suppliers.length} suppliers`);
