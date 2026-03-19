@@ -4,7 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import * as helmet from 'helmet';
+const helmet = require('helmet');
 
 // SERIALIZATION FIX (BigInt/Date)
 

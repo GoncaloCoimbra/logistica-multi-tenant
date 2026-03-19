@@ -55,10 +55,10 @@ export declare class SuperadminService {
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            companyId: string | null;
             password: string;
             role: import(".prisma/client").$Enums.Role;
             avatarUrl: string | null;
+            companyId: string | null;
         }[];
         _count: {
             products: number;

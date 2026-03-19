@@ -26,10 +26,10 @@ export declare class CompanyRepository extends BaseRepository<Company> {
             isActive: boolean;
             createdAt: Date;
             updatedAt: Date;
-            companyId: string | null;
             password: string;
             role: import(".prisma/client").$Enums.Role;
             avatarUrl: string | null;
+            companyId: string | null;
         }[];
         vehicles: {
             id: string;

@@ -72,9 +72,9 @@ export declare class TransportsController {
                     address: string | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    companyId: string;
                     city: string | null;
                     state: string | null;
-                    companyId: string;
                 };
             } & {
                 id: string;
@@ -284,9 +284,9 @@ export declare class TransportsController {
                     address: string | null;
                     createdAt: Date;
                     updatedAt: Date;
+                    companyId: string;
                     city: string | null;
                     state: string | null;
-                    companyId: string;
                 };
             } & {
                 id: string;
