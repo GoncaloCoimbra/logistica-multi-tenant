@@ -42,21 +42,21 @@ services:
         condition: service_healthy
     networks:
       - logistica-network
-    command: sh -c "npx prisma migrate deploy && npm run start:dev"
+    command: npm run start:dev
 
   # Frontend React
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     container_name: logistica-frontend
     environment:
-      VITE_API_URL: http://backend:3000
+      REACT_APP_API_URL: http://backend:3000
     ports:
-      - "5173:5173"
+      - "3001:3000"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
     depends_on:
       - backend
     networks:
