@@ -68,5 +68,6 @@
             "not dead",
             "not op_mini all"
         ]
-    }
+    },
+    "proxy": "http://logistica-backend:3000"
 }
