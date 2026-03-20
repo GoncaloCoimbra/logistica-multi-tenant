@@ -8,95 +8,95 @@ export declare class VehiclesController {
     create(createVehicleDto: CreateVehicleDto, req: any): Promise<{
         company: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             name: string;
             nif: string;
             email: string;
             phone: string | null;
             address: string | null;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
         model: string;
         brand: string;
         capacity: number;
         year: number;
-        status: import(".prisma/client").$Enums.VehicleStatus;
-        createdAt: Date;
-        updatedAt: Date;
-        companyId: string;
     }>;
     findAll(req: any, filters?: any): Promise<({
+        company: {
+            id: string;
+            name: string;
+            nif: string;
+            email: string;
+            phone: string | null;
+            address: string | null;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+        };
         transports: {
             id: string;
-            status: import(".prisma/client").$Enums.TransportStatus;
             createdAt: Date;
             updatedAt: Date;
             companyId: string;
             internalCode: string;
+            totalWeight: number;
+            status: import(".prisma/client").$Enums.TransportStatus;
             vehicleId: string;
             origin: string;
             destination: string;
             departureDate: Date;
             estimatedArrival: Date;
+            notes: string | null;
             actualArrival: Date | null;
             receivedBy: string | null;
             receivingNotes: string | null;
-            totalWeight: number;
-            notes: string | null;
         }[];
-        company: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            nif: string;
-            email: string;
-            phone: string | null;
-            address: string | null;
-            isActive: boolean;
-        };
     } & {
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
         model: string;
         brand: string;
         capacity: number;
         year: number;
-        status: import(".prisma/client").$Enums.VehicleStatus;
-        createdAt: Date;
-        updatedAt: Date;
-        companyId: string;
     })[]>;
     findAvailable(req: any, queryCompanyId?: string): Promise<({
         company: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             name: string;
             nif: string;
             email: string;
             phone: string | null;
             address: string | null;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
         model: string;
         brand: string;
         capacity: number;
         year: number;
-        status: import(".prisma/client").$Enums.VehicleStatus;
-        createdAt: Date;
-        updatedAt: Date;
-        companyId: string;
     })[]>;
     getStats(req: any, queryCompanyId?: string): Promise<{
         total: number;
@@ -106,99 +106,99 @@ export declare class VehiclesController {
         retired: number;
     }>;
     findOne(id: string, req: any): Promise<{
+        company: {
+            id: string;
+            name: string;
+            nif: string;
+            email: string;
+            phone: string | null;
+            address: string | null;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+        };
         transports: {
             id: string;
-            status: import(".prisma/client").$Enums.TransportStatus;
             createdAt: Date;
             updatedAt: Date;
             companyId: string;
             internalCode: string;
+            totalWeight: number;
+            status: import(".prisma/client").$Enums.TransportStatus;
             vehicleId: string;
             origin: string;
             destination: string;
             departureDate: Date;
             estimatedArrival: Date;
+            notes: string | null;
             actualArrival: Date | null;
             receivedBy: string | null;
             receivingNotes: string | null;
-            totalWeight: number;
-            notes: string | null;
         }[];
-        company: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            name: string;
-            nif: string;
-            email: string;
-            phone: string | null;
-            address: string | null;
-            isActive: boolean;
-        };
     } & {
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
         model: string;
         brand: string;
         capacity: number;
         year: number;
-        status: import(".prisma/client").$Enums.VehicleStatus;
-        createdAt: Date;
-        updatedAt: Date;
-        companyId: string;
     }>;
     update(id: string, updateVehicleDto: UpdateVehicleDto, req: any): Promise<{
         company: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             name: string;
             nif: string;
             email: string;
             phone: string | null;
             address: string | null;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
         model: string;
         brand: string;
         capacity: number;
         year: number;
-        status: import(".prisma/client").$Enums.VehicleStatus;
-        createdAt: Date;
-        updatedAt: Date;
-        companyId: string;
     }>;
     updateStatus(id: string, body: {
         status: string;
     }, req: any): Promise<{
         company: {
             id: string;
-            createdAt: Date;
-            updatedAt: Date;
             name: string;
             nif: string;
             email: string;
             phone: string | null;
             address: string | null;
             isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
         };
     } & {
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        companyId: string;
+        status: import(".prisma/client").$Enums.VehicleStatus;
         licensePlate: string;
         type: string;
         model: string;
         brand: string;
         capacity: number;
         year: number;
-        status: import(".prisma/client").$Enums.VehicleStatus;
-        createdAt: Date;
-        updatedAt: Date;
-        companyId: string;
     }>;
     remove(id: string, req: any): Promise<{
         message: string;
