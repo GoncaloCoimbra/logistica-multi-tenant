@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Base de Dados PostgreSQL
   db:
     image: postgres:15-alpine
     container_name: logistica-db
@@ -21,7 +20,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Backend API (NestJS)
   backend:
     build:
       context: ./backend-nest
@@ -44,12 +42,13 @@ services:
       - logistica-network
     command: npm run start:dev
 
-  # Frontend React
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
     container_name: logistica-frontend
+    environment:
+      - WDS_SOCKET_PORT=3001
     ports:
       - "3001:3000"
     volumes:

@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AppGateway } from './app.gateway';
 
 // DATABASE MODULES
 
@@ -83,6 +84,7 @@ import { TenantInterceptor } from '@common/interceptors/tenant.interceptor';
 
   providers: [
     AppService,
+    AppGateway,
 
     // GLOBAL GUARDS
 

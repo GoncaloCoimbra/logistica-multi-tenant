@@ -12,6 +12,7 @@ const config_1 = require("@nestjs/config");
 const core_1 = require("@nestjs/core");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
+const app_gateway_1 = require("./app.gateway");
 const database_module_1 = require("./database/database.module");
 const companies_module_1 = require("./companies/companies.module");
 const users_module_1 = require("./users/users.module");
@@ -67,6 +68,7 @@ exports.AppModule = AppModule = __decorate([
         controllers: [app_controller_1.AppController],
         providers: [
             app_service_1.AppService,
+            app_gateway_1.AppGateway,
             {
                 provide: core_1.APP_GUARD,
                 useClass: jwt_auth_guard_1.JwtAuthGuard,

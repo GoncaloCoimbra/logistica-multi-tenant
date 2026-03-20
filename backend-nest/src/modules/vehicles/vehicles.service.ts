@@ -291,9 +291,9 @@ export class VehiclesService {
 
       if (data.year !== undefined) {
         const year = Number(data.year);
-        if (isNaN(year) || year < 1900 || year > new data().getFullYear() + 1) {
+        if (isNaN(year) || year < 1900 || year > new Date().getFullYear() + 1) {
           throw new BadRequestException(
-            `Year deve ser entre 1900 e ${new data().getFullYear() + 1}`,
+            `Year deve ser entre 1900 e ${new Date().getFullYear() + 1}`,
           );
         }
         updateData.year = year;
