@@ -64,7 +64,7 @@ const Footer: React.FC = () => {
                 { to: '/products',    label: 'Products' },
                 { to: '/fornecedores',label: 'Suppliers' },
                 { to: '/transportes', label: 'Transports' },
-                { to: '/rastreamento?tab=historico', label: 'History' },
+                { to: '/historico', label: 'History' },
               ].map(link => (
                 <li key={link.to}>
                   <Link

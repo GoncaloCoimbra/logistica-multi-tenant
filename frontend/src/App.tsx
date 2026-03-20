@@ -135,10 +135,7 @@ function App() {
 
               {/* Products - English & Portuguese */}
               <Route path="products" element={<ProductList />} />
-              <Route path="products" element={<ProductList />} />
               <Route path="products/new" element={<NewProduct />} />
-              <Route path="products/ new" element={<NewProduct />} />
-              <Route path="products/:id" element={<ProductDetails />} />
               <Route path="products/:id" element={<ProductDetails />} />
 
               {/* Suppliers - English & Portuguese */}
