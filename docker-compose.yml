@@ -49,6 +49,7 @@ services:
     container_name: logistica-frontend
     environment:
       - WDS_SOCKET_PORT=3001
+      - REACT_APP_API_URL=http://logistica-backend:3000/api
     ports:
       - "3001:3000"
     volumes:
