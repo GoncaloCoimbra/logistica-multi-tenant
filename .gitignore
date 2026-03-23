@@ -3,3 +3,5 @@ dist/
 .env
 *.map
 node_modules/
+
+backend-nest/.env
