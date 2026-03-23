@@ -1,10 +1,11 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app) {
-  // Determine backend URL based on environment
-  const backendUrl = process.env.NODE_ENV === 'production' 
-    ? 'http://logistica-backend:3000'
-    : 'http://localhost:3000';
+  // In Docker environment with docker-compose, the React dev server
+  // can communicate directly with the backend container via hostname
+  const backendUrl = process.env.DOCKER_BACKEND_URL || 'http://localhost:3000';
+
+  console.log('[setupProxy] Backend URL configured as:', backendUrl);
 
   app.use(
     '/api',
