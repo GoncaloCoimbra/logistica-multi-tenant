@@ -136,7 +136,7 @@ const ProductList: React.FC = () => {
         </button>
       </div>
 
-      {/* 🎯  new: FilterChips Component */}
+      {/*   new: FilterChips Component */}
       <FilterChips
         filters={activeFilters}
         onRemove={removeFilter}
