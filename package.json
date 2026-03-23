@@ -15,15 +15,15 @@
   },
   "lint-staged": {
     "backend-nest/**/*.{ts,tsx}": [
-      "npm run --workspace=backend-nest lint --",
-      "npm run --workspace=backend-nest format --"
+      "npm run --workspace=backend-nest lint -- --no-color",
+      "npm run --workspace=backend-nest format -- --no-color"
     ],
     "frontend/**/*.{ts,tsx}": [
-      "npm run --workspace=frontend lint --",
-      "npm run --workspace=frontend format --"
+      "npm run --workspace=frontend lint -- --no-color",
+      "npm run --workspace=frontend format -- --no-color"
     ],
     "*.{js,json}": [
-      "prettier --write"
+      "prettier --write --no-color"
     ]
   },
   "husky": {

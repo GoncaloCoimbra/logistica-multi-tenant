@@ -129,7 +129,7 @@ const ProductList: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-white">Lista de Produtos</h1>
         <button
-          onClick={() => navigate('/products/ new')}
+          onClick={() => navigate('/products/new')}
           className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-6 py-2 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all border border-amber-500/30 shadow-lg font-medium"
         >
          + Novo Produto
@@ -243,7 +243,7 @@ const ProductList: React.FC = () => {
             </p>
             {activeFilters.length === 0 && (
               <button
-                onClick={() => navigate('/products/ new')}
+                onClick={() => navigate('/products/new')}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-white rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all border border-amber-500/30 shadow-lg font-medium"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
