@@ -40,7 +40,6 @@ services:
         condition: service_healthy
     networks:
       - logistica-network
-    command: npm run start:dev
 
   frontend:
     build:

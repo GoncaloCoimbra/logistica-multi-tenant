@@ -8,6 +8,19 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma = new client_1.PrismaClient();
 async function main() {
     console.log('🌱 Starting seed...\n');
+    console.log(' Creating System Admin Company...');
+    const systemCompany = await prisma.company.upsert({
+        where: { email: 'system@admin.com' },
+        update: {},
+        create: {
+            name: 'System Administration',
+            nif: '000000000',
+            email: 'system@admin.com',
+            phone: '+351 000 000 000',
+            address: 'System Address',
+        },
+    });
+    console.log(' System Company created:', systemCompany.name);
     console.log(' Creating Super Admin...');
     const superAdminPassword = await bcrypt_1.default.hash('superadmin123', 10);
     const superAdmin = await prisma.user.upsert({
@@ -18,6 +31,7 @@ async function main() {
             email: 'superadmin@sistema.com',
             password: superAdminPassword,
             role: client_1.Role.SUPER_ADMIN,
+            companyId: systemCompany.id,
         },
     });
     console.log(' Super Admin created:', superAdmin.email);
