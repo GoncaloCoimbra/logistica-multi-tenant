@@ -5,3 +5,5 @@ dist/
 node_modules/
 
 backend-nest/.env
+
+backend-nest/.env
