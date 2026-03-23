@@ -99,8 +99,8 @@ Password: Admin123!
 
  Operator Account
 
-Email: operador@empresa.com
-Password: Operador123!
+Email: operator@empresa.com
+Password: operator123!
 
 
 

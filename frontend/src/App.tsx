@@ -214,8 +214,15 @@ function App() {
               {/* Profile */}
               <Route path="profile" element={<Profile />} />
 
-              {/* Settings */}
-              <Route path="configuracoes" element={<Settings />} />
+              {/* Settings (only for Admin and SuperAdmin) */}
+              <Route
+                path="configuracoes"
+                element={
+                  <PrivateRoute requireAdmin>
+                    <Settings />
+                  </PrivateRoute>
+                }
+              />
 
               {/* SuperAdmin Dashboard (dentro do MainLayout) */}
               <Route 

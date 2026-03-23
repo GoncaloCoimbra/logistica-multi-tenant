@@ -4,7 +4,20 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
+
   console.log('🌱 Starting seed...\n');
+
+  // Limpar tabelas principais para evitar duplicidade
+  // Ordem importa devido a FKs
+  await prisma.auditLog.deleteMany({});
+  await prisma.productMovement.deleteMany({});
+  await prisma.product.deleteMany({});
+  await prisma.vehicle.deleteMany({});
+  await prisma.supplier.deleteMany({});
+  await prisma.refreshToken.deleteMany({});
+  await prisma.user.deleteMany({});
+  await prisma.company.deleteMany({});
+  console.log('🧹 Tabelas limpas com sucesso!');
 
   // 1️ CREATE SYSTEM ADMIN COMPANY FIRST
   console.log(' Creating System Admin Company...');
@@ -96,25 +109,32 @@ async function main() {
 
   console.log(' Operator user created:', operator1.email);
 
+
   // Supplier of Company 1
-  const supplier1 = await prisma.supplier.create({
-    data: {
-      name: 'Supplier Test Ltd',
-      nif: '501000000',
-      email: 'supplier@test.com',
-      phone: '+351 220 100 000',
-      address: 'Supplier Street, 456, Lisbon',
-      city: 'Lisboa',
-      state: 'Lisboa',
-      companyId: company1.id,
-    },
-  });
+  let supplier1 = await prisma.supplier.findFirst({ where: { nif: '501000000' } });
+  if (!supplier1) {
+    supplier1 = await prisma.supplier.create({
+      data: {
+        name: 'Supplier Test Ltd',
+        nif: '501000000',
+        email: 'supplier@test.com',
+        phone: '+351 220 100 000',
+        address: 'Supplier Street, 456, Lisbon',
+        city: 'Lisboa',
+        state: 'Lisboa',
+        companyId: company1.id,
+      },
+    });
+  }
 
   console.log(' Supplier created:', supplier1.name);
 
+
   // Vehicle of Company 1
-  const vehicle1 = await prisma.vehicle.create({
-    data: {
+  const vehicle1 = await prisma.vehicle.upsert({
+    where: { licensePlate_companyId: { licensePlate: 'AB-12-CD', companyId: company1.id } },
+    update: {},
+    create: {
       licensePlate: 'AB-12-CD',
       type: 'Truck',
       model: 'Mercedes Actros',
@@ -128,10 +148,13 @@ async function main() {
 
   console.log(' Vehicle created:', vehicle1.licensePlate);
 
+
   // Products of Company 1
   const products1 = await Promise.all([
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { internalCode_companyId: { internalCode: 'PROD-001', companyId: company1.id } },
+      update: {},
+      create: {
         internalCode: 'PROD-001',
         description: 'Test Product A - Electronics',
         quantity: 100,
@@ -144,8 +167,10 @@ async function main() {
         companyId: company1.id,
       },
     }),
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { internalCode_companyId: { internalCode: 'PROD-002', companyId: company1.id } },
+      update: {},
+      create: {
         internalCode: 'PROD-002',
         description: 'Test Product B - Textile',
         quantity: 250,
@@ -158,8 +183,10 @@ async function main() {
         companyId: company1.id,
       },
     }),
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { internalCode_companyId: { internalCode: 'PROD-003', companyId: company1.id } },
+      update: {},
+      create: {
         internalCode: 'PROD-003',
         description: 'Test Product C - Food',
         quantity: 500,
@@ -240,25 +267,32 @@ async function main() {
 
   console.log(' Operator user created:', operator2.email);
 
+
   // Supplier from Company 2
-  const supplier2 = await prisma.supplier.create({
-    data: {
-      name: 'North Supplier Lda',
-      nif: '502000000',
-      email: 'norte@fornecedor.com',
-      phone: '+351 220 200 000',
-      address: 'North Street, 321, Porto',
-      city: 'Porto',
-      state: 'Porto',
-      companyId: company2.id,
-    },
-  });
+  let supplier2 = await prisma.supplier.findFirst({ where: { nif: '502000000' } });
+  if (!supplier2) {
+    supplier2 = await prisma.supplier.create({
+      data: {
+        name: 'North Supplier Lda',
+        nif: '502000000',
+        email: 'norte@fornecedor.com',
+        phone: '+351 220 200 000',
+        address: 'North Street, 321, Porto',
+        city: 'Porto',
+        state: 'Porto',
+        companyId: company2.id,
+      },
+    });
+  }
 
   console.log(' Supplier created:', supplier2.name);
 
+
   // Vehicle from Company 2
-  const vehicle2 = await prisma.vehicle.create({
-    data: {
+  const vehicle2 = await prisma.vehicle.upsert({
+    where: { licensePlate_companyId: { licensePlate: 'XY-34-ZW', companyId: company2.id } },
+    update: {},
+    create: {
       licensePlate: 'XY-34-ZW',
       type: 'Van',
       model: 'Sprinter',
@@ -272,10 +306,13 @@ async function main() {
 
   console.log(' Vehicle created:', vehicle2.licensePlate);
 
+
   // Products from Company 2
   const products2 = await Promise.all([
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { internalCode_companyId: { internalCode: 'TRANS-001', companyId: company2.id } },
+      update: {},
+      create: {
         internalCode: 'TRANS-001',
         description: 'Packaging Material',
         quantity: 1000,
@@ -288,8 +325,10 @@ async function main() {
         companyId: company2.id,
       },
     }),
-    prisma.product.create({
-      data: {
+    prisma.product.upsert({
+      where: { internalCode_companyId: { internalCode: 'TRANS-002', companyId: company2.id } },
+      update: {},
+      create: {
         internalCode: 'TRANS-002',
         description: 'Wooden Pallets',
         quantity: 50,
@@ -301,7 +340,7 @@ async function main() {
         supplierId: supplier2.id,
         companyId: company2.id,
       },
-    }),
+    })
   ]);
 
   console.log(` ${products2.length} products created for Company 2`);
@@ -354,7 +393,7 @@ async function main() {
   console.log('\n COMPANY 1 - Logistics Demo Ltd');
   console.log('    Admin: superadmin@sistema.com /superadmin123');
   console.log('    Admin: admin@logistica.com / admin123');
-  console.log('   Operator: operador@logistica.com / operator123');
+  console.log('   Operator: operator@logistica.com / operator123');
   console.log(`    Products: ${products1.length}`);
   console.log(`    Vehicles: 1`);
   console.log(`    Suppliers: 1`);

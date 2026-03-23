@@ -10,10 +10,10 @@ const OperatorHome: React.FC = () => {
       <header className={`${theme.backgrounds.header} px-6 py-4 flex items-center justify-between border-b border-slate-700`}>
         <div className="flex items-center space-x-3">
           <img src="/logo.png" alt="LogiSphere" className="h-12 w-auto" />
-          <h2 className="text-white font-bold text-lg">Área do Operador</h2>
+          <h2 className="text-white font-bold text-lg">Área do operator</h2>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-slate-300">{user?.name || 'Operador'}</span>
+          <span className="text-sm text-slate-300">{user?.name || 'operator'}</span>
           <button
             onClick={logout}
             className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"

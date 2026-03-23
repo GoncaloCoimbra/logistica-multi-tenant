@@ -302,7 +302,7 @@ const Login: React.FC = () => {
               {[
                 'superadmin@sistema.com / superadmin123',
                 'admin@logistica.com / admin123',
-                'operador@logistica.com / operator123',
+                'operator@logistica.com / operator123',
               ].map(cred => (
                 <p
                   key={cred}
