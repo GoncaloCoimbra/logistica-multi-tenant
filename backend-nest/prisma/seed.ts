@@ -6,8 +6,24 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting seed...\n');
 
+  // 1️ CREATE SYSTEM ADMIN COMPANY FIRST
+  console.log(' Creating System Admin Company...');
 
-  // 1️ SUPER ADMIN (WITHOUT COMPANY)
+  const systemCompany = await prisma.company.upsert({
+    where: { email: 'system@admin.com' },
+    update: {},
+    create: {
+      name: 'System Administration',
+      nif: '000000000',
+      email: 'system@admin.com',
+      phone: '+351 000 000 000',
+      address: 'System Address',
+    },
+  });
+
+  console.log(' System Company created:', systemCompany.name);
+
+  // 2️ SUPER ADMIN (WITH SYSTEM COMPANY)
   
   console.log(' Creating Super Admin...');
   
@@ -21,6 +37,7 @@ async function main() {
       email: 'superadmin@sistema.com',
       password: superAdminPassword,
       role: Role.SUPER_ADMIN,
+      companyId: systemCompany.id,
     },
   });
 
