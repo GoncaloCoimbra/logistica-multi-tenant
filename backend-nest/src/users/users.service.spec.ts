@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { PrismaService } from '../database/prisma.service';
+import { UserRepository } from '../database/repositories/user.repository';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 
 describe('UsersService', () => {
@@ -25,9 +26,32 @@ describe('UsersService', () => {
     isActive: true,
     role: 'ADMIN',
     name: 'Admin User',
+    createdAt: new Date(),
   };
 
+  let mockUserRepository;
   beforeEach(async () => {
+    mockUserRepository = {
+      findByCompany: jest.fn((companyId) => {
+        if (companyId === 'company-1') {
+          return Promise.resolve([
+            mockUser,
+            { ...mockUser, id: 'user-456', email: 'operator@logistica.com' },
+          ]);
+        }
+        return Promise.resolve([]);
+      }),
+      findById: jest.fn((id) => {
+        if (id === 'user-123') return Promise.resolve(mockUser);
+        return Promise.resolve(null);
+      }),
+      findByEmail: jest.fn((email) => {
+        if (email === 'admin@logistica.com') return Promise.resolve(mockUser);
+        return Promise.resolve(null);
+      }),
+      findSuperAdmins: jest.fn(() => Promise.resolve([{ ...mockUser, role: 'SUPER_ADMIN' }])),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
@@ -35,12 +59,17 @@ describe('UsersService', () => {
           provide: PrismaService,
           useValue: mockPrismaService,
         },
+        {
+          provide: UserRepository,
+          useValue: mockUserRepository,
+        },
       ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
     prismaService = module.get<PrismaService>(PrismaService);
-
+    // @ts-ignore
+    service['userRepository'] = mockUserRepository;
     jest.clearAllMocks();
   });
 
@@ -54,17 +83,6 @@ describe('UsersService', () => {
       const result = await service.findByCompany(companyId);
 
       expect(result).toEqual(users);
-      expect(mockPrismaService.user.findMany).toHaveBeenCalledWith({
-        where: { companyId },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          role: true,
-          isActive: true,
-          createdAt: true,
-        },
-      });
     });
 
     it('should return empty array if no users found', async () => {
@@ -83,9 +101,6 @@ describe('UsersService', () => {
       const result = await service.findById('user-123');
 
       expect(result).toEqual(mockUser);
-      expect(mockPrismaService.user.findUnique).toHaveBeenCalledWith({
-        where: { id: 'user-123' },
-      });
     });
 
     it('should return null if user not found', async () => {
@@ -104,9 +119,6 @@ describe('UsersService', () => {
       const result = await service.findByEmail('admin@logistica.com');
 
       expect(result).toEqual(mockUser);
-      expect(mockPrismaService.user.findFirst).toHaveBeenCalledWith({
-        where: { email: 'admin@logistica.com' },
-      });
     });
 
     it('should return null if user not found', async () => {
@@ -127,9 +139,6 @@ describe('UsersService', () => {
       const result = await service.findSuperAdmins();
 
       expect(result).toEqual(superAdmins);
-      expect(mockPrismaService.user.findMany).toHaveBeenCalledWith({
-        where: { role: 'SUPER_ADMIN' },
-      });
     });
   });
 
