@@ -45,7 +45,8 @@ export class ProductRepository extends BaseRepository<Product> {
 
   async updateStatus(id: string, status: any) {
     return this.prisma.product.update({
-      where: { id }, data: { status },
+      where: { id },
+      data: { status },
     });
   }
 

@@ -159,7 +159,9 @@ export class RegistrationService {
 
       // 6. VERIFY USER WAS CREATED
 
-      this.logger.log('[Registration] Verifying if user was really created in database...');
+      this.logger.log(
+        '[Registration] Verifying if user was really created in database...',
+      );
       const userInDb = await this.prisma.user.findUnique({
         where: { email: result.user.email },
       });

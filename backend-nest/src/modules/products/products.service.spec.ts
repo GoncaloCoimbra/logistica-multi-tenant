@@ -89,7 +89,8 @@ describe('ProductsService - State Machine Tests', () => {
             );
 
             expect(result.status).toBe(toStatus);
-            expect(prisma.productMovement.create).toHaveBeenCalledWith({ data: {
+            expect(prisma.productMovement.create).toHaveBeenCalledWith({
+              data: {
                 productId: mockProductId,
                 previousStatus: fromStatus as ProductStatus,
                 newStatus: toStatus,
@@ -189,7 +190,8 @@ describe('ProductsService - State Machine Tests', () => {
 
       expect(result.status).toBe(ProductStatus.IN_STORAGE);
       expect(result.currentLocation).toBe(newLocation);
-      expect(prisma.productMovement.create).toHaveBeenCalledWith({ data: {
+      expect(prisma.productMovement.create).toHaveBeenCalledWith({
+        data: {
           productId: mockProductId,
           previousStatus: ProductStatus.RECEIVED,
           newStatus: ProductStatus.IN_STORAGE,
@@ -237,7 +239,8 @@ describe('ProductsService - State Machine Tests', () => {
       );
 
       expect(result.status).toBe(ProductStatus.DISPATCHED);
-      expect(prisma.productMovement.create).toHaveBeenCalledWith({ data: {
+      expect(prisma.productMovement.create).toHaveBeenCalledWith({
+        data: {
           productId: mockProductId,
           previousStatus: ProductStatus.IN_STORAGE,
           newStatus: ProductStatus.DISPATCHED,

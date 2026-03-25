@@ -57,7 +57,8 @@ export class ReferralsService {
         : createReferralDto.estimatedValue * 0.05;
 
     // Cria a referência
-    const referral = await this.prisma.referral.create({ data: {
+    const referral = await this.prisma.referral.create({
+      data: {
         clientName: createReferralDto.clientName,
         contactInfo: createReferralDto.contactInfo,
         referralSource: createReferralDto.referralSource || '',
@@ -225,7 +226,8 @@ export class ReferralsService {
     }
 
     const updatedReferral = await this.prisma.referral.update({
-      where: { id }, data: updateData,
+      where: { id },
+      data: updateData,
     });
 
     return updatedReferral;
@@ -244,7 +246,8 @@ export class ReferralsService {
     const referral = await this.findOne(id, userId, userRole, userCompanyId);
 
     const updatedReferral = await this.prisma.referral.update({
-      where: { id }, data: {
+      where: { id },
+      data: {
         status: updateStatusDto.status,
       },
     });

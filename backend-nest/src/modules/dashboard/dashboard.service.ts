@@ -300,7 +300,8 @@ export class DashboardService {
 
     return {
       message: 'Estatísticas mensais',
-      companyId: companyId || 'ALL', data: [],
+      companyId: companyId || 'ALL',
+      data: [],
     };
   }
 

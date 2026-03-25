@@ -120,7 +120,8 @@ export class VehiclesService {
       );
 
       // Create vehicle
-      const vehicle = await this.prisma.vehicle.create({ data: vehicleData,
+      const vehicle = await this.prisma.vehicle.create({
+        data: vehicleData,
         include: {
           company: true,
         },
@@ -316,7 +317,8 @@ export class VehiclesService {
 
       // Update ve�culo
       const updated = await this.prisma.vehicle.update({
-        where: { id }, data: updateData,
+        where: { id },
+        data: updateData,
         include: {
           company: true,
         },
@@ -344,7 +346,8 @@ export class VehiclesService {
     }
 
     return this.prisma.vehicle.update({
-      where: { id }, data: { status },
+      where: { id },
+      data: { status },
       include: {
         company: true,
       },

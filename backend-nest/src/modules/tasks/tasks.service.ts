@@ -48,7 +48,8 @@ export class TasksService {
     const dueDate = new Date(createTaskDto.dueDate);
 
     // Cria a tarefa
-    const task = await this.prisma.task.create({ data: {
+    const task = await this.prisma.task.create({
+      data: {
         title: createTaskDto.title,
         description: createTaskDto.description,
         status: 'PENDING',
@@ -191,7 +192,8 @@ export class TasksService {
     }
 
     const updatedTask = await this.prisma.task.update({
-      where: { id }, data: updateData,
+      where: { id },
+      data: updateData,
     });
 
     return updatedTask;
@@ -210,7 +212,8 @@ export class TasksService {
     const task = await this.findOne(id, userId, userRole, userCompanyId);
 
     const updatedTask = await this.prisma.task.update({
-      where: { id }, data: {
+      where: { id },
+      data: {
         status: updateStatusDto.status,
       },
     });

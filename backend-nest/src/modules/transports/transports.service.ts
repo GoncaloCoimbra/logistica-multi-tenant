@@ -185,7 +185,8 @@ export class TransportsService {
           );
 
           await this.prisma.transport.update({
-            where: { id: transport.id }, data: { status: TransportStatus.ARRIVED },
+            where: { id: transport.id },
+            data: { status: TransportStatus.ARRIVED },
           });
 
           this.logger.log(`   ✅ Status changed: IN_TRANSIT → ARRIVED`);
@@ -321,7 +322,8 @@ export class TransportsService {
     this.logger.log(`🔢 Código gerado: ${internalCode}`);
 
     const transport = await this.prisma.$transaction(async (tx) => {
-      const newTransport = await tx.transport.create({ data: {
+      const newTransport = await tx.transport.create({
+        data: {
           internalCode,
           vehicleId: date.vehicleId,
           origin: date.origin,
@@ -345,7 +347,8 @@ export class TransportsService {
         this.logger.log(`📦 Processando ${date.products.length} product(s)...`);
 
         for (const productData of date.products) {
-          await tx.transportProduct.create({ data: {
+          await tx.transportProduct.create({
+            data: {
               transportId: newTransport.id,
               productId: productData.productId,
               quantity: productData.quantity,
@@ -355,7 +358,8 @@ export class TransportsService {
           this.logger.log(`  ✓ product ${productData.productId} associado`);
 
           const product = await tx.product.update({
-            where: { id: productData.productId }, data: {
+            where: { id: productData.productId },
+            data: {
               status: ProductStatus.DISPATCHED,
               quantity: {
                 decrement: productData.quantity,
@@ -366,7 +370,8 @@ export class TransportsService {
           this.logger.log(`  ✓ Status mudado: ${product.status}`);
           this.logger.log(`  ✓ Quantity atualizada: ${product.quantity}`);
 
-          await tx.productMovement.create({ data: {
+          await tx.productMovement.create({
+            data: {
               productId: productData.productId,
               previousStatus: ProductStatus.IN_STORAGE,
               newStatus: ProductStatus.DISPATCHED,
@@ -382,7 +387,8 @@ export class TransportsService {
       }
 
       await tx.vehicle.update({
-        where: { id: date.vehicleId }, data: { status: VehicleStatus.in_use },
+        where: { id: date.vehicleId },
+        data: { status: VehicleStatus.in_use },
       });
 
       this.logger.log(
@@ -529,7 +535,8 @@ export class TransportsService {
   }
 
   async update(
-    id: string, data: UpdateTransportDto,
+    id: string,
+    data: UpdateTransportDto,
     companyId?: string,
     userId?: string,
   ) {
@@ -577,7 +584,8 @@ export class TransportsService {
 
       return await this.prisma.$transaction(async (tx) => {
         const updatedTransport = await tx.transport.update({
-          where: { id }, data: updateData,
+          where: { id },
+          data: updateData,
           include: {
             vehicle: true,
             company: true,
@@ -595,7 +603,8 @@ export class TransportsService {
 
         for (const tp of updatedTransport.products) {
           await tx.product.update({
-            where: { id: tp.productId }, data: {
+            where: { id: tp.productId },
+            data: {
               status: ProductStatus.APPROVED,
               currentLocation: transport.destination,
             },
@@ -603,7 +612,8 @@ export class TransportsService {
 
           this.logger.log(`  ✓ product ${tp.product.internalCode} → APPROVED`);
 
-          await tx.productMovement.create({ data: {
+          await tx.productMovement.create({
+            data: {
               productId: tp.productId,
               previousStatus: ProductStatus.DISPATCHED,
               newStatus: ProductStatus.APPROVED,
@@ -618,7 +628,8 @@ export class TransportsService {
         }
 
         await tx.vehicle.update({
-          where: { id: transport.vehicleId }, data: { status: VehicleStatus.available },
+          where: { id: transport.vehicleId },
+          data: { status: VehicleStatus.available },
         });
 
         this.logger.log(
@@ -660,7 +671,8 @@ export class TransportsService {
 
       return await this.prisma.$transaction(async (tx) => {
         const updatedTransport = await tx.transport.update({
-          where: { id }, data: updateData,
+          where: { id },
+          data: updateData,
           include: {
             vehicle: true,
             company: true,
@@ -674,7 +686,8 @@ export class TransportsService {
 
         for (const tp of updatedTransport.products) {
           await tx.product.update({
-            where: { id: tp.productId }, data: {
+            where: { id: tp.productId },
+            data: {
               status: ProductStatus.IN_STORAGE,
               quantity: {
                 increment: tp.quantity,
@@ -686,7 +699,8 @@ export class TransportsService {
             `  ✓ product ${tp.product.internalCode} → IN_STORAGE (devolvido ao stock)`,
           );
 
-          await tx.productMovement.create({ data: {
+          await tx.productMovement.create({
+            data: {
               productId: tp.productId,
               previousStatus: ProductStatus.DISPATCHED,
               newStatus: ProductStatus.IN_STORAGE,
@@ -699,7 +713,8 @@ export class TransportsService {
         }
 
         await tx.vehicle.update({
-          where: { id: transport.vehicleId }, data: { status: VehicleStatus.available },
+          where: { id: transport.vehicleId },
+          data: { status: VehicleStatus.available },
         });
 
         this.logger.log(
@@ -730,7 +745,8 @@ export class TransportsService {
     this.logger.log(`📝 Atualização simples de campos logísticos`);
 
     const result = await this.prisma.transport.update({
-      where: { id }, data: updateData,
+      where: { id },
+      data: updateData,
       include: {
         vehicle: true,
         company: true,
@@ -831,7 +847,8 @@ export class TransportsService {
 
           for (const tp of transport.products) {
             await tx.product.update({
-              where: { id: tp.productId }, data: {
+              where: { id: tp.productId },
+              data: {
                 status: ProductStatus.IN_STORAGE,
                 quantity: {
                   increment: tp.quantity,
@@ -843,7 +860,8 @@ export class TransportsService {
               `  ✓ ${tp.product.internalCode}: +${tp.quantity} un → IN_STORAGE`,
             );
 
-            await tx.productMovement.create({ data: {
+            await tx.productMovement.create({
+              data: {
                 productId: tp.productId,
                 previousStatus: ProductStatus.DISPATCHED,
                 newStatus: ProductStatus.IN_STORAGE,
@@ -856,7 +874,8 @@ export class TransportsService {
           }
 
           await tx.vehicle.update({
-            where: { id: transport.vehicleId }, data: { status: VehicleStatus.available },
+            where: { id: transport.vehicleId },
+            data: { status: VehicleStatus.available },
           });
 
           this.logger.log(
@@ -903,7 +922,8 @@ export class TransportsService {
         await this.prisma.$transaction(async (tx) => {
           if (transport.status === TransportStatus.PENDING) {
             await tx.vehicle.update({
-              where: { id: transport.vehicleId }, data: { status: VehicleStatus.available },
+              where: { id: transport.vehicleId },
+              data: { status: VehicleStatus.available },
             });
             this.logger.log(
               `🚗 Vehicle ${transport.vehicle.licensePlate} → AVAILABLE (liberado)`,

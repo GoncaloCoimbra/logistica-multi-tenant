@@ -48,5 +48,5 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/logistica_test
         run: npm run --workspace=backend-nest test
 
-      - name: Build Frontend (Ignorar Erros)
-        run: npm run --workspace=frontend build || true
+      - name: Build Frontend
+        run: npm run --workspace=frontend build

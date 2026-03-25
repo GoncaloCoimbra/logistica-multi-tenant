@@ -49,7 +49,9 @@ describe('UsersService', () => {
         if (email === 'admin@logistica.com') return Promise.resolve(mockUser);
         return Promise.resolve(null);
       }),
-      findSuperAdmins: jest.fn(() => Promise.resolve([{ ...mockUser, role: 'SUPER_ADMIN' }])),
+      findSuperAdmins: jest.fn(() =>
+        Promise.resolve([{ ...mockUser, role: 'SUPER_ADMIN' }]),
+      ),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -76,7 +78,10 @@ describe('UsersService', () => {
   describe('findByCompany', () => {
     it('should return all users for a company', async () => {
       const companyId = 'company-1';
-      const users = [mockUser, { ...mockUser, id: 'user-456', email: 'operator@logistica.com' }];
+      const users = [
+        mockUser,
+        { ...mockUser, id: 'user-456', email: 'operator@logistica.com' },
+      ];
 
       mockPrismaService.user.findMany.mockResolvedValue(users);
 
@@ -141,6 +146,4 @@ describe('UsersService', () => {
       expect(result).toEqual(superAdmins);
     });
   });
-
-
 });

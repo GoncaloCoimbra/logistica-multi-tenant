@@ -52,8 +52,7 @@ describe('API Health Checks - E2E', () => {
     });
 
     it('should reject requests without JWT token to protected routes', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/api/users');
+      const response = await request(app.getHttpServer()).get('/api/users');
 
       expect(response.status).toBe(401);
     });
@@ -70,8 +69,7 @@ describe('API Health Checks - E2E', () => {
     });
 
     it('should set security headers', async () => {
-      const response = await request(app.getHttpServer())
-        .get('/api');
+      const response = await request(app.getHttpServer()).get('/api');
 
       // Check for basic security headers
       expect(response.status).toBe(200);
@@ -117,8 +115,7 @@ describe('Multi-Tenant Data Isolation - E2E', () => {
   });
 
   it('should deny access to protected endpoints without JWT', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/api/products');
+    const response = await request(app.getHttpServer()).get('/api/products');
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty('message');

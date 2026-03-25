@@ -59,7 +59,8 @@ export class VehicleRepository {
 
   async updateStatus(id: string, status: any): Promise<Vehicle> {
     return this.prisma.vehicle.update({
-      where: { id }, data: { status },
+      where: { id },
+      data: { status },
     });
   }
 

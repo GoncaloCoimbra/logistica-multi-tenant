@@ -38,7 +38,8 @@ export class SuppliersService {
         throw new ConflictException('Already exists um supplier com este NIF');
       }
 
-      const supplier = await this.prisma.supplier.create({ data: {
+      const supplier = await this.prisma.supplier.create({
+        data: {
           name: createSupplierDto.name,
           nif: createSupplierDto.nif,
           email: createSupplierDto.email || null,
@@ -250,7 +251,8 @@ export class SuppliersService {
     this.logger.log(`📝 Dados para atualização: ${JSON.stringify(updateData)}`);
 
     const updated = await this.prisma.supplier.update({
-      where: { id }, data: updateData,
+      where: { id },
+      data: updateData,
     });
 
     this.logger.log(` Supplier ${id} atualizado com success`);

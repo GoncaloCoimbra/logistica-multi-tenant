@@ -84,7 +84,10 @@ export async function createApp(): Promise<NestExpressApplication> {
     // X-XSS-Protection: Enables XSS filter in older browsers
     res.setHeader('X-XSS-Protection', '1; mode=block');
     // Strict-Transport-Security: Enforces HTTPS
-    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader(
+      'Strict-Transport-Security',
+      'max-age=31536000; includeSubDomains',
+    );
     // Content-Security-Policy: Restricts resource loading
     res.setHeader(
       'Content-Security-Policy',

@@ -60,7 +60,8 @@ export class AuthService {
       if (!companyId && role !== Role.SUPER_ADMIN) {
         this.logger.log(` Creating default company for: ${name}`);
 
-        const company = await tx.company.create({ data: {
+        const company = await tx.company.create({
+          data: {
             name: `${name}'s Company`,
             nif: `TEMP-${Date.now()}`, // Gerar NIF temporário único
             email: email,
@@ -75,7 +76,8 @@ export class AuthService {
       }
 
       // Create o usuário
-      const user = await tx.user.create({ data: {
+      const user = await tx.user.create({
+        data: {
           name,
           email,
           password: hashedPassword,
@@ -190,7 +192,8 @@ export class AuthService {
     }
 
     const updatedUser = await this.prisma.user.update({
-      where: { id: userId }, data: {
+      where: { id: userId },
+      data: {
         ...(name && { name }),
         ...(email && { email }),
       },
@@ -223,7 +226,8 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     await this.prisma.user.update({
-      where: { id: userId }, data: { password: hashedPassword },
+      where: { id: userId },
+      data: { password: hashedPassword },
     });
 
     this.logger.log(`Password changed: ${user.email}`);
@@ -260,7 +264,8 @@ export class AuthService {
 
     const avatarUrl = `/uploads/avatars/${fileName}`;
     const updatedUser = await this.prisma.user.update({
-      where: { id: userId }, data: { avatarUrl } as any,
+      where: { id: userId },
+      data: { avatarUrl } as any,
     });
 
     this.logger.log(`Avatar updated: ${updatedUser.email}`);
@@ -290,7 +295,8 @@ export class AuthService {
           validToken = true;
           // Revoke the used refresh token
           await (this.prisma as any).refreshToken.update({
-            where: { id: t.id }, data: { revoked: true },
+            where: { id: t.id },
+            data: { revoked: true },
           });
           break;
         }
@@ -341,7 +347,8 @@ export class AuthService {
     }
 
     const updatedUser = await this.prisma.user.update({
-      where: { id: userId }, data: { avatarUrl: null } as any,
+      where: { id: userId },
+      data: { avatarUrl: null } as any,
     });
 
     this.logger.log(`Avatar removed: ${updatedUser.email}`);
@@ -366,7 +373,8 @@ export class AuthService {
     try {
       const hash = await bcrypt.hash(refreshToken, 10);
       const expiresAt = new Date(Date.now() + 30 * 24 * 3600 * 1000);
-      await (this.prisma as any).refreshToken.create({ data: {
+      await (this.prisma as any).refreshToken.create({
+        data: {
           tokenHash: hash,
           userId,
           expiresAt,
@@ -387,7 +395,8 @@ export class AuthService {
     for (const t of tokens) {
       if (await bcrypt.compare(refreshToken, t.tokenHash)) {
         await (this.prisma as any).refreshToken.update({
-          where: { id: t.id }, data: { revoked: true },
+          where: { id: t.id },
+          data: { revoked: true },
         });
         return { revoked: true };
       }

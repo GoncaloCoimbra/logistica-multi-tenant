@@ -41,7 +41,8 @@ export class NotificationsService {
 
       console.log('📨 [SVC-5] Creating notification in DB...');
 
-      const notification = await this.prisma.notification.create({ data: {
+      const notification = await this.prisma.notification.create({
+        data: {
           title: date.title,
           content: date.message,
           companyId: date.companyId,
@@ -75,7 +76,10 @@ export class NotificationsService {
 
   async findByCompany(companyId: string | null | undefined) {
     try {
-      console.log('[Notifications] Finding notifications for companyId:', companyId);
+      console.log(
+        '[Notifications] Finding notifications for companyId:',
+        companyId,
+      );
 
       // Se companyId for null/undefined (SUPER_ADMIN), retorna TODAS as notificações
       const whereClause = companyId ? { companyId } : {};
@@ -132,7 +136,10 @@ export class NotificationsService {
 
   async findUnreadByCompany(companyId: string | null | undefined) {
     try {
-      console.log('[Notifications] Finding unread notifications for companyId:', companyId);
+      console.log(
+        '[Notifications] Finding unread notifications for companyId:',
+        companyId,
+      );
 
       // Se companyId for null/undefined (SUPER_ADMIN), retorna TODAS não lidas
       const whereClause = companyId
@@ -175,7 +182,8 @@ export class NotificationsService {
       }
 
       return await this.prisma.notification.update({
-        where: { id }, data: { isRead: true },
+        where: { id },
+        data: { isRead: true },
         include: {
           company: {
             select: {
@@ -206,7 +214,8 @@ export class NotificationsService {
         : { isRead: false };
 
       return await this.prisma.notification.updateMany({
-        where: whereClause, data: { isRead: true },
+        where: whereClause,
+        data: { isRead: true },
       });
     } catch (error) {
       console.error('Error marking all notifications as read:', error);
@@ -285,8 +294,7 @@ export class NotificationsService {
         isRead: false,
       }));
 
-      await this.prisma.notification.createMany({ data: notifications,
-      });
+      await this.prisma.notification.createMany({ data: notifications });
 
       console.log(`✅ [ARRIVED] ${notifications.length} notifications created`);
     } catch (error: any) {
@@ -332,8 +340,7 @@ export class NotificationsService {
         isRead: false,
       }));
 
-      await this.prisma.notification.createMany({ data: notifications,
-      });
+      await this.prisma.notification.createMany({ data: notifications });
 
       console.log(
         `✅ [DELIVERED] ${notifications.length} notificações criadas`,
@@ -379,8 +386,7 @@ export class NotificationsService {
         isRead: false,
       }));
 
-      await this.prisma.notification.createMany({ data: notifications,
-      });
+      await this.prisma.notification.createMany({ data: notifications });
 
       console.log(
         ` [ERROR] ${notifications.length} error notifications created`,

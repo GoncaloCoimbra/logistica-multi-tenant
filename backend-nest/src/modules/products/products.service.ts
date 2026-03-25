@@ -44,7 +44,8 @@ export class ProductsService {
     //  Define status padrão se não fornecido
     const status = createProductDto.status || 'RECEIVED';
 
-    const product = await this.prisma.product.create({ data: {
+    const product = await this.prisma.product.create({
+      data: {
         internalCode: createProductDto.internalCode,
         description: createProductDto.description,
         quantity: createProductDto.quantity,
@@ -62,7 +63,8 @@ export class ProductsService {
     });
 
     // Create movimento inicial
-    await this.prisma.productMovement.create({ data: {
+    await this.prisma.productMovement.create({
+      data: {
         productId: product.id,
         previousStatus: status,
         newStatus: status,
@@ -273,7 +275,8 @@ export class ProductsService {
     }
 
     return this.prisma.product.update({
-      where: { id: product.id }, data: updateProductDto,
+      where: { id: product.id },
+      data: updateProductDto,
       include: {
         supplier: true,
       },
@@ -289,7 +292,8 @@ export class ProductsService {
     const product = await this.findOne(id, companyId);
 
     const updatedProduct = await this.prisma.product.update({
-      where: { id: product.id }, data: {
+      where: { id: product.id },
+      data: {
         status: statusDto.newStatus,
         currentLocation: statusDto.location || product.currentLocation,
       },
@@ -298,7 +302,8 @@ export class ProductsService {
       },
     });
 
-    await this.prisma.productMovement.create({ data: {
+    await this.prisma.productMovement.create({
+      data: {
         productId: product.id,
         previousStatus: product.status,
         newStatus: statusDto.newStatus,
