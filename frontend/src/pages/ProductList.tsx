@@ -142,6 +142,7 @@ const ProductList: React.FC = () => {
         onRemove={removeFilter}
         onClearAll={clearAllFilters}
       />
+      
 
       
 
@@ -173,7 +174,7 @@ const ProductList: React.FC = () => {
 
           {/* Date From */}
           <div>
-            <label className="block text-sm font-medium text-amber-300 mb-2">
+            <label className="block text-sm font-medium text-amber-300 mb-2">+
               Date (From)
             </label>
             <input
