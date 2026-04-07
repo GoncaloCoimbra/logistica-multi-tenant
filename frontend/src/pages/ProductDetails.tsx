@@ -64,7 +64,7 @@ const ProductDetails: React.FC = () => {
   const [newFilterType, setNewFilterType] = useState<'supplier' | 'vehicle' | 'status' | 'location'>('supplier');
   const [newFilterValue, setNewFilterValue] = useState('');
   
-  // 🆕 States to delete product
+  // States to delete product
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -105,7 +105,7 @@ const ProductDetails: React.FC = () => {
     loadFiltersFromURL();
   }, [id]);
 
-  // 🗑️ Função para deletar product
+  // Function to delete product
   const handleDeleteProduct = async () => {
     if (!product) return;
 
@@ -118,44 +118,44 @@ const ProductDetails: React.FC = () => {
       // Success - redirect to products list
       navigate('/products', { 
         state: { 
-          message: `product "${product.description}" foi eliminado com success!`,
+          message: `Product "${product.description}" was successfully deleted!`,
           type: 'success'
         }
       });
     } catch (error: any) {
       console.error('Error deleting product:', error);
-      console.error('Response completo:', error.response);
+      console.error('Full response:', error.response);
       
-      // Capturar mensagem de error da API - garantir que seja sempre string
+      // Capture error message from API - ensure it is always a string
       let errorMessage = 'Error deleting product. Please try again.';
       
       if (error.response) {
-        const { status, date } = error.response;
+        const { status, data } = error.response;
         
-        // Tratar error 403 (Forbidden) especificamente
+        // Handle 403 (Forbidden) specifically
         if (status === 403) {
-          errorMessage = '🔒 Sem permissão para delete este product. Verifique suas permissões de access.';
+          errorMessage = '🔒 You do not have permission to delete this product. Please check your access permissions.';
         }
-        // Tratar error 400 (Bad Request) - validação do backend
-        else if (status === 400 && date) {
-          if (typeof date.message === 'string') {
-            errorMessage = date.message;
-          } else if (typeof date.message === 'object' && date.message.message) {
-            errorMessage = date.message.message;
-          } else if (typeof date.error === 'string') {
-            errorMessage = date.error;
+        // Handle 400 (Bad Request) - backend validation
+        else if (status === 400 && data) {
+          if (typeof data.message === 'string') {
+            errorMessage = data.message;
+          } else if (typeof data.message === 'object' && data.message.message) {
+            errorMessage = data.message.message;
+          } else if (typeof data.error === 'string') {
+            errorMessage = data.error;
           }
         }
-        // Outros erros
-        else if (date) {
-          if (typeof date.message === 'string') {
-            errorMessage = date.message;
-          } else if (typeof date.message === 'object' && date.message.message) {
-            errorMessage = date.message.message;
-          } else if (typeof date.error === 'string') {
-            errorMessage = date.error;
-          } else if (typeof date === 'string') {
-            errorMessage = date;
+        // Other errors
+        else if (data) {
+          if (typeof data.message === 'string') {
+            errorMessage = data.message;
+          } else if (typeof data.message === 'object' && data.message.message) {
+            errorMessage = data.message.message;
+          } else if (typeof data.error === 'string') {
+            errorMessage = data.error;
+          } else if (typeof data === 'string') {
+            errorMessage = data;
           }
         }
       } else if (error.message) {
@@ -169,7 +169,7 @@ const ProductDetails: React.FC = () => {
 
   const handleAddFilter = () => {
     if (!newFilterValue.trim()) {
-      alert('Digite um valor para o filtro');
+      alert('Please enter a value for the filter');
       return;
     }
 
@@ -177,7 +177,7 @@ const ProductDetails: React.FC = () => {
       supplier: 'Supplier',
       vehicle: 'Vehicle',
       status: 'Status',
-      location: 'Localização'
+      location: 'Location'
     };
 
     const newFilter: ActiveFilter = {
@@ -206,7 +206,7 @@ const ProductDetails: React.FC = () => {
     navigate(`/products${queryString ? `?${queryString}` : ''}`);
   };
 
-  // 🆕 Check if can delete
+  // Check if can delete
   const canDelete = product?.status === 'RECEIVED';
 
   if (loading) {
@@ -227,7 +227,7 @@ const ProductDetails: React.FC = () => {
           <svg className="w-16 h-16 text-red-400/50 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <p className="text-red-400 font-medium text-lg">product não encontrado.</p>
+          <p className="text-red-400 font-medium text-lg">Product not found.</p>
         </div>
       </div>
     );
@@ -247,7 +247,7 @@ const ProductDetails: React.FC = () => {
           Back to List
         </button>
 
-        {/* 🆕 Botão Deletar */}
+        {/* Delete Button */}
         <button
           onClick={() => setShowDeleteModal(true)}
           disabled={!canDelete}
@@ -261,18 +261,18 @@ const ProductDetails: React.FC = () => {
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
-          Delete product
+          Delete Product
         </button>
       </div>
 
-      {/* 🆕 Warning if cannot delete */}
+      {/* Warning if cannot delete */}
       {!canDelete && (
         <div className="bg-amber-900/20 border-2 border-amber-500/50 rounded-lg p-4 mb-6 flex items-start gap-3">
           <svg className="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
           </svg>
           <div>
-            <p className="text-amber-300 font-semibold">product não pode ser eliminado</p>
+            <p className="text-amber-300 font-semibold">Product cannot be deleted</p>
             <p className="text-amber-200/80 text-sm mt-1">
               Only products in <strong>"Received"</strong> status can be deleted. Current status: <strong>{statusLabels.product[product.status] || product.status}</strong>
             </p>
@@ -280,11 +280,11 @@ const ProductDetails: React.FC = () => {
         </div>
       )}
 
-      {/* Filtros Ativos */}
+      {/* Active Filters */}
       {(activeFilters.length > 0 || showAddFilter) && (
         <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-6 mb-6">
           <div className="flex justify-between items-start mb-6">
-            <h3 className="text-lg font-semibold text-white">🔍 Filtros Ativos</h3>
+            <h3 className="text-lg font-semibold text-white">🔍 Active Filters</h3>
             <button
               onClick={() => setShowAddFilter(!showAddFilter)}
               className="text-sm bg-gradient-to-r from-amber-500 to-amber-600 text-white px-4 py-2 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all border border-amber-500/30 shadow-lg font-medium"
@@ -317,7 +317,7 @@ const ProductDetails: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-amber-300 mb-2">
-                    Tipo de Filtro
+                    Filter Type
                   </label>
                   <select
                     value={newFilterType}
@@ -327,19 +327,19 @@ const ProductDetails: React.FC = () => {
                     <option value="supplier" className="bg-[#1e293b]">Supplier</option>
                     <option value="vehicle" className="bg-[#1e293b]">Vehicle</option>
                     <option value="status" className="bg-[#1e293b]">Status</option>
-                    <option value="location" className="bg-[#1e293b]">Localização</option>
+                    <option value="location" className="bg-[#1e293b]">Location</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-amber-300 mb-2">
-                    Valor
+                    Value
                   </label>
                   <input
                     type="text"
                     value={newFilterValue}
                     onChange={(e) => setNewFilterValue(e.target.value)}
-                    placeholder="Digite o valor..."
+                    placeholder="Enter a value..."
                     className="w-full px-4 py-2.5 bg-[#1e293b]/50 border border-amber-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-white placeholder-amber-300/50"
                     onKeyPress={(e) => e.key === 'Enter' && handleAddFilter()}
                   />
@@ -350,7 +350,7 @@ const ProductDetails: React.FC = () => {
                     onClick={handleAddFilter}
                     className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-6 py-2.5 rounded-lg hover:from-amber-600 hover:to-amber-700 transition-all border border-amber-500/30 shadow-lg font-medium"
                   >
-                    Adicionar
+                    Add
                   </button>
                 </div>
               </div>
@@ -359,12 +359,12 @@ const ProductDetails: React.FC = () => {
         </div>
       )}
 
-      {/* Informações do product */}
+      {/* Product Info Header */}
       <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-8 mb-6">
         <div className="flex justify-between items-start">
           <div>
             <h2 className="text-3xl font-bold text-white mb-3">{product.description}</h2>
-            <p className="text-amber-300">Código: {product.internalCode}</p>
+            <p className="text-amber-300">Code: {product.internalCode}</p>
           </div>
           <span className={`px-5 py-2.5 rounded-full font-semibold text-sm ${getStatusBadgeClass('product', product.status)}`}>
             {statusLabels.product[product.status] || product.status}
@@ -374,7 +374,7 @@ const ProductDetails: React.FC = () => {
 
       {/* Product Details */}
       <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-8 mb-8">
-        <h3 className="text-xl font-semibold text-white mb-6">📋 Informações do product</h3>
+        <h3 className="text-xl font-semibold text-white mb-6">📋 Product Information</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
             <p className="text-sm text-amber-300 mb-1">Quantity</p>
@@ -385,40 +385,40 @@ const ProductDetails: React.FC = () => {
             <p className="text-xl font-medium text-white">{product.supplier?.name || '—'}</p>
           </div>
           <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
-            <p className="text-sm text-amber-300 mb-1">Localização Atual</p>
+            <p className="text-sm text-amber-300 mb-1">Current Location</p>
             <p className="text-xl font-medium text-white">{product.currentLocation || '—'}</p>
           </div>
           <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
-            <p className="text-sm text-amber-300 mb-1">Weight Total</p>
+            <p className="text-sm text-amber-300 mb-1">Total Weight</p>
             <p className="text-xl font-medium text-white">{product.totalWeight ? `${product.totalWeight} kg` : '—'}</p>
           </div>
           <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
-            <p className="text-sm text-amber-300 mb-1">Volume Total</p>
+            <p className="text-sm text-amber-300 mb-1">Total Volume</p>
             <p className="text-xl font-medium text-white">{product.totalVolume ? `${product.totalVolume} m³` : '—'}</p>
           </div>
           <div className="bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
-            <p className="text-sm text-amber-300 mb-1">Date de Receção</p>
+            <p className="text-sm text-amber-300 mb-1">Reception Date</p>
             <p className="text-xl font-medium text-white">
-              {product.receivedAt ? new Date(product.receivedAt).toLocaleDateString('pt-PT') : '—'}
+              {product.receivedAt ? new Date(product.receivedAt).toLocaleDateString('en-GB') : '—'}
             </p>
           </div>
           <div className="col-span-2 bg-gradient-to-br from-amber-900/20 to-amber-900/10 p-4 rounded-lg border border-amber-500/20">
-            <p className="text-sm text-amber-300 mb-1">Observações</p>
+            <p className="text-sm text-amber-300 mb-1">Observations</p>
             <p className="text-lg text-white">{product.observations || '—'}</p>
           </div>
         </div>
       </div>
 
-      {/* Histórico de Movimentações */}
+      {/* Movement History */}
       <div className="bg-gradient-to-br from-[#1e293b]/80 to-[#0f172a]/80 rounded-xl shadow-2xl border border-amber-500/30 p-8">
-        <h3 className="text-xl font-semibold text-white mb-6">📜 Histórico de Movimentações</h3>
+        <h3 className="text-xl font-semibold text-white mb-6">📜 Movement History</h3>
         
         {!product.movements || product.movements.length === 0 ? (
           <div className="text-center py-8">
             <svg className="w-16 h-16 text-amber-500/30 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <p className="text-amber-300/70">Nenhuma movimentação registrada</p>
+            <p className="text-amber-300/70">No movements recorded</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -454,7 +454,7 @@ const ProductDetails: React.FC = () => {
                     )}
                   </div>
                   <div className="text-sm text-amber-400/70 ml-4 whitespace-nowrap">
-                    {new Date(movement.createdAt).toLocaleString('pt-PT')}
+                    {new Date(movement.createdAt).toLocaleString('en-GB')}
                   </div>
                 </div>
               </div>
@@ -463,7 +463,7 @@ const ProductDetails: React.FC = () => {
         )}
       </div>
 
-      {/* 🆕 Modal de Confirmação de Exclusão */}
+      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <>
           <div 
@@ -483,12 +483,12 @@ const ProductDetails: React.FC = () => {
                 </div>
 
                 <p className="text-amber-200 mb-4">
-                  Tem certeza que deseja delete o product <strong className="text-white">"{product.description}"</strong>?
+                  Are you sure you want to delete the product <strong className="text-white">"{product.description}"</strong>?
                 </p>
 
                 <div className="bg-amber-900/20 border border-amber-500/30 rounded-lg p-3 mb-6">
                   <p className="text-sm text-amber-300">
-                    <strong>Código:</strong> {product.internalCode}<br />
+                    <strong>Code:</strong> {product.internalCode}<br />
                     <strong>Status:</strong> {statusLabels.product[product.status]}
                   </p>
                 </div>
@@ -515,14 +515,14 @@ const ProductDetails: React.FC = () => {
                     {deleting ? (
                       <>
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                        A delete...
+                        Deleting...
                       </>
                     ) : (
                       <>
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
-                        Sim, Delete
+                        Yes, Delete
                       </>
                     )}
                   </button>
