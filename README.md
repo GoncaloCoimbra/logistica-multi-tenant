@@ -1362,6 +1362,6 @@ If you found a bug or have a suggestion:
 1. Check existing [Issues](https://github.com/your-org/logistica-multi-tenant/issues)
 2. Create a new issue if needed
 
----
+Created by Goncalo Coimbra
 
-**Developed with ❤️ for the Commit PT community**
+
